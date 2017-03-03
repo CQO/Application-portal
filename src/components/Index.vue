@@ -1,22 +1,29 @@
-<template lang='pug'>
-  .box.chat
-    .title 聊天
-    .chat-list 
-      ul
-        li(v-for='item in chatList')
-          Avater(v-bind:username='item.name')
-          .message
-            p.name {{item.name}}
-            p.text {{item.lastMessage}}
-    .tab
-      .chat.tab-item
-      .contacts.tab-item
-      .me.tab-item
+<template>
+<div>
+<mt-tabbar>
+  <mt-tab-item id="外卖">
+    <img slot="icon" src="../assets/quasar-logo.png">
+    外卖
+  </mt-tab-item>
+  <mt-tab-item id="订单">
+    <img slot="icon" src="../assets/quasar-logo.png">
+    订单
+  </mt-tab-item>
+  <mt-tab-item id="发现">
+    <img slot="icon" src="../assets/quasar-logo.png">
+    发现
+  </mt-tab-item>
+  <mt-tab-item id="我的">
+    <img slot="icon" src="../assets/quasar-logo.png">
+    我的
+  </mt-tab-item>
+</mt-tabbar>
+</div>
+
 </template>
 
 <script>
-import Avater from './avater'
-import { Toast } from 'mint-ui'
+import { Tabbar, TabItem, TabContainer, TabContainerItem} from 'mint-ui'
 export default {
   data () {
     return {
@@ -36,16 +43,16 @@ export default {
       ]
     }
   },
-  components: {
-    Avater
-  },
   computed: {
+  },
+  component: {
+    Tabbar,
+    TabItem,
+    TabContainer,
+    TabContainerItem
   },
   methods: {
 
-  },
-  created () {
-    Toast('提示信息')
   }
 }
 </script>
