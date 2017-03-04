@@ -1,121 +1,138 @@
 <template>
-<div>
-<mt-tabbar>
-  <mt-tab-item id="外卖">
-    <img slot="icon" src="../assets/quasar-logo.png">
-    外卖
-  </mt-tab-item>
-  <mt-tab-item id="订单">
-    <img slot="icon" src="../assets/quasar-logo.png">
-    订单
-  </mt-tab-item>
-  <mt-tab-item id="发现">
-    <img slot="icon" src="../assets/quasar-logo.png">
-    发现
-  </mt-tab-item>
-  <mt-tab-item id="我的">
-    <img slot="icon" src="../assets/quasar-logo.png">
-    我的
-  </mt-tab-item>
-</mt-tabbar>
-</div>
+  <div class='page-tabbar'>
+    <div class='page-wrap'>
+      <header class='mint-header is-fixed'>
+        <div class='mint-header-button is-left'></div> 
+        <h1 class='mint-header-title'>{{selected}}</h1> 
+        <div class='mint-header-button is-right'></div>
+      </header>
+      <mt-tab-container class='page-tabbar-container' v-model='selected'>
+        <mt-tab-container-item id='通知'>
+          <ul>
+            <li v-for='item in notice'>
+              <img class='user-img' src='../assets/1.png'>
+              <div class='message'>
+                <p>{{item.name}}</p>
+                <p class='text'>{{item.text}}</p>
+              </div>
+              <div class='time'>{{item.time}}</div>
+              <div class='notice' v-if='item.notice'>{{item.notice}}</div>
+            </li>
+          </ul>
+        </mt-tab-container-item>
+        <mt-tab-container-item id='订单'>
+          <mt-cell v-for='n in 5' :title=''订单 ' + n' />
+        </mt-tab-container-item>
+        <mt-tab-container-item id='发现'>
+          <mt-cell v-for='n in 7' :title=''发现 ' + n' />
+        </mt-tab-container-item>
+        <mt-tab-container-item id='我的'>
+          <div class='page-part'>
+            <mt-cell v-for='n in 12' :title=''我的 ' + n' />
+          </div>
+          <router-link to='/'>
+            <mt-button type='danger' size='large'>退出</mt-button>
+          </router-link>
+        </mt-tab-container-item>
+      </mt-tab-container>
+    </div>
 
+    <mt-tabbar v-model='selected' fixed>
+      <mt-tab-item id='通知'>
+        <img slot='icon' src='../assets/100x100.png'>
+        通知
+      </mt-tab-item>
+      <mt-tab-item id='订单'>
+        <img slot='icon' src='../assets/100x100.png'>
+        订单
+      </mt-tab-item>
+      <mt-tab-item id='发现'>
+        <img slot='icon' src='../assets/100x100.png'>
+        发现
+      </mt-tab-item>
+      <mt-tab-item id='我的'>
+        <img slot='icon' src='../assets/100x100.png'>
+        我的
+      </mt-tab-item>
+    </mt-tabbar>
+  </div>
 </template>
 
 <script>
-import { Tabbar, TabItem, TabContainer, TabContainerItem} from 'mint-ui'
 export default {
+  name: 'page-tabbar',
   data () {
     return {
-      chatList: [
-        { name: '邮箱机器人', id: '10005', lastMessage: '欢迎添加邮箱机器人', time: '12:00' },
-        { name: 'Maer', id: '10001', lastMessage: '你只要在桌面上点击鼠标右键，选择“新建文件夹”就行了', time: '9:20' },
-        { name: '小米', id: '10002', lastMessage: '测试', time: '昨天' },
-        { name: '北京服务点', id: '10004', lastMessage: '哦哦', time: '昨天' },
-        { name: '邮箱机器人', id: '10005', lastMessage: '欢迎添加邮箱机器人', time: '12:00' },
-        { name: 'Maer', id: '10001', lastMessage: '你只要在桌面上点击鼠标右键，选择“新建文件夹”就行了', time: '9:20' },
-        { name: '小米', id: '10002', lastMessage: '测试', time: '昨天' },
-        { name: '北京服务点', id: '10004', lastMessage: '哦哦', time: '昨天' },
-        { name: '邮箱机器人', id: '10005', lastMessage: '欢迎添加邮箱机器人', time: '12:00' },
-        { name: 'Maer', id: '10001', lastMessage: '你只要在桌面上点击鼠标右键，选择“新建文件夹”就行了', time: '9:20' },
-        { name: '小米', id: '10002', lastMessage: '测试', time: '昨天' },
-        { name: '北京服务点', id: '10004', lastMessage: '哦哦', time: '昨天' }
+      selected: '通知',
+      notice: [
+        {name: '天宫圆圆', text: '姜一:明天早晨九点开例会', time: '17:43', img: '../assets/1.png', notice: 0},
+        {name: '信息发布', text: '人事部:3月工资已发放', time: '12:20', img: '../assets/1.png', notice: 0},
+        {name: '邮件', text: '您有来自行政部门的一封邮件', time: '10:49', img: '../assets/1.png', notice: 0},
+        {name: '公文管理', text: '您有待办公文需要处理', time: '08:31', img: '../assets/1.png', notice: 3}
       ]
     }
-  },
-  computed: {
-  },
-  component: {
-    Tabbar,
-    TabItem,
-    TabContainer,
-    TabContainerItem
-  },
-  methods: {
-
   }
 }
 </script>
 
-<style lang='less' scoped>
-.title{
-  height: 50px;
-  background-color: beige;
-  line-height: 50px;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #194ca0;
-}
-.chat-list {
-  top:50px;
-  position:absolute;
-  width: 100%;
-  height: calc(~"100% - 100px");
-  li{
+<style>
+  .page-tabbar {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .page-wrap {
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 100px;
+  }
+  .page-tabbar-container{
+    margin-top: 40px;
+  }
+  .mint-tab-container-item li{
     display: flex;
-    padding: 5px;
-    width: 100%;
-    border-bottom: 1px solid #ecedee;
-    .message{
-      margin-left: 5px;
-      width: 100%;
-    }
-    .name{
-      color: #2b2b2b;
-      font-weight: bold;
-      height: 22px;
-      line-height: 22px;
-    }
-    .text{
-      width: 80%;
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: #828282;
-      height: 20px;
-    }
+    height: 65px;
+    border-bottom: 1px solid #eaeaea;
+    position: relative;
   }
-  li:active{
-    background-color: #ceedff;
+  .user-img{
+    width: 45px;
+    height: 45px;
+    margin: 10px;
   }
-  ul{
-    overflow-y: auto;
-    height: 100%;
-    overflow-x: hidden;
+  .message{
+    margin: 10px;
+    width: calc(100% - 125px);
   }
-}
-.tab{
-  height: 50px;
-  width: 100%;
-  background-color: white;
-  position: absolute;
-  bottom: 0;
-  border-top: 1px solid #dfdfdf;
-  .tab-item{
-    width: 33.3%;
-    height: 100%;
+  .text{
+    color: #8c8c8c;
+    font-size: 0.8rem;
   }
-}
+  .time{
+    width: 40px;
+    margin: 10px 0;
+    color: #d3d3d3;
+  }
+  .mint-header{
+    background-color: #f8f8f8;
+    color: black;
+    font-size: 1rem;
+    border-bottom: 1px solid #d3d3d3;
+  }
+  .mint-header-title{
+    font-weight: bold;
+  }
+  .notice{
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    background-color: red;
+    top: 2px;
+    left: 45px;
+    border-radius: 50%;
+    color: white;
+    line-height: 15px;
+    text-align: center;
+    font-size: 0.3rem;
+  }
 </style>
