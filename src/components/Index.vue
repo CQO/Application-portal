@@ -1,98 +1,82 @@
-<template>
-  <div class='page-tabbar'>
-    <div class='page-wrap'>
-      <header class='mint-header is-fixed'>
-        <div class='mint-header-button is-left'></div> 
-        <h1 class='mint-header-title'>{{selected}}</h1> 
-        <div class='mint-header-button is-right'></div>
-      </header>
-      <mt-tab-container class='page-tabbar-container' v-model='selected'>
-        <mt-tab-container-item id='通知'>
-          <ul>
-            <li v-for='item in notice'>
-              <img class='user-img' src='../assets/1.png'>
-              <div class='message'>
-                <p>{{item.name}}</p>
-                <p class='text'>{{item.text}}</p>
-              </div>
-              <div class='time'>{{item.time}}</div>
-              <div class='notice' v-if='item.notice'>{{item.notice}}</div>
-            </li>
-          </ul>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='我的应用'>
-          <mt-search class="search-box"></mt-search>
-          <mt-swipe class="swipe-box" :auto="4000">
-            <mt-swipe-item>1</mt-swipe-item>
-            <mt-swipe-item>2</mt-swipe-item>
-            <mt-swipe-item>3</mt-swipe-item>
-          </mt-swipe>
-          <div class="tongxun-title app-title">通讯类</div>
-          <div class="tongxun-box">
-            <div class="tongxun-app">
-              <img src="../assets/1.png">
-              <p>天宫圆圆</p>
-            </div>
-            <div class="tongxun-app">
-              <img src="../assets/2.png">
-              <p>邮件</p>
-            </div>
-          </div>
-          <div class="bangong-title app-title">办公类</div>
-          <div class="tongxun-box">
-            <div class="tongxun-app">
-              <img src="../assets/3.png">
-              <p>办公系统</p>
-            </div>
-            <div class="tongxun-app">
-              <img src="../assets/4.png">
-              <p>信息发布</p>
-            </div>
-          </div>
-          <div class="bangong-box"></div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='通讯录'>
-          <mt-search class="search-box"></mt-search>
-          <div class="zuzhi"></div>
-          <ul class="organization">
-            <li>
-              <img src="../assets/5.png">
-              <p class="organization-name"> 研发一组
-              <p class="organization-number"> 0
-              <p class="organization-people"> 24
-            </li>
-          </ul>
-        </mt-tab-container-item>
-        <mt-tab-container-item id='我'>
-          <div class='page-part'>
-            <mt-cell v-for='n in 12' :title=''我 ' + n' />
-          </div>
-          <router-link to='/'>
-            <mt-button type='danger' size='large'>退出</mt-button>
-          </router-link>
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </div>
+<template lang="pug">
+  .page-tabbar
+    .page-wrap
+      .mint-header.is-fixed
+        .mint-header-button.is-left
+        h1.mint-header-title {{selected}}
+        .mint-header-button.is-right
+      mt-tab-container.page-tabbar-container(v-model='selected')
+        mt-tab-container-item(id='通知')
+          ul
+            li(v-for='item in notice')
+              img.user-img(src='../assets/1.png')
+              .message
+                p {{item.name}}
+                p.text {{item.text}}
+              .time {{item.time}}
+              .notice(v-if='item.notice') {{item.notice}}
+        mt-tab-container-item(id='我的应用')
+          mt-search.search-box
+          mt-swipe.swipe-box(:auto="4000")
+            mt-swipe-item
+              img(src="../assets/a.png")
+            mt-swipe-item
+              img(src="../assets/b.png")
+            mt-swipe-item
+              img(src="../assets/c.png")
+          .tongxun-title.app-title 通讯类
+          .tongxun-box
+            .tongxun-app
+              img(src="../assets/1.png")
+              p 天宫圆圆
+            .tongxun-app
+              img(src="../assets/2.png")
+              p 邮件
+          .bangong-title.app-title 办公类
+          .tongxun-box
+            .tongxun-app
+              img(src="../assets/3.png")
+              p 办公系统
+            .tongxun-app
+              img(src="../assets/4.png")
+              p 信息发布
+          .bangong-box
+        mt-tab-container-item(id='通讯录')
+          mt-search.search-box
+          .zuzhi
+          ul.organization
+            li
+              img(src="../assets/5.png")
+              p.organization-name 研发一组
+              p.organization-number 0
+              p.organization-people 24
+        mt-tab-container-item(id='我')
+          .personal-information-title 个人信息
+          mt-cell.personal-information-box(title="罗杰斯",is-link)
+            img(slot="icon",src="../assets/user.png",width="45",height="45")
+          .personal-information-title 操作
+          mt-cell.operating-box(title="设置",is-link)
+            img(slot="icon",src="../assets/setting.png",width="25",height="25")
+          mt-cell.operating-box(title="帮助",is-link)
+            img(slot="icon",src="../assets/help.png",width="25",height="25")
+          mt-cell.operating-box(title="当前版本",is-link)
+            img(slot="icon",src="../assets/update.png",width="25",height="25")
+          .personal-information-title 
+          mt-button(size="large") 登录
 
-    <mt-tabbar v-model='selected' fixed>
-      <mt-tab-item id='通知'>
-        <img slot='icon' src='../assets/100x100.png'>
-        通知
-      </mt-tab-item>
-      <mt-tab-item id='我的应用'>
-        <img slot='icon' src='../assets/100x100.png'>
-        我的应用
-      </mt-tab-item>
-      <mt-tab-item id='通讯录'>
-        <img slot='icon' src='../assets/100x100.png'>
-        通讯录
-      </mt-tab-item>
-      <mt-tab-item id='我'>
-        <img slot='icon' src='../assets/100x100.png'>
-        我
-      </mt-tab-item>
-    </mt-tabbar>
-  </div>
+    mt-tabbar(v-model='selected',fixed)
+      mt-tab-item(id='通知')
+        img(slot='icon',src='../assets/100x100.png') 
+        p 通知
+      mt-tab-item(id='我的应用')
+        img(slot='icon',src='../assets/100x100.png') 
+        p 我的应用
+      mt-tab-item(id='通讯录')
+        img(slot='icon',src='../assets/100x100.png') 
+        p 通讯录
+      mt-tab-item(id='我')
+        img(slot='icon',src='../assets/100x100.png') 
+        p 我
 </template>
 
 <script>
@@ -185,6 +169,13 @@ export default {
   }
   .search-box{
     height: 45px;
+    border-bottom: 1px solid #e7eaef;
+  }
+  .search-box .mint-searchbar{
+    background-color: #f8f8f8;
+  }
+  .search-box .mint-searchbar-inner{
+    background-color: #dbdbdb;
   }
   .swipe-box{
     height: 200px;
@@ -196,6 +187,7 @@ export default {
     line-height: 30px;
     border-bottom: 1px solid #e5e5e5;
     border-top: 1px solid #e5e5e5;
+    margin-top: 5px;
   }
   .tongxun-box{
     display: flex;
@@ -229,5 +221,21 @@ export default {
     height: 65px;
     line-height: 65px;
     width: calc(100% - 140px);
+  }
+  .personal-information-title{
+    height: 30px;
+    line-height: 30px;
+    color: #a8a8a8;
+    margin-left: 10px;
+  }
+  .personal-information-box .mint-cell,.personal-information-box .mint-cell-wrapper{
+    height: 65px;
+  }
+  .operating-box{
+    height: 45px;
+  }
+  .mint-button{
+    background-color: white;
+    color: #353535;
   }
 </style>

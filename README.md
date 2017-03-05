@@ -1,4 +1,3 @@
-需要安装 Quasar
 # Quasar App
 
 > A Quasar project

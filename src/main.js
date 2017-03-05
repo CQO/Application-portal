@@ -9,11 +9,11 @@ require(`quasar/dist/quasar.${__THEME}.css`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
-import Mint from 'mint-ui'
+import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 
+Vue.use(MintUI)
 Vue.use(Quasar) // Install Quasar Framework
-Vue.use(Mint)
 
 Quasar.start(() => {
   /* eslint-disable no-new */
