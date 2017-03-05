@@ -21,19 +21,47 @@
           </ul>
         </mt-tab-container-item>
         <mt-tab-container-item id='我的应用'>
-          <mt-search class="search-box" v-model="value"></mt-search>
+          <mt-search class="search-box"></mt-search>
           <mt-swipe class="swipe-box" :auto="4000">
             <mt-swipe-item>1</mt-swipe-item>
             <mt-swipe-item>2</mt-swipe-item>
             <mt-swipe-item>3</mt-swipe-item>
           </mt-swipe>
-          <div class="tongxun-title">通讯类</div>
-          <div class="tongxun-box"></div>
-          <div class="bangong-title">办公类</div>
+          <div class="tongxun-title app-title">通讯类</div>
+          <div class="tongxun-box">
+            <div class="tongxun-app">
+              <img src="../assets/1.png">
+              <p>天宫圆圆</p>
+            </div>
+            <div class="tongxun-app">
+              <img src="../assets/2.png">
+              <p>邮件</p>
+            </div>
+          </div>
+          <div class="bangong-title app-title">办公类</div>
+          <div class="tongxun-box">
+            <div class="tongxun-app">
+              <img src="../assets/3.png">
+              <p>办公系统</p>
+            </div>
+            <div class="tongxun-app">
+              <img src="../assets/4.png">
+              <p>信息发布</p>
+            </div>
+          </div>
           <div class="bangong-box"></div>
         </mt-tab-container-item>
         <mt-tab-container-item id='通讯录'>
-          <mt-cell v-for='n in 7' :title=''通讯录 ' + n' />
+          <mt-search class="search-box"></mt-search>
+          <div class="zuzhi"></div>
+          <ul class="organization">
+            <li>
+              <img src="../assets/5.png">
+              <p class="organization-name"> 研发一组
+              <p class="organization-number"> 0
+              <p class="organization-people"> 24
+            </li>
+          </ul>
         </mt-tab-container-item>
         <mt-tab-container-item id='我'>
           <div class='page-part'>
@@ -88,6 +116,7 @@ export default {
   .page-tabbar {
     overflow: hidden;
     height: 100vh;
+    background-color: #f4f4f4;
   }
 
   .page-wrap {
@@ -103,6 +132,7 @@ export default {
     height: 65px;
     border-bottom: 1px solid #eaeaea;
     position: relative;
+    background-color: white;
   }
   .user-img{
     width: 45px;
@@ -142,12 +172,62 @@ export default {
     color: white;
     line-height: 15px;
     text-align: center;
-    font-size: 0.3rem;
+    font-size: 12px;
+  }
+  .search-box input{
+    border: 0;
+    box-sizing: border-box;
+    height: 100%;
+    outline: 0;
+  }
+  .search-box div{
+    z-index: 0;
   }
   .search-box{
     height: 45px;
   }
   .swipe-box{
     height: 200px;
+  }
+  .app-title{
+    background-color: white;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+  }
+  .tongxun-box{
+    display: flex;
+  }
+  .tongxun-app{
+    height: 63px;
+    width: 63px;
+    margin:20px 20px 20px 0;
+    align-items: center;
+  }
+  .tongxun-box img{
+    width: 45px;
+    margin: 0 9px;
+  }
+  .tongxun-box p{
+    height: 15px;
+    line-height: 15px;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 3px;
+  }
+  .zuzhi{
+    height:45px;
+  }
+  .organization img{
+    height: 45px;
+    width: 45px;
+    margin: 10px;
+  }
+  .organization-name{
+    height: 65px;
+    line-height: 65px;
+    width: calc(100% - 140px);
   }
 </style>
