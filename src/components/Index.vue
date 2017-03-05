@@ -20,15 +20,24 @@
             </li>
           </ul>
         </mt-tab-container-item>
-        <mt-tab-container-item id='订单'>
-          <mt-cell v-for='n in 5' :title=''订单 ' + n' />
+        <mt-tab-container-item id='我的应用'>
+          <mt-search class="search-box" v-model="value"></mt-search>
+          <mt-swipe class="swipe-box" :auto="4000">
+            <mt-swipe-item>1</mt-swipe-item>
+            <mt-swipe-item>2</mt-swipe-item>
+            <mt-swipe-item>3</mt-swipe-item>
+          </mt-swipe>
+          <div class="tongxun-title">通讯类</div>
+          <div class="tongxun-box"></div>
+          <div class="bangong-title">办公类</div>
+          <div class="bangong-box"></div>
         </mt-tab-container-item>
-        <mt-tab-container-item id='发现'>
-          <mt-cell v-for='n in 7' :title=''发现 ' + n' />
+        <mt-tab-container-item id='通讯录'>
+          <mt-cell v-for='n in 7' :title=''通讯录 ' + n' />
         </mt-tab-container-item>
-        <mt-tab-container-item id='我的'>
+        <mt-tab-container-item id='我'>
           <div class='page-part'>
-            <mt-cell v-for='n in 12' :title=''我的 ' + n' />
+            <mt-cell v-for='n in 12' :title=''我 ' + n' />
           </div>
           <router-link to='/'>
             <mt-button type='danger' size='large'>退出</mt-button>
@@ -42,17 +51,17 @@
         <img slot='icon' src='../assets/100x100.png'>
         通知
       </mt-tab-item>
-      <mt-tab-item id='订单'>
+      <mt-tab-item id='我的应用'>
         <img slot='icon' src='../assets/100x100.png'>
-        订单
+        我的应用
       </mt-tab-item>
-      <mt-tab-item id='发现'>
+      <mt-tab-item id='通讯录'>
         <img slot='icon' src='../assets/100x100.png'>
-        发现
+        通讯录
       </mt-tab-item>
-      <mt-tab-item id='我的'>
+      <mt-tab-item id='我'>
         <img slot='icon' src='../assets/100x100.png'>
-        我的
+        我
       </mt-tab-item>
     </mt-tabbar>
   </div>
@@ -134,5 +143,11 @@ export default {
     line-height: 15px;
     text-align: center;
     font-size: 0.3rem;
+  }
+  .search-box{
+    height: 45px;
+  }
+  .swipe-box{
+    height: 200px;
   }
 </style>
