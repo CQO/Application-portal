@@ -52,7 +52,7 @@
               p.organization-people 24
         mt-tab-container-item(id='我')
           .personal-information-title 个人信息
-          mt-cell.personal-information-box(title="罗杰斯",is-link)
+          mt-cell.personal-information-box(title="罗杰斯",to="/personalDetails",is-link)
             img(slot="icon",src="../assets/user.png",width="45",height="45")
           .personal-information-title 操作
           mt-cell.operating-box(title="设置",is-link)
@@ -228,7 +228,7 @@ export default {
     color: #a8a8a8;
     margin-left: 10px;
   }
-  .personal-information-box .mint-cell,.personal-information-box .mint-cell-wrapper{
+  .personal-information-box,.personal-information-box .mint-cell,.personal-information-box .mint-cell-wrapper{
     height: 65px;
   }
   .operating-box{
