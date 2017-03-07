@@ -1,25 +1,25 @@
-// === DEFAULT / CUSTOM STYLE ===
-// WARNING! always comment out ONE of the two require() calls below.
-// 1. use next line to activate CUSTOM STYLE (./src/themes)
-// require(`./themes/app.${__THEME}.styl`)
-// 2. or, use next line to activate DEFAULT QUASAR STYLE
-require(`quasar/dist/quasar.${__THEME}.css`)
-// ==============================
-
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import Quasar from 'quasar'
-import router from './router'
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
+import FastClick from 'fastclick'
+import VueRouter from 'vue-router'
+import App from './App'
 
-Vue.use(MintUI)
-Vue.use(Quasar) // Install Quasar Framework
+Vue.use(VueRouter)
 
-Quasar.start(() => {
-  /* eslint-disable no-new */
-  new Vue({
-    el: '#q-app',
-    router,
-    render: h => h(require('./App'))
-  })
+const routes = [
+  { path: '/', name: 'Main', component: require('./components/App') },
+  { path: '/Hellow', name: 'Hellow', component: require('./components/Hello') }
+]
+
+const router = new VueRouter({
+  routes
 })
+
+FastClick.attach(document.body)
+
+/* eslint-disable no-new */
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app-box')

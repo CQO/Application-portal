@@ -1,37 +1,47 @@
-var
-  path = require('path'),
-  config = require('../config'),
-  cssUtils = require('./css-utils'),
-  webpack = require('webpack'),
-  merge = require('webpack-merge'),
-  baseWebpackConfig = require('./webpack.base.conf'),
-  ExtractTextPlugin = require('extract-text-webpack-plugin'),
-  HtmlWebpackPlugin = require('html-webpack-plugin')
+var path = require('path')
+var utils = require('./utils')
+var webpack = require('webpack')
+var config = require('../config')
+var merge = require('webpack-merge')
+var baseWebpackConfig = require('./webpack.base.conf')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: cssUtils.styleRules({
+    rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
-      extract: true,
-      postcss: true
+      extract: true
     })
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
+  output: {
+    path: config.build.assetsRoot,
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+  },
   plugins: [
+    // http://vuejs.github.io/vue-loader/en/workflow/production.html
+    new webpack.DefinePlugin({
+      'process.env': env
+    }),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: config.build.productionSourceMap,
-      minimize: true,
       compress: {
         warnings: false
-      }
+      },
+      sourceMap: true
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: '[name].[contenthash].css'
+      filename: utils.assetsPath('css/[name].[contenthash].css')
     }),
+    // generate dist index.html with correct asset hash for caching.
+    // you can customize output by editing /index.html
+    // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.index,
-      template: 'src/index.html',
+      template: 'index.html',
       inject: true,
       minify: {
         removeComments: true,
@@ -82,6 +92,11 @@ if (config.build.productionGzip) {
       minRatio: 0.8
     })
   )
+}
+
+if (config.build.bundleAnalyzerReport) {
+  var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
 module.exports = webpackConfig
