@@ -2,9 +2,9 @@
 .notice-box
   .title-normal
     p.text 通知
-  ul
+  ul.notice-list
     li(v-for='item in notice')
-      img.user-img(src='../assets/icon_nav_cell.png')
+      img.user-img(src='../assets/golf.png')
       .message
         p {{item.name}}
         p.text {{item.text}}
@@ -37,6 +37,48 @@ export default {
     height: 40px;
     line-height: 40px;
     text-align: center;
+  }
+}
+.notice-list{
+  li{
+    display: flex;
+    height: 65px;
+    border-bottom: 1px solid #eaeaea;
+    position: relative;
+    background-color: white;
+    .user-img{
+      width: 45px;
+      height: 45px;
+      margin: 10px;
+    }
+    .message{
+      margin: 10px;
+      width: calc(~'100% - 130px');
+    }
+    .text{
+      color: #8c8c8c;
+      font-size: 0.8rem;
+    }
+    .time{
+      width: 40px;
+      margin: 10px 0;
+      color: #d3d3d3;
+      font-size: 0.6rem;
+      text-align: center;
+    }
+    .notice{
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      background-color: red;
+      top: 2px;
+      left: 45px;
+      border-radius: 50%;
+      color: white;
+      line-height: 15px;
+      text-align: center;
+      font-size: 12px;
+    }
   }
 }
 </style>
