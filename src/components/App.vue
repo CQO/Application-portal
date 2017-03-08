@@ -1,6 +1,6 @@
 <template lang="pug">
 .app-box
-  Navigation(title="我的应用")
+  Navigation(title="我的应用",left="add")
   search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
   swiper(:list="baseList",v-model="index",@on-index-change="onIndexChange")
   AppTitle.tongxun-title(title="通讯类")
