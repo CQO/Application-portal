@@ -1,7 +1,6 @@
 <template lang="pug">
 .notice-box
-  .title-normal
-    p.text 通知
+  Navigation(title="通知")
   ul.notice-list
     li(v-for='item in notice')
       img.user-img(src='../assets/golf.png')
@@ -13,8 +12,12 @@
 </template>
 
 <script>
+import Navigation from './bar/Navigation';
 export default {
   name: 'page-tabbar',
+  components: {
+    Navigation
+  },
   data () {
     return {
       selected: '通知',
@@ -30,15 +33,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.title-normal{
-  height: 40px;
-  border-bottom: 1px solid #d3d3d3;
-  .text{
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-  }
-}
 .notice-list{
   li{
     display: flex;

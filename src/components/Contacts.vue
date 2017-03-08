@@ -1,5 +1,6 @@
 <template lang="pug">
 .contacts-box
+  Navigation(title="通讯录")
   Search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
   .zuzhi 
     a 北信源北京
@@ -23,10 +24,11 @@
 
 <script>
 import { Search } from 'vux'
-
+import Navigation from './bar/Navigation';
 export default {
   components: {
-    Search
+    Search,
+    Navigation
   },
   methods: {
     resultClick (item) {
@@ -39,7 +41,7 @@ export default {
   data () {
     return {
       results: [],
-      value: 'test'
+      value: ''
     }
   }
 }

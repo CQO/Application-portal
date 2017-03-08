@@ -1,10 +1,9 @@
 <template lang="pug">
 .app-box
-  .title-normal
-    p.text 我的应用
+  Navigation(title="我的应用")
   search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
   swiper(:list="baseList",v-model="index",@on-index-change="onIndexChange")
-  .tongxun-title.app-title 通讯类
+  AppTitle.tongxun-title(title="通讯类")
   .tongxun-box
     .tongxun-app
       img(src="../assets/golf.png")
@@ -12,7 +11,7 @@
     .tongxun-app
       img(src="../assets/golf.png")
       p 邮件
-  .bangong-title.app-title 办公类
+  AppTitle.bangong-title(title="办公类")
   .tongxun-box
     .tongxun-app
       img(src="../assets/golf.png")
@@ -24,11 +23,15 @@
 
 <script>
 import { Search,Swiper } from 'vux'
+import Navigation from './bar/Navigation';
+import AppTitle from './bar/AppTitle';
 
 export default {
   components: {
     Search,
-    Swiper
+    Swiper,
+    Navigation,
+    AppTitle
   },
   methods: {
     resultClick (item) {
@@ -44,7 +47,7 @@ export default {
   data () {
     return {
       results: [],
-      value: 'test',
+      value: '',
       baseList:[{
         url: 'javascript:',
         img: 'https://static.vux.li/demo/1.jpg',
@@ -76,23 +79,18 @@ function getResult (val) {
 }
 </script>
 
+<style>
+.vux-search-box .vux-search-box, .vux-search-box .weui-search-bar{
+  background-color: #f8f8f8;
+  
+}
+.vux-search-box   .weui-search-bar__label{
+  background: #dbdbdb;
+}
+</style>
+
 <style lang='less' scoped>
 
-.title-normal{
-  height: 40px;
-  border-bottom: 1px solid #d3d3d3;
-  .text{
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-  }
-}
-.vux-search-box{
-  background-color: #f8f8f8;
-  .weui-search-bar__label{
-    background: #dbdbdb;
-  }
-}
 .tongxun-box{
   display: flex;
   img{
@@ -112,15 +110,4 @@ function getResult (val) {
     margin: 15px;
   }
 }
-.app-title{
-    background-color: white;
-    padding: 0 10px;
-    height: 30px;
-    line-height: 30px;
-    border-bottom: 1px solid #e5e5e5;
-    border-top: 1px solid #e5e5e5;
-    margin-top: 5px;
-    color: #7e7e7e;
-    font-size: 0.8rem;
-  }
 </style>
