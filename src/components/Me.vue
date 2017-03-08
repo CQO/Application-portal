@@ -1,6 +1,6 @@
 <template lang="pug">
 .personal-information
-  Navigation(title="我")
+  XHeader(:left-options="{showBack: false}") 我
   .title 个人信息
   .information.weui-cell_access
     img(src="../assets/golf.png")
@@ -12,12 +12,11 @@
 </template>
 
 <script>
-import { Panel } from 'vux'
-import Navigation from './bar/Navigation';
+import { Panel, XHeader } from 'vux'
 export default {
   components: {
     Panel,
-    Navigation
+    XHeader
   },
   data () {
     return {

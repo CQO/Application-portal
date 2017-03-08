@@ -3,16 +3,16 @@
     router-view
     tabbar
       tabbar-item(link="/")
-        img(slot="icon" src="./assets/icon_nav_button.png")
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 通知
       tabbar-item(show-dot,link="/App")
-        img(slot="icon",src="./assets/icon_nav_msg.png")
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 我的应用
       tabbar-item(selected,link="/Contacts")
-        img(slot="icon",src="./assets/icon_nav_article.png")
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 通讯录
       tabbar-item(badge="2",link="/Me")
-        img(slot="icon",src="./assets/icon_nav_cell.png")
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 我
 </template>
 
@@ -33,11 +33,11 @@ export default {
 @import '~vux/src/styles/reset.less';
 @font-face {
       font-family: 'owo';
-      src: url('./font/owo.eot?17615682');
-      src: url('./font/owo.eot?17615682#iefix') format('embedded-opentype'),
-           url('./font/owo.woff?17615682') format('woff'),
-           url('./font/owo.ttf?17615682') format('truetype'),
-           url('./font/owo.svg?17615682#owo') format('svg');
+      src: url('./font/owo.eot');
+      src: url('./font/owo.eot') format('embedded-opentype'),
+           url('./font/owo.woff') format('woff'),
+           url('./font/owo.ttf') format('truetype'),
+           url('./font/owo.svg') format('svg');
       font-weight: normal;
       font-style: normal;
     }
@@ -50,5 +50,34 @@ body {
   font-weight: normal;
   speak: none;
   display: inline-block;
+}
+.vux-search-box .vux-search-box, .vux-search-box .weui-search-bar{
+  background-color: #f8f8f8;
+  
+}
+.vux-search-box   .weui-search-bar__label{
+  background: #dbdbdb;
+}
+.app .vux-header{
+  background-color: rgb(248, 248, 248); 
+  
+}
+.app .vux-header .vux-header-title{
+  color:black;
+}
+.tab-ico{
+  color: #a4a9b2;
+  font-size: 1.3rem;
+}
+.weui-bar__item_on .tab-ico,.app .weui-tabbar .weui-bar__item_on .weui-tabbar__label{
+  color:#1865ff;
+}
+.app .vux-header .vux-header-right{
+    font-size: 2rem;
+    line-height: 2rem;
+    top: 5px;
+    a{
+      color:#1865ff
+    }
 }
 </style>

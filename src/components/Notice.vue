@@ -1,6 +1,6 @@
 <template lang="pug">
 .notice-box
-  Navigation(title="通知")
+  x-header(:left-options="{showBack: false}") 通知
   ul.notice-list
     li(v-for='item in notice')
       img.user-img(src='../assets/golf.png')
@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import Navigation from './bar/Navigation';
+import { XHeader } from 'vux'
 export default {
   name: 'page-tabbar',
   components: {
-    Navigation
+    XHeader
   },
   data () {
     return {
