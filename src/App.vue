@@ -3,16 +3,16 @@
     router-view
     tabbar
       tabbar-item(link="/")
-        span.ico.tab-ico(slot="icon") 
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 通知
       tabbar-item(show-dot,link="/App")
-        span.ico.tab-ico(slot="icon") 
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 我的应用
       tabbar-item(selected,link="/Contacts")
-        span.ico.tab-ico(slot="icon") 
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 通讯录
       tabbar-item(badge="2",link="/Me")
-        span.ico.tab-ico(slot="icon") 
+        span.ico.tab-ico(slot="icon") 
         span(slot="label") 我
 </template>
 

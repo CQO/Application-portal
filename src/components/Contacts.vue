@@ -14,14 +14,14 @@
       a(href="#/Organization")
         img(src="../assets/golf.png")
         p.organization-name 研发一组
-        p.organization-number.ico  0
-        p.organization-people.ico  24
+        p.organization-number.ico  0
+        p.organization-people.ico  24
     li
       a(href="#/Organization")
         img(src="../assets/golf.png")
         p.organization-name 研发二组
-        p.organization-number.ico  2
-        p.organization-people.ico  14
+        p.organization-number.ico  2
+        p.organization-people.ico  14
 </template>
 
 <script>
