@@ -1,7 +1,7 @@
 <template lang="pug">
 .app-store-box
   x-header 应用商店
-  Search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
+  Search(@result-click="resultClick",:results="results",v-model="value",auto-scroll-to-top)
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
     checker-item(value="skill") 智造

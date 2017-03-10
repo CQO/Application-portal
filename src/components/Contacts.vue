@@ -1,7 +1,7 @@
 <template lang="pug">
 .contacts-box
   XHeader(:left-options="{showBack: false}") 通讯录
-  Search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
+  Search(@result-click="resultClick",:results="results",v-model="value",auto-scroll-to-top)
   .zuzhi 
     a 北信源北京
     p >
@@ -34,9 +34,6 @@ export default {
   methods: {
     resultClick (item) {
       window.alert('you click the result item: ' + JSON.stringify(item))
-    },
-    getResult (val) {
-      this.results = val ? getResult(this.value) : []
     },
   },
   data () {
