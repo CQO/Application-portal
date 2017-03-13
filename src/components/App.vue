@@ -19,6 +19,7 @@
 <script>
 import { Search, Swiper, XHeader, Grid, GridItem } from 'vux'
 import AppTitle from './bar/AppTitle';
+import './img/1.jpg';
 
 export default {
   components: {
@@ -54,7 +55,7 @@ export default {
       ],
       baseList:[{
         url: 'javascript:',
-        img: 'https://static.vux.li/demo/1.jpg',
+        img: './img/1.jpg',
         title: '一朵花'
       }, {
         url: 'javascript:',
