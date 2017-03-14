@@ -9,18 +9,73 @@
         p.text {{item.text}}
       .time {{item.time}}
       .notice(v-if='item.notice') {{item.notice}}
+    .button(@click="Click") {{dbtest}}
+    .duihua
+      input(type="value",v-model="message")
+      .send(v-on:click.stop="sendMessage") 发送消息
+    .wangluo(@click="wangluo") {{dbtest}}
 </template>
 
 <script>
 import { XHeader } from 'vux'
+import localforage from 'localforage'
 export default {
   name: 'page-tabbar',
   components: {
     XHeader
   },
+  methods: {
+    Click (item) {
+      const _this = this;
+          localforage.getItem('notice', function(err, value) {
+            if(err){console.error(`读取notice出现错误${err}`)}
+            else if(value === null){
+              _this.dbtest = 'notice没有数据！';
+              let dateBase=[];
+              for(let i=0;i<222;i++){
+                dateBase[i]={name: '天宫圆圆'+i, text: '姜一:明天早晨九点开例会', time: '17:43', img: '../assets/1.png', notice: 0};
+              }
+              localforage.setItem('notice', dateBase, function(err,value){
+                if(err){console.error(`设置notice出现错误${err}`)}
+              })
+              _this.dbtest = '写入数据库220条数据！';
+            }
+            else{
+              _this.dbtest = 'notice包含数据！！';
+              _this.notice=value;
+            }
+          });
+    },
+    get (url,fn){
+            var obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
+            obj.open('GET',url,true);
+            obj.onreadystatechange=function(){
+                if (obj.readyState == 4 && obj.status == 200 || obj.status == 304) { // readyState==4说明请求已完成
+                    fn.call(this, obj.responseText);  //从服务器获得数据
+                }
+            };
+            obj.send(null);
+        },
+    sendMessage(){
+      const _this = this;
+      _this.get(`http://www.tuling123.com/openapi/api?key=bb1b96a394b19b8ce2c61cf32c64d695&userid=123&info=${_this.message}`,function(e){
+        const message = JSON.parse(e);
+        _this.message = message.text;
+      })
+    },
+    wangluo(){
+      const _this = this;
+      _this.get(`http://myweb-10017157.cos.myqcloud.com/2017/0311/test.date`,function(e){
+        const message = JSON.parse(e);
+        _this.notice[0] = message;
+      })
+    }
+  },
   data () {
     return {
       selected: '通知',
+      dbtest:"读本地数据",
+      message:"测试消息",
       notice: [
         {name: '天宫圆圆', text: '姜一:明天早晨九点开例会', time: '17:43', img: '../assets/1.png', notice: 0},
         {name: '信息发布', text: '人事部:3月工资已发放', time: '12:20', img: '../assets/1.png', notice: 0},
@@ -34,6 +89,8 @@ export default {
 
 <style lang='less' scoped>
 .notice-list{
+  height: 568px;
+  overflow: auto;
   li{
     display: flex;
     height: 65px;
@@ -74,5 +131,46 @@ export default {
       font-size: 12px;
     }
   }
+  .button{
+    position: absolute;
+    right: 10px;
+    bottom: 60px;
+    background-color: cornflowerblue;
+    color: antiquewhite;
+    height: 40px;
+    width: 200px;
+    text-align: center;
+    line-height: 40px;
+  }
+  .duihua{
+    position: absolute;
+    right: 10px;
+    bottom: 110px;
+    background-color: cornflowerblue;
+    height: 40px;
+    width: 200px;
+    display: flex;
+    line-height: 40px;
+    color: antiquewhite;
+    font-size: 14px;
+    input{
+      width: 120px;
+    }
+    .send{
+      width: 80px;
+      text-align: center;
+    }
+  }
+  .wangluo{
+      position: absolute;
+      right: 10px;
+      bottom: 160px;
+      background-color: cornflowerblue;
+      color: antiquewhite;
+      height: 40px;
+      width: 200px;
+      text-align: center;
+      line-height: 40px;
+    }
 }
 </style>

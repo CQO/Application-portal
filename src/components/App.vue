@@ -55,7 +55,7 @@ export default {
       ],
       baseList:[{
         url: 'javascript:',
-        img: './img/1.jpg',
+        img: 'https://static.vux.li/demo/1.jpg',
         title: '一朵花'
       }, {
         url: 'javascript:',
