@@ -1,6 +1,5 @@
 <template lang="pug">
 .organization-box
-    x-header 组织架构
     Search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
     .zuzhi 
         a 北信源北京

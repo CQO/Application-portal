@@ -1,6 +1,5 @@
 <template lang="pug">
 .notice-box
-  x-header(:left-options="{showBack: false}") 通知
   ul.notice-list
     li(v-for='item in notice')
       img.user-img(src='../assets/golf.png')

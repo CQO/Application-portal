@@ -1,8 +1,5 @@
 <template lang="pug">
 .app-box
-  x-header(:left-options="{showBack: false}") 我的应用
-    a(href="#/AppStore",slot="right") +
-  search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
   swiper(:list="baseList",v-model="index",@on-index-change="onIndexChange")
   AppTitle.tongxun-title(title="通讯类")
   Grid
@@ -90,7 +87,7 @@ function getResult (val) {
 
 .app-box{
   .weui-grid{
-    width:25%;
+    width: 95px;
   }
   .weui-grids:before{
     border-right:none;

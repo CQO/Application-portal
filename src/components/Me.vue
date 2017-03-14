@@ -1,6 +1,5 @@
 <template lang="pug">
 .personal-information
-  XHeader(:left-options="{showBack: false}") 我
   .title 个人信息
   .information.weui-cell_access
     img(src="../assets/golf.png")

@@ -1,7 +1,5 @@
 <template lang="pug">
 .contacts-box
-  XHeader(:left-options="{showBack: false}") 通讯录
-  Search(@result-click="resultClick",:results="results",v-model="value",auto-scroll-to-top)
   .zuzhi 
     a 北信源北京
     p >
@@ -14,14 +12,14 @@
       a(href="#/Organization")
         img(src="../assets/golf.png")
         p.organization-name 研发一组
-        p.organization-number.ico  0
-        p.organization-people.ico  24
+        p.organization-number.ico &#xe649; 0
+        p.organization-people.ico &#xe6ca; 24
     li
       a(href="#/Organization")
         img(src="../assets/golf.png")
         p.organization-name 研发二组
-        p.organization-number.ico  2
-        p.organization-people.ico  14
+        p.organization-number.ico &#xe649; 2
+        p.organization-people.ico &#xe6ca; 14
 </template>
 
 <script>
