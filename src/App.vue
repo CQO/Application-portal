@@ -1,23 +1,23 @@
 <template lang="pug">
   .app(v-bind:class="classObject")
     .titleBar
-      p.title 通知
+      p.title {{tabIndex}}
     .content
       Notice.content-item
       App.content-item
       Contacts.content-item
       Me.content-item
     .bottomBar
-      .item.notice(@click="tabIndex=0")
+      .item.notice(@click="tabIndex='通知'")
         .ico &#xe615;
         .name 通知
-      .item.app(@click="tabIndex=1")
+      .item.app(@click="tabIndex='我的应用'")
         .ico &#xe60b;
         .name 我的应用
-      .item.contacts(@click="tabIndex=2")
+      .item.contacts(@click="tabIndex='通讯录'")
         .ico &#xe619;
         .name 通讯录
-      .item.me(@click="tabIndex=3")
+      .item.me(@click="tabIndex='我'")
         .ico &#xe66e;
         .name 我
 </template>
@@ -36,16 +36,16 @@ export default {
   },
   data () {
     return {
-      tabIndex:0,
+      tabIndex:"通知",
     }
   },
   computed: {
     classObject: function () {
       return {
-        'noticeActive': this.tabIndex===0,
-        'appActive': this.tabIndex===1,
-        'contactsActive': this.tabIndex===2,
-        'meActive': this.tabIndex===3,
+        'noticeActive': this.tabIndex==="通知",
+        'appActive': this.tabIndex==="我的应用",
+        'contactsActive': this.tabIndex==="通讯录",
+        'meActive': this.tabIndex==="我",
       }
     }
   }

@@ -6,6 +6,6 @@ Vue.use(Router)
 export default new Router({
   routes: [
     { path: '/', name: 'Main', component: require('components/App') },
-    { path: '/Hellow', name: 'Hellow', component: require('components/Hellow') }
+    { path: '/Organization', name: 'Organization', component: require('components/Organization') }
   ]
-})
+});
