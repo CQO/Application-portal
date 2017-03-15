@@ -102,13 +102,17 @@ body {
       color:#1865ff
     }
 }
+.app .vux-slider{
+  width: 400px;
+  margin: 0 auto;
+}
 </style>
 
 <style lang="less">
 .app{
   height: 100%;
   .notice-box, .contacts-box, .app-box, .personal-information{
-    transition: width 0.25s;
+    transition: width 0.2s;
   }
   .content-item{
     overflow: hidden;
@@ -118,9 +122,13 @@ body {
   .notice-box{
     width: 100%;
     color: blueviolet;
+    display: block;
   }
   .contacts-box, .app-box, .personal-information{
     width: 0;
+    div{
+      display: none;
+    }
   }
   .notice{
     .ico, .name{
@@ -132,6 +140,9 @@ body {
 .appActive{
   .notice-box, .contacts-box, .personal-information {
     width: 0;
+    div{
+      display: none;
+    }
   }
   .app-box{
     width: 100%;
@@ -147,6 +158,9 @@ body {
 .contactsActive{
   .notice-box, .app-box, .personal-information{
     width: 0;
+    div{
+      display: none;
+    }
   }
   .contacts-box{
     width: 100%;
@@ -161,6 +175,9 @@ body {
 .meActive{
   .notice-box, .contacts-box, .app-box{
     width: 0;
+    div{
+      display: none;
+    }
   }
   .personal-information{
     width: 100%;
