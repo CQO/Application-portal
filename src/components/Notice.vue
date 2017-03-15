@@ -88,26 +88,31 @@ export default {
 
 <style lang='less' scoped>
 .notice-list{
-  height: 568px;
-  overflow: auto;
+  height: 100%;
+  overflow-y: auto;
   li{
     display: flex;
     height: 65px;
     border-bottom: 1px solid #eaeaea;
     position: relative;
     background-color: white;
+    overflow: hidden;
+    width: 100%;
     .user-img{
       width: 45px;
       height: 45px;
       margin: 10px;
+      overflow: hidden;
     }
     .message{
       margin: 10px;
       width: calc(~'100% - 130px');
+      overflow: hidden;
     }
     .text{
       color: #8c8c8c;
       font-size: 0.8rem;
+      overflow: hidden;
     }
     .time{
       width: 40px;
@@ -115,6 +120,7 @@ export default {
       color: #d3d3d3;
       font-size: 0.6rem;
       text-align: center;
+      overflow: hidden;
     }
     .notice{
       width: 15px;
@@ -128,6 +134,7 @@ export default {
       line-height: 15px;
       text-align: center;
       font-size: 12px;
+      overflow: hidden;
     }
   }
   .button{
@@ -140,6 +147,7 @@ export default {
     width: 200px;
     text-align: center;
     line-height: 40px;
+    overflow: hidden;
   }
   .duihua{
     position: absolute;
@@ -152,12 +160,15 @@ export default {
     line-height: 40px;
     color: antiquewhite;
     font-size: 14px;
+    overflow: hidden;
     input{
       width: 120px;
+      overflow: hidden;
     }
     .send{
       width: 80px;
       text-align: center;
+      overflow: hidden;
     }
   }
   .wangluo{
@@ -170,6 +181,7 @@ export default {
       width: 200px;
       text-align: center;
       line-height: 40px;
+      overflow: hidden;
     }
 }
 </style>
