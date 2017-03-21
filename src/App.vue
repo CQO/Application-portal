@@ -1,23 +1,25 @@
 <template lang="pug">
   .app(v-bind:class="classObject")
     .titleBar
+      .add.titleButton.ico(v-bind:class="{ hidden: !leftIcon.isActive }") &#xe601;
       p.title {{tabIndex}}
+      .add.titleButton.ico(v-bind:class="{ hidden: !rightIcon.isActive }") &#xe626;
     .content
       Notice.content-item
       App.content-item
       Contacts.content-item
       Me.content-item
     .bottomBar
-      .item.notice(@click="tabIndex='通知'")
+      .item.notice(@click="noticeTabClick")
         .ico &#xe615;
         .name 通知
-      .item.app(@click="tabIndex='我的应用'")
+      .item.app(@click="appTabClick")
         .ico &#xe60b;
         .name 我的应用
-      .item.contacts(@click="tabIndex='通讯录'")
+      .item.contacts(@click="contactsTabClick")
         .ico &#xe619;
         .name 通讯录
-      .item.me(@click="tabIndex='我'")
+      .item.me(@click="meTabClick")
         .ico &#xe66e;
         .name 我
 </template>
@@ -27,6 +29,7 @@ import Notice from './components/Notice'
 import Contacts from './components/Contacts'
 import App from './components/App'
 import Me from './components/Me'
+import AppStore from './components/AppStore'
 export default {
   components: {
     Notice,
@@ -37,6 +40,8 @@ export default {
   data () {
     return {
       tabIndex:"通知",
+      rightIcon:{isActive:false,href:""},
+      leftIcon:{isActive:false,href:""}
     }
   },
   computed: {
@@ -48,7 +53,27 @@ export default {
         'meActive': this.tabIndex==="我",
       }
     }
-  }
+  },
+  methods: {
+    //通知标签点击事件
+    noticeTabClick() {
+      this.tabIndex='通知'
+      this.rightIcon = {isActive:false}
+    },
+    //我的应用标签点击事件
+    appTabClick () {
+      this.tabIndex='我的应用'
+      this.rightIcon = {isActive:true,ico:"&#xe61a;",href:""}
+    },
+    contactsTabClick () {
+      this.tabIndex='通讯录'
+      this.rightIcon = {isActive:false}
+    },
+    meTabClick () {
+      this.tabIndex='我'
+      this.rightIcon = {isActive:false}
+    }
+  },
 }
 </script>
 
@@ -56,11 +81,14 @@ export default {
 @import '~vux/src/styles/reset.less';
 @font-face {
   font-family: 'iconfont';  /* project id 252571 */
-  src: url('./font/iconfont.eot');
-  src: url('./font/iconfont.eot?#iefix') format('embedded-opentype'),
-  url('./font/iconfont.woff') format('woff'),
-  url('./font/iconfont.ttf') format('truetype'),
-  url('./font/iconfont.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_i5lb8u5c59nyu8fr.eot');
+  src: url('//at.alicdn.com/t/font_i5lb8u5c59nyu8fr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_i5lb8u5c59nyu8fr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_i5lb8u5c59nyu8fr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_i5lb8u5c59nyu8fr.svg#iconfont') format('svg');
+}
+.hidden{
+  visibility: hidden;
 }
 body {
   background-color: #f4f4f4;
@@ -103,7 +131,7 @@ body {
     }
 }
 .app .vux-slider{
-  width: 400px;
+  width: 100%;
   margin: 0 auto;
 }
 </style>
@@ -111,12 +139,14 @@ body {
 <style lang="less">
 .app{
   height: 100%;
-  .notice-box, .contacts-box, .app-box, .personal-information{
-    transition: width 0.08s;
-  }
   .content-item{
     overflow: hidden;
   }
+}
+.titleButton{
+  height: 45px;
+  width: 45px;
+  font-size: 1.4rem;
 }
 .noticeActive{
   .notice-box{
@@ -125,6 +155,7 @@ body {
     display: block;
   }
   .contacts-box, .app-box, .personal-information{
+    transition: width 0.08s;
     width: 0;
   }
   .notice{
@@ -136,11 +167,13 @@ body {
 
 .appActive{
   .notice-box, .contacts-box, .personal-information {
+    transition: width 0.08s;
     width: 0;
   }
   .app-box{
     width: 100%;
     color: blueviolet;
+    display: block;
   }
   .app{
     .ico, .name{
@@ -151,10 +184,12 @@ body {
 
 .contactsActive{
   .notice-box, .app-box, .personal-information{
+    transition: width 0.08s;
     width: 0;
   }
   .contacts-box{
     width: 100%;
+    display: block;
   }
   .contacts{
     .ico, .name{
@@ -165,6 +200,8 @@ body {
 
 .meActive{
   .notice-box, .contacts-box, .app-box{
+    transition: width 0.08s;
+    visibility:hidden;
     width: 0;
   }
   .personal-information{
@@ -180,7 +217,7 @@ body {
 
 .titleBar{
   height:45px;
-  line-height:145px;
+  line-height:45px;
   background:#f8f8f8;
   width:100%;
   position:absolute;
@@ -188,17 +225,19 @@ body {
   top:0;
   text-align:center;
   border-bottom: 1px solid #dfdde8;
+  display: flex;
   .title{
     height: 45px;
     line-height: 45px;
     font-size: 18px;
     font-family: -apple-system-font,Helvetica Neue,sans-serif;
+    width: calc(~"100% - 90px");
   }
 }
 .content{
   background:#f4f4f4;
   width:100%;
-  overflow:auto;
+  overflow:hidden;
   top:46px;
   position:absolute;
   z-index:10;

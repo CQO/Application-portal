@@ -8,11 +8,6 @@
         p.text {{item.text}}
       .time {{item.time}}
       .notice(v-if='item.notice') {{item.notice}}
-    .button(@click="Click") {{dbtest}}
-    .duihua
-      input(type="value",v-model="message")
-      .send(v-on:click.stop="sendMessage") 发送消息
-    .wangluo(@click="wangluo") {{dbtest}}
 </template>
 
 <script>
@@ -44,30 +39,6 @@ export default {
               _this.notice=value;
             }
           });
-    },
-    get (url,fn){
-            var obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
-            obj.open('GET',url,true);
-            obj.onreadystatechange=function(){
-                if (obj.readyState == 4 && obj.status == 200 || obj.status == 304) { // readyState==4说明请求已完成
-                    fn.call(this, obj.responseText);  //从服务器获得数据
-                }
-            };
-            obj.send(null);
-        },
-    sendMessage(){
-      const _this = this;
-      _this.get(`http://www.tuling123.com/openapi/api?key=bb1b96a394b19b8ce2c61cf32c64d695&userid=123&info=${_this.message}`,function(e){
-        const message = JSON.parse(e);
-        _this.message = message.text;
-      })
-    },
-    wangluo(){
-      const _this = this;
-      _this.get(`http://myweb-10017157.cos.myqcloud.com/2017/0311/test.date`,function(e){
-        const message = JSON.parse(e);
-        _this.notice[0] = message;
-      })
     }
   },
   data () {

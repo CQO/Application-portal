@@ -8,9 +8,7 @@ import App from './App'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', name: 'Main', component: require('./components/Notice') },
-  { path: '/AppStore', name: 'AppStore', component: require('./components/AppStore') },
-  { path: '/Organization', name: 'Organization', component: require('./components/Organization') }
+  { path: '/', name: 'Main', component: require('./components/Notice') }
 ]
 
 const router = new VueRouter({

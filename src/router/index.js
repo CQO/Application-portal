@@ -5,7 +5,6 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    { path: '/', name: 'Main', component: require('components/App') },
-    { path: '/Organization', name: 'Organization', component: require('components/Organization') }
+    { path: '/', name: 'Main', component: require('components/App') }
   ]
 });
