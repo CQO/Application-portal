@@ -155,7 +155,7 @@ body {
     display: block;
   }
   .contacts-box, .app-box, .personal-information{
-    transition: width 0.08s;
+    
     width: 0;
   }
   .notice{
@@ -167,7 +167,6 @@ body {
 
 .appActive{
   .notice-box, .contacts-box, .personal-information {
-    transition: width 0.08s;
     width: 0;
   }
   .app-box{
@@ -184,7 +183,7 @@ body {
 
 .contactsActive{
   .notice-box, .app-box, .personal-information{
-    transition: width 0.08s;
+    
     width: 0;
   }
   .contacts-box{
@@ -200,7 +199,7 @@ body {
 
 .meActive{
   .notice-box, .contacts-box, .app-box{
-    transition: width 0.08s;
+    
     visibility:hidden;
     width: 0;
   }
