@@ -1,5 +1,6 @@
 <template lang="pug">
 .notice-box
+  TitleBar(title='通知')
   ul.notice-list
     li(v-for='item in notice')
       img.user-img(src='../assets/golf.png')
@@ -8,15 +9,18 @@
         p.text {{item.text}}
       .time {{item.time}}
       .notice(v-if='item.notice') {{item.notice}}
+  BottomBar(index="0")
 </template>
 
 <script>
-import { XHeader } from 'vux'
+import TitleBar from './bar/Title'
+import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
 export default {
   name: 'page-tabbar',
   components: {
-    XHeader
+    TitleBar,
+    BottomBar
   },
   methods: {
     Click (item) {

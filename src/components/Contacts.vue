@@ -1,5 +1,6 @@
 <template lang="pug">
 .contacts-box
+  TitleBar(title='通讯录')
   .zuzhi 
     a 北信源北京
     p >
@@ -20,37 +21,18 @@
         p.organization-name 研发二组
         p.organization-number.ico &#xe649; 2
         p.organization-people.ico &#xe6ca; 14
+  BottomBar(index="2")
 </template>
 
 <script>
 import { Search,XHeader } from 'vux'
+import TitleBar from './bar/Title'
+import BottomBar from './bar/Bottom'
 export default {
   components: {
-    Search,
-    XHeader
-  },
-  methods: {
-    resultClick (item) {
-      window.alert('you click the result item: ' + JSON.stringify(item))
-    },
-  },
-  data () {
-    return {
-      results: [],
-      value: ''
-    }
+    TitleBar,
+    BottomBar
   }
-}
-
-function getResult (val) {
-  let rs = []
-  for (let i = 0; i < 8; i++) {
-    rs.push({
-      title: `${val} result: ${i + 1} `,
-      other: i
-    })
-  }
-  return rs
 }
 </script>
 
@@ -76,13 +58,15 @@ function getResult (val) {
         height: 61px;
         line-height: 61px;
         width: calc(~"100% - 160px");
+        font-size: 0.9rem;
     }
     .ico{
         height: 61px;
         line-height: 61px;
-        width: 50px;
+        width: 40px;
         color: #a4a9b2;
         text-align: center;
+        font-size: 0.8rem;
     }
 }
 .zuzhi{

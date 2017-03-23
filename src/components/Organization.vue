@@ -1,5 +1,6 @@
 <template lang="pug">
 .organization-box
+    TitleBar(title='组织架构',leftIcon="flase")
     Search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
     .zuzhi 
         a 北信源北京
@@ -15,13 +16,15 @@
 <script>
 import { Search, Checker, CheckerItem, XHeader } from 'vux'
 import Organization from './list/Organization';
+import TitleBar from './bar/Title'
 export default {
   components: {
     Search,
     Checker,
     CheckerItem,
     Organization,
-    XHeader
+    XHeader,
+    TitleBar
   },
   methods: {
     resultClick (item) {

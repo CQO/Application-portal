@@ -1,5 +1,6 @@
 <template lang="pug">
 .app-store-box
+  TitleBar(title='应用商店',leftIcon="flase")
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
     checker-item(value="skill") 智造
@@ -13,13 +14,15 @@
 <script>
 import { Search, Checker, CheckerItem, XHeader } from 'vux'
 import AppStore from './list/AppStore';
+import TitleBar from './bar/Title'
 export default {
   components: {
     Search,
     Checker,
     CheckerItem,
     AppStore,
-    XHeader
+    XHeader,
+    TitleBar
   },
   methods: {
     resultClick (item) {
@@ -51,6 +54,7 @@ export default {
     classification: function () {
       const _this = this;
       return this.appList.filter(function (list) {
+        //判断筛选条件是否为显示全部
         if(_this.select === "all"){
           return true
         }

@@ -1,5 +1,6 @@
 <template lang="pug">
 .app-box
+  TitleBar(title='我的应用',rightIcon="flase")
   swiper(:list="baseList",v-model="index",@on-index-change="onIndexChange")
   AppTitle.tongxun-title(title="通讯类")
   Grid
@@ -11,13 +12,14 @@
     grid-item(v-for="item in bangongList",:key="item")
       img(slot="icon",src="../assets/golf.png")
       span(slot="label") {{item.name}}
+  BottomBar(index="1")
 </template>
 
 <script>
 import { Search, Swiper, XHeader, Grid, GridItem } from 'vux'
-import AppTitle from './bar/AppTitle';
-import './img/1.jpg';
-
+import AppTitle from './bar/AppTitle'
+import TitleBar from './bar/Title'
+import BottomBar from './bar/Bottom'
 export default {
   components: {
     Search,
@@ -25,7 +27,9 @@ export default {
     AppTitle,
     XHeader,
     Grid,
-    GridItem
+    GridItem,
+    TitleBar,
+    BottomBar
   },
   methods: {
     resultClick (item) {
