@@ -7,7 +7,7 @@
     p.name 罗杰斯
     .ico &#xe659;
   .title 操作
-  P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color")
+  P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:key="item.id")
   .quit 退出登录
   BottomBar(index="3")
 </template>
@@ -17,6 +17,7 @@ import { Panel, XHeader } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
+
 export default {
   components: {
     Panel,
@@ -29,9 +30,9 @@ export default {
     return {
       list: 
       [
-        { icon: '&#xe600;', title: '设置', color:'#61c2ff'}, 
-        { icon: '&#xe629;', title: '帮助', color:'#ffd217'},
-        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47'}
+        { icon: '&#xe600;', title: '设置', color:'#61c2ff', id:"1000"}, 
+        { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001"},
+        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002"}
       ]
     }
   }

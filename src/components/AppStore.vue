@@ -8,7 +8,7 @@
     checker-item(value="picture") 看图
     checker-item(value="sell") 销售
   ul
-    AppStore(v-for="item in classification",:neme="item.neme",:detail="item.detail",:exist="item.exist")
+    AppStore(v-for="item in classification",:neme="item.neme",:detail="item.detail",:exist="item.exist",:key="item.id")
 </template>
 
 <script>
@@ -38,11 +38,11 @@ export default {
   data () {
     return {
       appList:[
-        { neme:"天工圆圆", detail:"183次下载 | 24.7M", exist:false, type:"skill", exist:true },
-        { neme:"信息发布", detail:"132次下载 | 12.6M", exist:false, type:"cooperation", exist:false },
-        { neme:"邮件", detail:"您有一封来自行政部的邮件", exist:false, type:"skill", exist:false },
-        { neme:"公文管理", detail:"您有代办公文需要处理", exist:false, type:"picture", exist:false },
-        { neme:"办公系统", detail:"您有代办公文需要处理", exist:false, type:"skill", exist:false }
+        { neme:"天工圆圆", detail:"183次下载 | 24.7M", exist:false, type:"skill", exist:true, id:"1000"},
+        { neme:"信息发布", detail:"132次下载 | 12.6M", exist:false, type:"cooperation", exist:false, id:"1001" },
+        { neme:"邮件", detail:"您有一封来自行政部的邮件", exist:false, type:"skill", exist:false, id:"1002" },
+        { neme:"公文管理", detail:"您有代办公文需要处理", exist:false, type:"picture", exist:false, id:"1003" },
+        { neme:"办公系统", detail:"您有代办公文需要处理", exist:false, type:"skill", exist:false, id:"1004" }
       ],
       results: [],
       value: '',
