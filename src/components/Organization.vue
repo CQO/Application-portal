@@ -1,7 +1,7 @@
 <template lang="pug">
 .organization-box
     TitleBar(title='组织架构',leftIcon="flase")
-    Search(@result-click="resultClick",@on-change="getResult",:results="results",v-model="value",auto-scroll-to-top)
+    Search
     .zuzhi 
         a 北信源北京
         p >
@@ -26,17 +26,6 @@ export default {
     XHeader,
     TitleBar
   },
-  methods: {
-    resultClick (item) {
-      window.alert('you click the result item: ' + JSON.stringify(item))
-    },
-    getResult (val) {
-      this.results = val ? getResult(this.value) : []
-    },
-    onIndexChange (index) {
-      this.index = index
-    }
-  },
   data () {
     return {
       organizationList:[
@@ -46,22 +35,9 @@ export default {
         {neme:'高永胜',text:'[电脑]软件工程师',id:'1003'},
         {neme:'赵建超',text:'[电脑]软件工程师',id:'1004'},
         {neme:'刘洋',text:'[电脑]软件工程师',id:'1005'},
-      ],
-      results: [],
-      value: '',
+      ]
     }
   },
-}
-
-function getResult (val) {
-  let rs = []
-  for (let i = 0; i < 8; i++) {
-    rs.push({
-      title: `${val} result: ${i + 1} `,
-      other: i
-    })
-  }
-  return rs
 }
 </script>
 

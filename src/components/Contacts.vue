@@ -1,6 +1,7 @@
 <template lang="pug">
 .contacts-box
   TitleBar(title='通讯录')
+  Search
   .zuzhi 
     a 北信源北京
     p >
@@ -11,13 +12,13 @@
   ul.organization
     li
       a(href="#/Organization")
-        img(src="../assets/golf.png")
+        img(src="http://xn--9tr.com/vrv/304/Organization.png")
         p.organization-name 研发一组
         p.organization-number.ico &#xe649; 0
         p.organization-people.ico &#xe6ca; 24
     li
       a(href="#/Organization")
-        img(src="../assets/golf.png")
+        img(src="http://xn--9tr.com/vrv/304/Organization.png")
         p.organization-name 研发二组
         p.organization-number.ico &#xe649; 2
         p.organization-people.ico &#xe6ca; 14
@@ -31,7 +32,8 @@ import BottomBar from './bar/Bottom'
 export default {
   components: {
     TitleBar,
-    BottomBar
+    BottomBar,
+    Search
   }
 }
 </script>

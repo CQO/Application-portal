@@ -3,7 +3,7 @@
   TitleBar(title='通知')
   ul.notice-list
     li(v-for='item in notice')
-      img.user-img(src='../assets/golf.png')
+      img.user-img(:src='item.img')
       .message
         p {{item.name}}
         p.text {{item.text}}
@@ -51,10 +51,10 @@ export default {
       dbtest:"读本地数据",
       message:"测试消息",
       notice: [
-        {name: '天宫圆圆', text: '姜一:明天早晨九点开例会', time: '17:43', img: '../assets/1.png', notice: 0},
-        {name: '信息发布', text: '人事部:3月工资已发放', time: '12:20', img: '../assets/1.png', notice: 0},
-        {name: '邮件', text: '您有来自行政部门的一封邮件', time: '10:49', img: '../assets/1.png', notice: 0},
-        {name: '公文管理', text: '您有待办公文需要处理', time: '08:31', img: '../assets/1.png', notice: 3}
+        {name: '天工圆圆', text: '姜一:明天早晨九点开例会', time: '17:43', img: 'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png', notice: 0},
+        {name: '信息发布', text: '人事部:3月工资已发放', time: '12:20', img: 'http://xn--9tr.com/vrv/304/xinxifabu.png', notice: 0},
+        {name: '邮件', text: '您有来自行政部门的一封邮件', time: '10:49', img: 'http://xn--9tr.com/vrv/304/youjian.png', notice: 0},
+        {name: '公文管理', text: '您有待办公文需要处理', time: '08:31', img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png', notice: 3}
       ]
     }
   }

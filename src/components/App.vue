@@ -1,94 +1,48 @@
 <template lang="pug">
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
-  swiper(:list="baseList",v-model="index",@on-index-change="onIndexChange")
+  swiper(:list="status.showList",v-model="index",@on-index-change="onIndexChange")
   AppTitle.tongxun-title(title="通讯类")
   Grid
-    grid-item(v-for="item in tongxunList",:key="item")
-      img(slot="icon",src="../assets/golf.png")
-      span(slot="label") {{item.name}}
+    grid-item(v-for="item in status.communication",:key="item")
+      img(slot="icon",:src="status.appList[item].icon")
+      span(slot="label") {{status.appList[item].name}}
   AppTitle.bangong-title(title="办公类")
   Grid
-    grid-item(v-for="item in bangongList",:key="item")
-      img(slot="icon",src="../assets/golf.png")
-      span(slot="label") {{item.name}}
+    grid-item(v-for="item in status.office",:key="item")
+      img(slot="icon",:src="status.appList[item].icon")
+      span(slot="label") {{status.appList[item].name}}
   BottomBar(index="1")
 </template>
 
 <script>
-import { Search, Swiper, XHeader, Grid, GridItem } from 'vux'
+import { Search, Swiper, Grid, GridItem } from 'vux'
+import { mapState } from 'vuex'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 export default {
-  components: {
-    Search,
-    Swiper,
-    AppTitle,
-    XHeader,
-    Grid,
-    GridItem,
-    TitleBar,
-    BottomBar
-  },
+  computed: mapState([
+    // 映射 this.count 为 store.state.count
+    'status'
+  ]),
   methods: {
-    resultClick (item) {
-      window.alert('you click the result item: ' + JSON.stringify(item))
-    },
-    getResult (val) {
-      this.results = val ? getResult(this.value) : []
-    },
     onIndexChange (index) {
       this.index = index
     }
   },
-  data () {
-    return {
-      results: [],
-      value: '',
-      tongxunList:[
-        {name:"天宫圆圆",src:""},
-        {name:"邮件",src:""}
-      ],
-      bangongList:[
-        {name:"办公系统",src:""},
-        {name:"信息发布",src:""}
-      ],
-      baseList:[{
-        url: 'javascript:',
-        img: 'https://static.vux.li/demo/1.jpg',
-        title: '一朵花'
-      }, {
-        url: 'javascript:',
-        img: 'https://static.vux.li/demo/2.jpg',
-        title: '一辆车'
-      }, {
-        url: 'javascript:',
-        img: 'https://static.vux.li/demo/3.jpg',
-        title: '一次旅行'
-      }],
-      index:0,
-
-    }
+  components: {
+    Search,
+    Swiper,
+    AppTitle,
+    Grid,
+    GridItem,
+    TitleBar,
+    BottomBar
   }
-}
-
-function getResult (val) {
-  let rs = []
-  for (let i = 0; i < 8; i++) {
-    rs.push({
-      title: `${val} result: ${i + 1} `,
-      other: i
-    })
-  }
-  return rs
 }
 </script>
-
-
-
-<style lang='less' scoped>
-
+<style lang='less'>
 .app-box{
   .weui-grid{
     width: 95px;
@@ -105,6 +59,11 @@ function getResult (val) {
   .weui-grid:after{
     border-bottom:none;
   }
-  
+}
+.weui-grids{
+  .weui-grid__icon{
+    width: 45px;
+    height: 45px;
+  }
 }
 </style>

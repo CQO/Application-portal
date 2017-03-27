@@ -3,7 +3,7 @@
   TitleBar(title='我')
   .title 个人信息
   .information
-    img(src="../assets/user.png")
+    img(src="http://xn--9tr.com/vrv/304/user.png")
     p.name 罗杰斯
     .ico &#xe659;
   .title 操作

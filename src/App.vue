@@ -113,4 +113,16 @@ body{
   bottom:51px;
   display: flex;
 }
+/*搜索框样式*/
+.vux-search-box{
+  .weui-search-bar{
+    background-color: #f8f8f8;
+  }
+  .weui-search-bar:before{
+    border-top: 0;
+  }
+  .weui-search-bar__label{
+    background: #dbdbdb;
+  }
+}
 </style>

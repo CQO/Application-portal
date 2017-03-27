@@ -1,6 +1,6 @@
 <template lang="pug">
 li.organization-list
-  img.user-img(src='../../assets/golf.png')
+  img.user-img(src='http://xn--9tr.com/vrv/304/Organization.png')
   .message
     p {{neme}}
     p.text {{text}}
