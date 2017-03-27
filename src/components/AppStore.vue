@@ -31,12 +31,6 @@ export default {
     TitleBar
   },
   methods: {
-    resultClick (item) {
-      window.alert('you click the result item: ' + JSON.stringify(item))
-    },
-    getResult (val) {
-      this.results = val ? getResult(this.value) : []
-    },
     onIndexChange (index) {
       this.index = index
     }
@@ -50,8 +44,6 @@ export default {
         { neme:"公文管理", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png', type:"picture", exist:false, id:"1003" },
         { neme:"办公系统", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/bangongxitong.png', type:"skill", exist:false, id:"1004" }
       ],
-      results: [],
-      value: '',
       select: 'all',
     }
   },
@@ -70,17 +62,6 @@ export default {
       })
     }
   }
-}
-
-function getResult (val) {
-  let rs = []
-  for (let i = 0; i < 8; i++) {
-    rs.push({
-      title: `${val} result: ${i + 1} `,
-      other: i
-    })
-  }
-  return rs
 }
 </script>
 

@@ -5,7 +5,7 @@
   AppTitle.tongxun-title(title="通讯类")
   Grid
     grid-item(v-for="item in status.communication",:key="item")
-      img(slot="icon",:src="status.appList[item].icon")
+      img(slot="icon",:src="status.appList[item].icon",v-on:click="post('open')")
       span(slot="label") {{status.appList[item].name}}
   AppTitle.bangong-title(title="办公类")
   Grid
@@ -26,9 +26,32 @@ export default {
     // 映射 this.count 为 store.state.count
     'status'
   ]),
+  data () {
+    return {
+      index: 0,
+    }
+  },
   methods: {
     onIndexChange (index) {
       this.index = index
+    },
+    post: function (ob) {
+      const app1 = {
+        "type":2,"sopid":"com.vrv.linkDood",
+        "pkgpath":"com.vrv.linkDood-1.0.45.sop",
+        "scheme":"linkdood:showlinkdood?id=14324535&pwd=123456",
+        "name":"linkdood"
+      };
+      const data = JSON.stringify(app1);
+      const obj = new XMLHttpRequest();
+      obj.open("POST", "http://localhost:9999/"+ob, true);
+      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+      obj.onreadystatechange = function () {
+        if (obj.readyState === 4 && (obj.status === 200 || obj.status === 304)) {  // 304未修改
+          console.log(obj.responseText);
+        }
+      };
+      obj.send(data);
     }
   },
   components: {
