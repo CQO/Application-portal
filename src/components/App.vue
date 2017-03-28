@@ -1,34 +1,47 @@
 <template lang="pug">
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
-  swiper(:list="status.showList",v-model="index",@on-index-change="onIndexChange")
+  swiper(:list="showList",v-model="index",@on-index-change="onIndexChange")
   AppTitle.tongxun-title(title="通讯类")
   Grid
-    grid-item(v-for="item in status.communication",:key="item")
-      img(slot="icon",:src="status.appList[item].icon",v-on:click="post('open')")
-      span(slot="label") {{status.appList[item].name}}
+    grid-item(v-for="item in communication",:key="item")
+      img(slot="icon",:src="appList[item].icon",v-on:click="post('open')")
+      span(slot="label") {{appList[item].name}}
   AppTitle.bangong-title(title="办公类")
   Grid
-    grid-item(v-for="item in status.office",:key="item")
-      img(slot="icon",:src="status.appList[item].icon")
-      span(slot="label") {{status.appList[item].name}}
+    grid-item(v-for="item in office",:key="item")
+      img(slot="icon",:src="appList[item].icon")
+      span(slot="label") {{appList[item].name}}
   BottomBar(index="1")
 </template>
 
 <script>
 import { Search, Swiper, Grid, GridItem } from 'vux'
-import { mapState } from 'vuex'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 export default {
-  computed: mapState([
-    // 映射 this.count 为 store.state.count
-    'status'
-  ]),
   data () {
     return {
       index: 0,
+      communication:['tiangongyuanyuan', 'youjian'],
+      office:['bangongxitong', 'xinxifabu'],
+      appList:{
+        tiangongyuanyuan:{id:"10000", name:"天宫圆圆", icon:'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png'},
+        xinxifabu:{id:"10001", name:"信息发布", icon:'http://xn--9tr.com/vrv/304/xinxifabu.png'},
+        youjian:{id:"10002", name:"邮件", icon:'http://xn--9tr.com/vrv/304/youjian.png'},
+        gongwenguanli:{id:"10003", name:"公文管理", icon:'http://xn--9tr.com/vrv/304/gongwenguanli.png'},
+        bangongxitong:{id:"10004", name:"办公系统", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png'}
+      },
+      showList:[{
+        url: 'https://translate.google.cn/',
+        img: 'http://xn--9tr.com/vrv/304/1.png',
+        title: '两会时间'
+      }, {
+        url: 'https://translate.google.cn/',
+        img: 'http://xn--9tr.com/vrv/304/2.png',
+        title: '信源豆豆'
+      }],
     }
   },
   methods: {

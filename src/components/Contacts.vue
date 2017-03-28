@@ -14,14 +14,14 @@
       a(href="#/Organization")
         img(src="http://xn--9tr.com/vrv/304/Organization.png")
         p.organization-name 研发一组
-        p.organization-number.ico &#xe649; 0
-        p.organization-people.ico &#xe6ca; 24
+        p.organization-number.ico &#xe62a; 0
+        p.organization-people.ico &#xe60c; 24
     li
       a(href="#/Organization")
         img(src="http://xn--9tr.com/vrv/304/Organization.png")
         p.organization-name 研发二组
-        p.organization-number.ico &#xe649; 2
-        p.organization-people.ico &#xe6ca; 14
+        p.organization-number.ico &#xe62a; 2
+        p.organization-people.ico &#xe60c; 14
   BottomBar(index="2")
 </template>
 
@@ -68,7 +68,7 @@ export default {
         width: 40px;
         color: #a4a9b2;
         text-align: center;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 }
 .zuzhi{

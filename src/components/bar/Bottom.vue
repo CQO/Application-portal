@@ -1,16 +1,16 @@
 <template lang="pug">
   .bottomBar
     .item.notice(@click="noticeTabClick",v-bind:class="{ active: index==='0' }")
-      .ico &#xe615;
+      .ico &#xe630;
       .name 通知
     .item.app(@click="appTabClick",v-bind:class="{ active: index==='1' }")
-      .ico &#xe60b;
+      .ico &#xe622;
       .name 我的应用
     .item.contacts(@click="contactsTabClick",v-bind:class="{ active: index==='2' }")
-      .ico &#xe619;
+      .ico &#xe664;
       .name 通讯录
     .item.me(@click="meTabClick",v-bind:class="{ active: index==='3' }")
-      .ico &#xe66e;
+      .ico &#xe60c;
       .name 我
 </template>
 <script>

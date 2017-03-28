@@ -16,12 +16,7 @@
 import { Search, Checker, CheckerItem, XHeader } from 'vux'
 import AppStore from './list/AppStore';
 import TitleBar from './bar/Title'
-import { mapState } from 'vuex'
 export default {
-  computed: mapState([
-    // 映射 this.count 为 store.state.count
-    'status'
-  ]),
   components: {
     Search,
     Checker,

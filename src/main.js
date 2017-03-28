@@ -1,14 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import Vuex from 'vuex';
 import FastClick from 'fastclick';
 import VueRouter from 'vue-router';
 import App from './App';
-import store from './vuex/store';
 
 Vue.use(VueRouter);
-Vue.use(Vuex);
 
 const routes = [
   { path: '/', name: 'Main', component: require('./components/Notice') },
@@ -28,6 +25,5 @@ FastClick.attach(document.body)
 /* eslint-disable no-new */
 new Vue({
   router,
-  store,
   render: h => h(App)
 }).$mount('#app-box');
