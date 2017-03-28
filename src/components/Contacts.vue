@@ -3,9 +3,9 @@
   TitleBar(title='通讯录')
   Search
   .zuzhi 
-    a 北信源北京
+    a 北京
     p >
-    a 南京研发中心
+    a 研发中心
     p >
     a 移动终端部
 
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { Search,XHeader } from 'vux'
+import Search from './panel/Search'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 export default {

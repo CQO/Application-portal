@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import { Search, Checker, CheckerItem, XHeader } from 'vux'
+import { Checker, CheckerItem, XHeader } from 'vux'
+import Search from './panel/Search'
 import AppStore from './list/AppStore';
 import TitleBar from './bar/Title'
 export default {

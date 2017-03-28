@@ -1,7 +1,7 @@
 <template lang="pug">
 .organization-box
     TitleBar(title='组织架构',leftIcon="flase")
-    Search
+    Search(value="qqweqwe")
     .zuzhi 
         a 北信源北京
         p >
@@ -14,17 +14,28 @@
 </template>
 
 <script>
-import { Search, Checker, CheckerItem, XHeader } from 'vux'
 import Organization from './list/Organization';
 import TitleBar from './bar/Title'
+import Search from './panel/Search'
 export default {
   components: {
     Search,
-    Checker,
-    CheckerItem,
     Organization,
-    XHeader,
     TitleBar
+  },
+  methods: {
+    resultClick (item) {
+      window.alert('you click the result item: ' + JSON.stringify(item))
+    },
+    getResult (val) {
+      this.results = val ? getResult(this.value) : []
+    },
+    onFocus () {
+      console.log('on focus')
+    },
+    onCancel () {
+      console.log('on cancel')
+    }
   },
   data () {
     return {
@@ -35,9 +46,21 @@ export default {
         {neme:'高永胜',text:'[电脑]软件工程师',id:'1003'},
         {neme:'赵建超',text:'[电脑]软件工程师',id:'1004'},
         {neme:'刘洋',text:'[电脑]软件工程师',id:'1005'},
-      ]
+      ],
+      results: [],
+      value: 'test'
     }
   },
+}
+function getResult (val) {
+  let rs = []
+  for (let i = 0; i < 8; i++) {
+    rs.push({
+      title: `${val} result: ${i + 1} `,
+      other: i
+    })
+  }
+  return rs
 }
 </script>
 

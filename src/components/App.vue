@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { Search, Swiper, Grid, GridItem } from 'vux'
+import { Swiper, Grid, GridItem } from 'vux'
+import Search from './panel/Search'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
