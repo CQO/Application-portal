@@ -1,24 +1,22 @@
 <template lang="pug">
 .organization-box
-    TitleBar(title='组织架构',leftIcon="flase")
+    TitleBar(title='通讯录')
     Search(value="qqweqwe")
-    .zuzhi 
-        a 中国航天科工集团
-        p >
-        a {{$route.params.name}}
-        p >
     Organization(v-for="item in organizationList",:neme="item.neme",:text="item.text",:key="item.id")
+    BottomBar(index="2")
 </template>
 
 <script>
 import Organization from './list/Organization';
 import TitleBar from './bar/Title'
 import Search from './panel/Search'
+import BottomBar from './bar/Bottom'
 export default {
   components: {
     Search,
     Organization,
-    TitleBar
+    TitleBar,
+    BottomBar
   },
   methods: {
     resultClick (item) {

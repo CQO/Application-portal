@@ -49,7 +49,7 @@ export default {
     contactsTabClick () {
       this.tabIndex='通讯录'
       this.rightIcon = {isActive:false}
-      window.location.href="#/Contacts"
+      window.location.href="#/Organization"
     },
     meTabClick () {
       this.tabIndex='我'

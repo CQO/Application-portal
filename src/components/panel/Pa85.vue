@@ -2,7 +2,7 @@
   .panel85
     img(src="http://xn--9tr.com/vrv/304/user.png")
     .inf
-        p.name.item 张俊
+        p.name.item {{$route.params.name}}
         p.department.item 科研部
     
 </template>
