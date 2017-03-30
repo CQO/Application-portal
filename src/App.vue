@@ -8,11 +8,11 @@
 @import '~vux/src/styles/reset.less';
 @font-face {
   font-family: 'iconfont';  /* project id 252571 */
-  src: url('//at.alicdn.com/t/font_0v6yuahb34dt2o6r.eot');
-  src: url('//at.alicdn.com/t/font_0v6yuahb34dt2o6r.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_0v6yuahb34dt2o6r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_0v6yuahb34dt2o6r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_0v6yuahb34dt2o6r.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_z338l4ajqph9f6r.eot');
+  src: url('//at.alicdn.com/t/font_z338l4ajqph9f6r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_z338l4ajqph9f6r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_z338l4ajqph9f6r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_z338l4ajqph9f6r.svg#iconfont') format('svg');
 }
 .hidden{ visibility: hidden; }
 .ico{
@@ -21,6 +21,9 @@
   font-weight: normal;
   speak: none;
   display: inline-block;
+}
+ul{
+  list-style:none;
 }
 </style>
 
