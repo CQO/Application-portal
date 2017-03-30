@@ -8,11 +8,11 @@
 @import '~vux/src/styles/reset.less';
 @font-face {
   font-family: 'iconfont';  /* project id 252571 */
-  src: url('//at.alicdn.com/t/font_uxag96ii0rxxn7b9.eot');
-  src: url('//at.alicdn.com/t/font_uxag96ii0rxxn7b9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_uxag96ii0rxxn7b9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_uxag96ii0rxxn7b9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_uxag96ii0rxxn7b9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_ioek6hxn5crqkt9.eot');
+  src: url('//at.alicdn.com/t/font_ioek6hxn5crqkt9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_ioek6hxn5crqkt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_ioek6hxn5crqkt9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_ioek6hxn5crqkt9.svg#iconfont') format('svg');
 }
 .hidden{ visibility: hidden; }
 .ico{

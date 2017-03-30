@@ -1,5 +1,5 @@
 <template lang="pug">
-  .panel42
+  router-link.panel42(:to="url")
     .ico.icon(v-html="icoCode",:style="'color:'+color")
     .text {{text}}
     .ico.enter &#xe659;
@@ -10,6 +10,7 @@ export default {
   props: {
     icoCode: String,
     text: String,
+    url:String,
     color: String
   }
 }

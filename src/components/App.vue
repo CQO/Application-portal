@@ -34,14 +34,16 @@ export default {
         gongwenguanli:{id:"10003", name:"公文管理", icon:'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'#', special:"bggl"},
         bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://172.17.40.47/portal/menu.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=&SessionID=', special:"url"}
       },
-      showList:[{
-        url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993',
-        img: 'http://xn--9tr.com/vrv/304/1.png',
-        title: '两会时间'
-      }, {
+      showList:[
+      {
         url: 'https://translate.google.cn/',
         img: 'http://xn--9tr.com/vrv/304/2.png',
         title: '信源豆豆'
+      },
+      {
+        url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993',
+        img: 'http://xn--9tr.com/vrv/304/1.png',
+        title: '两会时间'
       }],
     }
   },

@@ -1,21 +1,27 @@
 <template lang="pug">
-.login-box
+.login-box(:class="step")
     .logo-box
         img.logo(src="../assets/logo.png")
         p 智慧企业平台
     .user-name-box
         .user.ico &#xe60c;
-        input(v-model="userName",placeholder="用户名")
+        input(v-model="userName",:placeholder="userCard")
     .password-box
         .password.ico &#xe623;
         input(v-model="password",placeholder="密码")
-    .login-button(v-on:click="loginIn",v-show="!selectData") 登陆
-    .select-list(v-show="selectData")
+    
+    .select-list(v-show="selectList")
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="item in selectList") {{item.text}}
-
+            li(v-for="item in selectList") {{item.unitName}}
+    .step
+        .login-button(v-on:click="loginIn") {{buttonText}}
+        p {{promptText}}
+        .point
+            .ico.icon1 &#xe602;
+            .ico.icon2 &#xe602;
+            .ico.icon3 &#xe602;
 </template>
 
 <script>
@@ -24,20 +30,54 @@ export default {
     return {
       userName: '',
       password:'',
-      selectList:[
-        {text:"王峰 财务部",id:"10000"},
-        {text:"王峰 开发一组 科研部",id:"10001"},
-        {text:"王峰 开发二组 科研部",id:"10002"},
-        {text:"王峰 开发二组 科研部",id:"10002"},
-        {text:"王峰 开发二组 科研部",id:"10002"}
-      ],
-      selectData:null,
+      step:'one',
+      buttonText:'登录',
+      promptText:'第一步:输入您的用户名',
+      userCard:'用户名',
+      selectList:null,
     }
   },
+
   methods: {
+    post: function (url,data) {
+      const postData = JSON.stringify(data);
+      const obj = new XMLHttpRequest();
+      obj.open("POST", url, true);
+      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+      obj.onreadystatechange = function () {
+        if (obj.readyState === 4 && (obj.status === 200 || obj.status === 304)) {  // 304未修改
+          document.write(obj.responseText);
+        }
+      };
+      obj.send(data);
+    },
     loginIn(){
-        console.log("sd");
-        this.selectData={};
+      switch(this.step){
+        case 'one':{
+          const data={userName:this.userName};
+          //this.post("http://localhost:9999/nameLoginList",data);
+          this.selectList=[
+            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发一部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'},
+            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发一部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'}
+          ];
+          this.promptText='第二步:请输入您所属组织架构';
+          this.step='two';
+          break;
+        }
+        case 'two':{
+          const data={usbkeyidentification:"",password:"1212"};
+          //this.post("http://localhost:9999/login",data);
+          this.selectList=null;
+          this.userCard = "身份证";
+          this.buttonText = "登录"
+          this.promptText='第三步:请填写您的身份证和密码';
+          this.step='three';
+          break;
+        }
+      }
+
+      const data={usbkeyidentification:"",password:"1212"};
+      //this.post("http://localhost:9999/login",data);
     }
   },
 }
@@ -123,5 +163,27 @@ export default {
     line-height: 50px;
     color: white;
     font-size: 1.4rem;
+}
+.step{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: #ccc;
+}
+.one{
+    .icon1{
+        color: blue;
+    }
+}
+.two{
+    .icon2{
+        color: blue;
+    }
+}
+.three{
+    .icon3{
+        color: blue;
+    }
 }
 </style>

@@ -7,18 +7,12 @@
     p >
 
   ul.organization
-    li
-      a(href="#/Organization")
+    li(v-for="item in List")
+      a(:href="'#/Organization/'+item")
         img(src="http://xn--9tr.com/vrv/304/Organization.png")
-        p.organization-name 研发一组
+        p.organization-name {{item}}
         p.organization-number.ico &#xe62a; 0
         p.organization-people.ico &#xe60c; 24
-    li
-      a(href="#/Organization")
-        img(src="http://xn--9tr.com/vrv/304/Organization.png")
-        p.organization-name 研发二组
-        p.organization-number.ico &#xe62a; 2
-        p.organization-people.ico &#xe60c; 14
   BottomBar(index="2")
 </template>
 
@@ -31,7 +25,12 @@ export default {
     TitleBar,
     BottomBar,
     Search
-  }
+  },
+  data () {
+    return {
+      List:['办公厅','计划部','科研部','科质部','空间部','财务部','资产部','经合部','国际部','人事部','安保部','审计部','纪监部','党群部','科信部','科技委','监事会']
+    }
+  },
 }
 </script>
 

@@ -7,7 +7,7 @@
     p.name 罗杰斯
     .ico &#xe659;
   .title 操作
-  P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:key="item.id")
+  P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url")
   .quit 退出登录
   BottomBar(index="3")
 </template>
@@ -26,13 +26,18 @@ export default {
     BottomBar,
     P42
   },
+  methods: {
+    openUrl(url) {
+      console.log(url)
+    }
+  },
   data () {
     return {
       list: 
       [
-        { icon: '&#xe600;', title: '设置', color:'#61c2ff', id:"1000"}, 
-        { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001"},
-        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002"}
+        { icon: '&#xe600;', title: '设置', color:'#61c2ff', id:"1000",url:"/Sett"}, 
+        { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
+        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ]
     }
   }

@@ -1,15 +1,12 @@
 <template lang="pug">
 .organization-box
-    TitleBar(title='组织架构',leftIcon="flase",backUrl="/Contacts")
+    TitleBar(title='组织架构',leftIcon="flase")
     Search(value="qqweqwe")
     .zuzhi 
-        a 北京
+        a 中国航天科工集团
         p >
-        a 研发中心
+        a {{$route.params.name}}
         p >
-        a 移动终端部
-        p >
-        a 研发一组
     Organization(v-for="item in organizationList",:neme="item.neme",:text="item.text",:key="item.id")
 </template>
 
