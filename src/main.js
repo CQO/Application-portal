@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 
 const routes = [
   { path: '/Main', name: 'Main', component: require('./components/Notice') },
-  { path: '/', name: 'Index', component: require('./components/Index') },
+  { path: '/', name: 'Index', component: require('./components/Notice') },
   { path: '/App', name: 'App', component: require('./components/App') },
   { path: '/Contacts', name: 'Contacts', component: require('./components/Contacts') },
   { path: '/Me', name: 'Me', component: require('./components/Me') },

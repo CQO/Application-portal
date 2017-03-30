@@ -3,11 +3,8 @@
   TitleBar(title='通讯录')
   Search
   .zuzhi 
-    a 北京
+    a 中国航天科工集团
     p >
-    a 研发中心
-    p >
-    a 移动终端部
 
   ul.organization
     li
