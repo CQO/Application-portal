@@ -1,6 +1,6 @@
 <template lang="pug">
   .title-bar
-    router-link.add.titleButton.ico(v-bind:class="{ hidden: !leftIcon }",to="\App") &#xe601;
+    .add.titleButton.ico(v-bind:class="{ hidden: !leftIcon }",v-on:click="back") &#xe601;
     p.title {{title}}
     router-link.add.titleButton.ico(v-bind:class="{ hidden: !rightIcon }",to="\AppStore") &#xe626;
 </template>
@@ -11,7 +11,12 @@ export default {
         title: String,
         leftIcon:String,
         rightIcon:String
-    },  
+    },
+    methods: {
+      back () {
+        history.go(-1);
+      },
+  },
 }
 
 </script>

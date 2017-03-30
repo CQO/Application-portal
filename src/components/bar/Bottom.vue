@@ -22,7 +22,7 @@ export default {
     //通知标签点击事件
     noticeTabClick() {
       this.tabIndex='通知'
-      window.location.href="#/"
+      window.location.href="#/Main"
     },
     //我的应用标签点击事件
     appTabClick () {

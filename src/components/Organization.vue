@@ -1,11 +1,11 @@
 <template lang="pug">
 .organization-box
-    TitleBar(title='组织架构',leftIcon="flase")
+    TitleBar(title='组织架构',leftIcon="flase",backUrl="/Contacts")
     Search(value="qqweqwe")
     .zuzhi 
-        a 北信源北京
+        a 北京
         p >
-        a 南京研发中心
+        a 研发中心
         p >
         a 移动终端部
         p >

@@ -1,5 +1,5 @@
 <template lang="pug">
-li.organization-list
+router-link.organization-list(to="\Information")
   img.user-img(src='http://xn--9tr.com/vrv/304/Organization.png')
   .message
     p {{neme}}
