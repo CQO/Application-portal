@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice')
+    li(v-for='item in notice',v-on:click="turn(item.url)")
       img.user-img(:src='item.img')
       .message
         p {{item.name}}
@@ -23,36 +23,65 @@ export default {
     BottomBar
   },
   methods: {
-    Click (item) {
-      const _this = this;
-          localforage.getItem('notice', function(err, value) {
-            if(err){console.error(`读取notice出现错误${err}`)}
-            else if(value === null){
-              _this.dbtest = 'notice没有数据！';
-              let dateBase=[];
-              for(let i=0;i<222;i++){
-                dateBase[i]={name: '天宫圆圆'+i, text: '姜一:明天早晨九点开例会', time: '17:43', img: '../assets/1.png', notice: 0};
-              }
-              localforage.setItem('notice', dateBase, function(err,value){
-                if(err){console.error(`设置notice出现错误${err}`)}
-              })
-              _this.dbtest = '写入数据库220条数据！';
-            }
-            else{
-              _this.dbtest = 'notice包含数据！！';
-              _this.notice=value;
-            }
-          });
+    turn (url) {
+      window.location.href=url;
+    },
+    
+  },
+  created(){
+    const _this = this;
+    function get(url,fn){
+      const obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
+      obj.open('GET',url,true);
+      obj.onreadystatechange=function(){
+        if (obj.readyState === 4 && obj.status === 200 || obj.status === 304) { // readyState==4说明请求已完成
+          fn.call(this, obj.responseText);  //从服务器获得数据
+        }
+      };
+      obj.send(null);
     }
+    /**/
+	  function cutString(original,before,after,index){
+      index = index || 0;
+      if (typeof index === "number") {
+        const P = original.indexOf(before, index);
+        if (P > -1) {
+          if (after) {
+            const f = original.indexOf(after, P + 1);
+            return (f>-1)? original.slice(P + before.toString().length, f):
+            console.error("owo [在文本中找不到 参数三 "+after+"]");} 
+            else {
+              return original.slice(P + before.toString().length);
+            }
+          } 
+          else {
+            console.error("owo [在文本中找不到 参数一 " + before + "]");
+          }
+        } 
+        else {
+          console.error("owo [sizeTransition:" + index + "不是一个整数!]");
+        };
+    }
+    get('http://172.17.40.47/CASIC/interfaces/304DaiBanInterface.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=',function(e){
+      _this.notice.xietongbangong.text = cutString(e,"Title>","<");
+      //时间处理
+      const newDate = new Date();
+      let time = cutString(e,"SentTime>","<");
+      console.log(Date.parse(new Date(time)));
+      time = time.split(" ");
+      _this.notice.xietongbangong.time = time[1];
+      //角标处理
+      _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
+    })
   },
   data () {
     return {
       selected: '通知',
       dbtest:"读本地数据",
       message:"测试消息",
-      notice: [
-        {name: '协同办公', text: '您有待办公文需要处理', time: '08:31', img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png', notice: 3}
-      ]
+      notice: {
+        xietongbangong:{name: '协同办公', text: '您有待办公文需要处理', time: '08:31', img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'http://172.17.40.47/page_m/dblist.jsp', notice: 3}
+      }
     }
   }
 }
@@ -78,7 +107,7 @@ export default {
     }
     .message{
       margin: 10px;
-      width: calc(~'100% - 130px');
+      width: calc(~'100% - 135px');
       overflow: hidden;
     }
     .text{
@@ -87,7 +116,7 @@ export default {
       overflow: hidden;
     }
     .time{
-      width: 40px;
+      width: 50px;
       margin: 10px 0;
       color: #d3d3d3;
       font-size: 0.6rem;
@@ -95,15 +124,15 @@ export default {
       overflow: hidden;
     }
     .notice{
-      width: 15px;
-      height: 15px;
+      width: 18px;
+      height: 18px;
       position: absolute;
       background-color: red;
       top: 2px;
       left: 45px;
       border-radius: 50%;
       color: white;
-      line-height: 15px;
+      line-height: 18px;
       text-align: center;
       font-size: 12px;
       overflow: hidden;

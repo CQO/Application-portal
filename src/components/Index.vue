@@ -51,13 +51,13 @@ export default {
       switch(this.step){
         case 'one':{
           const data={userName:this.userName};
-          this.post("http://localhost:9999/nameLoginList",data);
-        //   this.selectList=[
-        //     {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发一部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'},
-        //     {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发二部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'}
-        //   ];
-        //   this.promptText='第二步:请输入您所属组织架构';
-        //   this.step='two';
+          //this.post("http://localhost:9999/nameLoginList",data);
+          this.selectList=[
+            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发一部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'},
+            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发二部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'}
+          ];
+          this.promptText='第二步:请输入您所属组织架构';
+          this.step='two';
           break;
         }
         case 'two':{

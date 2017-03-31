@@ -32,7 +32,7 @@ export default {
         xinxifabu:{id:"10001", name:"信息发布", icon:'http://xn--9tr.com/vrv/304/xinxifabu.png',url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url"},
         youjian:{id:"10002", name:"邮件", icon:'http://xn--9tr.com/vrv/304/youjian.png',url:'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993', special:"url"},
         gongwenguanli:{id:"10003", name:"公文管理", icon:'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'#', special:"bggl"},
-        bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://172.17.40.47/portal/menu.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=&SessionID=', special:"url"}
+        bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/portal/menu.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=&SessionID=', special:"url"}
       },
       showList:[
       {
@@ -53,7 +53,8 @@ export default {
     },
     openApp: function () {
       const app1 = {
-        "type":2,"sopid":"com.vrv.linkDood",
+        "type":2,
+        "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
         "scheme":"linkdood:showlinkdood?id=14324535&pwd=123456",
         "name":"linkdood"
@@ -62,6 +63,7 @@ export default {
       const obj = new XMLHttpRequest();
       obj.open("POST", "http://localhost:9999/open", true);
       obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+      obj.setRequestHeader("Access-Control-Allow-Origin", "*"); // 跨域
       obj.onreadystatechange = function () {
         if (obj.readyState === 4 && (obj.status === 200 || obj.status === 304)) {  // 304未修改
           console.log(obj.responseText);
@@ -71,7 +73,7 @@ export default {
     },
     openStart:function(url,special){
       switch(special){
-        case 'open':openApp();break;
+        case 'open':this.openApp();break;
         case 'url':window.location.href=url;break;
         case 'bggl':console.log('bggl');break;
         case 'xtbg':console.log('xtbg');break;
