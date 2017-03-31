@@ -18,20 +18,6 @@ export default {
     TitleBar,
     BottomBar
   },
-  methods: {
-    resultClick (item) {
-      window.alert('you click the result item: ' + JSON.stringify(item))
-    },
-    getResult (val) {
-      this.results = val ? getResult(this.value) : []
-    },
-    onFocus () {
-      console.log('on focus')
-    },
-    onCancel () {
-      console.log('on cancel')
-    }
-  },
   data () {
     return {
       organizationList:[
@@ -46,16 +32,6 @@ export default {
       value: 'test'
     }
   },
-}
-function getResult (val) {
-  let rs = []
-  for (let i = 0; i < 8; i++) {
-    rs.push({
-      title: `${val} result: ${i + 1} `,
-      other: i
-    })
-  }
-  return rs
 }
 </script>
 

@@ -27,9 +27,6 @@ export default {
     P42
   },
   methods: {
-    openUrl(url) {
-      console.log(url)
-    },
     quitApp(url) {
       window.location.href="/"
     }

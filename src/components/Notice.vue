@@ -25,8 +25,7 @@ export default {
   methods: {
     turn (url) {
       window.location.href=url;
-    },
-    
+    }
   },
   created(){
     const _this = this;
@@ -62,20 +61,11 @@ export default {
           console.error("owo [sizeTransition:" + index + "不是一个整数!]");
         };
     }
-    get('http://10.152.36.26/CASIC/interfaces/304DaiBanInterface.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=',function(e){
+    get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName=%e6%9c%b1%e5%85%89%e6%99%a8&PID=110108198512314993&webService=',function(e){
       _this.notice.xietongbangong.text = cutString(e,"Title>","<");
       //时间处理
       const time = cutString(e,"SentTime>","<");
-      let timeData = new Date(time);
-      let hours = timeData.getHours();
-      if(hours<10){
-        hours ="0"+hours;
-      }
-      let minutes = timeData.getMinutes();
-      if(hours<10){
-        minutes ="0"+minutes;
-      }
-      _this.notice.xietongbangong.time = hours + ':' + minutes;
+      _this.notice.xietongbangong.time = time;
       //角标处理
       _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
     })
@@ -86,7 +76,7 @@ export default {
       dbtest:"读本地数据",
       message:"测试消息",
       notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: 'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/page_m/dblist.jsp', notice: ''}
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: 'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName=%e6%9c%b1%e5%85%89%e6%99%a8&PID=110108198512314993&webService=', notice: ''}
       }
     }
   }

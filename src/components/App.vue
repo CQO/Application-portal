@@ -32,18 +32,18 @@ export default {
         xinxifabu:{id:"10001", name:"信息发布", icon:'http://xn--9tr.com/vrv/304/xinxifabu.png',url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url"},
         youjian:{id:"10002", name:"邮件", icon:'http://xn--9tr.com/vrv/304/youjian.png',url:'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993', special:"url"},
         gongwenguanli:{id:"10003", name:"公文管理", icon:'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'#', special:"bggl"},
-        bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/portal/menu.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=110108198512314993&webService=&SessionID=', special:"url"}
+        bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/portal/menu.jsp?userName=%e6%9c%b1%e5%85%89%e6%99%a8&PID=110108198512314993&webService=&SessionID=', special:"url"}
       },
       showList:[
       {
         url: 'https://translate.google.cn/',
         img: 'http://xn--9tr.com/vrv/304/2.png',
-        title: '信源豆豆'
+        title: ''
       },
       {
         url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993',
         img: 'http://xn--9tr.com/vrv/304/1.png',
-        title: '两会时间'
+        title: ''
       }],
     }
   },
@@ -56,7 +56,7 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=14324535&pwd=123456",
+        "scheme":"linkdood:showlinkdood?id=110108198512314993&pwd=123456",
         "name":"linkdood"
       };
       const data = JSON.stringify(app1);

@@ -34,11 +34,13 @@ export default {
   data () {
     return {
       appList:[
+        { neme:"协同办公", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/bangongxitong.png', type:"skill", exist:false, id:"1004" },
+        { neme:"邮件", detail:"您有一封来自行政部的邮件", exist:false, img: 'http://xn--9tr.com/vrv/304/youjian.png', type:"skill", exist:false, id:"1002" },
+        { neme:"信息发布", detail:"132次下载 | 12.6M", exist:false, img: 'http://xn--9tr.com/vrv/304/xinxifabu.png', type:"cooperation", exist:false, id:"1001" },
         { neme:"天工圆圆", detail:"183次下载 | 24.7M", exist:false, img: 'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png', type:"skill", exist:true, id:"1000"},
         { neme:"信息发布", detail:"132次下载 | 12.6M", exist:false, img: 'http://xn--9tr.com/vrv/304/xinxifabu.png', type:"cooperation", exist:false, id:"1001" },
-        { neme:"邮件", detail:"您有一封来自行政部的邮件", exist:false, img: 'http://xn--9tr.com/vrv/304/youjian.png', type:"skill", exist:false, id:"1002" },
         { neme:"公文管理", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png', type:"picture", exist:false, id:"1003" },
-        { neme:"办公系统", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/bangongxitong.png', type:"skill", exist:false, id:"1004" }
+        
       ],
       select: 'all',
     }
