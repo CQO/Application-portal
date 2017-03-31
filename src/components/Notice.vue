@@ -62,7 +62,7 @@ export default {
           console.error("owo [sizeTransition:" + index + "不是一个整数!]");
         };
     }
-    get('http://172.17.40.47/CASIC/interfaces/304DaiBanInterface.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=',function(e){
+    get('http://10.152.36.26/CASIC/interfaces/304DaiBanInterface.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=',function(e){
       _this.notice.xietongbangong.text = cutString(e,"Title>","<");
       //时间处理
       const time = cutString(e,"SentTime>","<");
@@ -87,7 +87,7 @@ export default {
       dbtest:"读本地数据",
       message:"测试消息",
       notice: {
-        xietongbangong:{name: '协同办公', text: '您有待办公文需要处理', time: '08:31', img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'http://172.17.40.47/page_m/dblist.jsp', notice: 3}
+        xietongbangong:{name: '协同办公', text: '您有待办公文需要处理', time: '08:31', img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'http://10.152.36.26/page_m/dblist.jsp', notice: 3}
       }
     }
   }
