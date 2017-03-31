@@ -1,6 +1,6 @@
 <template lang="pug">
 li.app-list
-    img(src="../../assets/golf.png")
+    img(:src="icon")
     .info
         p.name {{neme}}
         p.detail {{detail}}
@@ -21,6 +21,10 @@ export default {
         },
         exist: {
             type: Boolean
+        },
+        icon: {
+            type: String,
+            required: true
         }
     }
 }

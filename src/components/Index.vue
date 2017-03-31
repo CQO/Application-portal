@@ -27,52 +27,37 @@
 export default {
   data () {
     return {
-      userName: '',
-      password:'',
+      userName: '刘霞',
+      password:'123456',
       step:'one',
       promptText:'第一步:输入您的用户名',
       selectList:null,
     }
   },
   methods: {
-    post: function (url,data) {
+    post: function (url,data,fn) {
       const postData = JSON.stringify(data);
       const obj = new XMLHttpRequest();
       obj.open("POST", url, true);
       obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
       obj.onreadystatechange = function () {
+          
         if (obj.readyState === 4 ) {  // 304未修改
-          document.write(obj.responseText);
+          fn.call(this, obj.responseText);
         }
       };
-      obj.send(data);
+      obj.send(postData);
     },
-    loginIn(){
-      switch(this.step){
-        case 'one':{
-          const data={userName:this.userName};
-          //this.post("http://localhost:9999/nameLoginList",data);
-          this.selectList=[
-            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'北京 科研部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'},
-            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'北京 人事部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'}
-          ];
-          this.promptText='第二步:请输入您所属组织架构';
-          this.step='two';
-          break;
-        }
-        case 'two':{
-          const data={usbkeyidentification:"",password:"1212"};
-          //this.post("http://localhost:9999/login",data);
-          this.selectList=null;
-          this.promptText='第三步:请填写您的身份证和密码';
-          this.step='three';
-          break;
-        }
-      }
+    loginIn: function(){
+      const _this = this;
+      const data={userName:this.userName,password:this.password};
+      this.post("http://localhost:9999/nameLoginList",data,function(d){
+        const Data = JSON.parse(d);
+        _this.selectList=Data
+      });
     },
     jump(name){
-        console.log(name);
-        window.location.href="#/Main"
+      window.location.href="#/Main"
     }
   },
 }
@@ -83,7 +68,7 @@ export default {
     width: 140px;
     margin: 0 auto;
     height: 200px;
-    padding-top: 60px;
+    padding-top: 40px;
     img{
         height: 100px;
         width: 100px;

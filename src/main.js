@@ -14,11 +14,11 @@ const routes = [
   { path: '/Contacts', name: 'Contacts', component: require('./components/Contacts') },
   { path: '/Me', name: 'Me', component: require('./components/Me') },
   { path: '/AppStore', name: 'AppStore', component: require('./components/AppStore') },
-  { path: '/Organization', name: 'Organization', component: require('./components/Organization') },
+  { path: '/Organization/:name', name: 'Organization', component: require('./components/Organization') },
   { path: '/Details', name: 'Details', component: require('./components/Details') },
   { path: '/Information/:name', name: 'Information', component: require('./components/Information') },
   { path: '/Version', name: 'Version', component: require('./components/Version') },
-  { path: '/Site', name: 'Site', component: require('./components/Site') },
+  { path: '/Sett', name: 'Sett', component: require('./components/Sett') },
   { path: '/Help', name: 'Help', component: require('./components/Help') }
 ];
 

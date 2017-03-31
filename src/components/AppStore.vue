@@ -4,12 +4,10 @@
   Search
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
-    checker-item(value="skill") 智造
-    checker-item(value="cooperation") 协作
-    checker-item(value="picture") 看图
-    checker-item(value="sell") 销售
+    checker-item(value="bangong") 办公类
+    checker-item(value="tongxun") 通讯录
   ul
-    AppStore(v-for="item in classification",:neme="item.neme",:detail="item.detail",:exist="item.exist",:key="item.id")
+    AppStore(v-for="item in classification",:neme="item.neme",:detail="item.detail",:exist="item.exist",:key="item.id",:icon="item.icon")
 </template>
 
 <script>
@@ -34,13 +32,10 @@ export default {
   data () {
     return {
       appList:[
-        { neme:"协同办公", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/bangongxitong.png', type:"skill", exist:false, id:"1004" },
-        { neme:"邮件", detail:"您有一封来自行政部的邮件", exist:false, img: 'http://xn--9tr.com/vrv/304/youjian.png', type:"skill", exist:false, id:"1002" },
-        { neme:"信息发布", detail:"132次下载 | 12.6M", exist:false, img: 'http://xn--9tr.com/vrv/304/xinxifabu.png', type:"cooperation", exist:false, id:"1001" },
-        { neme:"天工圆圆", detail:"183次下载 | 24.7M", exist:false, img: 'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png', type:"skill", exist:true, id:"1000"},
-        { neme:"信息发布", detail:"132次下载 | 12.6M", exist:false, img: 'http://xn--9tr.com/vrv/304/xinxifabu.png', type:"cooperation", exist:false, id:"1001" },
-        { neme:"公文管理", detail:"您有代办公文需要处理", exist:false, img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png', type:"picture", exist:false, id:"1003" },
-        
+        { neme:"协同办公", detail:"112次下载 | 11.6M", icon: 'http://xn--9tr.com/vrv/304/bangongxitong.png', type:"bangong", exist:true, id:"1004" },
+        { neme:"邮件", detail:"252次下载 | 25.3M", icon: 'http://xn--9tr.com/vrv/304/youjian.png', type:"bangong", exist:true, id:"1002" },
+        { neme:"信息发布", detail:"132次下载 | 12.6M", icon: 'http://xn--9tr.com/vrv/304/xinxifabu.png', type:"bangong", exist:true, id:"1001" },
+        { neme:"天工圆圆", detail:"183次下载 | 24.7M", icon: 'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png', type:"tongxun", exist:true, id:"1000"}        
       ],
       select: 'all',
     }

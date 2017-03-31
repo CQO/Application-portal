@@ -44,7 +44,7 @@ body{
   width: 45px;
   font-size: 1.4rem;
 }
-
+a:visited,a:link,a:hover,a:active {color: black;}
 /*栏目 通知 激活样式*/
 .noticeActive{
   .notice-box{

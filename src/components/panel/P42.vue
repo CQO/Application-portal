@@ -1,6 +1,6 @@
 <template lang="pug">
-  router-link.panel42(:to="url")
-    .ico.icon(v-html="icoCode",:style="'color:'+color")
+  router-link.panel42(:to="url",:class="{ isIcon: icoCode }")
+    .ico.icon(v-if="icoCode",v-html="icoCode",:style="'color:'+color")
     .text {{text}}
     .ico.enter &#xe659;
 </template>
@@ -36,6 +36,12 @@ export default {
         width: calc(~"100% - 84px");
         line-height: 42px;
         font-size: 0.9rem;
+        margin: 0 21px;
+    }
+}
+.isIcon{
+    .text{
+        margin: 0;
     }
 }
 </style>

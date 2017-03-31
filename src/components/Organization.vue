@@ -1,7 +1,12 @@
 <template lang="pug">
 .organization-box
-    TitleBar(title='通讯录')
+    TitleBar(title='通讯录',leftIcon="flase")
     Search(value="qqweqwe")
+    .zuzhi 
+      a(href="#\Contacts") 中国航天科工集团
+      p >
+      a {{$route.params.name}}
+      p >
     Organization(v-for="item in organizationList",:neme="item.neme",:text="item.text",:key="item.id")
     BottomBar(index="2")
 </template>

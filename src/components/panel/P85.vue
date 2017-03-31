@@ -1,7 +1,7 @@
 <template lang="pug">
   .panel85
     span.text 头像
-    img
+    img(src="http://xn--9tr.com/vrv/304/user.png")
     .ico.enter &#xe607;
     
 </template>

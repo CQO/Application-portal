@@ -6,12 +6,12 @@
   Grid
     grid-item(v-for="item in office",:key="item")
       img(slot="icon",:src="appList[item].icon",v-on:click="openStart(appList[item].url, appList[item].special)")
-      span(slot="label") {{appList[item].name}}
+      span(slot="label",v-on:click="openStart(appList[item].url, appList[item].special)") {{appList[item].name}}
   AppTitle.tongxun-title(title="通讯类")
   Grid
     grid-item(v-for="item in communication",:key="item")
       img(slot="icon",:src="appList[item].icon",v-on:click="openStart(appList[item].url, appList[item].special)")
-      span(slot="label") {{appList[item].name}}
+      span(slot="label",v-on:click="openStart(appList[item].url, appList[item].special)") {{appList[item].name}}
   BottomBar(index="1")
 </template>
 
@@ -47,6 +47,14 @@ export default {
       }],
     }
   },
+  created(){
+    const data={type:5};
+    const _this = this;
+    this.post("http://localhost:9999/appRequest",data,function(d){
+      const Data = JSON.parse(d);
+      document.write(d)
+    });
+  },
   methods: {
     onIndexChange (index) {
       this.index = index
@@ -77,6 +85,19 @@ export default {
         case 'bggl':console.log('bggl');break;
         case 'xtbg':console.log('xtbg');break;
       }
+    },
+    post: function (url,data,fn) {
+      const postData = JSON.stringify(data);
+      const obj = new XMLHttpRequest();
+      obj.open("POST", url, true);
+      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+      obj.onreadystatechange = function () {
+          
+        if (obj.readyState === 4 ) {  // 304未修改
+          fn.call(this, obj.responseText);
+        }
+      };
+      obj.send(postData);
     }
   },
   components: {
@@ -93,7 +114,9 @@ export default {
 <style lang='less'>
 .app-box{
   .weui-grid{
-    width: 95px;
+    width: 75px;
+    margin: 20px 10px;
+    padding: 0;
   }
   .weui-grids:before{
     border-right:none;
