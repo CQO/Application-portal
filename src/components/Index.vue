@@ -14,7 +14,7 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="item in selectList",v-on:click="jump(item.unitName)") {{item.unitName}}
+            li(v-for="(item,num) in selectList",v-on:click="jump(item.unitName,num)") {{item.unitName}}
     .step
         .login-button(v-on:click="loginIn",:class="{ hide: selectList }") 登录
         p {{promptText}}
@@ -27,11 +27,12 @@
 export default {
   data () {
     return {
-      userName: '刘霞',
+      userName: '朱光晨',
       password:'123456',
       step:'one',
       promptText:'第一步:输入您的用户名',
       selectList:null,
+      usbkeyidentification:null
     }
   },
   methods: {
@@ -41,7 +42,6 @@ export default {
       obj.open("POST", url, true);
       obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
       obj.onreadystatechange = function () {
-          
         if (obj.readyState === 4 ) {  // 304未修改
           fn.call(this, obj.responseText);
         }
@@ -53,11 +53,23 @@ export default {
       const data={userName:this.userName,password:this.password};
       this.post("http://localhost:9999/nameLoginList",data,function(d){
         const Data = JSON.parse(d);
-        _this.selectList=Data
+        //document.write(d);
+        if(d === "[]"){
+            window.location.href="#/Main"
+        }
+        else{
+            _this.selectList=Data
+        }
+        //_this.selectList=Data
       });
     },
-    jump(name){
-      window.location.href="#/Main"
+    jump(name,num){
+      const _this = this;
+      const data={usbkeyidentification:this.selectList[num].usbkeyidentification,password:this.password};
+      this.post("http://localhost:9999/login",data,function(d){
+        const Data = JSON.parse(d);
+      });
+        window.location.href="#/Main"
     }
   },
 }

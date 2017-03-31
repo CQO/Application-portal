@@ -4,7 +4,7 @@
   .title 个人信息
   router-link.information(to="\Details")
     img(src="http://xn--9tr.com/vrv/304/user.png")
-    p.name 罗杰斯
+    p.name 朱光晨 
     .ico &#xe659;
   .title 操作
   P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url")
@@ -27,8 +27,26 @@ export default {
     P42
   },
   methods: {
-    quitApp(url) {
-      window.location.href="/"
+    post: function (url,data,fn) {
+      const postData = JSON.stringify(data);
+      const obj = new XMLHttpRequest();
+      obj.open("POST", url, true);
+      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+      obj.onreadystatechange = function () {
+        if (obj.readyState === 4 ) {  // 304未修改
+          fn.call(this, obj.responseText);
+        }
+      };
+      obj.send(postData);
+    },
+    quitApp: function(url) {
+      const _this = this;
+      const data={userName:this.userName,password:this.password};
+      this.post("http://localhost:9999/loginout",data,function(d){
+        const Data = JSON.parse(d);
+        //document.write(d);
+      });
+      window.location.href="/";
     }
   },
   data () {

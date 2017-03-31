@@ -52,7 +52,7 @@ export default {
     const _this = this;
     this.post("http://localhost:9999/appRequest",data,function(d){
       const Data = JSON.parse(d);
-      document.write(d)
+      _this.showList = Data;
     });
   },
   methods: {
