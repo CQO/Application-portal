@@ -8,7 +8,7 @@
     .ico &#xe659;
   .title 操作
   P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url")
-  .quit 退出登录
+  .quit(v-on:click="quitApp") 退出登录
   BottomBar(index="3")
 </template>
 
@@ -29,6 +29,9 @@ export default {
   methods: {
     openUrl(url) {
       console.log(url)
+    },
+    quitApp(url) {
+      window.location.href="/"
     }
   },
   data () {

@@ -18,8 +18,8 @@ const routes = [
   { path: '/Details', name: 'Details', component: require('./components/Details') },
   { path: '/Information/:name', name: 'Information', component: require('./components/Information') },
   { path: '/Version', name: 'Version', component: require('./components/Version') },
-  { path: '/Site', name: 'Site', component: require('./components/Version') },
-  { path: '/Help', name: 'Help', component: require('./components/Version') }
+  { path: '/Site', name: 'Site', component: require('./components/Site') },
+  { path: '/Help', name: 'Help', component: require('./components/Help') }
 ];
 
 const router = new VueRouter({

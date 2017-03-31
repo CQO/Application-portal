@@ -16,7 +16,7 @@
         ul.list
             li(v-for="item in selectList",v-on:click="jump(item.unitName)") {{item.unitName}}
     .step
-        .login-button(v-on:click="loginIn",v-show="!selectList") 登录
+        .login-button(v-on:click="loginIn",:class="{ hide: selectList }") 登录
         p {{promptText}}
         .point
             .ico.icon1 &#xe602;
@@ -53,8 +53,8 @@ export default {
           const data={userName:this.userName};
           //this.post("http://localhost:9999/nameLoginList",data);
           this.selectList=[
-            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发一部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'},
-            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'南京研发中心移动安全研发部研发二部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'}
+            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'北京 科研部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'},
+            {'enname':'刘霞','unitId':'11','deptName':'惯性公司,综合管理部','unitName':'北京 人事部','usbkeyname':'刘霞','userAccount':'2324324','usbkeyidentification':'123456','isFirstLogin':'0','orderNum':1,'orgCode':'10011013','orgID':'11'}
           ];
           this.promptText='第二步:请输入您所属组织架构';
           this.step='two';
@@ -144,7 +144,8 @@ export default {
         overflow-y: auto;
         li{
             padding: 10px;
-            border-bottom: 1px solid cyan;
+            border-bottom: 1px solid #dcecec;
+            text-align: center;
         }
     }
 }
@@ -160,8 +161,6 @@ export default {
     font-size: 1.4rem;
 }
 .step{
-    position: absolute;
-    bottom: 0;
     width: 100%;
     text-align: center;
     color: #ccc;
@@ -175,5 +174,8 @@ export default {
     .icon2{
         color: blue;
     }
+}
+.hide{
+    visibility:hidden;
 }
 </style>

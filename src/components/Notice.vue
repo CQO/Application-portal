@@ -75,7 +75,6 @@ export default {
       if(hours<10){
         minutes ="0"+minutes;
       }
-      console.log(timeData.getHours());
       _this.notice.xietongbangong.time = hours + ':' + minutes;
       //角标处理
       _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
@@ -87,7 +86,7 @@ export default {
       dbtest:"读本地数据",
       message:"测试消息",
       notice: {
-        xietongbangong:{name: '协同办公', text: '您有待办公文需要处理', time: '08:31', img: 'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'http://10.152.36.26/page_m/dblist.jsp', notice: 3}
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: 'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/page_m/dblist.jsp', notice: ''}
       }
     }
   }
