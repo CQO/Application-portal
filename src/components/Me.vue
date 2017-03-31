@@ -4,7 +4,7 @@
   .title 个人信息
   router-link.information(to="\Details")
     img(src="http://xn--9tr.com/vrv/304/user.png")
-    p.name 朱光晨 
+    p.name {{userName}} 
     .ico &#xe659;
   .title 操作
   P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url")
@@ -17,6 +17,7 @@ import { Panel, XHeader } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
+import localforage from 'localforage'
 
 export default {
   components: {
@@ -49,6 +50,12 @@ export default {
       window.location.href="/";
     }
   },
+  created(){
+    const _this = this;
+    localforage.getItem('userName', function (err, value) {
+      _this.userName = value;
+    });
+  },
   data () {
     return {
       list: 
@@ -56,7 +63,8 @@ export default {
         { icon: '&#xe600;', title: '设置', color:'#61c2ff', id:"1000",url:"/Sett"}, 
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
-      ]
+      ],
+      userName:"朱光晨"
     }
   }
 }

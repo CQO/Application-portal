@@ -24,10 +24,11 @@
 </template>
 
 <script>
+import localforage from 'localforage'
 export default {
   data () {
     return {
-      userName: '朱光晨',
+      userName: '刘霞',
       password:'123456',
       step:'one',
       promptText:'第一步:输入您的用户名',
@@ -51,6 +52,9 @@ export default {
     loginIn: function(){
       const _this = this;
       const data={userName:this.userName,password:this.password};
+      localforage.setItem('userName', this.userName, function (err){
+        
+      });
       this.post("http://localhost:9999/nameLoginList",data,function(d){
         const Data = JSON.parse(d);
         //document.write(d);
