@@ -65,11 +65,18 @@ export default {
     get('http://172.17.40.47/CASIC/interfaces/304DaiBanInterface.jsp?userName=%E7%8E%8B%E9%B8%BF%E5%BF%97&PID=220223197109281511&webService=',function(e){
       _this.notice.xietongbangong.text = cutString(e,"Title>","<");
       //时间处理
-      const newDate = new Date();
-      let time = cutString(e,"SentTime>","<");
-      console.log(Date.parse(new Date(time)));
-      time = time.split(" ");
-      _this.notice.xietongbangong.time = time[1];
+      const time = cutString(e,"SentTime>","<");
+      let timeData = new Date(time);
+      let hours = timeData.getHours();
+      if(hours<10){
+        hours ="0"+hours;
+      }
+      let minutes = timeData.getMinutes();
+      if(hours<10){
+        minutes ="0"+minutes;
+      }
+      console.log(timeData.getHours());
+      _this.notice.xietongbangong.time = hours + ':' + minutes;
       //角标处理
       _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
     })
