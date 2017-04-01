@@ -39,6 +39,12 @@ export default {
       };
       obj.send(null);
     }
+    localforage.getItem('userName', function (err, value) {
+      _this.userName = value;
+    });
+    localforage.getItem('usbkeyidentification', function (err, value) {
+      _this.usbkeyidentification = value;
+    });
     /**/
 	  function cutString(original,before,after,index){
       index = index || 0;
@@ -61,7 +67,7 @@ export default {
           console.error("owo [sizeTransition:" + index + "不是一个整数!]");
         };
     }
-    get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName=%e6%9c%b1%e5%85%89%e6%99%a8&PID=110108198512314993&webService=',function(e){
+    get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=',function(e){
       _this.notice.xietongbangong.text = cutString(e,"Title>","<");
       //时间处理
       const time = cutString(e,"SentTime>","<");
@@ -75,8 +81,10 @@ export default {
       selected: '通知',
       dbtest:"读本地数据",
       message:"测试消息",
+      usbkeyidentification:'',
+      userName:'',
       notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: 'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName=%e6%9c%b1%e5%85%89%e6%99%a8&PID=110108198512314993&webService=', notice: ''}
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: 'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=', notice: ''}
       }
     }
   }

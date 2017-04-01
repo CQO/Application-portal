@@ -27,12 +27,14 @@ export default {
       index: 0,
       communication:['tiangongyuanyuan'],
       office:['bangongxitong','youjian', 'xinxifabu'],
+      userName:'',
+      usbkeyidentification:'',
       appList:{
         tiangongyuanyuan:{id:"10000", name:"天工圆圆", icon:'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png',url:'#', special:"open"},
         xinxifabu:{id:"10001", name:"信息发布", icon:'http://xn--9tr.com/vrv/304/xinxifabu.png',url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url"},
-        youjian:{id:"10002", name:"邮件", icon:'http://xn--9tr.com/vrv/304/youjian.png',url:'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993', special:"url"},
+        youjian:{id:"10002", name:"邮件", icon:'http://xn--9tr.com/vrv/304/youjian.png',url:'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+this.usbkeyidentification, special:"url"},
         gongwenguanli:{id:"10003", name:"公文管理", icon:'http://xn--9tr.com/vrv/304/gongwenguanli.png',url:'#', special:"bggl"},
-        bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/portal/menu.jsp?userName=%e6%9c%b1%e5%85%89%e6%99%a8&PID=110108198512314993&webService=&SessionID=', special:"url"}
+        bangongxitong:{id:"10004", name:"协同办公", icon:'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/portal/menu.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=&SessionID=', special:"url"}
       },
       showList:[
       {
@@ -41,7 +43,7 @@ export default {
         title: ''
       },
       {
-        url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID=110108198512314993',
+        url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+this.usbkeyidentification,
         img: 'http://xn--9tr.com/vrv/304/1.png',
         title: ''
       }],
@@ -50,10 +52,16 @@ export default {
   created(){
     const data={type:5};
     const _this = this;
-    this.post("http://localhost:9999/appRequest",data,function(d){
-      const Data = JSON.parse(d);
-      _this.showList = Data;
+    localforage.getItem('userName', function (err, value) {
+      _this.userName = value;
     });
+    localforage.getItem('usbkeyidentification', function (err, value) {
+      _this.usbkeyidentification = value;
+    });
+    // this.post("http://localhost:9999/appRequest",data,function(d){
+    //   const Data = JSON.parse(d);
+    //   _this.showList = Data;
+    // });
   },
   methods: {
     onIndexChange (index) {

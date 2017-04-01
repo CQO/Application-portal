@@ -8,7 +8,7 @@
         input(v-model="userName",placeholder="用户名")
     .password-box
         .password.ico &#xe623;
-        input(v-model="password",placeholder="密码")
+        input(type="password",v-model="password",placeholder="密码")
     
     .select-list(v-show="selectList")
         .title
@@ -28,8 +28,8 @@ import localforage from 'localforage'
 export default {
   data () {
     return {
-      userName: '刘霞',
-      password:'123456',
+      userName: '',
+      password:'',
       step:'one',
       promptText:'第一步:输入您的用户名',
       selectList:null,
@@ -64,12 +64,14 @@ export default {
         else{
             _this.selectList=Data
         }
-        //_this.selectList=Data
       });
     },
     jump(name,num){
       const _this = this;
       const data={usbkeyidentification:this.selectList[num].usbkeyidentification,password:this.password};
+      localforage.setItem('usbkeyidentification', this.selectList[num].usbkeyidentification, function (err){
+        
+      });
       this.post("http://localhost:9999/login",data,function(d){
         const Data = JSON.parse(d);
       });
