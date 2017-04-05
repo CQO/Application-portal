@@ -3,12 +3,12 @@
     .logo-box
         img.logo(src="../assets/logo.png")
         p 智慧企业平台
-    .user-name-box
+    .user-name-box(:class="{ error: userNameError }")
         .user.ico &#xe60c;
-        input(v-model="userName",placeholder="用户名")
-    .password-box
+        input(v-model="userName",:placeholder="userPoint",v-on:change.stop="checkUserName")
+    .password-box(:class="{ error: passWordError }")
         .password.ico &#xe623;
-        input(type="password",v-model="password",placeholder="密码")
+        input(type="password",v-model="password",:placeholder="passWordPoint",v-on:change.stop="checkPassWord")
     
     .select-list(v-show="selectList")
         .title
@@ -33,7 +33,11 @@ export default {
       step:'one',
       promptText:'第一步:输入您的用户名',
       selectList:null,
-      usbkeyidentification:null
+      usbkeyidentification:null,
+      userPoint:'用户名',
+      userNameError:true,
+      passWordPoint:'密码',
+      passWordError:true
     }
   },
   methods: {
@@ -51,20 +55,36 @@ export default {
     },
     loginIn: function(){
       const _this = this;
-      const data={userName:this.userName,password:this.password};
-      localforage.setItem('userName', this.userName, function (err){
-        
-      });
-      this.post("http://localhost:9999/nameLoginList",data,function(d){
-        const Data = JSON.parse(d);
-        //document.write(d);
-        if(d === "[]"){
-            window.location.href="#/Main"
-        }
-        else{
-            _this.selectList=Data
-        }
-      });
+      const postData={userName:this.userName,password:this.password};
+      if(_this.passWordError || _this.userNameError){
+        console.log("账号密码没有输入")
+      }
+      else{
+        //登陆请求
+        this.post("http://localhost:9999/nameLoginList",postData,function(data){
+          //判断是否取到数据
+          if(data !=="" && data !==null){
+            const Data = JSON.parse(data);
+            //document.write(d);
+            if(d === "[]"){
+              window.location.href="#/Main"
+            }
+            else{
+              this.promptText = '第二步:请选择所属组织';
+              //把用户名存储到起来
+              localforage.setItem('userName', this.userName, function (err){
+                if(err){
+                  console.log("数据库操作失败！")
+                }
+              });
+              _this.selectList=Data
+            }
+          }
+          else{
+            console.log("请求失败！")
+          }
+        });
+      }
     },
     jump(name,num){
       const _this = this;
@@ -76,6 +96,28 @@ export default {
         const Data = JSON.parse(d);
       });
         window.location.href="#/Main"
+    },
+    checkUserName:function(){
+      //判断用户名是否正确
+      if(this.userName === ''){
+        this.userPoint = '用户名不能为空！'
+        this.userNameError = true
+      }
+      else{
+        this.userPoint = '用户名'
+        this.userNameError = false
+      }
+    },
+    checkPassWord:function(){
+      //判断用户名是否正确
+      if(this.userName === ''){
+        this.passWordPoint = '密码不能为空！'
+        this.passWordError = true
+      }
+      else{
+        this.passWordPoint = '密码'
+        this.passWordError = false
+      }
     }
   },
 }
@@ -180,5 +222,8 @@ export default {
 }
 .hide{
     visibility:hidden;
+}
+.error {
+    border-color: cadetblue;
 }
 </style>

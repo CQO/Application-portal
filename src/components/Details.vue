@@ -3,7 +3,7 @@
   TitleBar(title='个人信息',leftIcon="flase")
   P85
   .details
-    Pa42(v-for="(item,key) in data",:item="key",:text="item")
+    Pa42(v-for="(item,key) in data",:item="key",:text="item",:key="item")
   .phone
     Pa42(item="手机号码",:text="phoneNumber")
 </template>

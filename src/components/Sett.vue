@@ -1,7 +1,7 @@
 <template lang="pug">
 .setting
     TitleBar(title='设置',leftIcon="flase")
-    P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url")
+    P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url",:key="item.id")
 </template>
 
 <script>

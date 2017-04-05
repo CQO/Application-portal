@@ -3,7 +3,7 @@
   TitleBar(title='详细资料',leftIcon="flase")
   Pa85
   .phone
-    Pan42(v-for="(item,key) in job", :item="key",:text="item")
+    Pan42(v-for="(item,key) in job", :item="key",:text="item",:key="item")
   .inonBar
     .chat.ico &#xe60a;
     .mess.ico &#xe619;
