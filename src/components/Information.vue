@@ -13,6 +13,7 @@
 import Pa85 from './panel/Pa85'
 import Pan42 from './panel/Pan42'
 import TitleBar from './bar/Title'
+
 export default {
   components: {
     Pa85,

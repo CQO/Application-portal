@@ -13,47 +13,36 @@
 </template>
 
 <script>
-import { Panel, XHeader } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
 import localforage from 'localforage'
-
+import {post} from "./method.js" 
 export default {
   components: {
-    Panel,
-    XHeader,
     TitleBar,
     BottomBar,
     P42
   },
   methods: {
-    post: function (url,data,fn) {
-      const postData = JSON.stringify(data);
-      const obj = new XMLHttpRequest();
-      obj.open("POST", url, true);
-      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
-      obj.onreadystatechange = function () {
-        if (obj.readyState === 4 ) {  // 304未修改
-          fn.call(this, obj.responseText);
-        }
-      };
-      obj.send(postData);
-    },
-    quitApp: function(url) {
+    quitApp: function(url) { //退出登录
       const _this = this;
-      const data={userName:this.userName,password:this.password};
-      this.post("http://localhost:9999/loginout",data,function(d){
-        const Data = JSON.parse(d);
-        //document.write(d);
+      const postData={userName:this.userName,password:this.password};
+      this.post("http://localhost:9999/loginout",postData,function(data){
+        if(data){
+          const Data = JSON.parse(data);
+        }
       });
       window.location.href="/";
     }
   },
   created(){
     const _this = this;
+    //获取用户名
     localforage.getItem('userName', function (err, value) {
-      _this.userName = value;
+      if(value){
+        _this.userName = value;
+      }
     });
   },
   data () {
@@ -64,7 +53,7 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      userName:"朱光晨"
+      userName:"未登录"
     }
   }
 }
@@ -116,5 +105,4 @@ export default {
       }
     }
 }
-
 </style>

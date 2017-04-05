@@ -22,14 +22,15 @@ import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
+import {post} from "./method.js" 
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
       $youjian          = require('../assets/youjian.png'),
       $gongwenguanli    = require('../assets/gongwenguanli.png'),
       $bangongxitong    = require('../assets/bangongxitong.png'),
-      $1    = require('../assets/1.png'),
-      $2    = require('../assets/2.png');
+      $1                = require('../assets/1.png'),
+      $2                = require('../assets/2.png');
 export default {
   data () {
     return {
@@ -42,7 +43,6 @@ export default {
         tiangongyuanyuan:{id:"10000", name:"天工圆圆", icon:$tiangongyuanyuan,url:'#', special:"open"},
         xinxifabu:{id:"10001", name:"信息发布", icon:$xinxifabu,url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url"},
         youjian:{id:"10002", name:"邮件", icon:$youjian,url:'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+this.usbkeyidentification, special:"url"},
-        gongwenguanli:{id:"10003", name:"公文管理", icon:$gongwenguanli,url:'#', special:"bggl"},
         bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'http://10.152.36.26:8080/portal/menu.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=&SessionID=', special:"url"}
       },
       showList:[
@@ -59,7 +59,6 @@ export default {
     }
   },
   created(){
-    const data={type:5};
     const _this = this;
     localforage.getItem('userName', function (err, value) {
       _this.userName = value;
@@ -67,16 +66,12 @@ export default {
     localforage.getItem('usbkeyidentification', function (err, value) {
       _this.usbkeyidentification = value;
     });
-    // this.post("http://localhost:9999/appRequest",data,function(d){
-    //   const Data = JSON.parse(d);
-    //   _this.showList = Data;
-    // });
   },
   methods: {
-    onIndexChange (index) {
+    onIndexChange (index) { //轮播图
       this.index = index
     },
-    openApp: function () {
+    openApp: function () { //打开应用
       const app1 = {
         "type":2,
         "sopid":"com.vrv.linkDood",
@@ -84,38 +79,17 @@ export default {
         "scheme":"linkdood:showlinkdood?id=110108198512314993&pwd=123456",
         "name":"linkdood"
       };
-      const data = JSON.stringify(app1);
-      const obj = new XMLHttpRequest();
-      obj.open("POST", "http://localhost:9999/open", true);
-      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
-      obj.onreadystatechange = function () {
-        if (obj.readyState === 4 && (obj.status === 200 || obj.status === 304)) {  // 304未修改
-          console.log(obj.responseText);
-        }
-      };
-      obj.send(data);
+      //向9999端口发送Post请求打开应用
+      post("http://localhost:9999/open",app1,function(date){
+        console.log(date)
+      });
     },
-    openStart:function(url,special){
+    openStart:function(url,special){ //判断以何种方式打开应用
       switch(special){
-        case 'open':this.openApp();break;
-        case 'url':window.location.href=url;break;
-        case 'bggl':console.log('bggl');break;
-        case 'xtbg':console.log('xtbg');break;
+        case 'open':this.openApp();break; //启动应用
+        case 'url':window.location.href=url;break; //跳转到Url
       }
     },
-    post: function (url,data,fn) {
-      const postData = JSON.stringify(data);
-      const obj = new XMLHttpRequest();
-      obj.open("POST", url, true);
-      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
-      obj.onreadystatechange = function () {
-          
-        if (obj.readyState === 4 ) {  // 304未修改
-          fn.call(this, obj.responseText);
-        }
-      };
-      obj.send(postData);
-    }
   },
   components: {
     Search,

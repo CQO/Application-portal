@@ -17,14 +17,15 @@ import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
 import {get,cutString} from "./method.js" 
+//引入图片资源
+const $bangongxitong    = require('../assets/bangongxitong.png')
 export default {
-  name: 'page-tabbar',
   components: {
     TitleBar,
     BottomBar
   },
   methods: {
-    turn (url) {
+    turn (url) { //跳转到某个地址
       window.location.href=url;
     }
   },
@@ -56,7 +57,7 @@ export default {
       usbkeyidentification:'',
       userName:'',
       notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: 'http://xn--9tr.com/vrv/304/bangongxitong.png',url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=', notice: ''}
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=', notice: ''}
       }
     }
   }

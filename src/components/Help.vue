@@ -4,6 +4,15 @@
     .ver 暂时没有内容
 </template>
 
+<script>
+import TitleBar from './bar/Title'
+export default {
+  components: {
+    TitleBar
+  }
+}
+</script>
+
 <style lang='less' scoped>
 .version{
     .ver{
@@ -15,13 +24,3 @@
     }
 }
 </style>
-
-<script>
-
-import TitleBar from './bar/Title'
-export default {
-  components: {
-    TitleBar
-  }
-}
-</script>

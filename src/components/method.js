@@ -33,4 +33,18 @@ const cutString = function(original,before,after,index){
       console.error("owo [sizeTransition:" + index + "不是一个整数!]");
     }
 };
-export {get, cutString};
+
+const post = function (url,data,fn) {
+  const postData = JSON.stringify(data);
+  const obj = new XMLHttpRequest();
+  obj.open("POST", url, true);
+  obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+  obj.onreadystatechange = function () {
+    if (obj.readyState === 4 ) {  // 304未修改
+      fn.call(this, obj.responseText);
+    }
+  };
+  obj.send(postData);
+};
+
+export {get, cutString, post};

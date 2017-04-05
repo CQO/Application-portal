@@ -1,7 +1,7 @@
 <template lang="pug">
 .organization-box
     TitleBar(title='通讯录',leftIcon="flase")
-    Search(value="qqweqwe")
+    Search
     .zuzhi 
       a(href="#\Contacts") 中国航天科工集团
       p >
@@ -32,9 +32,7 @@ export default {
         {neme:'高永胜',text:'[电脑]软件工程师',id:'1003'},
         {neme:'赵建超',text:'[电脑]软件工程师',id:'1004'},
         {neme:'刘洋',text:'[电脑]软件工程师',id:'1005'},
-      ],
-      results: [],
-      value: 'test'
+      ]
     }
   },
 }

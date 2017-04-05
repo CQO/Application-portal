@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { Checker, CheckerItem, XHeader } from 'vux'
+import { Checker, CheckerItem } from 'vux'
 import Search from './panel/Search'
 import AppStore from './list/AppStore';
 import TitleBar from './bar/Title'
@@ -21,7 +21,6 @@ export default {
     Checker,
     CheckerItem,
     AppStore,
-    XHeader,
     TitleBar
   },
   methods: {
@@ -70,13 +69,13 @@ export default {
     font-weight: 400;
   }
   .vux-checker-item{
-    width: 40px;
     height: 24px;
     line-height: 24px;
     text-align: center;
     color: blue;
     font-size: 0.7rem;
-    margin: 0 10px;
+    margin: 0 5px;
+    padding: 0 5px;
   }
   .item-selected{
     background-color: #1865ff;
