@@ -1,6 +1,6 @@
 <template lang="pug">
   .panel85
-    img(src="http://xn--9tr.com/vrv/304/user.png")
+    img(src="../../assets/user.png")
     .inf
         p.name.item {{$route.params.name}}
         p.department.item 科研部

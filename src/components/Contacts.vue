@@ -9,7 +9,7 @@
   ul.organization
     li(v-for="item in List")
       a(:href="'#/Organization/'+item")
-        img(src="http://xn--9tr.com/vrv/304/Organization.png")
+        img(src="../assets/Organization.png")
         p.organization-name {{item}}
         p.organization-number.ico &#xe62a; 0
         p.organization-people.ico &#xe60c; 24

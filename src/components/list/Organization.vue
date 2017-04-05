@@ -1,6 +1,6 @@
 <template lang="pug">
 router-link.organization-list(:to="'/Information/'+neme")
-  img.user-img(src='http://xn--9tr.com/vrv/304/Organization.png')
+  img.user-img(src='../../assets/Organization.png')
   .message
     p {{neme}}
     p.text {{text}}

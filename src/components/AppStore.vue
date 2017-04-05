@@ -13,8 +13,13 @@
 <script>
 import { Checker, CheckerItem } from 'vux'
 import Search from './panel/Search'
-import AppStore from './list/AppStore';
+import AppStore from './list/AppStore'
 import TitleBar from './bar/Title'
+//引入图片资源
+const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
+      $xinxifabu        = require('../assets/xinxifabu.png'),
+      $youjian          = require('../assets/youjian.png'),
+      $bangongxitong    = require('../assets/bangongxitong.png');
 export default {
   components: {
     Search,
@@ -31,10 +36,10 @@ export default {
   data () {
     return {
       appList:[
-        { neme:"协同办公", detail:"112次下载 | 11.6M", icon: 'http://xn--9tr.com/vrv/304/bangongxitong.png', type:"bangong", exist:true, id:"1004" },
-        { neme:"邮件", detail:"252次下载 | 25.3M", icon: 'http://xn--9tr.com/vrv/304/youjian.png', type:"bangong", exist:true, id:"1002" },
-        { neme:"信息发布", detail:"132次下载 | 12.6M", icon: 'http://xn--9tr.com/vrv/304/xinxifabu.png', type:"bangong", exist:true, id:"1001" },
-        { neme:"天工圆圆", detail:"183次下载 | 24.7M", icon: 'http://xn--9tr.com/vrv/304/tiangongyuanyuan.png', type:"tongxun", exist:true, id:"1000"}        
+        { neme:"协同办公", detail:"112次下载 | 11.6M", icon: $bangongxitong, type:"bangong", exist:true, id:"1004" },
+        { neme:"邮件", detail:"252次下载 | 25.3M", icon: $youjian, type:"bangong", exist:true, id:"1002" },
+        { neme:"信息发布", detail:"132次下载 | 12.6M", icon: $xinxifabu, type:"bangong", exist:true, id:"1001" },
+        { neme:"天工圆圆", detail:"183次下载 | 24.7M", icon: $tiangongyuanyuan, type:"tongxun", exist:true, id:"1000"}        
       ],
       select: 'all',
     }

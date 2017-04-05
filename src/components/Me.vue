@@ -3,7 +3,7 @@
   TitleBar(title='我')
   .title 个人信息
   router-link.information(to="\Details")
-    img(src="http://xn--9tr.com/vrv/304/user.png")
+    img(src="../assets/user.png")
     p.name {{userName}} 
     .ico &#xe659;
   .title 操作
@@ -31,9 +31,9 @@ export default {
       this.post("http://localhost:9999/loginout",postData,function(data){
         if(data){
           const Data = JSON.parse(data);
+          window.location.href="/";
         }
       });
-      window.location.href="/";
     }
   },
   created(){
