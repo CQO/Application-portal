@@ -21,23 +21,32 @@
         .point
             .ico.icon1 &#xe602;
             .ico.icon2 &#xe602;
+    .alert-box(v-show="showAlert")
+        .main-box
+            .text-box
+                p 登录失败
+                .text {{textAlert}}
+            .button(v-on:click="closeAlert") 确定
 </template>
 
 <script>
 import localforage from 'localforage'
+
 export default {
   data () {
     return {
       userName: '',
       password:'',
       step:'one',
-      promptText:'第一步:输入您的用户名',
+      promptText:'第一步:输入您的用户名和密码',
       selectList:null,
       usbkeyidentification:null,
       userPoint:'用户名',
       userNameError:true,
       passWordPoint:'密码',
-      passWordError:true
+      passWordError:true,
+      showAlert:false,//控制提醒框是否显示
+      textAlert:'',//弹出框显示文字
     }
   },
   methods: {
@@ -57,7 +66,8 @@ export default {
       const _this = this;
       const postData={userName:this.userName,password:this.password};
       if(_this.passWordError || _this.userNameError){
-        console.log("账号密码没有输入")
+        _this.textAlert = '账号密码没有输入'
+        _this.showAlert = true
       }
       else{
         //登陆请求
@@ -81,12 +91,13 @@ export default {
             }
           }
           else{
-            console.log("请求失败！")
+            _this.textAlert = '与服务器连接出现问题！'
+            _this.showAlert = true
           }
         });
       }
     },
-    jump(name,num){
+    jump:function(name,num){
       const _this = this;
       const data={usbkeyidentification:this.selectList[num].usbkeyidentification,password:this.password};
       localforage.setItem('usbkeyidentification', this.selectList[num].usbkeyidentification, function (err){
@@ -118,6 +129,10 @@ export default {
         this.passWordPoint = '密码'
         this.passWordError = false
       }
+    },
+    closeAlert:function () {
+      //将弹出框隐藏
+      this.showAlert = false
     }
   },
 }
@@ -225,5 +240,50 @@ export default {
 }
 .error {
     border-color: cadetblue;
+}
+</style>
+
+<style scoped>
+.alert-box {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.main-box {
+    position: absolute;
+    height: 150px;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+    width: 80%;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+.text-box p {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+.text-box .text {
+    text-align: center;
+    color: #999;
+    height: 70px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.button{
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 1.4rem;
+    color: darkorchid;
+    border-top: 1px solid beige;
 }
 </style>

@@ -16,6 +16,7 @@
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
+import {get,cutString} from "./method.js" 
 export default {
   name: 'page-tabbar',
   components: {
@@ -29,44 +30,15 @@ export default {
   },
   created(){
     const _this = this;
-    function get(url,fn){
-      const obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
-      obj.open('GET',url,true);
-      obj.onreadystatechange=function(){
-        if (obj.readyState === 4 && obj.status === 200 || obj.status === 304) { // readyState==4说明请求已完成
-          fn.call(this, obj.responseText);  //从服务器获得数据
-        }
-      };
-      obj.send(null);
-    }
+    //取出用户名
     localforage.getItem('userName', function (err, value) {
       _this.userName = value;
     });
+    //取出身份信息
     localforage.getItem('usbkeyidentification', function (err, value) {
       _this.usbkeyidentification = value;
     });
-    /**/
-	  function cutString(original,before,after,index){
-      index = index || 0;
-      if (typeof index === "number") {
-        const P = original.indexOf(before, index);
-        if (P > -1) {
-          if (after) {
-            const f = original.indexOf(after, P + 1);
-            return (f>-1)? original.slice(P + before.toString().length, f):
-            console.error("owo [在文本中找不到 参数三 "+after+"]");} 
-            else {
-              return original.slice(P + before.toString().length);
-            }
-          } 
-          else {
-            console.error("owo [在文本中找不到 参数一 " + before + "]");
-          }
-        } 
-        else {
-          console.error("owo [sizeTransition:" + index + "不是一个整数!]");
-        };
-    }
+    //请求通知信息
     get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=',function(e){
       _this.notice.xietongbangong.text = cutString(e,"Title>","<");
       //时间处理
