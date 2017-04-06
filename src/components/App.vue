@@ -60,6 +60,12 @@ export default {
   },
   created(){
     const _this = this;
+    //请求轮播图数据
+    const data={type:5};
+    post("http://localhost:9999/appRequest",data,function(d){
+      const Data = JSON.parse(d);
+      _this.showList = Data;
+    });
     localforage.getItem('userName', function (err, value) {
       _this.userName = value;
     });

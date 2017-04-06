@@ -28,7 +28,7 @@ export default {
     quitApp: function(url) { //退出登录
       const _this = this;
       const postData={userName:this.userName,password:this.password};
-      this.post("http://localhost:9999/loginout",postData,function(data){
+      post("http://localhost:9999/loginout",postData,function(data){
         if(data){
           const Data = JSON.parse(data);
           window.location.href="/";

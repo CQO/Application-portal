@@ -35,16 +35,16 @@ import localforage from 'localforage'
 export default {
   data () {
     return {
-      userName: '',
-      password:'',
+      userName: '刘霞',
+      password:'123456',
       step:'one',
       promptText:'第一步:输入您的用户名和密码',
       selectList:null,
       usbkeyidentification:null,
       userPoint:'用户名',
-      userNameError:true,
+      userNameError:false,
       passWordPoint:'密码',
-      passWordError:true,
+      passWordError:false,
       showAlert:false,//控制提醒框是否显示
       textAlert:'',//弹出框显示文字
     }
@@ -75,8 +75,8 @@ export default {
           //判断是否取到数据
           if(data !=="" && data !==null){
             const Data = JSON.parse(data);
-            //document.write(d);
-            if(d === "[]"){
+            //document.write(data);
+            if(data === "[]"){
               window.location.href="#/Main"
             }
             else{
