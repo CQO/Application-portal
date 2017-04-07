@@ -22,9 +22,9 @@ export default {
   created(){
     const _this = this;
     //获取用户名
-    localforage.getItem('userName', function (err, value) {
+    localforage.getItem('userData', function (err, value) {
       if(value){
-        _this.inf.name = value;
+        _this.inf.name = value.userName;
       }
     });
   },

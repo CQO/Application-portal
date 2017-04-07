@@ -67,14 +67,9 @@ export default {
       }
     });
     //获取用户名
-    localforage.getItem('userName', function (err, value) {
-      const userName = value;
-      //获取ID
-      localforage.getItem('usbkeyidentification', function (err, value) {
-        const usbkeyidentification = value;
-        _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+usbkeyidentification
-        _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userName+'&PID='+usbkeyidentification+'&webService=&SessionID='
-      });
+    localforage.getItem('userData', function (err, value) {
+      _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+value.idCard
+      _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=&SessionID='
     });
   },
   methods: {

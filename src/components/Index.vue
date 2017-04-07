@@ -74,7 +74,7 @@ export default {
               }
             }
             else{
-              this.promptText = '第二步:请选择所属组织';
+              _this.promptText = '第二步:请选择所属组织';
               _this.selectList=Data
             }
           }

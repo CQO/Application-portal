@@ -37,8 +37,6 @@ export default {
     //取出用户名
     localforage.getItem('userData', function (err, value) {
       const userName = value;
-      document.write(value.idCard)
-      console.log(value)
       //请求通知信息
       get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=',function(e){
         if(e !=="" && e !==null){
