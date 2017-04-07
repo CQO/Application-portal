@@ -31,8 +31,8 @@ export default {
   data () {
     return {
       data:{
-        姓名:"未登录",
-        性别:"未填写",
+        "姓名":"未登录",
+        "性别":"未填写",
       },
       phoneNumber:""
     }

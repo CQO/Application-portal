@@ -65,7 +65,6 @@ export default {
         _this.textAlert = '网络错误'
         _this.showPositionValue = true
       }
-
     });
     //获取用户名
     localforage.getItem('userName', function (err, value) {

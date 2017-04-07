@@ -130,6 +130,7 @@ export default {
     margin: 0 auto;
     height: 180px;
     padding-top: 60px;
+    display:block;
     img{
         height: 80px;
         width: 120px;
@@ -272,7 +273,4 @@ export default {
     color: darkorchid;
     border-top: 1px solid beige;
 }
-@media screen and (max-height: 540px) { 
-.logo-box {display: none;} 
-} 
 </style>

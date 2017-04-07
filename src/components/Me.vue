@@ -37,7 +37,7 @@ export default {
         //隐藏退出提示
         _this.$vux.loading.hide()
         //收到消息就返回主界面
-        window.location.href="";
+        window.location.href="#/Quit";
       });
     }
   },

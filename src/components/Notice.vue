@@ -49,6 +49,8 @@ export default {
             _this.notice.xietongbangong.time = time;
             //角标处理
             _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
+            //改变地址
+            _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userName + '&PID='+ usbkeyidentification + '&webService='
           }
           else{
             _this.textAlert = '网络错误'
@@ -68,7 +70,7 @@ export default {
       textAlert:'',//弹出框显示文字
       showPositionValue:false,
       notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=', notice: ''}
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
       }
     }
   }
