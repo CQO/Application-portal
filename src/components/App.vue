@@ -38,7 +38,7 @@ export default {
       office:['bangongxitong','youjian', 'xinxifabu'],
       appList:{
         tiangongyuanyuan:{id:"10000", name:"天工圆圆", icon:$tiangongyuanyuan,url:'#', special:"open"},
-        xinxifabu:{id:"10001", name:"信息发布", icon:$xinxifabu,url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url"},
+        xinxifabu:{id:"10001", name:"信息发布", icon:$xinxifabu, url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url"},
         youjian:{id:"10002", name:"邮件", icon:$youjian,url:'', special:"url"},
         bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url"}
       },
@@ -92,6 +92,7 @@ export default {
       });
     },
     openStart:function(url,special){ //判断以何种方式打开应用
+      //document.write(url)
       switch(special){
         case 'open':this.openApp();break; //启动应用
         case 'url':window.location.href=url;break; //跳转到Url

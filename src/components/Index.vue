@@ -16,18 +16,12 @@
         ul.list
             li(v-for="(item,num) in selectList",v-on:click="jump(item.usbkeyname,num,item.usbkeyidentification)") {{item.unitName}}
     .step
-        .login-button(v-on:click="loginIn",:class="{ hide: selectList }") 登录
+        .login-button(@click="loginIn()",:class="{ hide: selectList }") 登录
         p {{promptText}}
         .point
             .ico.icon1 &#xe602;
             .ico.icon2 &#xe602;
-    .alert-box(v-show="showAlert")
-        .main-box
-            .text-box
-                p 登录失败
-                .text {{textAlert}}
-            .button(v-on:click="closeAlert") 确定
-    toast(v-model="showPositionValue",type="text",:time="800",is-show-mask,:text="textAlert",position="top") sdfdf
+    toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
 </template>
 
 <script>
@@ -48,9 +42,8 @@ export default {
       userNameError:false,
       passWordPoint:'密码',
       passWordError:false,
-      showAlert:false,//控制提醒框是否显示
       textAlert:'',//弹出框显示文字
-      showPositionValue:true
+      showPositionValue:false,
     }
   },
   components: {
@@ -61,9 +54,8 @@ export default {
       const _this = this;
       const postData={userName:this.userName,password:this.password};
       if(_this.passWordError || _this.userNameError){
-
-        _this.textAlert = '账号密码没有输入'
-        _this.showAlert = true
+        _this.textAlert = '请输入账号密码'
+        _this.showPositionValue = true
       }
       else{
         //登陆请求
@@ -81,8 +73,8 @@ export default {
             }
           }
           else{
-            _this.textAlert = '与服务器连接出现问题！'
-            _this.showAlert = true
+            _this.textAlert = '登录失败'
+            _this.showPositionValue = true
           }
         });
       }
@@ -134,13 +126,13 @@ export default {
 
 <style lang='less' scoped>
 .logo-box{
-    width: 140px;
+    width: 160px;
     margin: 0 auto;
-    height: 200px;
-    padding-top: 40px;
+    height: 180px;
+    padding-top: 60px;
     img{
-        height: 100px;
-        width: 100px;
+        height: 80px;
+        width: 120px;
         margin: 0 20px;
     }
     p{

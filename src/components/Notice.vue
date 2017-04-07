@@ -33,29 +33,29 @@ export default {
     const _this = this;
     //取出用户名
     localforage.getItem('userName', function (err, value) {
-      _this.userName = value;
+      const userName = value;
+      //取出身份信息
+      localforage.getItem('usbkeyidentification', function (err, value) {
+        const usbkeyidentification = value;
+        //请求通知信息
+        get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userName+'&PID='+usbkeyidentification+'&webService=',function(e){
+          _this.notice.xietongbangong.text = cutString(e,"Title>","<");
+          //时间处理
+          const time = cutString(e,"SentTime>","<");
+          _this.notice.xietongbangong.time = time;
+          //角标处理
+          _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
+        })
+      });
     });
-    //取出身份信息
-    localforage.getItem('usbkeyidentification', function (err, value) {
-      _this.usbkeyidentification = value;
-    });
-    //请求通知信息
-    get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=',function(e){
-      _this.notice.xietongbangong.text = cutString(e,"Title>","<");
-      //时间处理
-      const time = cutString(e,"SentTime>","<");
-      _this.notice.xietongbangong.time = time;
-      //角标处理
-      _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
-    })
+
+
   },
   data () {
     return {
       selected: '通知',
       dbtest:"读本地数据",
       message:"测试消息",
-      usbkeyidentification:'',
-      userName:'',
       notice: {
         xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=', notice: ''}
       }
