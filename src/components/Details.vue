@@ -3,7 +3,7 @@
   TitleBar(title='个人信息',leftIcon="flase")
   P85
   .details
-    Pa42(v-for="(item,key) in data",:item="key",:text="item",:key="item")
+    Pa42(v-for="(item,key) in inf",:item="key",:text="item",:key="item")
   .phone
     Pa42(item="手机号码",:text="phoneNumber")
 </template>
@@ -24,14 +24,14 @@ export default {
     //获取用户名
     localforage.getItem('userName', function (err, value) {
       if(value){
-        _this.data[姓名] = value;
+        _this.inf.name = value;
       }
     });
   },
   data () {
     return {
-      data:{
-        "姓名":"未登录",
+      inf:{
+        name:"未登录",
         "性别":"未填写",
       },
       phoneNumber:""

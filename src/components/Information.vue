@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     sendMes:function(){
-      const data={schem:"sms:"+"000000"};
+      const data={scheme:"sms:"+"000000"+"?body="};
       post("http://localhost:9999/open",data,function(d){
         if(d !=="" && d !==null){
           const Data = JSON.parse(d);

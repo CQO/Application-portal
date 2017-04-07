@@ -32,7 +32,7 @@ import { Toast } from 'vux'
 export default {
   data () {
     return {
-      userName: '朱光晨',
+      userName: '刘霞',
       password:'123456',
       step:'one',
       promptText:'第一步:输入您的用户名和密码',
@@ -65,7 +65,13 @@ export default {
             const Data = JSON.parse(data);
             //document.write(data);
             if(data === "[]"){
-              window.location.href="#/Main"
+              if(data.code === 0){
+                window.location.href="#/Main"
+              }
+              else{
+                _this.textAlert = '用户名或密码错误'
+                _this.showPositionValue = true
+              }
             }
             else{
               this.promptText = '第二步:请选择所属组织';
@@ -81,18 +87,17 @@ export default {
     },
     jump:function(name,num,idCard){
       const _this = this;
+      
       const data={usbkeyidentification:idCard,password:this.password};
-      //把用户名存储到起来
-      localforage.setItem('userName', name, function (err){
-        
-      });
-      localforage.setItem('usbkeyidentification', idCard, function (err){
-        
-      });
       post("http://localhost:9999/login",data,function(d){
         const Data = JSON.parse(d);
       });
-      window.location.href="#/Main"
+      const userData ={userName:name,idCard:idCard}
+      //把用户名存储到起来
+      localforage.setItem('userData', userData, function (err){
+        window.location.href="#/Main"
+      });
+      
     },
     checkUserName:function(){
       //判断用户名是否正确

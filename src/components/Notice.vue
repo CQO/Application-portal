@@ -35,29 +35,27 @@ export default {
   created(){
     const _this = this;
     //取出用户名
-    localforage.getItem('userName', function (err, value) {
+    localforage.getItem('userData', function (err, value) {
       const userName = value;
-      //取出身份信息
-      localforage.getItem('usbkeyidentification', function (err, value) {
-        const usbkeyidentification = value;
-        //请求通知信息
-        get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userName+'&PID='+usbkeyidentification+'&webService=',function(e){
-          if(e !=="" && e !==null){
-            _this.notice.xietongbangong.text = cutString(e,"Title>","<");
-            //时间处理
-            const time = cutString(e,"SentTime>","<");
-            _this.notice.xietongbangong.time = time;
-            //角标处理
-            _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
-            //改变地址
-            _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userName + '&PID='+ usbkeyidentification + '&webService='
-          }
-          else{
-            _this.textAlert = '网络错误'
-            _this.showPositionValue = true
-          }
-        })
-      });
+      document.write(value.idCard)
+      console.log(value)
+      //请求通知信息
+      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=',function(e){
+        if(e !=="" && e !==null){
+          _this.notice.xietongbangong.text = cutString(e,"Title>","<");
+          //时间处理
+          const time = cutString(e,"SentTime>","<");
+          _this.notice.xietongbangong.time = time;
+          //角标处理
+          _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
+          //改变地址
+          _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + value.userName + '&PID='+ value.idCard + '&webService='
+        }
+        else{
+          _this.textAlert = '网络错误'
+          _this.showPositionValue = true
+        }
+      })
     });
 
 
