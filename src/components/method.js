@@ -41,6 +41,7 @@ const post = function (url,data,fn) {
   obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
   obj.onreadystatechange = function () {
     if (obj.readyState === 4 ) {  // 304未修改
+      console.log(obj);
       fn.call(this, obj.responseText);
     }
   };

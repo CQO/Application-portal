@@ -13,6 +13,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import  { LoadingPlugin } from 'vux'
+Vue.use(LoadingPlugin)
+
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
@@ -28,11 +32,12 @@ export default {
     quitApp: function(url) { //退出登录
       const _this = this;
       const postData={userName:this.userName,password:this.password};
+      _this.$vux.loading.show({ text: '正在退出' })
       post("http://localhost:9999/loginout",postData,function(data){
-        if(data){
-          const Data = JSON.parse(data);
-          window.location.href="/";
-        }
+        //隐藏退出提示
+        _this.$vux.loading.hide()
+        //收到消息就返回主界面
+        window.location.href="";
       });
     }
   },

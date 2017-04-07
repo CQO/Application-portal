@@ -14,7 +14,7 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="(item,num) in selectList",v-on:click="jump(item.unitName,num)") {{item.unitName}}
+            li(v-for="(item,num) in selectList",v-on:click="jump(item.usbkeyname,num,item.usbkeyidentification)") {{item.unitName}}
     .step
         .login-button(v-on:click="loginIn",:class="{ hide: selectList }") 登录
         p {{promptText}}
@@ -27,15 +27,18 @@
                 p 登录失败
                 .text {{textAlert}}
             .button(v-on:click="closeAlert") 确定
+    toast(v-model="showPositionValue",type="text",:time="800",is-show-mask,:text="textAlert",position="top") sdfdf
 </template>
 
 <script>
 import localforage from 'localforage'
+import {post} from "./method.js" 
 
+import { Toast } from 'vux'
 export default {
   data () {
     return {
-      userName: '刘霞',
+      userName: '朱光晨',
       password:'123456',
       step:'one',
       promptText:'第一步:输入您的用户名和密码',
@@ -47,31 +50,24 @@ export default {
       passWordError:false,
       showAlert:false,//控制提醒框是否显示
       textAlert:'',//弹出框显示文字
+      showPositionValue:true
     }
   },
+  components: {
+    Toast
+  },
   methods: {
-    post: function (url,data,fn) {
-      const postData = JSON.stringify(data);
-      const obj = new XMLHttpRequest();
-      obj.open("POST", url, true);
-      obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
-      obj.onreadystatechange = function () {
-        if (obj.readyState === 4 ) {  // 304未修改
-          fn.call(this, obj.responseText);
-        }
-      };
-      obj.send(postData);
-    },
     loginIn: function(){
       const _this = this;
       const postData={userName:this.userName,password:this.password};
       if(_this.passWordError || _this.userNameError){
+
         _this.textAlert = '账号密码没有输入'
         _this.showAlert = true
       }
       else{
         //登陆请求
-        this.post("http://localhost:9999/nameLoginList",postData,function(data){
+        post("http://localhost:9999/nameLoginList",postData,function(data){
           //判断是否取到数据
           if(data !=="" && data !==null){
             const Data = JSON.parse(data);
@@ -81,12 +77,6 @@ export default {
             }
             else{
               this.promptText = '第二步:请选择所属组织';
-              //把用户名存储到起来
-              localforage.setItem('userName', this.userName, function (err){
-                if(err){
-                  console.log("数据库操作失败！")
-                }
-              });
               _this.selectList=Data
             }
           }
@@ -97,16 +87,20 @@ export default {
         });
       }
     },
-    jump:function(name,num){
+    jump:function(name,num,idCard){
       const _this = this;
-      const data={usbkeyidentification:this.selectList[num].usbkeyidentification,password:this.password};
-      localforage.setItem('usbkeyidentification', this.selectList[num].usbkeyidentification, function (err){
+      const data={usbkeyidentification:idCard,password:this.password};
+      //把用户名存储到起来
+      localforage.setItem('userName', name, function (err){
         
       });
-      this.post("http://localhost:9999/login",data,function(d){
+      localforage.setItem('usbkeyidentification', idCard, function (err){
+        
+      });
+      post("http://localhost:9999/login",data,function(d){
         const Data = JSON.parse(d);
       });
-        window.location.href="#/Main"
+      window.location.href="#/Main"
     },
     checkUserName:function(){
       //判断用户名是否正确
