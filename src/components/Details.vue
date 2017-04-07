@@ -12,19 +12,29 @@
 import P85 from './panel/P85'
 import Pa42 from './panel/Pa42'
 import TitleBar from './bar/Title'
+import localforage from 'localforage'
 export default {
   components: {
     P85,
     Pa42,
     TitleBar
   },
+  created(){
+    const _this = this;
+    //获取用户名
+    localforage.getItem('userName', function (err, value) {
+      if(value){
+        _this.data[姓名] = value;
+      }
+    });
+  },
   data () {
     return {
       data:{
-        姓名:"罗杰斯",
+        姓名:"未登录",
         性别:"未填写",
       },
-      phoneNumber:"12312532114"
+      phoneNumber:""
     }
   }
 }

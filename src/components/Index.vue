@@ -272,4 +272,7 @@ export default {
     color: darkorchid;
     border-top: 1px solid beige;
 }
+@media screen and (max-height: 540px) { 
+.logo-box {display: none;} 
+} 
 </style>

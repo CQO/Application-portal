@@ -9,10 +9,12 @@
         p.text {{item.text}}
       .time {{item.time}}
       .notice(v-if='item.notice') {{item.notice}}
+  Toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
   BottomBar(index="0")
 </template>
 
 <script>
+import { Toast } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
@@ -22,7 +24,8 @@ const $bangongxitong    = require('../assets/bangongxitong.png')
 export default {
   components: {
     TitleBar,
-    BottomBar
+    BottomBar,
+    Toast
   },
   methods: {
     turn (url) { //跳转到某个地址
@@ -39,12 +42,18 @@ export default {
         const usbkeyidentification = value;
         //请求通知信息
         get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userName+'&PID='+usbkeyidentification+'&webService=',function(e){
-          _this.notice.xietongbangong.text = cutString(e,"Title>","<");
-          //时间处理
-          const time = cutString(e,"SentTime>","<");
-          _this.notice.xietongbangong.time = time;
-          //角标处理
-          _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");;
+          if(e !=="" && e !==null){
+            _this.notice.xietongbangong.text = cutString(e,"Title>","<");
+            //时间处理
+            const time = cutString(e,"SentTime>","<");
+            _this.notice.xietongbangong.time = time;
+            //角标处理
+            _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
+          }
+          else{
+            _this.textAlert = '网络错误'
+            _this.showPositionValue = true
+          }
         })
       });
     });
@@ -56,6 +65,8 @@ export default {
       selected: '通知',
       dbtest:"读本地数据",
       message:"测试消息",
+      textAlert:'',//弹出框显示文字
+      showPositionValue:false,
       notice: {
         xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'http://10.152.36.26:8080/page_m/dblist.jsp?userName='+this.userName+'&PID='+this.usbkeyidentification+'&webService=', notice: ''}
       }

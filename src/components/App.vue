@@ -12,17 +12,19 @@
     grid-item(v-for="item in communication",:key="item")
       img(slot="icon",:src="appList[item].icon",v-on:click="openStart(appList[item].url, appList[item].special)")
       span(slot="label",v-on:click="openStart(appList[item].url, appList[item].special)") {{appList[item].name}}
+  Toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
   BottomBar(index="1")
 </template>
 
 <script>
-import { Swiper, Grid, GridItem } from 'vux'
+import { Swiper, Grid, GridItem, Toast } from 'vux'
 import Search from './panel/Search'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
 import {post} from "./method.js" 
+
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -43,16 +45,11 @@ export default {
         bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url"}
       },
       showList:[
-      {
-        url: 'https://translate.google.cn/',
-        img: $1,
-        title: ''
-      },
-      {
-        url: 'https://translate.google.cn/',
-        img: $2,
-        title: ''
-      }],
+        {url: 'https://translate.google.cn/',img: $1,title: ''},
+        {url: 'https://translate.google.cn/', img: $2, title: ''}
+      ],
+      textAlert:'',//弹出框显示文字
+      showPositionValue:false,
     }
   },
   created(){
@@ -60,8 +57,15 @@ export default {
     //请求轮播图数据
     const data={type:5};
     post("http://localhost:9999/appRequest",data,function(d){
-      const Data = JSON.parse(d);
-      _this.showList = Data;
+      if(d !=="" && d !==null){
+        const Data = JSON.parse(d);
+        _this.showList = Data;
+      }
+      else{
+        _this.textAlert = '网络错误'
+        _this.showPositionValue = true
+      }
+
     });
     //获取用户名
     localforage.getItem('userName', function (err, value) {
@@ -106,7 +110,8 @@ export default {
     Grid,
     GridItem,
     TitleBar,
-    BottomBar
+    BottomBar,
+    Toast
   }
 }
 </script>
