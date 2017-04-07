@@ -9,14 +9,12 @@
   .title 操作
   P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url",:key="item.id")
   .quit(v-on:click="quitApp") 退出登录
+  Loading(v-model="showLoading",text="正在退出...")
   BottomBar(index="3")
 </template>
 
 <script>
-import Vue from 'vue'
-import  { LoadingPlugin } from 'vux'
-Vue.use(LoadingPlugin)
-
+import  { Loading } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
@@ -26,18 +24,19 @@ export default {
   components: {
     TitleBar,
     BottomBar,
+    Loading,
     P42
   },
   methods: {
     quitApp: function(url) { //退出登录
       const _this = this;
       const postData={userName:this.userName,password:this.password};
-      _this.$vux.loading.show({ text: '正在退出' })
+      _this.show1 = true
       post("http://localhost:9999/loginout",postData,function(data){
         //隐藏退出提示
-        _this.$vux.loading.hide()
+        _this.show1 = false
         //收到消息就返回主界面
-        window.location.href="#/Quit";
+        //window.location.href="#/Quit";
       });
     }
   },
@@ -57,7 +56,10 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      userName:"未登录"
+      userName:"未登录",
+      sexList:["保密","男","女"],
+      sex:"",
+      showLoading: false
     }
   }
 }

@@ -21,6 +21,7 @@
         .point
             .ico.icon1 &#xe602;
             .ico.icon2 &#xe602;
+    Loading(v-model="showLoading",text="正在登录...")
     toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
 </template>
 
@@ -28,7 +29,7 @@
 import localforage from 'localforage'
 import {post} from "./method.js" 
 
-import { Toast } from 'vux'
+import { Toast,Loading } from 'vux'
 export default {
   data () {
     return {
@@ -44,10 +45,12 @@ export default {
       passWordError:false,
       textAlert:'',//弹出框显示文字
       showPositionValue:false,
+      showLoading:false
     }
   },
   components: {
-    Toast
+    Toast,
+    Loading
   },
   methods: {
     loginIn: function(){
@@ -58,8 +61,10 @@ export default {
         _this.showPositionValue = true
       }
       else{
+        _this.showLoading = true
         //登陆请求
         post("http://localhost:9999/nameLoginList",postData,function(data){
+          _this.showLoading = false
           //判断是否取到数据
           if(data !=="" && data !==null){
             const Data = JSON.parse(data);
@@ -87,9 +92,10 @@ export default {
     },
     jump:function(name,num,idCard){
       const _this = this;
-      
+      _this.showLoading = true
       const data={usbkeyidentification:idCard,password:this.password};
       post("http://localhost:9999/login",data,function(d){
+        _this.showLoading = false
         const Data = JSON.parse(d);
       });
       const userData ={userName:name,idCard:idCard}
