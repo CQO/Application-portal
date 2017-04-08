@@ -14,7 +14,7 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="(item,num) in selectList",v-on:click="jump(item.usbkeyname,num,item.usbkeyidentification)") {{item.unitName}}
+            li(v-for="(item,num) in selectList",v-on:click="jump(item.usbkeyname,num,item.usbkeyidentification,item.unitId)") {{item.unitName}}
     .step
         .login-button(@click="loginIn()",:class="{ hide: selectList }") 登录
         p {{promptText}}
@@ -22,15 +22,16 @@
             .ico.icon1 &#xe602;
             .ico.icon2 &#xe602;
     Loading(text="正在登录...")
-    toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
+    Toast
 </template>
 
 <script>
 import localforage from 'localforage'
 import {post} from "./method.js" 
 import Loading from './brick/Loading'
+import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { Toast } from 'vux'
+
 export default {
   data () {
     return {
@@ -57,8 +58,7 @@ export default {
       const _this = this;
       const postData={userName:this.userName,password:this.password};
       if(_this.passWordError || _this.userNameError){
-        _this.textAlert = '请输入账号密码'
-        _this.showPositionValue = true
+        Order.$emit('Toast', '请输入账号密码')
       }
       else{
         Order.$emit('Loading', 'show')
@@ -68,42 +68,44 @@ export default {
           //判断是否取到数据
           if(data !=="" && data !==null){
             const Data = JSON.parse(data);
-            //document.write(data);
-            if(data === "[]"){
-              if(data.code === 0){
-                window.location.href="#/Main"
-              }
-              else{
-                _this.textAlert = '用户名或密码错误'
-                _this.showPositionValue = true
-              }
+            if(Data.length === 0){
+              Order.$emit('Toast', '用户名或密码错误')
             }
             else{
-              _this.promptText = '第二步:请选择所属组织';
+              if(Data.length === 1){
+                const data = Data[0]
+                _this.jump(data.usbkeyname,0,data.usbkeyidentification,data.unitId)
+              }
+              _this.step = "two"
+              _this.promptText = '第二步:请选择所属组织'
               _this.selectList=Data
             }
           }
           else{
-            _this.textAlert = '登录失败'
-            _this.showPositionValue = true
+            Order.$emit('Toast', '登录失败')
           }
         });
       }
     },
-    jump:function(name,num,idCard){
+    jump:function(name,num,idCard,unitId){
       const _this = this;
       Order.$emit('Loading', 'show')
       const data={usbkeyidentification:idCard,password:this.password};
       post("http://localhost:9999/login",data,function(d){
         Order.$emit('Loading', 'hide')
         const Data = JSON.parse(d);
+        if(Data.code == 0){
+          const userData ={userName:name, idCard:idCard, key:unitId}
+          //把用户名存储到起来
+          localforage.setItem('userData', userData, function (err){
+            window.location.href="#/Main"
+          });
+        }
+        else{
+          Order.$emit('Toast', '密码错误！')
+          _this.selectList = null
+        }
       });
-      const userData ={userName:name,idCard:idCard}
-      //把用户名存储到起来
-      localforage.setItem('userData', userData, function (err){
-        window.location.href="#/Main"
-      });
-      
     },
     checkUserName:function(){
       //判断用户名是否正确

@@ -2,10 +2,10 @@
 .details-box
   TitleBar(title='详细资料',leftIcon="flase")
   Pa85
-  .phone
+  .phone(v-on:click="call")
     Pan42(v-for="(item,key) in job", :item="key",:text="item",:key="item")
   .inonBar
-    .chat.ico &#xe60a;
+    .chat.ico(v-on:click="yuanyuan") &#xe60a;
     .mess.ico(v-on:click="sendMes") &#xe619;
 </template>
 
@@ -32,6 +32,32 @@ export default {
           _this.textAlert = '网络错误'
           _this.showPositionValue = true
         }
+      });
+    },
+    call:function(){
+      const data={call:"10086"};
+      post("http://localhost:9999/call",data,function(d){
+        if(d !=="" && d !==null){
+          const Data = JSON.parse(d);
+          _this.showList = Data;
+        }
+        else{
+          _this.textAlert = '网络错误'
+          _this.showPositionValue = true
+        }
+      });
+    },
+    yuanyuan:function(){
+      const app1 = {
+        "type":2,
+        "sopid":"com.vrv.linkDood",
+        "pkgpath":"com.vrv.linkDood-1.0.45.sop",
+        "scheme":"linkdood:showlinkdood?id=110108198512314993&pwd=123456",
+        "name":"linkdood"
+      };
+      //向9999端口发送Post请求打开应用
+      post("http://localhost:9999/open",app1,function(date){
+        console.log(date)
       });
     }
   },

@@ -57,7 +57,7 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      userName:"未登录",
+      userName:"",
       sexList:["保密","男","女"],
       sex:""
     }

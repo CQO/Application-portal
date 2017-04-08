@@ -8,7 +8,7 @@
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
-      .choose.ico(v-show="item.isSelect") &#xe608;
+      .choose.ico(v-show="item.isSelect",v-on:click="exit(key)") &#xe608;
   .delate(v-on:click="delateApp",v-if="showDelateButton") 删除
   Toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
   BottomBar(index="1")
@@ -34,12 +34,7 @@ export default {
   data () {
     return {
       index: 0,
-      appList:{
-        tiangongyuanyuan:{id:"10000", name:"天工圆圆", icon:$tiangongyuanyuan,url:'', special:"open", type:"communication", isSelect:false},
-        xinxifabu:{id:"10001", name:"信息发布", icon:$xinxifabu, url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url", type:"office" ,isSelect:false},
-        youjian:{id:"10002", name:"邮件", icon:$youjian,url:'', special:"url", type:"office", isSelect:false},
-        bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url", type:"office", isSelect:false}
-      },
+      appList:{},
       showList:[
         // {url: 'https://translate.google.cn/',img: $1,title: ''},
         // {url: 'https://translate.google.cn/', img: $2, title: ''}
@@ -47,6 +42,7 @@ export default {
       textAlert:'',//弹出框显示文字
       showPositionValue:false,
       showDelateButton:false,//显示删除按钮
+      idCard:0
     }
   },
   created(){
@@ -65,11 +61,7 @@ export default {
       }
     });
     //---------------------------------------------------------
-    //获取用户名
-    localforage.getItem('userData', function (err, value) {
-      _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+value.idCard
-      _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=&SessionID='
-    });
+
     //获取应用列表
     localforage.getItem('appList', function (err, value) {
       //如果没有取得数据，给应用列表一个默认值
@@ -80,11 +72,23 @@ export default {
           youjian:{id:"10002", name:"邮件", icon:$youjian,url:'', special:"url", type:"office", isSelect:false},
           bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url", type:"office", isSelect:false}
         }
+        localforage.setItem('appList', _this.appList);
       }
       else{
         //取到数据则使用数据库中存储的数据
         _this.appList = value
       }
+    });
+    //获取用户名
+    localforage.getItem('userData', function (err, value) {
+      _this.idCard = value.idCard
+      if(value.key !== 1){
+        _this.appList.bangongxitong = {}
+      }
+      else{
+        _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=&SessionID='
+      }
+      _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+value.idCard
     });
   },
   methods: {
@@ -96,7 +100,7 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=110108198512314993&pwd=123456",
+        "scheme":"linkdood:showlinkdood?id="+this.idCard,
         "name":"linkdood"
       };
       //向9999端口发送Post请求打开应用
@@ -105,7 +109,6 @@ export default {
       });
     },
     openStart:function(url,special){ //判断以何种方式打开应用
-      //document.write(url)
       switch(special){
         case 'open':this.openApp();break; //启动应用
         case 'url':window.location.href=url;break; //跳转到Url
@@ -136,6 +139,12 @@ export default {
       }
       //将删除按钮隐藏
       _this.showDelateButton = false
+    },
+    exit:function(key){
+      //将对应的appItem改为不可视
+      this.appList[key].isSelect = false
+      //隐藏删除按钮
+      this.showDelateButton = false
     }
   },
   components: {
@@ -191,6 +200,7 @@ export default {
   p{
     width: 75px;
     text-align: center;
+    font-size: 0.9rem;
   }
   .choose{
     position: absolute;
@@ -198,7 +208,7 @@ export default {
     height: 100%;
     width: 100%;
     top: 0;
-    line-height: 77px;
+    line-height: 70px;
     text-align: center;
     font-size: 2rem;
     color: aqua;
