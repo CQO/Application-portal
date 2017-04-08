@@ -4,6 +4,8 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
+var VueTouch = require('vue-touch')
+Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(VueRouter)
 
 const routes = [

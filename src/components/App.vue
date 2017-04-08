@@ -3,15 +3,17 @@
   TitleBar(title='我的应用',rightIcon="flase")
   swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
   AppTitle.bangong-title(title="办公类")
-  Grid
-    grid-item(v-for="item in office",:key="item")
-      img(slot="icon",:src="appList[item].icon",v-on:click="openStart(appList[item].url, appList[item].special)")
-      span(slot="label",v-on:click="openStart(appList[item].url, appList[item].special)") {{appList[item].name}}
+  .grid
+    .grid-item(v-for="item in office",:key="item",v-on:press="test")
+      v-touch.touch(tag="div",v-on:press="test",v-on:tap="openStart(appList[item].url, appList[item].special)")
+      img(slot="icon",:src="appList[item].icon")
+      p {{appList[item].name}}
   AppTitle.tongxun-title(title="通讯类")
-  Grid
-    grid-item(v-for="item in communication",:key="item")
-      img(slot="icon",:src="appList[item].icon",v-on:click="openStart(appList[item].url, appList[item].special)")
-      span(slot="label",v-on:click="openStart(appList[item].url, appList[item].special)") {{appList[item].name}}
+  .grid
+    .grid-item(v-for="item in communication",:key="item")
+      v-touch.touch(tag="div",v-on:press="test",v-on:tap="openStart(appList[item].url, appList[item].special)")
+      img(slot="icon",:src="appList[item].icon")
+      p {{appList[item].name}}
   Toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
   BottomBar(index="1")
 </template>
@@ -96,6 +98,9 @@ export default {
         case 'url':window.location.href=url;break; //跳转到Url
       }
     },
+    test:function(){
+      console.log("sd");
+    }
   },
   components: {
     Search,
@@ -109,6 +114,7 @@ export default {
   }
 }
 </script>
+
 <style lang='less'>
 .app-box{
   .weui-grid{
@@ -133,6 +139,27 @@ export default {
   .weui-grid__icon{
     width: 45px;
     height: 45px;
+  }
+}
+.grid{
+  display: flex;
+  .grid-item{
+    width: 75px;
+    margin: 10px;
+    position: relative;
+  }
+  .touch{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+  img{
+    height: 45px;
+    margin: 0 15px;
+  }
+  p{
+    width: 75px;
+    text-align: center;
   }
 }
 </style>
