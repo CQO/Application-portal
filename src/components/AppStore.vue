@@ -54,7 +54,6 @@ export default {
       localforage.setItem('appList', Data, function (err){
         _this.appList[key].exist = true
       });
-      console.log(item)
     }
   },
   created(){

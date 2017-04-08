@@ -21,15 +21,16 @@
         .point
             .ico.icon1 &#xe602;
             .ico.icon2 &#xe602;
-    Loading(v-model="showLoading",text="正在登录...")
+    Loading(text="正在登录...")
     toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
 </template>
 
 <script>
 import localforage from 'localforage'
 import {post} from "./method.js" 
-
-import { Toast,Loading } from 'vux'
+import Loading from './brick/Loading'
+import { Order } from './Order.js'
+import { Toast } from 'vux'
 export default {
   data () {
     return {
@@ -44,8 +45,7 @@ export default {
       passWordPoint:'密码',
       passWordError:false,
       textAlert:'',//弹出框显示文字
-      showPositionValue:false,
-      showLoading:false
+      showPositionValue:false
     }
   },
   components: {
@@ -61,10 +61,10 @@ export default {
         _this.showPositionValue = true
       }
       else{
-        _this.showLoading = true
+        Order.$emit('Loading', 'show')
         //登陆请求
         post("http://localhost:9999/nameLoginList",postData,function(data){
-          _this.showLoading = false
+          Order.$emit('Loading', 'hide')
           //判断是否取到数据
           if(data !=="" && data !==null){
             const Data = JSON.parse(data);
@@ -92,10 +92,10 @@ export default {
     },
     jump:function(name,num,idCard){
       const _this = this;
-      _this.showLoading = true
+      Order.$emit('Loading', 'show')
       const data={usbkeyidentification:idCard,password:this.password};
       post("http://localhost:9999/login",data,function(d){
-        _this.showLoading = false
+        Order.$emit('Loading', 'hide')
         const Data = JSON.parse(d);
       });
       const userData ={userName:name,idCard:idCard}

@@ -9,17 +9,18 @@
   .title 操作
   P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url",:key="item.id")
   .quit(v-on:click="quitApp") 退出登录
-  Loading(v-model="showLoading",text="正在退出...")
+  Loading(text="正在退出...")
   BottomBar(index="3")
 </template>
 
 <script>
-import  { Loading } from 'vux'
+import Loading from './brick/Loading'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
 import localforage from 'localforage'
-import {post} from "./method.js" 
+import {post} from "./method.js"
+import { Order } from './Order.js'
 export default {
   components: {
     TitleBar,
@@ -31,12 +32,12 @@ export default {
     quitApp: function(url) { //退出登录
       const _this = this;
       const postData={userName:this.userName,password:this.password};
-      _this.show1 = true
+      Order.$emit('Loading', 'show')
       post("http://localhost:9999/loginout",postData,function(data){
         //隐藏退出提示
-        _this.show1 = false
+        Order.$emit('Loading', 'hide')
         //收到消息就返回主界面
-        //window.location.href="#/Quit";
+        window.location.href="#/Quit";
       });
     }
   },
@@ -58,8 +59,7 @@ export default {
       ],
       userName:"未登录",
       sexList:["保密","男","女"],
-      sex:"",
-      showLoading: false
+      sex:""
     }
   }
 }
