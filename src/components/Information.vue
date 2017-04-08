@@ -3,10 +3,13 @@
   TitleBar(title='详细资料',leftIcon="flase")
   Pa85
   .phone(v-on:click="call")
-    Pan42(v-for="(item,key) in job", :item="key",:text="item",:key="item")
-  .inonBar
-    .chat.ico(v-on:click="yuanyuan") &#xe60a;
-    .mess.ico(v-on:click="sendMes") &#xe619;
+    Pan42(item="职位",text="产品经理")
+    .message
+      p 联系方式
+      .chat.ico(v-on:click="yuanyuan") &#xe60a;
+      .mess.ico(v-on:click="sendMes") &#xe619;
+    Pan42(item="手机号码",text="18092852085")
+    
 </template>
 
 <script>
@@ -60,15 +63,6 @@ export default {
         console.log(date)
       });
     }
-  },
-  data () {
-    return {
-      job:{
-        职位:"产品经理",
-        联系方式:"",
-        手机号码:"12312532114"
-      }
-    }
   }
 }
 </script>
@@ -77,15 +71,21 @@ export default {
 .details,.phone{
   margin: 20px 0;
 }
-.inonBar{
-  width: 80px;
-  position: relative;
-  bottom: 99px;
-  left: 93px;
-  color: #a4a9b2;
-  font-size: 1.1rem;
+.message{
+  height: 42px;
+  line-height: 42px;
+  padding: 0 15px;
+  background-color: white;
+  display: flex;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eaeaea;
+  p{
+    width: 65px;
+  }
   .ico{
-    margin-right: 20px;
+    margin: 0 10px;
+    font-size: 1.2rem;
+    color: burlywood;
   }
 }
 </style>

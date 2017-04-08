@@ -19,7 +19,7 @@ import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
 import localforage from 'localforage'
-import {post} from "./method.js"
+import {post, globalData} from "./method.js"
 import { Order } from './Order.js'
 export default {
   components: {
@@ -44,11 +44,8 @@ export default {
   created(){
     const _this = this;
     //获取用户名
-    localforage.getItem('userData', function (err, value) {
-      if(value){
-        _this.userName = value.userName;
-      }
-    });
+    const value = globalData.userData
+    if(value){ _this.userName = value.userName; }
   },
   data () {
     return {

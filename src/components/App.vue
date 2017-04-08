@@ -21,7 +21,7 @@ import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
-import {post} from "./method.js" 
+import {post,globalData} from "./method.js" 
 
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
@@ -36,8 +36,8 @@ export default {
       index: 0,
       appList:{},
       showList:[
-        // {url: 'https://translate.google.cn/',img: $1,title: ''},
-        // {url: 'https://translate.google.cn/', img: $2, title: ''}
+        {url: 'https://translate.google.cn/',img: $1,title: ''},
+        {url: 'https://translate.google.cn/', img: $2, title: ''}
       ],
       textAlert:'',//弹出框显示文字
       showPositionValue:false,
@@ -49,17 +49,23 @@ export default {
     const _this = this;
     //请求轮播图数据
     //---------------------------------------------------------
-    const data={type:5};
-    post("http://localhost:9999/appRequest",data,function(d){
-      if(d !=="" && d !==null){
-        const Data = JSON.parse(d);
-        _this.showList = Data;
-      }
-      else{
-        _this.textAlert = '网络错误'
-        _this.showPositionValue = true
-      }
-    });
+    //如果轮播图没有初始化请求数据
+    if(globalData.showList === null){
+      post("http://localhost:9999/appRequest",{type:5},function(d){
+        if(d !=="" && d !==null){
+          const Data = JSON.parse(d);
+          _this.showList = Data
+          globalData.showList = Data
+        }
+        else{
+          _this.textAlert = '网络错误'
+          _this.showPositionValue = true
+        }
+      });
+    }
+    else{ //如果已经初始化过则使用缓存
+      _this.showList = globalData.showList
+    }
     //---------------------------------------------------------
 
     //获取应用列表
@@ -80,16 +86,23 @@ export default {
       }
     });
     //获取用户名
-    localforage.getItem('userData', function (err, value) {
-      _this.idCard = value.idCard
-      if(value.key !== 1){
-        _this.appList.bangongxitong = {}
+    //-------------------------------------------------------------------
+    const value = globalData.userData
+    _this.idCard = value.idCard
+    const appList = _this.appList
+    if(value.key !== 1){
+      appList.bangongxitong = {}
+    }
+    else{
+      //判断办公系统应用是否存在,存在则改变其URL
+      if(appList.bangongxitong !== undefined){
+        appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=&SessionID='
       }
-      else{
-        _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=&SessionID='
-      }
-      _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+value.idCard
-    });
+    }
+    if(appList.youjian !== undefined){
+      appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+value.idCard
+    }
+    //-------------------------------------------------------------------
   },
   methods: {
     onIndexChange (index) { //轮播图

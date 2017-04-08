@@ -31,7 +31,7 @@ import {post} from "./method.js"
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-
+import {globalData} from "./method.js"
 export default {
   data () {
     return {
@@ -98,6 +98,7 @@ export default {
           const userData ={userName:name, idCard:idCard, key:unitId}
           //把用户名存储到起来
           localforage.setItem('userData', userData, function (err){
+            globalData.userData = userData
             window.location.href="#/Main"
           });
         }

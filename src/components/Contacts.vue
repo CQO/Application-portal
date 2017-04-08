@@ -11,7 +11,7 @@
       a(:href="'#/Organization/'+item")
         img(src="../assets/Organization.png")
         p.organization-name {{item}}
-        p.organization-number.ico &#xe62a; 0
+        p.organization-number.ico &#xe61b; 0
         p.organization-people.ico &#xe60c; 24
   BottomBar(index="2")
 </template>

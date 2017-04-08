@@ -47,4 +47,9 @@ const post = function (url,data,fn) {
   obj.send(postData);
 };
 
-export {get, cutString, post};
+let globalData = {
+  userData : {userName:'测试用户', idCard:666666666, key:223},
+  showList : null,
+  appList  : null
+};
+export {get, cutString, post, globalData};

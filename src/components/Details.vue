@@ -14,26 +14,17 @@
 import P85 from './panel/P85'
 import Pa42 from './panel/Pa42'
 import TitleBar from './bar/Title'
-import localforage from 'localforage'
+import {globalData} from "./method.js" 
 export default {
   components: {
     P85,
     Pa42,
     TitleBar
   },
-  created(){
-    const _this = this;
-    //获取用户名
-    localforage.getItem('userData', function (err, value) {
-      if(value){
-        _this.name = value.userName;
-      }
-    });
-  },
   data () {
     return {
-      name:"",
-      phoneNumber:""
+      phoneNumber:"",
+      name: globalData.userData.userName
     }
   }
 }

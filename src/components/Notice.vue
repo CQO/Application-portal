@@ -18,7 +18,7 @@ import { Toast } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import localforage from 'localforage'
-import {get,cutString} from "./method.js" 
+import {get, cutString, globalData} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
 export default {
@@ -35,33 +35,29 @@ export default {
   created(){
     const _this = this;
     //取出用户名
-    localforage.getItem('userData', function (err, value) {
-      const userName = value;
-      if(userName.key === 1){
-        //请求通知信息
-        get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=',function(e){
-          if(e !=="" && e !==null){
-            _this.notice.xietongbangong.text = cutString(e,"Title>","<");
-            //时间处理
-            const time = cutString(e,"SentTime>","<");
-            _this.notice.xietongbangong.time = time;
-            //角标处理
-            _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
-            //改变地址
-            _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + value.userName + '&PID='+ value.idCard + '&webService='
-          }
-          else{
-            _this.textAlert = '网络错误'
-            _this.showPositionValue = true
-          }
-        })
-      }
-      else{
-        _this.notice = {}
-      }
-    });
-
-
+    const userName = globalData.userData
+    if(userName.key === 1){
+      //请求通知信息
+      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=',function(e){
+        if(e !=="" && e !==null){
+          _this.notice.xietongbangong.text = cutString(e,"Title>","<");
+          //时间处理
+          const time = cutString(e,"SentTime>","<");
+          _this.notice.xietongbangong.time = time;
+          //角标处理
+          _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
+          //改变地址
+          _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + value.userName + '&PID='+ value.idCard + '&webService='
+        }
+        else{
+          _this.textAlert = '网络错误'
+          _this.showPositionValue = true
+        }
+      })
+    }
+    else{
+      _this.notice = {}
+    }
   },
   data () {
     return {
