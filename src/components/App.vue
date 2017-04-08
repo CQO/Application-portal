@@ -41,8 +41,8 @@ export default {
         bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url", type:"office", isSelect:false}
       },
       showList:[
-        {url: 'https://translate.google.cn/',img: $1,title: ''},
-        {url: 'https://translate.google.cn/', img: $2, title: ''}
+        // {url: 'https://translate.google.cn/',img: $1,title: ''},
+        // {url: 'https://translate.google.cn/', img: $2, title: ''}
       ],
       textAlert:'',//弹出框显示文字
       showPositionValue:false,
