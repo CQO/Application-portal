@@ -4,8 +4,8 @@
   Search
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
-    checker-item(value="bangong") 办公类
-    checker-item(value="tongxun") 通讯录
+    checker-item(value="office") 办公类
+    checker-item(value="communication") 通讯录
   ul
     AppStore(v-for="item in classification",:neme="item.neme",:detail="item.detail",:exist="item.exist",:key="item.id",:icon="item.icon")
 </template>
@@ -15,6 +15,7 @@ import { Checker, CheckerItem } from 'vux'
 import Search from './panel/Search'
 import AppStore from './list/AppStore'
 import TitleBar from './bar/Title'
+import localforage from 'localforage'
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -33,13 +34,26 @@ export default {
       this.index = index
     }
   },
+  created(){
+    const _this = this
+    localforage.getItem('appList', function (err, value) {
+      for(let item in _this.appList){
+        for(let myApp in value){
+          if(_this.appList[item].appName === myApp){
+            _this.appList[item].exist =true
+            break
+          }
+        }
+      }
+    })
+  },
   data () {
     return {
       appList:[
-        { neme:"协同办公", detail:"112次下载 | 11.6M", icon: $bangongxitong, type:"bangong", exist:true, id:"1004" },
-        { neme:"邮件", detail:"252次下载 | 25.3M", icon: $youjian, type:"bangong", exist:true, id:"1002" },
-        { neme:"信息发布", detail:"132次下载 | 12.6M", icon: $xinxifabu, type:"bangong", exist:true, id:"1001" },
-        { neme:"天工圆圆", detail:"183次下载 | 24.7M", icon: $tiangongyuanyuan, type:"tongxun", exist:true, id:"1000"}        
+        { neme:"协同办公", appName:"bangongxitong", detail:"版本号:1.41", icon: $bangongxitong, type:"office", exist:false, id:"1004" },
+        { neme:"邮件", appName:"youjian", detail:"版本号:0.10", icon: $youjian, type:"office", exist:false, id:"1002" },
+        { neme:"信息发布", appName:"xinxifabu", detail:"版本号:1.01", icon: $xinxifabu, type:"office", exist:false, id:"1001" },
+        { neme:"天工圆圆", appName:"tiangongyuanyuan", detail:"版本号:2.36", icon: $tiangongyuanyuan, type:"communication", exist:false, id:"1000"}        
       ],
       select: 'all',
     }
