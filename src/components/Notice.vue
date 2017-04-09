@@ -9,14 +9,15 @@
         p.text {{item.text}}
       .time {{item.time}}
       .notice(v-if='item.notice') {{item.notice}}
-  Toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
+  Toast
   BottomBar(index="0")
 </template>
 
 <script>
-import { Toast } from 'vux'
+import Toast from './brick/Toast'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
+import { Order } from './Order.js'
 import {get, cutString, globalData} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
@@ -25,6 +26,13 @@ export default {
     TitleBar,
     BottomBar,
     Toast
+  },
+  data () {
+    return {
+      notice: {
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
+      }
+    }
   },
   methods: {
     //跳转到某个地址
@@ -36,20 +44,20 @@ export default {
     const userData = globalData.userData
     if(userData.key == "1"){
       //请求通知信息
-      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(e){
-        if(e !=="" && e !==null){
-          _this.notice.xietongbangong.text = cutString(e,"Title>","<");
+      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(receive){
+        if(receive !=="" && receive !==null){
+          _this.notice.xietongbangong.text = cutString(receive,"Title>","<");
           //时间处理
-          const time = cutString(e,"SentTime>","<");
-          _this.notice.xietongbangong.time = time;
+          let time = cutString(receive,"SentTime>","<")
+          time = cutString(time," ")
+          _this.notice.xietongbangong.time = time
           //角标处理
-          _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
+          _this.notice.xietongbangong.notice = cutString(receive,"wdNum>","<");
           //改变地址
           _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
         }
         else{
-          _this.textAlert = '网络错误'
-          _this.showPositionValue = true
+          Order.$emit('Loading', '网络错误')
         }
       })
     }
@@ -57,25 +65,13 @@ export default {
       _this.notice = {}
     }
   },
-  data () {
-    return {
-      selected: '通知',
-      dbtest:"读本地数据",
-      message:"测试消息",
-      textAlert:'',//弹出框显示文字
-      showPositionValue:false,
-      notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
-      }
-    }
-  }
 }
 </script>
 
 <style lang='less' scoped>
 .notice-list{
   height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   li{
     display: flex;
     height: 65px;
@@ -123,51 +119,5 @@ export default {
       overflow: hidden;
     }
   }
-  .button{
-    position: absolute;
-    right: 10px;
-    bottom: 60px;
-    background-color: cornflowerblue;
-    color: antiquewhite;
-    height: 40px;
-    width: 200px;
-    text-align: center;
-    line-height: 40px;
-    overflow: hidden;
-  }
-  .duihua{
-    position: absolute;
-    right: 10px;
-    bottom: 110px;
-    background-color: cornflowerblue;
-    height: 40px;
-    width: 200px;
-    display: flex;
-    line-height: 40px;
-    color: antiquewhite;
-    font-size: 14px;
-    overflow: hidden;
-    input{
-      width: 120px;
-      overflow: hidden;
-    }
-    .send{
-      width: 80px;
-      text-align: center;
-      overflow: hidden;
-    }
-  }
-  .wangluo{
-      position: absolute;
-      right: 10px;
-      bottom: 160px;
-      background-color: cornflowerblue;
-      color: antiquewhite;
-      height: 40px;
-      width: 200px;
-      text-align: center;
-      line-height: 40px;
-      overflow: hidden;
-    }
 }
 </style>

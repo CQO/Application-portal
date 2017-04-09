@@ -25,7 +25,7 @@ const routes = [
 
 const router = new VueRouter({
   routes
-})
+});
 
 FastClick.attach(document.body)
 

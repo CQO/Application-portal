@@ -37,6 +37,7 @@ export default {
     font-size: 18px;
     font-family: -apple-system-font,Helvetica Neue,sans-serif;
     width: calc(~"100% - 90px");
+    margin: 0;
   }
   /*标题栏按钮样式*/
   .titleButton{

@@ -76,11 +76,11 @@ export default {
       else{
         Order.$emit('Loading', 'show')
         //登陆请求
-        post("http://localhost:9999/nameLoginList",postData,function(data){
+        post("http://localhost:9999/nameLoginList",postData,function(receive){
           Order.$emit('Loading', 'hide')
           //判断是否取到数据
-          if(data !=="" && data !==null){
-            const Data = JSON.parse(data);
+          if(receive !=="" && receive !==null){
+            const Data = JSON.parse(receive);
             if(Data.length === 0){
               Order.$emit('Toast', '用户名或密码错误')
             }
@@ -156,6 +156,7 @@ export default {
         background-color: #f4f4f4;
         width: 245px;
         font-size: 1rem;
+        padding: 0;
     }
     .ico{
         height: 50px;
