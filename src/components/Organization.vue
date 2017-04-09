@@ -28,10 +28,7 @@ export default {
       organizationList:[
         {neme:'吴福龙',text:'[电脑]软件工程师',id:'1000'},
         {neme:'王博',text:'[电脑]软件工程师',id:'1001'},
-        {neme:'曾天翼',text:'[电脑]软件工程师',id:'1002'},
-        {neme:'高永胜',text:'[电脑]软件工程师',id:'1003'},
-        {neme:'赵建超',text:'[电脑]软件工程师',id:'1004'},
-        {neme:'刘洋',text:'[电脑]软件工程师',id:'1005'},
+        {neme:'曾天翼',text:'[电脑]软件工程师',id:'1002'}
       ]
     }
   },
@@ -43,7 +40,7 @@ export default {
     .zuzhi{
         height:45px;
         display: flex;
-        line-height: 45px;
+        line-height: 45px;  
         font-size: 0.8rem;
         a{
             color: #2c84ff;

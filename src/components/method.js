@@ -47,9 +47,69 @@ const post = function (url,data,fn) {
   obj.send(postData);
 };
 
+//引入图片资源
+const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
+      $xinxifabu        = require('../assets/xinxifabu.png'),
+      $youjian          = require('../assets/youjian.png'),
+      $bangongxitong    = require('../assets/bangongxitong.png'),
+      $1                = require('../assets/1.png'),
+      $2                = require('../assets/2.png');
+
 let globalData = {
-  userData : {userName:'测试用户', idCard:666666666, key:223},
-  showList : null,
-  appList  : null
+  userData : {userName:'测试用户', idCard:666666666, key:223, phoneNumber:18092852085},
+  showList : [
+    {url: 'https://translate.google.cn/',img: $1,title: ''},
+    {url: 'https://translate.google.cn/', img: $2, title: ''}
+  ],
+  appList  : {
+    tiangongyuanyuan:{
+      id: "10000", 
+      name: "天工圆圆", 
+      icon: $tiangongyuanyuan,
+      url: '', 
+      special: "open", 
+      type: "communication",
+      detail:"版本号:1.41",
+      isSelect: false,
+      available: true,
+      exist:true
+    },
+    xinxifabu:{
+      id: "10001", 
+      name: "信息发布", 
+      icon: $xinxifabu, 
+      url: 'http://info.casic.cs/jeecms2/index/mobile/', 
+      special: "url", 
+      type:"office" ,
+      detail:"版本号:0.8",
+      isSelect: false,
+      available: true,
+      exist:true
+    },
+    youjian:{
+      id: "10002", 
+      name: "邮件", 
+      icon: $youjian,
+      url: '', 
+      special: "url", 
+      type: "office", 
+      detail:"版本号:1.6",
+      isSelect: false,
+      available: true,
+      exist:true
+    },
+    bangongxitong:{
+      id:"10004", 
+      name:"协同办公", 
+      icon:$bangongxitong,
+      url:'', 
+      special:"url", 
+      type:"office",
+      detail:"版本号:0.2",
+      isSelect:false,
+      available: true,
+      exist:true
+    }
+  }
 };
 export {get, cutString, post, globalData};

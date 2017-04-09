@@ -1,5 +1,5 @@
 <template>
-  <div class="toast-box" v-if="show">
+  <div class="toast-box" v-show="show">
     <span class="text">{{text}}</span>
   </div>
 </template>
@@ -34,6 +34,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
+    z-index: 999;
 }
 .toast-box span{
     height: 30px;

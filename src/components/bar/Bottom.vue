@@ -66,7 +66,7 @@ export default {
   height:50px;
   background:#f7f7fa;
   width:100%;
-  position:absolute;
+  position:fixed;
   z-index:5;
   bottom:0;
   display: flex;

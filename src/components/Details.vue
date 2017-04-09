@@ -7,7 +7,7 @@
     Pa42(item="性别", text="未填写")
   .phone
     .item 手机号码
-    input(type="text")
+    input(type="text",v-model="phoneNumber",v-on:change="phoneNumberChange")
 </template>
 
 <script>
@@ -15,6 +15,7 @@ import P85 from './panel/P85'
 import Pa42 from './panel/Pa42'
 import TitleBar from './bar/Title'
 import {globalData} from "./method.js" 
+
 export default {
   components: {
     P85,
@@ -23,10 +24,15 @@ export default {
   },
   data () {
     return {
-      phoneNumber:"",
+      phoneNumber:globalData.userData.phoneNumber,
       name: globalData.userData.userName
     }
-  }
+  },
+  methods: {
+    phoneNumberChange () {
+      globalData.userData.phoneNumber = this.phoneNumber
+    }
+  },
 }
 </script>
 

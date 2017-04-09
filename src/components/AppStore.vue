@@ -12,16 +12,15 @@
       .info
         p.name {{item.name}}
         p.detail {{item.detail}}
-      .button.open(v-if="item.exist") 已安装
+      .button.open(v-if="item.exist") 打开
       .button.down(v-else,v-on:click="installApp(item,key)") 安装
 </template>
 
 <script>
 import { Checker, CheckerItem } from 'vux'
 import Search from './panel/Search'
-import AppStore from './list/AppStore'
 import TitleBar from './bar/Title'
-import localforage from 'localforage'
+import { globalData} from "./method.js" 
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -32,7 +31,6 @@ export default {
     Search,
     Checker,
     CheckerItem,
-    AppStore,
     TitleBar
   },
   methods: {
@@ -40,61 +38,33 @@ export default {
       this.index = index
     },
     installApp:function(item,key){
-      const _this = this
-      let Data = _this.localforageData
-      Data[item.appName] = {
-        id:item.id,
-        name: item.name,
-        icon: item.icon,
-        special: item.special,
-        type: item.type,
-        isSelect:false
-      }
-      //把应用列表存储到起来
-      localforage.setItem('appList', Data, function (err){
-        _this.appList[key].exist = true
-      });
+      globalData.appList[key].exist = true
     }
-  },
-  created(){
-    const _this = this
-    localforage.getItem('appList', function (err, value) {
-      _this.localforageData = value
-      for(let item in _this.appList){
-        for(let myApp in value){
-          if(_this.appList[item].appName === myApp){
-            _this.appList[item].exist =true
-            break
-          }
-        }
-      }
-    })
   },
   data () {
     return {
-      appList:[
-        { name:"协同办公", appName:"bangongxitong", detail:"版本号:1.41", icon: $bangongxitong,special:"url", type:"office", exist:false,url:'', id:"1004" },
-        { name:"邮件", appName:"youjian", detail:"版本号:0.10", icon: $youjian,special:"url", type:"office", exist:false,url:'', id:"1002" },
-        { name:"信息发布", appName:"xinxifabu", detail:"版本号:1.01", icon: $xinxifabu,special:"url", type:"office", exist:false, id:"1001",url:'http://info.casic.cs/jeecms2/index/mobile/', },
-        { name:"天工圆圆", appName:"tiangongyuanyuan", detail:"版本号:2.36", icon: $tiangongyuanyuan, special:"open", type:"communication", exist:false, url:'', id:"1000"}        
-      ],
       select: 'all',
-      localforageData: ''
+      localforageData: '',
+      appList: globalData.appList,
     }
   },
   computed: {
     //筛选应用
     classification: function () {
       const _this = this;
-      return this.appList.filter(function (list) {
-        //判断筛选条件是否为显示全部
-        if(_this.select === "all"){
-          return true
+      if(_this.select === "all"){
+        return globalData.appList
+      }
+      else{
+        const newList ={}
+        for(let item in globalData.appList){
+          //判断应用列表的类型是否和选择的类型一致
+          if(globalData.appList[item].type === _this.select){
+            newList[item] = globalData.appList[item]
+          }
         }
-        else if(list.type === _this.select){
-          return true
-        }
-      })
+        return newList
+      }
     }
   }
 }

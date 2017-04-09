@@ -18,7 +18,6 @@ import Loading from './brick/Loading'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
-import localforage from 'localforage'
 import {post, globalData} from "./method.js"
 import { Order } from './Order.js'
 export default {

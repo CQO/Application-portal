@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import localforage from 'localforage'
 import {post} from "./method.js" 
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
@@ -53,6 +52,11 @@ export default {
     Toast,
     Loading
   },
+  created(){
+    post("http://localhost:9999/getLoginStatus","",(data) => {
+      document.write(data)
+    })
+  },
   methods: {
     loginIn: function(){
       const _this = this;
@@ -76,9 +80,11 @@ export default {
                 const data = Data[0]
                 _this.jump(data.usbkeyname,0,data.usbkeyidentification,data.unitId)
               }
-              _this.step = "two"
-              _this.promptText = '第二步:请选择所属组织'
-              _this.selectList=Data
+              else{
+                _this.step = "two"
+                _this.promptText = '第二步:请选择所属组织'
+                _this.selectList=Data
+              }
             }
           }
           else{
@@ -96,11 +102,6 @@ export default {
         const Data = JSON.parse(d);
         if(Data.code == 0){
           const userData ={userName:name, idCard:idCard, key:unitId}
-          //把用户名存储到起来
-          localforage.setItem('userData', userData, function (err){
-            globalData.userData = userData
-            window.location.href="#/Main"
-          });
         }
         else{
           Order.$emit('Toast', '密码错误！')

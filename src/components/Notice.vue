@@ -17,7 +17,6 @@
 import { Toast } from 'vux'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
-import localforage from 'localforage'
 import {get, cutString, globalData} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
@@ -36,7 +35,7 @@ export default {
     const _this = this;
     //取出用户名
     const userName = globalData.userData
-    if(userName.key === 1){
+    if(userName.key == "1"){
       //请求通知信息
       get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=',function(e){
         if(e !=="" && e !==null){

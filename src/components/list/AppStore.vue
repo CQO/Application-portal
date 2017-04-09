@@ -4,7 +4,7 @@ li.app-list
     .info
         p.name {{neme}}
         p.detail {{detail}}
-    .button.open(v-if="exist") 已安装
+    .button.open(v-if="exist") 打开
     .button.down(v-else) 安装
 </template>
 

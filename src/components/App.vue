@@ -4,24 +4,25 @@
   swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
   AppTitle.bangong-title(title="应用列表")
   .grid
-    .grid-item(v-for="(item,key) in appList",:key="item")
+    .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
       .choose.ico(v-show="item.isSelect",v-on:click="exit(key)") &#xe608;
   .delate(v-on:click="delateApp",v-if="showDelateButton") 删除
-  Toast(v-model="showPositionValue",type="text",:time="800",:text="textAlert")
+  Toast
   BottomBar(index="1")
 </template>
 
 <script>
-import { Swiper, Grid, GridItem, Toast } from 'vux'
+import { Swiper, Grid, GridItem } from 'vux'
 import Search from './panel/Search'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
-import localforage from 'localforage'
-import {post,globalData} from "./method.js" 
+import Toast from './brick/Toast'
+import { Order } from './Order.js'
+import { post, globalData} from "./method.js" 
 
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
@@ -34,78 +35,44 @@ export default {
   data () {
     return {
       index: 0,
-      appList:{},
-      showList:[
-        {url: 'https://translate.google.cn/',img: $1,title: ''},
-        {url: 'https://translate.google.cn/', img: $2, title: ''}
-      ],
-      textAlert:'',//弹出框显示文字
-      showPositionValue:false,
-      showDelateButton:false,//显示删除按钮
-      idCard:0
+      showList: globalData.showList,
+      appList:globalData.appList,
+      showDelateButton: false,//显示删除按钮
     }
   },
   created(){
     const _this = this;
     //请求轮播图数据
     //---------------------------------------------------------
-    //如果轮播图没有初始化请求数据
-    if(globalData.showList === null){
-      post("http://localhost:9999/appRequest",{type:5},function(d){
-        if(d !=="" && d !==null){
-          const Data = JSON.parse(d);
-          _this.showList = Data
-          globalData.showList = Data
-        }
-        else{
-          _this.textAlert = '网络错误'
-          _this.showPositionValue = true
-        }
-      });
-    }
-    else{ //如果已经初始化过则使用缓存
-      _this.showList = globalData.showList
-    }
-    //---------------------------------------------------------
-
-    //获取应用列表
-    localforage.getItem('appList', function (err, value) {
-      //如果没有取得数据，给应用列表一个默认值
-      if(err !== null || value === "" ||value === null){
-        _this.appList = {
-          tiangongyuanyuan:{id:"10000", name:"天工圆圆", icon:$tiangongyuanyuan,url:'#', special:"open", type:"communication", isSelect:false},
-          xinxifabu:{id:"10001", name:"信息发布", icon:$xinxifabu, url:'http://info.casic.cs/jeecms2/index/mobile/', special:"url", type:"office" ,isSelect:false},
-          youjian:{id:"10002", name:"邮件", icon:$youjian,url:'', special:"url", type:"office", isSelect:false},
-          bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url", type:"office", isSelect:false}
-        }
-        localforage.setItem('appList', _this.appList);
+    post("http://localhost:9999/appRequest",{type:5},function(receiveData){
+      if(receiveData !=="" && receiveData !==null){
+        const Data = JSON.parse(d);
+        globalData.showList = Data
       }
       else{
-        //取到数据则使用数据库中存储的数据
-        _this.appList = value
+        Order.$emit('Toast', '网络错误！')
       }
     });
-    //获取用户名
+    //---------------------------------------------------------
+    // 获取用户数据和应用数据
     //-------------------------------------------------------------------
-    const value = globalData.userData
-    _this.idCard = value.idCard
-    const appList = _this.appList
-    if(value.key !== 1){
-      appList.bangongxitong = {}
-    }
+    const userData = globalData.userData
+    //document.write(userData.key)
+    //如果身份不是所属组织将不会看到办公系统
+    if( userData.key != "1" ){ _this.appList["bangongxitong"].available = false}
     else{
       //判断办公系统应用是否存在,存在则改变其URL
-      if(appList.bangongxitong !== undefined){
-        appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=&SessionID='
+      if(_this.appList.bangongxitong !== undefined){
+        _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
       }
     }
-    if(appList.youjian !== undefined){
-      appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+value.idCard
+    if(_this.appList.youjian !== undefined){
+      _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
     }
     //-------------------------------------------------------------------
   },
   methods: {
-    onIndexChange (index) { //轮播图
+    onIndexChange: function(index) { //轮播图
       this.index = index
     },
     openApp: function () { //打开应用
@@ -136,19 +103,21 @@ export default {
     delateApp:function(){
       const oldList = this.appList,
             _this   = this;
-      let   newList = {},
-            mark    = false ;//用于标记用户是否有删除app
+      let   mark    = false ;//用于标记用户是否有删除app
       for(let item in oldList){
         //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
-        if(!oldList[item].isSelect){ newList[item] = oldList[item] }
+        if(oldList[item].isSelect){ 
+          //将应用标记为不存在
+          globalData.appList[item].exist = false
+          //将应用标记为未选择
+          globalData.appList[item].isSelect = false
+        }
         else{ mark = true; }
       }
       //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
       if(mark) {
         //把应用列表存储到起来
-        localforage.setItem('appList', newList, function (err){
-          _this.appList = newList
-        });
+        _this.appList = globalData.appList
       }
       //将删除按钮隐藏
       _this.showDelateButton = false

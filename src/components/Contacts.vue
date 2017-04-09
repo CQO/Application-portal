@@ -28,7 +28,7 @@ export default {
   },
   data () {
     return {
-      List:['办公厅','计划部','科研部','科质部','空间部','财务部','资产部','经合部','国际部','人事部','安保部','审计部','纪监部','党群部','科信部','科技委','监事会']
+      List:['办公厅','计划部','科研部','科质部']
     }
   },
 }
@@ -38,7 +38,7 @@ export default {
 <style lang='less' scoped>
 .organization{
     height: 381px;
-    overflow: auto;
+    overflow: scroll;
     li{
         height: 61px;
         background-color: white;
