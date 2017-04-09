@@ -16,7 +16,6 @@
 
 <script>
 import { Swiper, Grid, GridItem } from 'vux'
-import Search from './panel/Search'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
@@ -24,6 +23,9 @@ import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import { post, globalData} from "./method.js" 
 
+import Vue from 'vue';
+import VueTouch from 'vue-touch';
+Vue.use(VueTouch, {name: 'v-touch'});
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -130,7 +132,6 @@ export default {
     }
   },
   components: {
-    Search,
     Swiper,
     AppTitle,
     Grid,
@@ -169,6 +170,9 @@ export default {
     width: 75px;
     margin: 10px;
     position: relative;
+  }
+  .grid-item:active{
+    background-color: aquamarine;
   }
   .touch{
     position: absolute;

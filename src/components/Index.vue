@@ -68,12 +68,11 @@ export default {
     }
   },
   methods: {
-    loginIn: function(){
-      const _this = this;
-      const postData={userName:this.userName,password:this.password};
-      if(_this.userName === "" || _this.password === ""){
-        Order.$emit('Toast', '请输入账号密码')
-      }
+    loginIn: function(){ //登录函数
+      const _this    = this,
+            postData = {userName:this.userName,password:this.password};
+      //判断用户名和密码是否为空
+      if(_this.userName === "" || _this.password === ""){ Order.$emit('Toast', '请输入账号密码') }
       else{
         Order.$emit('Loading', 'show')
         //登陆请求
@@ -121,10 +120,6 @@ export default {
           _this.selectList = null
         }
       });
-    },
-    closeAlert:function () {
-      //将弹出框隐藏
-      this.showAlert = false
     }
   },
 }
@@ -231,53 +226,5 @@ export default {
 }
 .hide{
     visibility:hidden;
-}
-.error {
-    border-color: cadetblue;
-}
-</style>
-
-<style scoped>
-.alert-box {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-.main-box {
-    position: absolute;
-    height: 150px;
-    background-color: white;
-    border: 1px solid gray;
-    border-radius: 5px;
-    padding: 10px;
-    width: 80%;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-.text-box p {
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    font-size: 1.2rem;
-}
-.text-box .text {
-    text-align: center;
-    color: #999;
-    height: 70px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-.button{
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    font-size: 1.4rem;
-    color: darkorchid;
-    border-top: 1px solid beige;
 }
 </style>

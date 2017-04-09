@@ -27,9 +27,8 @@ export default {
     Toast
   },
   methods: {
-    turn (url) { //跳转到某个地址
-      window.location.href=url;
-    }
+    //跳转到某个地址
+    turn (url) { window.location.href=url; }
   },
   created(){
     const _this = this;
