@@ -57,9 +57,10 @@ const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
 
 let globalData = {
   userData : {userName:'测试用户', idCard:666666666, key:223, phoneNumber:18092852085},
+  successful : false,
   showList : [
-    {url: 'https://translate.google.cn/',img: $1,title: ''},
-    {url: 'https://translate.google.cn/', img: $2, title: ''}
+    // {url: 'https://translate.google.cn/',img: $1,title: ''},
+    // {url: 'https://translate.google.cn/', img: $2, title: ''}
   ],
   appList  : {
     tiangongyuanyuan:{

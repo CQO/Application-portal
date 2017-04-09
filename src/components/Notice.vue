@@ -34,10 +34,10 @@ export default {
   created(){
     const _this = this;
     //取出用户名
-    const userName = globalData.userData
-    if(userName.key == "1"){
+    const userData = globalData.userData
+    if(userData.key == "1"){
       //请求通知信息
-      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+value.userName+'&PID='+value.idCard+'&webService=',function(e){
+      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(e){
         if(e !=="" && e !==null){
           _this.notice.xietongbangong.text = cutString(e,"Title>","<");
           //时间处理
@@ -46,7 +46,7 @@ export default {
           //角标处理
           _this.notice.xietongbangong.notice = cutString(e,"wdNum>","<");
           //改变地址
-          _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + value.userName + '&PID='+ value.idCard + '&webService='
+          _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
         }
         else{
           _this.textAlert = '网络错误'

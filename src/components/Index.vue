@@ -1,14 +1,14 @@
 <template lang="pug">
-.login-box(:class="step")
+.login-box(:class="{ two: selectList }",v-if="needLog")
     .logo-box
         img.logo(src="../assets/logo.png")
         p 智慧企业平台
-    .user-name-box(:class="{ error: userNameError }")
+    .user-name-box
         .user.ico &#xe60c;
-        input(v-model="userName",:placeholder="userPoint",v-on:change.stop="checkUserName")
-    .password-box(:class="{ error: passWordError }")
+        input(v-model="userName",placeholder="用户名")
+    .password-box
         .password.ico &#xe623;
-        input(type="password",v-model="password",:placeholder="passWordPoint",v-on:change.stop="checkPassWord")
+        input(type="password",v-model="password",placeholder="密码")
     
     .select-list(v-show="selectList")
         .title
@@ -26,26 +26,18 @@
 </template>
 
 <script>
-import {post} from "./method.js" 
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {globalData} from "./method.js"
+import {post, globalData} from "./method.js"
 export default {
   data () {
     return {
       userName: '刘霞',
       password:'123456',
-      step:'one',
       promptText:'第一步:输入您的用户名和密码',
       selectList:null,
-      usbkeyidentification:null,
-      userPoint:'用户名',
-      userNameError:false,
-      passWordPoint:'密码',
-      passWordError:false,
-      textAlert:'',//弹出框显示文字
-      showPositionValue:false
+      needLog:false
     }
   },
   components: {
@@ -53,15 +45,33 @@ export default {
     Loading
   },
   created(){
-    post("http://localhost:9999/getLoginStatus","",(data) => {
-      document.write(data)
-    })
+    const _this = this;
+    if(globalData.successful === false){
+      post("http://localhost:9999/getLoginStatus","",function(receive){
+        if(receive!==null && receive != ""){
+          const Data = JSON.parse(receive);
+          globalData.userData = {
+            userName : Data.userName,
+            idCard   : Data.usbkeyidentification,
+            password : Data.password,
+            key      : Data.unitId,
+          }
+          window.location.href="#/Main"
+        }
+        else{
+          _this.needLog = true
+        }
+      })
+    }
+    else{
+      _this.needLog = true
+    }
   },
   methods: {
     loginIn: function(){
       const _this = this;
       const postData={userName:this.userName,password:this.password};
-      if(_this.passWordError || _this.userNameError){
+      if(_this.userName === "" || _this.password === ""){
         Order.$emit('Toast', '请输入账号密码')
       }
       else{
@@ -81,7 +91,6 @@ export default {
                 _this.jump(data.usbkeyname,0,data.usbkeyidentification,data.unitId)
               }
               else{
-                _this.step = "two"
                 _this.promptText = '第二步:请选择所属组织'
                 _this.selectList=Data
               }
@@ -96,40 +105,22 @@ export default {
     jump:function(name,num,idCard,unitId){
       const _this = this;
       Order.$emit('Loading', 'show')
-      const data={usbkeyidentification:idCard,password:this.password};
+      const data={usbkeyidentification:idCard,password:this.password,unitId:unitId,userName:name};
       post("http://localhost:9999/login",data,function(d){
         Order.$emit('Loading', 'hide')
         const Data = JSON.parse(d);
         if(Data.code == 0){
           const userData ={userName:name, idCard:idCard, key:unitId}
+          //保存用户信息
+          globalData.userData = userData
+          globalData.successful = true
+          window.location.href="#/Main"
         }
         else{
           Order.$emit('Toast', '密码错误！')
           _this.selectList = null
         }
       });
-    },
-    checkUserName:function(){
-      //判断用户名是否正确
-      if(this.userName === ''){
-        this.userPoint = '用户名不能为空！'
-        this.userNameError = true
-      }
-      else{
-        this.userPoint = '用户名'
-        this.userNameError = false
-      }
-    },
-    checkPassWord:function(){
-      //判断用户名是否正确
-      if(this.userName === ''){
-        this.passWordPoint = '密码不能为空！'
-        this.passWordError = true
-      }
-      else{
-        this.passWordPoint = '密码'
-        this.passWordError = false
-      }
     },
     closeAlert:function () {
       //将弹出框隐藏
@@ -227,12 +218,13 @@ export default {
     text-align: center;
     color: #ccc;
 }
-.one{
-    .icon1{
-        color: blue;
-    }
+.icon1{
+    color: blue;
 }
 .two{
+    .icon1{
+        color: #ccc;
+    }
     .icon2{
         color: blue;
     }

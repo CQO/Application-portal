@@ -46,7 +46,7 @@ export default {
     //---------------------------------------------------------
     post("http://localhost:9999/appRequest",{type:5},function(receiveData){
       if(receiveData !=="" && receiveData !==null){
-        const Data = JSON.parse(d);
+        const Data = JSON.parse(receiveData);
         globalData.showList = Data
       }
       else{
