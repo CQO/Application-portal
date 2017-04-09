@@ -26,14 +26,17 @@ import { post, globalData} from "./method.js"
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
-//引入图片资源
-const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
-      $xinxifabu        = require('../assets/xinxifabu.png'),
-      $youjian          = require('../assets/youjian.png'),
-      $bangongxitong    = require('../assets/bangongxitong.png'),
-      $1                = require('../assets/1.png'),
+//载入轮播图默认图片
+const $1                = require('../assets/1.png'),
       $2                = require('../assets/2.png');
 export default {
+  components: {
+    Swiper,
+    AppTitle,
+    TitleBar,
+    BottomBar,
+    Toast
+  },
   data () {
     return {
       index: 0,
@@ -44,19 +47,23 @@ export default {
   },
   created(){
     const _this = this;
-    //请求轮播图数据
-    //---------------------------------------------------------
-    post("http://localhost:9999/appRequest",{type:5},function(receiveData){
-      if(receiveData !=="" && receiveData !==null){
-        const Data = JSON.parse(receiveData);
-        globalData.showList = Data
-      }
-      else{
-        Order.$emit('Toast', '网络错误！')
-      }
-    });
-    //---------------------------------------------------------
-    // 获取用户数据和应用数据
+    //如果数据为空则请求轮播图数据
+    if(globalData.showList.length === 0){
+      post("http://localhost:9999/appRequest",{type:5},function(receiveData){
+        if(receiveData !=="" && receiveData !==null){
+          const Data = JSON.parse(receiveData);
+          globalData.showList = Data
+        }
+        else{
+          _this.showList = [
+            {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
+            {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
+          ]
+          Order.$emit('Toast', '网络错误！')
+        }
+      });
+    }
+    // 根据用户数据生成链接
     //-------------------------------------------------------------------
     const userData = globalData.userData
     //document.write(userData.key)
@@ -130,38 +137,11 @@ export default {
       //隐藏删除按钮
       this.showDelateButton = false
     }
-  },
-  components: {
-    Swiper,
-    AppTitle,
-    TitleBar,
-    BottomBar,
-    Toast
   }
 }
 </script>
 
 <style lang='less'>
-.app-box{
-  .weui-grid{
-    width: 75px;
-    margin: 20px 10px;
-    padding: 0;
-  }
-  .weui-grids:before{
-    border-right:none;
-  }
-  .weui-grids:after{
-    border-left:none;
-  }
-  .weui-grid:before{
-    border-right:none;
-  }
-  .weui-grid:after{
-    border-bottom:none;
-  }
-}
-
 .grid{
   display: flex;
   .grid-item{

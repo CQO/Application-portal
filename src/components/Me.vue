@@ -40,12 +40,6 @@ export default {
       });
     }
   },
-  created(){
-    const _this = this;
-    //获取用户名
-    const value = globalData.userData
-    if(value){ _this.userName = value.userName; }
-  },
   data () {
     return {
       list: [
@@ -53,7 +47,7 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      userName:"",
+      userName: globalData.userData.userName,
       sexList:["保密","男","女"],
       sex:""
     }
@@ -72,9 +66,6 @@ export default {
       font-size: 0.8rem;
       background-color: #f4f4f4;
     }
-    .set{
-        margin:0;
-    }
     .quit{
         height: 40px;
         line-height: 40px;
@@ -82,9 +73,6 @@ export default {
         background-color: white;
         border: 1px solid #e5e5e5;
         margin: 20px 0;
-    }
-    .weui-cells{
-      font-size: 0.9rem;
     }
     .information{
       height: 61px;

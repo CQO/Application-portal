@@ -34,17 +34,16 @@ export default {
     TitleBar
   },
   methods: {
-    onIndexChange (index) {
+    onIndexChange: function(index) {
       this.index = index
     },
-    installApp:function(item,key){
+    installApp: function(item,key){
       globalData.appList[key].exist = true
     }
   },
   data () {
     return {
       select: 'all',
-      localforageData: '',
       appList: globalData.appList,
     }
   },

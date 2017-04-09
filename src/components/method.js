@@ -51,17 +51,12 @@ const post = function (url,data,fn) {
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
       $youjian          = require('../assets/youjian.png'),
-      $bangongxitong    = require('../assets/bangongxitong.png'),
-      $1                = require('../assets/1.png'),
-      $2                = require('../assets/2.png');
+      $bangongxitong    = require('../assets/bangongxitong.png');
 
 let globalData = {
   userData : {userName:'测试用户', idCard:666666666, key:223, phoneNumber:18092852085},
   successful : false,
-  showList : [
-    // {url: 'https://translate.google.cn/',img: $1,title: ''},
-    // {url: 'https://translate.google.cn/', img: $2, title: ''}
-  ],
+  showList : [],
   appList  : {
     tiangongyuanyuan:{
       id: "10000", 
