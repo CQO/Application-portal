@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { Swiper, Grid, GridItem } from 'vux'
+import { Swiper } from 'vux'
 import AppTitle from './bar/AppTitle'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
@@ -134,8 +134,6 @@ export default {
   components: {
     Swiper,
     AppTitle,
-    Grid,
-    GridItem,
     TitleBar,
     BottomBar,
     Toast
