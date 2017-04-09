@@ -29,9 +29,7 @@ export default {
   },
   data () {
     return {
-      notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
-      }
+      notice: {}
     }
   },
   methods: {
@@ -43,26 +41,32 @@ export default {
     //取出用户名
     const userData = globalData.userData
     if(userData.key == "1"){
-      //请求通知信息
-      get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(receive){
-        if(receive !=="" && receive !==null){
-          _this.notice.xietongbangong.text = cutString(receive,"Title>","<");
-          //时间处理
-          let time = cutString(receive,"SentTime>","<")
-          time = cutString(time," ")
-          _this.notice.xietongbangong.time = time
-          //角标处理
-          _this.notice.xietongbangong.notice = cutString(receive,"wdNum>","<");
-          //改变地址
-          _this.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
-        }
-        else{
-          Order.$emit('Loading', '网络错误')
-        }
-      })
-    }
-    else{
-      _this.notice = {}
+      //判断提示信息是否未拉取
+      if(globalData.notice.xietongbangong.time = ''){
+        //请求通知信息
+        get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(receive){
+          if(receive !=="" && receive !==null){
+            globalData.notice.xietongbangong.text = cutString(receive,"Title>","<");
+            //时间处理
+            let time = cutString(receive,"SentTime>","<")
+            time = time.replace(/-/g,"/");
+            const date = new Date(time);
+            time = date.getFullYear()+ "-" + (date.getMonth() + 1) + " " + (date.getHours() + 1) + ":" + date.getMinutes();
+            globalData.notice.xietongbangong.time = time
+            //角标处理
+            globalData.notice.xietongbangong.notice = cutString(receive,"wdNum>","<");
+            //改变地址
+            globalData.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
+            _this.notice = globalData.notice
+          }
+          else{
+            Order.$emit('Loading', '网络错误')
+          }
+        })
+      }
+      else{
+        _this.notice = globalData.notice
+      }
     }
   },
 }
@@ -94,7 +98,11 @@ export default {
     .text{
       color: #8c8c8c;
       font-size: 0.8rem;
+      width: 240px;
+      height: 20px;
+      white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
     .time{
       width: 50px;

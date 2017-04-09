@@ -2,13 +2,15 @@
 .details-box
   TitleBar(title='详细资料',leftIcon="flase")
   Pa85
-  .phone(v-on:click="call")
+  .phone
     Pan42(item="职位",text="产品经理")
     .message
       p 联系方式
       .chat.ico(v-on:click="yuanyuan") &#xe60a;
       .mess.ico(v-on:click="sendMes") &#xe619;
-    Pan42(item="手机号码",text="18092852085")
+    .Pan42(v-on:click="call")
+      .item 手机号码
+      .text 18092852085
     
 </template>
 
@@ -25,7 +27,7 @@ export default {
   },
   methods: {
     sendMes:function(){
-      const data={scheme:"sms:"+"000000"+"?body="};
+      const data={scheme:"sms:"+"18092852085"+"?body="};
       post("http://localhost:9999/open",data,function(d){
         if(d !=="" && d !==null){
           const Data = JSON.parse(d);
@@ -38,7 +40,7 @@ export default {
       });
     },
     call:function(){
-      const data={call:"10086"};
+      const data={call:this.text};
       post("http://localhost:9999/call",data,function(d){
         if(d !=="" && d !==null){
           const Data = JSON.parse(d);
@@ -86,6 +88,22 @@ export default {
     margin: 0 10px;
     font-size: 1.2rem;
     color: burlywood;
+  }
+}
+.Pan42{
+  height: 42px;
+  line-height: 42px;
+  padding: 0 15px;
+  background-color: white;
+  display: flex;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eaeaea;
+  .item{
+    width: 65px;
+  }
+  .text{
+    width: 65px;
+    margin: 0 10px;
   }
 }
 </style>

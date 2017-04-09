@@ -4,6 +4,7 @@
   .text {{text}}
 </template>
 <script>
+import {post} from "../method.js" 
 export default {
   props: {
     item: String,

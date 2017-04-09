@@ -2,9 +2,16 @@
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
   swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
-  AppTitle.bangong-title(title="应用列表")
+  AppTitle(title="办公类")
   .grid
-    .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist")
+    .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'office'")
+      v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special)")
+      img(slot="icon",:src="item.icon")
+      p {{item.name}}
+      .choose.ico(v-show="item.isSelect",v-on:click="exit(key)") &#xe608;
+  AppTitle(title="通讯类")
+  .grid
+    .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'communication'")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
@@ -26,9 +33,7 @@ import { post, globalData} from "./method.js"
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
-//载入轮播图默认图片
-const $1                = require('../assets/1.png'),
-      $2                = require('../assets/2.png');
+
 export default {
   components: {
     Swiper,
@@ -68,15 +73,20 @@ export default {
     const userData = globalData.userData
     //document.write(userData.key)
     //如果身份不是所属组织将不会看到办公系统
-    if( userData.key != "1" ){ _this.appList["bangongxitong"].available = false}
+    if( userData.key != "1" ){ 
+      globalData.appList["bangongxitong"].available = false
+      _this.appList["bangongxitong"].available = false
+    }
     else{
       //判断办公系统应用是否存在,存在则改变其URL
       if(_this.appList.bangongxitong !== undefined){
         _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
+        globalData.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
       }
     }
     if(_this.appList.youjian !== undefined){
       _this.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
+      globalData.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
     }
     //-------------------------------------------------------------------
   },
@@ -89,7 +99,7 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id="+this.idCard,
+        "scheme":"linkdood:showlinkdood?id="+globalData.userData.idCard,
         "name":"linkdood"
       };
       //向9999端口发送Post请求打开应用

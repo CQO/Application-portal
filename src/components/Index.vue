@@ -56,7 +56,15 @@ export default {
             password : Data.password,
             key      : Data.unitId,
           }
-          window.location.href="#/Main"
+          //异常处理
+          if(globalData.userData.idCard !== 666666666){
+            globalData.successful = true
+            window.location.href="#/Main"
+          }
+          else{
+            _this.userName = ''
+            _this.password = ''
+          }
         }
         else{
           _this.needLog = true

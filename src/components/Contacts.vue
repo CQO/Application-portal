@@ -38,7 +38,6 @@ export default {
 <style lang='less' scoped>
 .organization{
     height: 381px;
-    overflow: scroll;
     li{
         height: 61px;
         background-color: white;

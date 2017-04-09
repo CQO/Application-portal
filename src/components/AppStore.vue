@@ -12,7 +12,7 @@
       .info
         p.name {{item.name}}
         p.detail {{item.detail}}
-      .button.open(v-if="item.exist") 打开
+      .button.open(v-if="item.exist",v-on:click="openStart(item.url, item.special)") 打开
       .button.down(v-else,v-on:click="installApp(item,key)") 安装
 </template>
 
@@ -20,7 +20,7 @@
 import { Checker, CheckerItem } from 'vux'
 import Search from './panel/Search'
 import TitleBar from './bar/Title'
-import { globalData} from "./method.js" 
+import { post,globalData} from "./method.js" 
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -36,6 +36,25 @@ export default {
   methods: {
     onIndexChange: function(index) {
       this.index = index
+    },
+    openStart:function(url,special){ //判断以何种方式打开应用
+      switch(special){
+        case 'open':this.openApp();break; //启动应用
+        case 'url':window.location.href=url;break; //跳转到Url
+      }
+    },
+    openApp: function () { //打开应用
+      const app1 = {
+        "type":2,
+        "sopid":"com.vrv.linkDood",
+        "pkgpath":"com.vrv.linkDood-1.0.45.sop",
+        "scheme":"linkdood:showlinkdood?id="+this.idCard,
+        "name":"linkdood"
+      };
+      //向9999端口发送Post请求打开应用
+      post("http://localhost:9999/open",app1,function(date){
+        console.log(date)
+      });
     },
     installApp: function(item,key){
       globalData.appList[key].exist = true
@@ -127,6 +146,10 @@ export default {
       text-align: center;
       line-height: 30px;
       font-size: 0.9rem;
+    }
+    .button:active{
+      background: cornflowerblue;
+      color: white;
     }
     .open{
       border: 1px solid black;
