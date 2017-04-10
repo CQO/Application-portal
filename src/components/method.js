@@ -70,15 +70,15 @@ let globalData = {
       available: true,
       exist:true
     },
-    xinxifabu:{
-      id: "10001", 
-      name: "信息发布", 
-      icon: $xinxifabu, 
-      url: 'http://info.casic.cs/jeecms2/index/mobile/', 
-      special: "url", 
-      type:"office" ,
-      detail:"版本号:0.8",
-      isSelect: false,
+    bangongxitong:{
+      id:"10004", 
+      name:"协同办公", 
+      icon:$bangongxitong,
+      url:'', 
+      special:"url", 
+      type:"office",
+      detail:"版本号:0.2",
+      isSelect:false,
       available: true,
       exist:true
     },
@@ -94,15 +94,15 @@ let globalData = {
       available: true,
       exist:true
     },
-    bangongxitong:{
-      id:"10004", 
-      name:"协同办公", 
-      icon:$bangongxitong,
-      url:'', 
-      special:"url", 
-      type:"office",
-      detail:"版本号:0.2",
-      isSelect:false,
+    xinxifabu:{
+      id: "10001", 
+      name: "信息发布", 
+      icon: $xinxifabu, 
+      url: 'http://info.casic.cs/jeecms2/index/mobile/', 
+      special: "url", 
+      type:"office" ,
+      detail:"版本号:0.8",
+      isSelect: false,
       available: true,
       exist:true
     }

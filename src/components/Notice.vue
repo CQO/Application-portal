@@ -42,16 +42,16 @@ export default {
     const userData = globalData.userData
     if(userData.key == "1"){
       //判断提示信息是否未拉取
-      if(globalData.notice.xietongbangong.time = ''){
+      if(globalData.notice.xietongbangong.time === ''){
         //请求通知信息
         get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(receive){
           if(receive !=="" && receive !==null){
             globalData.notice.xietongbangong.text = cutString(receive,"Title>","<");
             //时间处理
             let time = cutString(receive,"SentTime>","<")
-            time = time.replace(/-/g,"/");
-            const date = new Date(time);
-            time = date.getFullYear()+ "-" + (date.getMonth() + 1) + " " + (date.getHours() + 1) + ":" + date.getMinutes();
+            // time = time.replace(/-/g,"/");
+            // const date = new Date(time);
+            // time = date.getFullYear() + "-" + (date.getMonth() + 1) + " " + (date.getHours() + 1) + ":" + date.getMinutes();
             globalData.notice.xietongbangong.time = time
             //角标处理
             globalData.notice.xietongbangong.notice = cutString(receive,"wdNum>","<");
@@ -60,7 +60,7 @@ export default {
             _this.notice = globalData.notice
           }
           else{
-            Order.$emit('Loading', '网络错误')
+            Order.$emit('Toast', '网络错误')
           }
         })
       }
@@ -99,18 +99,20 @@ export default {
       color: #8c8c8c;
       font-size: 0.8rem;
       width: 240px;
-      height: 20px;
+      height: 30px;
+      line-height: 30px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .time{
-      width: 50px;
-      margin: 10px 0;
       color: #d3d3d3;
       font-size: 0.6rem;
       text-align: center;
       overflow: hidden;
+      position: absolute;
+      right: 10px;
+      top: 10px;
     }
     .notice{
       width: 18px;

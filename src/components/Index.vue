@@ -33,8 +33,8 @@ import {post, globalData} from "./method.js"
 export default {
   data () {
     return {
-      userName: '刘霞',
-      password:'123456',
+      userName: '',
+      password:'',
       promptText:'第一步:输入您的用户名和密码',
       selectList:null,
       needLog:false

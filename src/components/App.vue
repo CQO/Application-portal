@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       index: 0,
-      showList: globalData.showList,
+      showList: [],
       appList:globalData.appList,
       showDelateButton: false,//显示删除按钮
     }
@@ -58,6 +58,7 @@ export default {
         if(receiveData !=="" && receiveData !==null){
           const Data = JSON.parse(receiveData);
           globalData.showList = Data
+          _this.showList = globalData.showList
         }
         else{
           _this.showList = [
@@ -67,6 +68,9 @@ export default {
           Order.$emit('Toast', '网络错误！')
         }
       });
+    }
+    else{
+      _this.showList = globalData.showList
     }
     // 根据用户数据生成链接
     //-------------------------------------------------------------------
