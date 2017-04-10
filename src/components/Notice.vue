@@ -30,7 +30,9 @@ export default {
   },
   data () {
     return {
-      notice: {}
+      notice: {
+        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
+      }
     }
   },
   methods: {
@@ -38,60 +40,44 @@ export default {
     turn (url) { window.location.href=url; }
   },
   created(){
-    const _this = this;
-
-    //取出用户名
-    const userData = globalData.userData
-    if(userData.key == "1"){
-      //判断提示信息是否未拉取
-      if(globalData.notice.xietongbangong.time === ''){
-        //请求通知信息
-        get('http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=',function(receive){
-          if(receive !=="" && receive !==null){
-            globalData.notice.xietongbangong.text = cutString(receive,"Title>","<");
-            //时间处理
-            let time = cutString(receive,"SentTime>","<")
-            // time = time.replace(/-/g,"/");
-            // const date = new Date(time);
-            // time = date.getFullYear() + "-" + (date.getMonth() + 1) + " " + (date.getHours() + 1) + ":" + date.getMinutes();
-            globalData.notice.xietongbangong.time = time
-            //角标处理
-            globalData.notice.xietongbangong.notice = cutString(receive,"wdNum>","<");
-            //改变地址
-            globalData.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
-            _this.notice = globalData.notice
-            localforage.setItem('notice', globalData.notice,function (err){
-              if(err){
-                Order.$emit('Toast', '缓存用户数据失败')
-              }
-            });
-          }
-          else{
-            Order.$emit('Toast', '网络错误')
-          }
-        })
-      }
-      else{
-        _this.notice = globalData.notice
-      }
-    }
-    else{
-      if(globalData.userData.idCard === 666666666){
-        localforage.getItem("userData",function(err,value){
-          if( value !==null && value !== "" ){
-            globalData.userData = value
-            if(value.userData.key == "1"){
-              localforage.getItem("notice",function(err,value){
-                if( value !==null && value !== "" ){
-                  globalData.notice = value
-                  _this.notice = value
+    const _this = this
+    localforage.getItem("userData",function(err,value){
+      if( value !==null && value !== "" ){
+        if(value.key == "1"){
+          localforage.getItem("notice",function(err,noticeData){
+            if( noticeData !==null && noticeData !== "" ){
+              _this.notice = value
+            }
+            else{
+              const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
+              //请求通知信息
+              get( noticeURL, function(receive){
+                if(receive !=="" && receive !==null){
+                  let noticeData = {}
+                  noticeData.xietongbangong.text = cutString(receive,"Title>","<");
+                  //时间处理
+                  let time = cutString(receive,"SentTime>","<")
+                  noticeData.xietongbangong.time = time
+                  //角标处理
+                  noticeData.xietongbangong.notice = cutString(receive,"wdNum>","<");
+                  //改变地址
+                  noticeData.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
+                  _this.notice = noticeData
+                  localforage.setItem('notice', noticeData,function (err){
+                    if(err){
+                      Order.$emit('Toast', '缓存用户数据失败')
+                    }
+                  });
+                }
+                else{
+                  Order.$emit('Toast', '网络错误')
                 }
               })
             }
-          }
-        })
+          })
+        }
       }
-    }
+    })
   },
 }
 </script>

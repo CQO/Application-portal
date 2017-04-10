@@ -107,8 +107,6 @@ let globalData = {
       exist:true
     }
   },
-  notice : {
-    xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
-  }
+  notice : null
 };
 export {get, cutString, post, globalData};
