@@ -18,6 +18,7 @@ import Toast from './brick/Toast'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import { Order } from './Order.js'
+import localforage from 'localforage'
 import {get, cutString, globalData} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
@@ -38,6 +39,7 @@ export default {
   },
   created(){
     const _this = this;
+
     //取出用户名
     const userData = globalData.userData
     if(userData.key == "1"){
@@ -58,6 +60,11 @@ export default {
             //改变地址
             globalData.notice.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
             _this.notice = globalData.notice
+            localforage.setItem('notice', globalData.notice,function (err){
+              if(err){
+                Order.$emit('Toast', '缓存用户数据失败')
+              }
+            });
           }
           else{
             Order.$emit('Toast', '网络错误')
@@ -66,6 +73,23 @@ export default {
       }
       else{
         _this.notice = globalData.notice
+      }
+    }
+    else{
+      if(globalData.userData.idCard === 666666666){
+        localforage.getItem("userData",function(err,value){
+          if( value !==null && value !== "" ){
+            globalData.userData = value
+            if(value.userData.key == "1"){
+              localforage.getItem("notice",function(err,value){
+                if( value !==null && value !== "" ){
+                  globalData.notice = value
+                  _this.notice = value
+                }
+              })
+            }
+          }
+        })
       }
     }
   },

@@ -29,6 +29,7 @@ import BottomBar from './bar/Bottom'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import { post, globalData} from "./method.js" 
+import localforage from 'localforage'
 
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
@@ -54,32 +55,65 @@ export default {
     const _this = this;
     //如果数据为空则请求轮播图数据
     if(globalData.showList.length === 0){
-      post("http://localhost:9999/appRequest",{type:5},function(receiveData){
-        if(receiveData !=="" && receiveData !==null){
-          const Data = JSON.parse(receiveData);
-          globalData.showList = Data
-          _this.showList = globalData.showList
+      //在本地数据库中寻找 轮播图信息
+      localforage.getItem("showList",function(err,value){
+        //如果找到了使用本地数据库中的信息
+        if(value !==null && value !== ""){
+            globalData.showList = value
+            _this.showList = value
         }
         else{
-          _this.showList = [
-            {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
-            {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
-          ]
-          Order.$emit('Toast', '网络错误！')
+          post("http://localhost:9999/appRequest",{type:5},function(receiveData){
+            //如果接收到了数据那么用新数据
+            if(receiveData !=="" && receiveData !==null){
+              const Data = JSON.parse(receiveData);
+              //把数据存储起来
+              globalData.showList = Data
+              _this.showList = globalData.showList
+              //把获取到的轮播图数据存储到数据库中以防不测
+              localforage.setItem('showList', Data,function (err){
+                if(err){
+                  Order.$emit('Toast', '缓存用户数据失败')
+                }
+              });
+            }
+            else{ //如果没有发来数据使用默认图片
+              _this.showList = [
+                {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
+                {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
+              ]
+              Order.$emit('Toast', '网络错误！')
+            }
+          });
         }
-      });
-    }
-    else{
-      _this.showList = globalData.showList
+      })
+      
     }
     // 根据用户数据生成链接
     //-------------------------------------------------------------------
+    
     const userData = globalData.userData
     //document.write(userData.key)
     //如果身份不是所属组织将不会看到办公系统
-    if( userData.key != "1" ){ 
-      globalData.appList["bangongxitong"].available = false
-      _this.appList["bangongxitong"].available = false
+    const userKey = userData.key
+    if( userKey != "1" ){ 
+      if(userKey === 223){
+        localforage.getItem("userData",function(err,value){
+          if(value !==null && value !== ""){
+            globalData.userData = value
+            _this.userData = value
+          }
+        })
+        //判断办公系统应用是否存在,存在则改变其URL
+        if(_this.appList.bangongxitong !== undefined){
+          _this.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
+          globalData.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
+        }
+      }
+      else{
+        globalData.appList["bangongxitong"].available = false
+        _this.appList["bangongxitong"].available = false
+      }
     }
     else{
       //判断办公系统应用是否存在,存在则改变其URL

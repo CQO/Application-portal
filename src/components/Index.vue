@@ -2,7 +2,7 @@
 .login-box(:class="{ two: selectList }",v-if="needLog")
     .logo-box
         img.logo(src="../assets/logo.png")
-        p 智慧企业平台
+        p 智慧企业运行平台
     .user-name-box
         .user.ico &#xe60c;
         input(v-model="userName",placeholder="用户名")
@@ -30,6 +30,8 @@ import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import {post, globalData} from "./method.js"
+import localforage from 'localforage'
+
 export default {
   data () {
     return {
@@ -121,6 +123,11 @@ export default {
           //保存用户信息
           globalData.userData = userData
           globalData.successful = true
+          localforage.setItem('userData', userData,function (err){
+            if(err){
+              Order.$emit('Toast', '缓存用户数据失败')
+            }
+          });
           window.location.href="#/Main"
         }
         else{
@@ -135,14 +142,14 @@ export default {
 
 <style lang='less' scoped>
 .logo-box{
-    width: 160px;
+    width: 180px;
     margin: 0 auto;
     height: 180px;
     padding-top: 60px;
     display:block;
     img{
         height: 80px;
-        width: 120px;
+        width: 140px;
         margin: 0 20px;
     }
     p{
