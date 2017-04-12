@@ -47,10 +47,5 @@ const post = function (url,data,fn) {
   obj.send(postData);
 };
 
-//引入图片资源
-const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
-      $xinxifabu        = require('../assets/xinxifabu.png'),
-      $youjian          = require('../assets/youjian.png'),
-      $bangongxitong    = require('../assets/bangongxitong.png');
 
 export {get, cutString, post};

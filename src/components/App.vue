@@ -5,17 +5,17 @@
   AppTitle(title="办公类")
   .grid
     .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'office'")
-      v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special)")
+      v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
       .choose.ico(v-show="item.isSelect",v-on:click="exit(key)") &#xe608;
   AppTitle(title="通讯类")
   .grid
     .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'communication'")
-      v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special)")
+      v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
-      .choose.ico(v-show="item.isSelect",v-on:click="exit(key)") &#xe608;
+      .choose.ico(tag="div",v-show="item.isSelect",v-on:tap.stop="exit(key)") &#xe608;
   .delate(v-on:click="delateApp",v-if="showDelateButton") 删除
   Toast
   BottomBar(index="1")
@@ -171,11 +171,24 @@ export default {
       //向9999端口发送Post请求打开应用
       post("http://localhost:9999/open",app1);
     },
-    openStart:function(url,special){ //判断以何种方式打开应用
-      switch(special){
-        case 'open':this.openApp();break; //启动应用
-        case 'url':window.location.href=url;break; //跳转到Url
+    openStart:function(url,special,key){ //判断以何种方式打开应用
+      if(this.appList[key].isSelect === true){
+        this.appList[key].isSelect = false
+        this.showDelateButton = false
       }
+      else{
+        if(this.showDelateButton === true){
+          this.appList[key].isSelect = true
+        }
+        else{
+          switch(special){
+            case 'open':this.openApp();break; //启动应用
+            case 'url':window.location.href=url;break; //跳转到Url
+          }
+        }
+        
+      }
+      
     },
     pressItem:function(key){ //长按app事件
       //将对应的appItem改为可视
@@ -249,14 +262,14 @@ export default {
   }
   .choose{
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    width: 100%;
-    top: 0;
-    line-height: 70px;
+    height: 20px;
+    width: 20px;
+    top: -8px;
+    right: 8px;
+    line-height: 20px;
     text-align: center;
-    font-size: 2rem;
-    color: aqua;
+    font-size: 20px;
+    color: teal;
   }
 }
 .delate{
