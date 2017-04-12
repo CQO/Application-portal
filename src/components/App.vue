@@ -47,52 +47,97 @@ export default {
     return {
       index: 0,
       showList: [],
-      appList:{},
+      appList  : {
+        tiangongyuanyuan:{
+          id: "10000", 
+          name: "天工圆圆", 
+          icon: $tiangongyuanyuan,
+          url: '', 
+          special: "open", 
+          type: "communication",
+          detail:"版本号:1.41",
+          isSelect: false,
+          available: true,
+          exist:true
+        },
+        bangongxitong:{
+          id:"10004", 
+          name:"协同办公", 
+          icon:$bangongxitong,
+          url:'', 
+          special:"url", 
+          type:"office",
+          detail:"版本号:0.2",
+          isSelect:false,
+          available: true,
+          exist:true
+        },
+        youjian:{
+          id: "10002", 
+          name: "邮件", 
+          icon: $youjian,
+          url: '', 
+          special: "url", 
+          type: "office", 
+          detail:"版本号:1.6",
+          isSelect: false,
+          available: true,
+          exist:true
+        },
+        xinxifabu:{
+          id: "10001", 
+          name: "信息发布", 
+          icon: $xinxifabu, 
+          url: 'http://info.casic.cs/jeecms2/index/mobile/', 
+          special: "url", 
+          type:"office" ,
+          detail:"版本号:0.8",
+          isSelect: false,
+          available: true,
+          exist:true
+        }
+      },
       showDelateButton: false,//显示删除按钮
     }
   },
   created(){
     const _this = this;
-    localforage.getItem("showList",function(err,value){
-      if(value !==null && value !== ""){
-        _this.showList = value
+    localforage.getItem("appData",function(err,appData){
+      const userData = appData.userData
+      //轮播图处理阶段
+      if( appData !==null && appData.showList != null){
+        _this.showList = appData.showList
       }
-      else{
+      else{ //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
+        //向后台发送获取轮播图数据请求 {type:5}是约定的字段
         post("http://localhost:9999/appRequest",{type:5},function(receiveData){
-          //如果接收到了数据那么用新数据
           if(receiveData !=="" && receiveData !==null){
             const Data = JSON.parse(receiveData);
-            //把数据存储起来
-            _this.showList = globalData.showList
-            //把获取到的轮播图数据存储到数据库中以防不测
-            localforage.setItem('showList', Data,function (err){
-              if(err){
-                Order.$emit('Toast', '缓存用户数据失败')
-              }
-            });
+            _this.showList = Data
+            appData.showList = Data
+            
           }
-          else{ //如果没有发来数据使用默认图片
+          else{ //如果没有请求到数据，那么有可能是浏览器不允许跨域，或者URL，服务器出问题了
+            //使用内置数据
             _this.showList = [
               {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
               {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
             ]
-            Order.$emit('Toast', '网络错误！')
+            Order.$emit('Toast', '轮播图数据获取失败')
           }
-        });
+        })
       }
-    })
-    // 根据用户数据生成链接
-    //-------------------------------------------------------------------
-    localforage.getItem("userData",function(err,value){
-      if(value.key != "1"){
-        globalData.appList["bangongxitong"].available = false
-      }
-      else{
-        globalData.appList.bangongxitong.url = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
-      }
-      globalData.appList.youjian.url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
-      _this.appList = globalData.appList
-      document.write(_this.appList)
+      //应用处理阶段
+      const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
+      //判断用户标识是否为1 如果不是则将 协同办公 应用available属性设置为 false
+      (userData.key == "1")? _this.appList["bangongxitong"].url = BanGongURL : _this.appList["bangongxitong"].available = false
+      _this.appList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
+      //把更改的 *应用数据* 存入数据库
+      localforage.setItem('appData', appData,function (err){
+        if(err){
+          Order.$emit('Toast', '缓存用户数据失败')
+        }
+      });
     })
   },
   methods: {

@@ -14,9 +14,9 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="(item,num) in selectList",v-on:click="jump(item.usbkeyname,num,item.usbkeyidentification,item.unitId)") {{item.unitName}}
+            li(v-for="(item,num) in selectList",v-on:click="login(item.usbkeyname,num,item.usbkeyidentification,item.unitId)") {{item.unitName}}
     .step
-        .login-button(@click="loginIn()",:class="{ hide: selectList }") 登录
+        .login-button(@click="PreLogin()",:class="{ hide: selectList }") 登录
         p {{promptText}}
         .point
             .ico.icon1 &#xe602;
@@ -47,43 +47,51 @@ export default {
     Loading
   },
   created(){
-    const _this = this;
-    if(globalData.successful === false){
-      post("http://localhost:9999/getLoginStatus","",function(receive){
-        if(receive!==null && receive != ""){
-          const Data = JSON.parse(receive);
-          globalData.userData = {
-            userName : Data.userName,
-            idCard   : Data.usbkeyidentification,
-            password : Data.password,
-            key      : Data.unitId,
-          }
-          //异常处理
-          if(globalData.userData.idCard !== 666666666){
-            globalData.successful = true
-            window.location.href="#/Main"
-          }
-          else{
-            _this.userName = ''
-            _this.password = ''
-          }
-        }
-        else{
-          _this.needLog = true
-        }
-      })
-    }
-    else{
-      _this.needLog = true
-    }
+    const _this = this
+    const appData = {}
+    localforage.getItem("appData",function(err,value){
+      if( value == null ||  value.userData == null){
+
+      }
+    })
+    // if(globalData.successful === false){
+    //   post("http://localhost:9999/getLoginStatus","",function(receive){
+    //     if(receive!==null && receive != ""){
+    //       const Data = JSON.parse(receive);
+    //       globalData.userData = {
+    //         userName : Data.userName,
+    //         idCard   : Data.usbkeyidentification,
+    //         password : Data.password,
+    //         key      : Data.unitId,
+    //       }
+    //       //异常处理
+    //       if(globalData.userData.idCard !== 666666666){
+    //         globalData.successful = true
+    //         window.location.href="#/Main"
+    //       }
+    //       else{
+    //         _this.userName = ''
+    //         _this.password = ''
+    //       }
+    //     }
+    //     else{
+    //       _this.needLog = true
+    //     }
+    //   })
+    // }
+    // else{
+    //   _this.needLog = true
+    // }
   },
   methods: {
-    loginIn: function(){ //登录函数
+    PreLogin: function(){ //预登录函数
       const _this    = this,
-            postData = {userName:this.userName,password:this.password};
+            userName = this.userName,
+            password = this.password;
       //判断用户名和密码是否为空
-      if(_this.userName === "" || _this.password === ""){ Order.$emit('Toast', '请输入账号密码') }
+      if(userName === "" || password === ""){ Order.$emit('Toast', '请输入账号和密码') }
       else{
+        const postData = {userName:this.userName,password:this.password};
         Order.$emit('Loading', 'show')
         //登陆请求
         post("http://localhost:9999/nameLoginList",postData,function(receive){
@@ -91,39 +99,32 @@ export default {
           //判断是否取到数据
           if(receive !=="" && receive !==null){
             const Data = JSON.parse(receive);
-            if(Data.length === 0){
-              Order.$emit('Toast', '用户名或密码错误')
-            }
-            else{
-              if(Data.length === 1){
-                const data = Data[0]
-                _this.jump(data.usbkeyname,0,data.usbkeyidentification,data.unitId)
-              }
-              else{
-                _this.promptText = '第二步:请选择所属组织'
-                _this.selectList=Data
-              }
+            switch(Data.length){
+              case 0  : Order.$emit('Toast', '登录失败'); break; 
+              //如果用户所属的组织只有一个，那么自动帮用户选择登录
+              case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
+              default : _this.promptText = '第二步:请选择所属组织'; _this.selectList=Data;
             }
           }
           else{
-            Order.$emit('Toast', '登录失败')
+            Order.$emit('Toast', '登录信息错误')
           }
         });
       }
     },
-    jump:function(name,num,idCard,unitId){
-      const _this = this;
+    login:function(name,num,idCard,unitId){ //登录函数
+      const _this    = this,
+            postData = {usbkeyidentification:idCard,password:this.password,unitId:unitId,userName:name};
       Order.$emit('Loading', 'show')
-      const data={usbkeyidentification:idCard,password:this.password,unitId:unitId,userName:name};
-      post("http://localhost:9999/login",data,function(d){
+      post("http://localhost:9999/login",postData,function(d){
         Order.$emit('Loading', 'hide')
         const Data = JSON.parse(d);
         if(Data.code == 0){
-          const userData ={userName:name, idCard:idCard, key:unitId}
+          const appData ={
+            userData:{userName:name, idCard:idCard, key:unitId}
+          }
           //保存用户信息
-          globalData.userData = userData
-          globalData.successful = true
-          localforage.setItem('userData', userData,function (err){
+          localforage.setItem('appData', appData,function (err){
             if(err){
               Order.$emit('Toast', '缓存用户数据失败')
             }

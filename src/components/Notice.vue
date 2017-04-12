@@ -41,41 +41,53 @@ export default {
   },
   created(){
     const _this = this
-    localforage.getItem("userData",function(err,value){
-      if( value !==null && value !== "" ){
-        if(value.key == "1"){
-          localforage.getItem("notice",function(err,noticeData){
-            if( noticeData !==null && noticeData !== "" ){
-              _this.notice = value
-            }
-            else{
-              const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
-              //请求通知信息
-              get( noticeURL, function(receive){
-                if(receive !=="" && receive !==null){
-                  let noticeData = {}
-                  noticeData.xietongbangong.text = cutString(receive,"Title>","<");
-                  //时间处理
-                  let time = cutString(receive,"SentTime>","<")
-                  noticeData.xietongbangong.time = time
-                  //角标处理
-                  noticeData.xietongbangong.notice = cutString(receive,"wdNum>","<");
-                  //改变地址
-                  noticeData.xietongbangong.url = 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
-                  _this.notice = noticeData
-                  localforage.setItem('notice', noticeData,function (err){
-                    if(err){
-                      Order.$emit('Toast', '缓存用户数据失败')
-                    }
-                  });
+    //取出用户数据
+    localforage.getItem("appData",function(err,appData){
+      //如果能进到这个页面但数据库中存储的 *应用数据* 获取不到，那么原因未知
+      if( appData !==null ){
+        //拷贝一份 *应用数据* 里的 *用户数据*
+        const userData = appData.userData
+        if(userData.key == "1"){
+          //判断 *应用数据* 中 是否有 *通知数据*
+          if(appData.notice !== null){
+            //如果有 *通知数据* 直接将它显示出来
+            _this.notice = value
+          }
+          else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
+            //拉取数据的URL
+            const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
+            //通过Get请求请求通知数据
+            get( noticeURL, function(receive){
+              //判断是否GET请求到数据
+              if(receive !=="" && receive !==null){
+                //给 *应用数据* 的备份 增加 *通知数据*
+                appData.noticeData = {
+                  xietongbangong:{ // 协同办公项
+                    text   : cutString(receive,"Title>","<"),
+                    time   : cutString(receive,"SentTime>","<"),
+                    notice : cutString(receive,"wdNum>","<"),
+                    url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
+                  }
                 }
-                else{
-                  Order.$emit('Toast', '网络错误')
-                }
-              })
-            }
-          })
+                // 将 *应用数据* 显示在界面上
+                _this.notice = appData.noticeData
+                // 将修改后的 *应用数据* 覆盖原来的应用数据
+                localforage.setItem('appData', appData,function (err){
+                  if(err !== null){ //错误处理
+                    Order.$emit('Toast', '数据存储失败')
+                  }
+                })
+              }
+              else{
+                Order.$emit('Toast', '获取通知数据失败')
+              }
+            })
+          }
         }
+      }
+      else{
+        Order.$emit('Toast', '非法登录')
+        window.location.href="#/Quit"
       }
     })
   },
