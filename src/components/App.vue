@@ -103,6 +103,7 @@ export default {
         }
       },
       showDelateButton: false,//显示删除按钮
+      selectNumber:0
     }
   },
   created(){
@@ -172,13 +173,24 @@ export default {
       post("http://localhost:9999/open",app1);
     },
     openStart:function(url,special,key){ //判断以何种方式打开应用
+      //首先判断当前点击项目是否已经被选中
       if(this.appList[key].isSelect === true){
+        //如果被选中 那么将它取消选中
         this.appList[key].isSelect = false
-        this.showDelateButton = false
+        //选中计数减少1
+        this.selectNumber--
+        if(this.selectNumber === 0){
+          //入过已经没有应用被选中了 删除按钮消失
+          this.showDelateButton = false
+        }
       }
       else{
+        //如果它没有被选中，但是在选择模式下
         if(this.showDelateButton === true){
+          //将点击项改为选中状态
           this.appList[key].isSelect = true
+          //计数加1
+          this.selectNumber++
         }
         else{
           switch(special){
@@ -195,6 +207,8 @@ export default {
       this.appList[key].isSelect = true
       //显示删除按钮
       this.showDelateButton = true
+      //计数加1
+      this.selectNumber++
     },
     delateApp:function(){
       const oldList = this.appList,
