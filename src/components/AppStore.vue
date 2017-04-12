@@ -20,7 +20,8 @@
 import { Checker, CheckerItem } from 'vux'
 import Search from './panel/Search'
 import TitleBar from './bar/Title'
-import { post,globalData} from "./method.js" 
+import { post} from "./method.js" 
+import localforage from 'localforage'
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -32,6 +33,13 @@ export default {
     Checker,
     CheckerItem,
     TitleBar
+  },
+  created(){
+    const _this = this
+    localforage.getItem("appData",function(err,appData){
+      _this.appData = appData
+      _this.appList = appData.appList
+    })
   },
   methods: {
     onIndexChange: function(index) {
@@ -57,13 +65,20 @@ export default {
       });
     },
     installApp: function(item,key){
-      globalData.appList[key].exist = true
+      this.appList[key].exist = true
+      this.appData.appList = this.appList
+      localforage.setItem('appData', this.appData,function (err){
+        if(err){
+          Order.$emit('Toast', '缓存用户数据失败')
+        }
+      })
     }
   },
   data () {
     return {
       select: 'all',
-      appList: globalData.appList,
+      appList: {},
+      appData: null
     }
   },
   computed: {
@@ -71,14 +86,14 @@ export default {
     classification: function () {
       const _this = this;
       if(_this.select === "all"){
-        return globalData.appList
+        return _this.appList
       }
       else{
         const newList ={}
-        for(let item in globalData.appList){
+        for(let item in _this.appList){
           //判断应用列表的类型是否和选择的类型一致
-          if(globalData.appList[item].type === _this.select){
-            newList[item] = globalData.appList[item]
+          if(_this.appList[item].type === _this.select){
+            newList[item] = _this.appList[item]
           }
         }
         return newList

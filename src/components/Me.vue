@@ -18,8 +18,9 @@ import Loading from './brick/Loading'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import P42 from './panel/P42'
-import {post, globalData} from "./method.js"
+import {post} from "./method.js"
 import { Order } from './Order.js'
+import localforage from 'localforage'
 export default {
   components: {
     TitleBar,
@@ -40,6 +41,11 @@ export default {
       });
     }
   },
+  created(){
+    localforage.getItem("appData",(err,appData) =>{
+      this.userName = appData.userData.userName
+    })
+  },
   data () {
     return {
       list: [
@@ -47,8 +53,8 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      userName: globalData.userData.userName,
-      sexList:["保密","男","女"],
+      userName: '测试用户',
+      sexList:["未填写","男","女"],
       sex:""
     }
   }

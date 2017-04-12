@@ -29,17 +29,17 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {post, globalData} from "./method.js"
+import {post} from "./method.js"
 import localforage from 'localforage'
 
 export default {
   data () {
     return {
-      userName: '',
-      password:'',
+      userName: '刘霞',
+      password:'123456',
       promptText:'第一步:输入您的用户名和密码',
       selectList:null,
-      needLog:false
+      needLog:true
     }
   },
   components: {
@@ -91,7 +91,7 @@ export default {
       //判断用户名和密码是否为空
       if(userName === "" || password === ""){ Order.$emit('Toast', '请输入账号和密码') }
       else{
-        const postData = {userName:this.userName,password:this.password};
+        const postData = {userName:_this.userName,password:_this.password};
         Order.$emit('Loading', 'show')
         //登陆请求
         post("http://localhost:9999/nameLoginList",postData,function(receive){
@@ -128,8 +128,10 @@ export default {
             if(err){
               Order.$emit('Toast', '缓存用户数据失败')
             }
+            else{
+              window.location.href="#/Main"
+            }
           });
-          window.location.href="#/Main"
         }
         else{
           Order.$emit('Toast', '密码错误！')

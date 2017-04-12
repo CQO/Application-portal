@@ -19,7 +19,7 @@ import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, globalData} from "./method.js" 
+import {get, cutString} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
 export default {

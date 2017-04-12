@@ -28,13 +28,17 @@ import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { post, globalData} from "./method.js" 
+import { post} from "./method.js" 
 import localforage from 'localforage'
 
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
-
+//引入图片资源
+const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
+      $xinxifabu        = require('../assets/xinxifabu.png'),
+      $youjian          = require('../assets/youjian.png'),
+      $bangongxitong    = require('../assets/bangongxitong.png');
 export default {
   components: {
     Swiper,
@@ -47,6 +51,7 @@ export default {
     return {
       index: 0,
       showList: [],
+      userData:null,
       appList  : {
         tiangongyuanyuan:{
           id: "10000", 
@@ -104,6 +109,7 @@ export default {
     const _this = this;
     localforage.getItem("appData",function(err,appData){
       const userData = appData.userData
+      _this.userData = appData.userData
       //轮播图处理阶段
       if( appData !==null && appData.showList != null){
         _this.showList = appData.showList
@@ -115,7 +121,11 @@ export default {
             const Data = JSON.parse(receiveData);
             _this.showList = Data
             appData.showList = Data
-            
+            localforage.setItem('appData', appData,function (err){
+              if(err){
+                Order.$emit('Toast', '缓存用户数据失败')
+              }
+            });
           }
           else{ //如果没有请求到数据，那么有可能是浏览器不允许跨域，或者URL，服务器出问题了
             //使用内置数据
@@ -127,11 +137,17 @@ export default {
           }
         })
       }
-      //应用处理阶段
+      //--------------------------------------------------应用处理阶段--------------------------------------------------
+      if(appData.appList != null){
+        Order.$emit('Toast', '替换')
+        _this.appList = appData.appList
+      }
       const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
-      //判断用户标识是否为1 如果不是则将 协同办公 应用available属性设置为 false
+      //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
       (userData.key == "1")? _this.appList["bangongxitong"].url = BanGongURL : _this.appList["bangongxitong"].available = false
       _this.appList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
+      appData.appList = _this.appList
+      //--------------------------------------------------------------------------------------------------------------
       //把更改的 *应用数据* 存入数据库
       localforage.setItem('appData', appData,function (err){
         if(err){
@@ -149,13 +165,11 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id="+globalData.userData.idCard,
+        "scheme":"linkdood:showlinkdood?id=" + this.userData.idCard,
         "name":"linkdood"
       };
       //向9999端口发送Post请求打开应用
-      post("http://localhost:9999/open",app1,function(date){
-        console.log(date)
-      });
+      post("http://localhost:9999/open",app1);
     },
     openStart:function(url,special){ //判断以何种方式打开应用
       switch(special){
@@ -177,16 +191,23 @@ export default {
         //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
         if(oldList[item].isSelect){ 
           //将应用标记为不存在
-          globalData.appList[item].exist = false
+          oldList[item].exist = false
           //将应用标记为未选择
-          globalData.appList[item].isSelect = false
+          oldList[item].isSelect = false
         }
         else{ mark = true; }
       }
       //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
       if(mark) {
         //把应用列表存储到起来
-        _this.appList = globalData.appList
+        localforage.getItem("appData",function(err,appData){
+          appData.appList = _this.appList
+          localforage.setItem('appData', appData,function (err){
+            if(err){
+              Order.$emit('Toast', '缓存用户数据失败')
+            }
+          });
+        })
       }
       //将删除按钮隐藏
       _this.showDelateButton = false
