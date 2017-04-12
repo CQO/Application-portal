@@ -19,7 +19,8 @@ const routes = [
   { path: '/Information/:name', name: 'Information', component: require('./components/Information') },
   { path: '/Version', name: 'Version', component: require('./components/Version') },
   { path: '/Sett', name: 'Sett', component: require('./components/Sett') },
-  { path: '/Help', name: 'Help', component: require('./components/Help') }
+  { path: '/Help', name: 'Help', component: require('./components/Help') },
+  { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/page/GenderSetting') }
 ];
 
 const router = new VueRouter({

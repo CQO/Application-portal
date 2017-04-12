@@ -1,5 +1,5 @@
 <template lang="pug">
-.P42
+router-link.P42(to="GenderSetting")
   .item {{item}}
   .text {{text}}
   .ico.enter &#xe607;

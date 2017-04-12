@@ -26,7 +26,7 @@ export default {
     TitleBar,
     BottomBar,
     Loading,
-    P42
+    P42,
   },
   methods: {
     quitApp: function(url) { //退出登录
@@ -53,6 +53,9 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
+      visible: true,
+      list1: [['小米', 'iPhone', '华为', '情怀', '三星', '其他', '不告诉你']],
+      value1: ['iPhone'],
       userName: '测试用户',
       sexList:["未填写","男","女"],
       sex:""
