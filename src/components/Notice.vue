@@ -30,9 +30,7 @@ export default {
   },
   data () {
     return {
-      notice: {
-        xietongbangong:{name: '协同办公', text: '正在拉取...', time: '', img: $bangongxitong,url:'', notice: ''}
-      }
+      notice: {}
     }
   },
   methods: {
@@ -49,9 +47,9 @@ export default {
         const userData = appData.userData
         if(userData.key == "1"){
           //判断 *应用数据* 中 是否有 *通知数据*
-          if(appData.notice !== null){
+          if(appData.notice){
             //如果有 *通知数据* 直接将它显示出来
-            _this.notice = value
+            _this.notice = appData.notice
           }
           else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
             //拉取数据的URL
@@ -63,12 +61,15 @@ export default {
                 //给 *应用数据* 的备份 增加 *通知数据*
                 appData.noticeData = {
                   xietongbangong:{ // 协同办公项
+                    img    : $bangongxitong,
+                    name   : '协同办公',
                     text   : cutString(receive,"Title>","<"),
                     time   : cutString(receive,"SentTime>","<"),
                     notice : cutString(receive,"wdNum>","<"),
                     url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
                   }
                 }
+                
                 // 将 *应用数据* 显示在界面上
                 _this.notice = appData.noticeData
                 // 将修改后的 *应用数据* 覆盖原来的应用数据
@@ -134,7 +135,7 @@ export default {
       overflow: hidden;
       position: absolute;
       right: 10px;
-      top: 10px;
+      top: 5px;
     }
     .notice{
       width: 18px;

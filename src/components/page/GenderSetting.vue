@@ -1,5 +1,5 @@
 <template lang="pug">
-.gender-setting
+.gender-setting(v-bind:class="classObject")
     TitleBar(title='性别',leftIcon="flase")
     .option-box
       .text 未设置
@@ -21,10 +21,12 @@ export default {
   },
   data () {
     return {
-      list: [
-        { title: '更改密码', id:"1000",url:"#"}, 
-        { title: '消息免打扰', id:"1001",url:"#"},
-      ]
+      classObject:"sdsd"
+    }
+  },
+  methods: {
+    checkGender (){
+
     }
   }
 }

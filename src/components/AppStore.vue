@@ -85,19 +85,17 @@ export default {
     //筛选应用
     classification: function () {
       const _this = this;
-      if(_this.select === "all"){
-        return _this.appList
-      }
-      else{
-        const newList ={}
-        for(let item in _this.appList){
-          //判断应用列表的类型是否和选择的类型一致
-          if(_this.appList[item].type === _this.select){
+      const newList ={}
+      for(let item in _this.appList){
+        //判断应用列表的类型是否和选择的类型一致
+        if(_this.select === "all" || _this.appList[item].type === _this.select){
+          if(_this.appList[item].available === true) {
             newList[item] = _this.appList[item]
           }
+          
         }
-        return newList
       }
+      return newList
     }
   }
 }

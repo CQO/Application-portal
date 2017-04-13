@@ -1,5 +1,5 @@
 <template lang="pug">
-router-link.P42(to="GenderSetting")
+router-link.P42(:to="to")
   .item {{item}}
   .text {{text}}
   .ico.enter &#xe607;
@@ -9,6 +9,7 @@ export default {
   props: {
     item: String,
     text: String,
+    to:String
   }
 }
 </script>

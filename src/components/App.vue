@@ -74,7 +74,7 @@ export default {
           type:"office",
           detail:"版本号:0.2",
           isSelect:false,
-          available: true,
+          available: false,
           exist:true
         },
         youjian:{
@@ -140,12 +140,14 @@ export default {
       }
       //--------------------------------------------------应用处理阶段--------------------------------------------------
       if(appData.appList != null){
-        Order.$emit('Toast', '替换')
         _this.appList = appData.appList
       }
       const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
       //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
-      (userData.key == "1")? _this.appList["bangongxitong"].url = BanGongURL : _this.appList["bangongxitong"].available = false
+      if(userData.key == "1"){
+        _this.appList["bangongxitong"].url = BanGongURL
+        _this.appList["bangongxitong"].available = true
+      }
       _this.appList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
       appData.appList = _this.appList
       //--------------------------------------------------------------------------------------------------------------
@@ -173,6 +175,7 @@ export default {
       post("http://localhost:9999/open",app1);
     },
     openStart:function(url,special,key){ //判断以何种方式打开应用
+      const _this = this
       //首先判断当前点击项目是否已经被选中
       if(this.appList[key].isSelect === true){
         //如果被选中 那么将它取消选中
@@ -193,9 +196,10 @@ export default {
           this.selectNumber++
         }
         else{
+          Order.$emit('Toast', _this.appList["bangongxitong"].url)
           switch(special){
-            case 'open':this.openApp();break; //启动应用
-            case 'url':window.location.href=url;break; //跳转到Url
+            case 'open':this.openApp();break; //启动应用 
+            case 'url':window.location.href=url;break; //跳转到Url 
           }
         }
         
