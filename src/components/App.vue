@@ -8,14 +8,14 @@
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
-      .choose.ico(v-show="item.isSelect",v-on:click="exit(key)") &#xe608;
+      .choose.ico(v-show="item.isSelect") &#xe608;
   AppTitle(title="通讯类")
   .grid
     .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'communication'")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
-      .choose.ico(tag="div",v-show="item.isSelect",v-on:tap.stop="exit(key)") &#xe608;
+      .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
   .delate(v-on:click="delateApp",v-if="showDelateButton") 删除
   Toast
   BottomBar(index="1")
@@ -110,12 +110,13 @@ export default {
     const _this = this;
     localforage.getItem("appData",function(err,appData){
       const userData = appData.userData
-      _this.userData = appData.userData
+      _this.userData = userData
       //轮播图处理阶段
-      if( appData !==null && appData.showList != null){
+      if( appData !== null && appData.showList != null){
         _this.showList = appData.showList
       }
-      else{ //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
+      else{ 
+        //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
         //向后台发送获取轮播图数据请求 {type:5}是约定的字段
         post("http://localhost:9999/appRequest",{type:5},function(receiveData){
           if(receiveData !=="" && receiveData !==null){
@@ -241,12 +242,6 @@ export default {
       }
       //将删除按钮隐藏
       _this.showDelateButton = false
-    },
-    exit:function(key){
-      //将对应的appItem改为不可视
-      this.appList[key].isSelect = false
-      //隐藏删除按钮
-      this.showDelateButton = false
     }
   }
 }

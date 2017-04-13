@@ -7,7 +7,7 @@
     p >
 
   ul.organization
-    li(v-for="item in List")
+    li(v-for="item in listCheck")
       a(:href="'#/Organization/'+item")
         img(src="../assets/Organization.png")
         p.organization-name {{item}}
@@ -17,18 +17,34 @@
 </template>
 
 <script>
-import Search from './panel/Search'
+import Search from './brick/Search'
 import TitleBar from './bar/Title'
 import BottomBar from './bar/Bottom'
+import { Order } from './Order.js'
 export default {
   components: {
     TitleBar,
     BottomBar,
     Search
   },
+  created () {
+    Order.$on('Toast', (message) => {
+      this.searchText = message
+    })
+  },
+  computed: {
+    //筛选应用
+    listCheck: function () {
+      const _this = this
+      return this.List.filter(function (text) {
+        return text.indexOf(_this.searchText) >= 0
+      })
+    }
+  },
   data () {
     return {
-      List:['办公厅','计划部','科研部','科质部']
+      List:['办公厅','计划部','科研部','科质部'],
+      searchText:""
     }
   },
 }
