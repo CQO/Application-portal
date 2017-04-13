@@ -1,219 +1,57 @@
 <template>
   <div class="search-box">
-    <div class="search-bar" :class="{'search-bar_focusing': !isCancel || currentValue}">
-      <form class="search-bar__form">
-        <div class="vux-search-mask" @click="touch" v-show="!isFixed && !isFocus"></div>
-        <div class="search-bar__box">
-          <i class="icon-search"></i>
-          <input type="search" class="search-bar__input" :placeholder="placeholder" autocomplete="off" :required="required" v-model="currentValue" ref="input"
-          @focus="onFocus"
-          @blur="onBlur"/>
-          <a href="javascript:" class="icon-clear" @click="clear" v-show="currentValue"></a>
-        </div>
-        <label class="search-bar__label" v-show="!isFocus">
-          <i class="icon-search"></i>
-          <span>搜索</span>
-        </label>
-      </form>
-      <a href="javascript:" class="search-bar__cancel-btn" @click="cancel">取消</a>
-      <slot name="right"></slot>
-    </div>
-    <div class="cells vux-search_show" v-show="isFixed">
-      <slot></slot>
-      <div class="cell cell_access" v-for="item in results" @click="handleResultClick(item)" v-on:touchmove.prevent>
-        <div class="cell__bd cell_primary">
-          <p>{{item.title}}</p>
-        </div>
-      </div>
+    <div class="text-bar">
+      <input v-model="searchText" class="text-input" type="text" name="fname" placeholder="搜索"/>
+      <img v-show="searchText" @click="clear" class="forgo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAACxUlEQVR42q1WS2sTURQe0JWp4kIl6KIWi1XcCNXWPqh1IbiW4s6FUBT8E278E4IxkIQuZpFJJp0kk8wzO6tWEf0BKqVS7dtmMq1GvzNO6uU282jrwKW5955zvvP47jkVhIBPVdWEoqi3dV3PW5a1aNv2dqPRaNPC7x3LsldwPlev158oitIriuIRYT+fLMvHYPw+DJHh31ELoD+r1eoD0osFMDMjnzJN81Mc4/xCZF/y+fyZUACEfRWCSwcB+Adkf5ckabArAHJ6GmF/OwwAE9Ey7CX31MAwjM+c4FuAujFr4iLF8+wZ9guZjJrYZREVjROYpzsw5zIMrEd4vSHL1Sskb1mN1+xdpVJ55IFomnaH2MEpOtms2M8AuQERbHcAwMZe6G1x9+1cLncCIHqpmwHTtNay2Wy/b2AUCi0+RbVabYzu4fF57Fe62dE0c0qAsaWQVDilUmnIj2gSe7cTAVJ8i85nZ9VB7JtBNuDgc8G2GzsROW/C03EmIgeA4349R3H/I0wfOh8Ev1WEsgdEcPCGhllGIlXX+BoE6G7FAqEFijdZkKgI2CXwzAp6B5QqroHuIUOgc/BoLQKghZpMkmEUewjhb4IMI37KbkLGiQD5SJG8CSm6Sx7/NWiMdVhErEONJugcRobDIsL9C1BTfxoQwToALgUVGdR3isXiDf+dDEC+a0bAxHuU2z4I/OJThH7mAZTL5QtE24BIW+gMA34Hv8injl58Op0+icdoHkVrmeZo94oUJckDWI14R9QZPCDovWTvEMDjXaZkMpmEadoLjEAbCnP424zZ2ls+QJtx9CtWDz9PkjRw/tM8WQUDzwXN9uso6PJhAKhRgggjoSNYFJUkDZyDAEBvsVAonI31zwQNMtB2mmddiPdtVa0/RMp7hP1+qVTqOB7TXbDvGbx8Zxjmhu/xJtrMezqHQ1PeYAr5/gAaUh813BsrogAAAABJRU5ErkJggg==" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    required: {
-      type: Boolean,
-      default: false
-    },
-    placeholder: String,
-    results: {
-      type: Array,
-      default () {
-        return []
-      }
+  data () {
+    return {
+      searchText:""
     }
   },
   methods: {
     clear () {
-      //输入框X号点击事件
-      this.currentValue = ''
-      this.isFocus = true
-      this.setFocus()
-      if (!this.isFixed) {
-        this.isFixed = true
-      }
-    },
-    cancel () {
-      //点击取消按钮
-      this.isCancel = true
-      this.currentValue = ''
-      this.isFixed = false
-      this.$emit('on-cancel')
-    },
-    handleResultClick (item) {
-      this.$emit('result-click', item) // just for compatibility
-      this.$emit('on-result-click', item)
-      this.isCancel = true
-      this.isFixed = false
-    },
-    touch () {
-      console.log("touch")
-      this.isCancel = false
-      this.isFixed = true
-      this.$emit('on-touch')
-    },
-    setFocus () {
-      console.log("touch")
-      this.$refs.input.focus()
-    },
-    onFocus () {
-      this.isFocus = true
-      this.touch()
-    },
-    onBlur () {
-      console.log("onBlur")
-      this.isFocus = false
-      this.isCancel = true
-      this.isFixed = false
-      this.currentValue = ''
+      this.searchText = ''
     }
   },
-  data () {
-    return {
-      currentValue: '',
-      isCancel: true,
-      isFocus: false,
-      isFixed: false,
-    }
-  },
-  watch: {
-    isFixed (val) {
-      if (val === true) {
-        this.setFocus()
-        this.isFocus = true
-      } else {}
-    },
-  }
 }
 </script>
 
 <style lang="less" scoped>
 .search-box{
-    width: 100%;
-    .search-bar{
+    height: 30px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #dfdde8;
+    padding: 5px 10px;
+    .text-bar{
+        background-color: #dbdbdb;
+        height: 30px;
+        width: 100%;
+        margin: 0 auto;
+        border-radius: 5px;
         position: relative;
-        padding: 8px 10px;
-        display: flex;
-        box-sizing: border-box;
-        background-color: #f8f8f8;
-        border-bottom: 1px solid #e5e5e5;
-        .search-bar__form{
-            position: relative;
-            -webkit-box-flex: 1;
-            flex: auto;
-            background-color: #f8f8f8;
-        }
-        .search-bar__form:after{
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 200%;
-            height: 200%;
-            -webkit-transform: scale(0.5);
-            transform: scale(0.5);
-            -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;
-            border-radius: 10px;
-            border: 1px solid #E6E6EA;
-            box-sizing: border-box;
-            background: #FFFFFF;
-        }
-        .vux-search-mask{
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 90%;
-            height: 100%;
-            z-index: 5;
-        }
-        .search-bar__box{
-            position: relative;
-            padding-left: 30px;
-            padding-right: 30px;
-            height: 100%;
-            width: 100%;
-            box-sizing: border-box;
-            z-index: 1;
-        }
-        .icon-search{
-            position: absolute;
-            left: 10px;
-            top: 0;
-            line-height: 28px;
-        }
-        .search-bar__input{
-            padding: 4px 0;
-            width: 100%;
-            height: 1.42857143em;
-            border: 0;
-            font-size: 14px;
-            line-height: 1.42857143em;
-            box-sizing: content-box;
-            background: transparent;
-        }
-        .icon-clear{
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 0 10px;
-            line-height: 28px;
-        }
-        .search-bar__label{
-            position: absolute;
-            top: 1px;
-            right: 1px;
-            bottom: 1px;
-            left: 1px;
-            z-index: 2;
-            border-radius: 3px;
-            text-align: center;
-            color: #9B9B9B;
-            background: #dbdbdb;
-            span{
-                display: inline-block;
-                font-size: 14px;
-                vertical-align: middle;
-            }
-        }
-        .icon-search{
-            margin-right: 5px;
-            color: #B2B2B2;
-            font-size: 14px;
-        }
-        .search-bar__cancel-btn{
-            display: none;
-            margin-left: 10px;
-            line-height: 28px;
-            color: #FF9900;
-            white-space: nowrap;
-        }
-        &.search-bar_focusing{
-            .search-bar__cancel-btn{
-                display: block;
-            }
-        }
+    }
+    .text-input{
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        border: none;
+        padding: 0;
+        background-color: #dbdbdb;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    .forgo{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        height: 20px;
     }
 }
 </style>
