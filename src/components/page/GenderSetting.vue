@@ -1,15 +1,15 @@
 <template lang="pug">
-.gender-setting(v-bind:class="classObject")
+.gender-setting
     TitleBar(title='性别',leftIcon="flase")
-    .option-box
+    .option-box(@click="checkGender(0)")
       .text 未设置
-      .is-check.ico &#xe609;
-    .option-box
+      .is-check.ico(v-show="gender == 0") &#xe609;
+    .option-box(@click="checkGender(1)")
       .text 男
-      .is-check.ico &#xe609;
-    .option-box
+      .is-check.ico(v-show="gender == 1") &#xe609;
+    .option-box(@click="checkGender(2)")
       .text 女
-      .is-check.ico &#xe609;
+      .is-check.ico(v-show="gender == 2") &#xe609;
 </template>
 
 <script>
@@ -21,12 +21,12 @@ export default {
   },
   data () {
     return {
-      classObject:"sdsd"
+      gender:0
     }
   },
   methods: {
-    checkGender (){
-
+    checkGender (genderID){
+      this.gender = genderID
     }
   }
 }

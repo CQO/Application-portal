@@ -68,7 +68,7 @@ export default {
   width:100%;
   position:fixed;
   z-index:5;
-  bottom:0;
+  top: 520px;
   display: flex;
   .item{
     width: 25%;

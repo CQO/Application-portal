@@ -196,10 +196,9 @@ export default {
           this.selectNumber++
         }
         else{
-          Order.$emit('Toast', _this.appList["bangongxitong"].url)
           switch(special){
             case 'open':this.openApp();break; //启动应用 
-            case 'url':window.location.href=url;break; //跳转到Url 
+            case 'url':Order.$emit('Toast', url);window.location.href=url;break; //跳转到Url 
           }
         }
         

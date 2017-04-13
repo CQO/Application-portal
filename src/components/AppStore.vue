@@ -92,7 +92,6 @@ export default {
           if(_this.appList[item].available === true) {
             newList[item] = _this.appList[item]
           }
-          
         }
       }
       return newList
