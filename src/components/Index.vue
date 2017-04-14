@@ -85,6 +85,11 @@ export default {
   },
   methods: {
     PreLogin: function(){ //预登录函数
+    //   vrv.init();
+    //   const data={call:12345};
+    //   vrv.jssdk.call(data,function(e){
+    //     document.write(e)
+    //   });
       const _this    = this,
             userName = this.userName,
             password = this.password;
