@@ -11,11 +11,7 @@ p,ul{
 /*全局样式*/
 @font-face {
   font-family: 'iconfont';  /* project id 252571 */
-  src: url('./assets/font/iconfont.eot');
-  src: url('./assets/font/iconfont.eot?#iefix') format('embedded-opentype'),
-  url('./assets/font/iconfont.woff') format('woff'),
-  url('./assets/font/iconfont.ttf') format('truetype'),
-  url('./assets/font/iconfont.svg#iconfont') format('svg');
+  src: url('./assets/font/iconfont.woff') format('woff');
 }
 .hidden{ visibility: hidden; }
 .ico{

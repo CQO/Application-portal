@@ -3,7 +3,7 @@
   TitleBar(title='个人信息',leftIcon="flase")
   P85
   .details
-    Pa42(item="姓名", :text="name",to="GenderSetting")
+    Pa42(item="姓名", :text="name",to="TimeOut")
     Pa42(item="性别", text="未填写",to="GenderSetting")
   .phone
     .item 手机号码

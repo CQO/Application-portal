@@ -20,7 +20,8 @@ const routes = [
   { path: '/Version', name: 'Version', component: require('./components/me/Version') },
   { path: '/Sett', name: 'Sett', component: require('./components/me/Sett') },
   { path: '/Help', name: 'Help', component: require('./components/me/Help') },
-  { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') }
+  { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') },
+  { path: '/TimeOut', name: 'TimeOut', component: require('./components/brick/TimeOut') }
 ];
 
 const router = new VueRouter({
