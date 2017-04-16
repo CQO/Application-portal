@@ -54,34 +54,6 @@ export default {
 
       }
     })
-    // if(globalData.successful === false){
-    //   post("http://localhost:9999/getLoginStatus","",function(receive){
-    //     if(receive!==null && receive != ""){
-    //       const Data = JSON.parse(receive);
-    //       globalData.userData = {
-    //         userName : Data.userName,
-    //         idCard   : Data.usbkeyidentification,
-    //         password : Data.password,
-    //         key      : Data.unitId,
-    //       }
-    //       //异常处理
-    //       if(globalData.userData.idCard !== 666666666){
-    //         globalData.successful = true
-    //         window.location.href="#/Main"
-    //       }
-    //       else{
-    //         _this.userName = ''
-    //         _this.password = ''
-    //       }
-    //     }
-    //     else{
-    //       _this.needLog = true
-    //     }
-    //   })
-    // }
-    // else{
-    //   _this.needLog = true
-    // }
   },
   methods: {
     PreLogin: function(){ //预登录函数
