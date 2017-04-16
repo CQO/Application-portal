@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import P85 from './panel/P85'
-import Pa42 from './panel/Pa42'
-import TitleBar from './bar/Title'
+import P85 from '../panel/P85'
+import Pa42 from '../panel/Pa42'
+import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 export default {
   components: {

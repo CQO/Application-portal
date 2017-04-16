@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import Organization from './list/Organization';
-import TitleBar from './bar/Title'
-import Search from './panel/Search'
-import BottomBar from './bar/Bottom'
+import Organization from '../list/Organization';
+import TitleBar from '../brick/Title'
+import Search from '../panel/Search'
+import BottomBar from '../brick/Bottom'
 export default {
   components: {
     Search,

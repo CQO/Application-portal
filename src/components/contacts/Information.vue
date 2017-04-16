@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import Pa85 from './panel/Pa85'
-import Pan42 from './panel/Pan42'
-import TitleBar from './bar/Title'
-import {post} from "./method.js" 
+import Pa85 from '../panel/Pa85'
+import Pan42 from '../panel/Pan42'
+import TitleBar from '../brick/Title'
+import {post} from "../method.js" 
 export default {
   components: {
     Pa85,

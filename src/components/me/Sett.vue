@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import TitleBar from './bar/Title'
-import P42 from './panel/P42'
+import TitleBar from '../brick/Title'
+import P42 from '../panel/P42'
 
 export default {
   components: {

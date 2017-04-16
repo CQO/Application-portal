@@ -18,15 +18,15 @@
 
 <script>
 import { Checker, CheckerItem } from 'vux'
-import Search from './panel/Search'
-import TitleBar from './bar/Title'
-import { post} from "./method.js" 
+import Search from '../panel/Search'
+import TitleBar from '../brick/Title'
+import { post} from "../method.js" 
 import localforage from 'localforage'
 //引入图片资源
-const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
-      $xinxifabu        = require('../assets/xinxifabu.png'),
-      $youjian          = require('../assets/youjian.png'),
-      $bangongxitong    = require('../assets/bangongxitong.png');
+const $tiangongyuanyuan = require('../../assets/tiangongyuanyuan.png'),
+      $xinxifabu        = require('../../assets/xinxifabu.png'),
+      $youjian          = require('../../assets/youjian.png'),
+      $bangongxitong    = require('../../assets/bangongxitong.png');
 export default {
   components: {
     Search,

@@ -13,14 +13,14 @@ const routes = [
   { path: '/App', name: 'App', component: require('./components/App') },
   { path: '/Contacts', name: 'Contacts', component: require('./components/Contacts') },
   { path: '/Me', name: 'Me', component: require('./components/Me') },
-  { path: '/AppStore', name: 'AppStore', component: require('./components/AppStore') },
-  { path: '/Organization/:name', name: 'Organization', component: require('./components/Organization') },
-  { path: '/Details', name: 'Details', component: require('./components/Details') },
-  { path: '/Information/:name', name: 'Information', component: require('./components/Information') },
-  { path: '/Version', name: 'Version', component: require('./components/Version') },
-  { path: '/Sett', name: 'Sett', component: require('./components/Sett') },
-  { path: '/Help', name: 'Help', component: require('./components/Help') },
-  { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/page/GenderSetting') }
+  { path: '/AppStore', name: 'AppStore', component: require('./components/app/AppStore') },
+  { path: '/Organization/:name', name: 'Organization', component: require('./components/contacts/Organization') },
+  { path: '/Details', name: 'Details', component: require('./components/me/Details') },
+  { path: '/Information/:name', name: 'Information', component: require('./components/contacts/Information') },
+  { path: '/Version', name: 'Version', component: require('./components/me/Version') },
+  { path: '/Sett', name: 'Sett', component: require('./components/me/Sett') },
+  { path: '/Help', name: 'Help', component: require('./components/me/Help') },
+  { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') }
 ];
 
 const router = new VueRouter({

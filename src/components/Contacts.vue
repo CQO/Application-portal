@@ -18,8 +18,8 @@
 
 <script>
 import Search from './brick/Search'
-import TitleBar from './bar/Title'
-import BottomBar from './bar/Bottom'
+import TitleBar from './brick/Title'
+import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 export default {
   components: {

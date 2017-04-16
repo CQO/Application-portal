@@ -23,9 +23,9 @@
 
 <script>
 import { Swiper } from 'vux'
-import AppTitle from './bar/AppTitle'
-import TitleBar from './bar/Title'
-import BottomBar from './bar/Bottom'
+import AppTitle from './brick/AppTitle'
+import TitleBar from './brick/Title'
+import BottomBar from './brick/Bottom'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import { post} from "./method.js" 

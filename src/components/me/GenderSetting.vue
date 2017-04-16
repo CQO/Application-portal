@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TitleBar from '../bar/Title'
+import TitleBar from '../brick/Title'
 
 export default {
   components: {

@@ -15,8 +15,8 @@
 
 <script>
 import Loading from './brick/Loading'
-import TitleBar from './bar/Title'
-import BottomBar from './bar/Bottom'
+import TitleBar from './brick/Title'
+import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
 import {post} from "./method.js"
 import { Order } from './Order.js'

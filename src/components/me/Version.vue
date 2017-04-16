@@ -1,11 +1,11 @@
 <template lang="pug">
 .version
-    TitleBar(title='帮助',leftIcon="flase")
-    .ver 暂时没有内容
+    TitleBar(title='当前版本',leftIcon="flase")
+    .ver 当前版本:1.0.0
 </template>
 
 <script>
-import TitleBar from './bar/Title'
+import TitleBar from '../brick/Title'
 export default {
   components: {
     TitleBar

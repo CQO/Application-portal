@@ -15,8 +15,8 @@
 
 <script>
 import Toast from './brick/Toast'
-import TitleBar from './bar/Title'
-import BottomBar from './bar/Bottom'
+import TitleBar from './brick/Title'
+import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
 import {get, cutString} from "./method.js" 
@@ -88,7 +88,7 @@ export default {
       }
       else{
         Order.$emit('Toast', '非法登录')
-        window.location.href="#/Quit"
+        //window.location.href="#/Quit"
       }
     })
   },
