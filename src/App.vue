@@ -22,7 +22,6 @@ p,ul{
   font-family: "iconfont";
   font-style: normal;
   font-weight: normal;
-  speak: none;
   display: inline-block;
 }
 ul{
