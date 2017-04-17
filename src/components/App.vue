@@ -110,7 +110,7 @@ export default {
     const _this = this;
     localforage.getItem("appData",function(err,appData){
       const nowTime = new Date().getTime()
-      if(nowTime - Timestamp.value > 120000){
+      if(nowTime - Timestamp.value > 1200000){
         window.location.href="#/TimeOut";
         return null
       }

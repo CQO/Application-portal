@@ -42,7 +42,7 @@ export default {
     //取出用户数据
     localforage.getItem("appData",function(err,appData){
       const nowTime = new Date().getTime()
-      if(nowTime - Timestamp.value > 120000){
+      if(nowTime - Timestamp.value > 1200000){
         window.location.href="#/TimeOut";
         return null
       }

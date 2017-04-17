@@ -70,6 +70,7 @@ export default {
   z-index:5;
   top: 520px;
   display: flex;
+  z-index: 9999;
   .item{
     width: 25%;
     height: 100%;

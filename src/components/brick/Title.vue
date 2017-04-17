@@ -31,6 +31,9 @@ export default {
   text-align:center;
   border-bottom: 1px solid #dfdde8;
   display: flex;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
   .title{
     height: 45px;
     line-height: 45px;
