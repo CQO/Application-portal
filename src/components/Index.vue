@@ -57,11 +57,6 @@ export default {
   },
   methods: {
     PreLogin: function(){ //预登录函数
-    //   vrv.init();
-    //   const data={call:12345,success:function(res){
-    //     console.log(res)
-    //   }};
-    //   vrv.jssdk.call(data);
       const _this    = this,
             userName = this.userName,
             password = this.password;
@@ -71,21 +66,25 @@ export default {
         const postData = {userName:_this.userName,password:_this.password};
         Order.$emit('Loading', 'show')
         //登陆请求
-        post("http://localhost:9999/nameLoginList",postData,function(receive){
-          Order.$emit('Loading', 'hide')
-          //判断是否取到数据
-          if(receive !=="" && receive !==null){
-            const Data = JSON.parse(receive);
-            switch(Data.length){
-              case 0  : Order.$emit('Toast', '登录失败'); break; 
-              //如果用户所属的组织只有一个，那么自动帮用户选择登录
-              case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
-              default : _this.promptText = '第二步:请选择所属组织'; _this.selectList=Data;
+        new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+          var foo = channel.objects.content;
+          foo.callback.connect(function(receive) {
+            Order.$emit('Loading', 'hide')
+            //判断是否取到数据
+            if(receive !=="" && receive !==null){
+                const Data = JSON.parse(receive);
+                switch(Data.length){
+                case 0  : Order.$emit('Toast', '登录失败'); break; 
+                //如果用户所属的组织只有一个，那么自动帮用户选择登录
+                case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
+                default : _this.promptText = '第二步:请选择所属组织'; _this.selectList=Data;
+                }
             }
-          }
-          else{
-            Order.$emit('Toast', '登录信息错误')
-          }
+            else{
+                Order.$emit('Toast', '登录信息错误')
+            }
+          });
+          foo.preLogin( JSON.stringify(postData))
         });
       }
     },
@@ -93,27 +92,32 @@ export default {
       const _this    = this,
             postData = {usbkeyidentification:idCard,password:this.password,unitId:unitId,userName:name};
       Order.$emit('Loading', 'show')
-      post("http://localhost:9999/login",postData,function(d){
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         Order.$emit('Loading', 'hide')
-        const Data = JSON.parse(d);
-        if(Data.code == 0){
-          const appData ={
-            userData:{userName:name, idCard:idCard, key:unitId}
+        const foo = channel.objects.content;
+        foo.callback.connect(function(receive) {
+          const Data = JSON.parse(receive);
+          if(Data.code == 0 || Data.code == 113){
+            const appData ={
+                userData:{userName:name, idCard:idCard, key:unitId}
+            }
+            //保存用户信息
+            localforage.setItem('appData', appData,function (err){
+                if(err){
+                  Order.$emit('Toast', '缓存用户数据失败')
+                }
+                else{
+                  window.location.href="#/Main"
+                }
+            });
           }
-          //保存用户信息
-          localforage.setItem('appData', appData,function (err){
-            if(err){
-              Order.$emit('Toast', '缓存用户数据失败')
-            }
-            else{
-              window.location.href="#/Main"
-            }
-          });
-        }
-        else{
-          Order.$emit('Toast', '密码错误！')
-          _this.selectList = null
-        }
+          else{
+            Order.$emit('Toast', '密码错误！')
+            _this.selectList = null
+          }
+        });
+        foo.login( JSON.stringify(postData))
+
       });
     }
   },
@@ -203,6 +207,9 @@ export default {
     line-height: 50px;
     color: white;
     font-size: 1.4rem;
+}
+.login-button:active{
+    background-color: blue;
 }
 .step{
     width: 100%;
