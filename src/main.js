@@ -14,7 +14,7 @@ const routes = [
   { path: '/Contacts', name: 'Contacts', component: require('./components/Contacts') },
   { path: '/Me', name: 'Me', component: require('./components/Me') },
   { path: '/AppStore', name: 'AppStore', component: require('./components/app/AppStore') },
-  { path: '/Organization/:name', name: 'Organization', component: require('./components/contacts/Organization') },
+  { path: '/Organization/:name/:id', name: 'Organization', component: require('./components/contacts/Organization') },
   { path: '/Details', name: 'Details', component: require('./components/me/Details') },
   { path: '/Information/:name', name: 'Information', component: require('./components/contacts/Information') },
   { path: '/Version', name: 'Version', component: require('./components/me/Version') },

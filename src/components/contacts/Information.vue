@@ -1,9 +1,15 @@
 <template lang="pug">
 .details-box
   TitleBar(title='详细资料',leftIcon="flase")
-  Pa85
+  .pre-inf
+    img(src="../../assets/user.png")
+    .inf
+        p.name.item {{$route.params.name}}
+        p.department.item 科研部
   .phone
-    Pan42(item="职位",text="产品经理")
+    .Pan42(v-on:click="call")
+      .item 职位
+      .text 产品经理
     .message
       p 联系方式
       .chat.ico(v-on:click="yuanyuan") &#xe60a;
@@ -15,14 +21,10 @@
 </template>
 
 <script>
-import Pa85 from '../panel/Pa85'
-import Pan42 from '../panel/Pan42'
 import TitleBar from '../brick/Title'
 import {post} from "../method.js" 
 export default {
   components: {
-    Pa85,
-    Pan42,
     TitleBar
   },
   methods: {
@@ -96,5 +98,35 @@ export default {
     width: 65px;
     margin: 0 10px;
   }
+}
+.pre-inf{
+    display: flex;
+    height: 85px;
+    background-color: white;
+    border-bottom: 1px solid #eaeaea;
+    padding: 0 15px;
+    margin: 10px 0;
+    img{
+        width: 60px;
+        height: 60px;
+        margin: 13px 0;
+        border-radius:5px;
+    }
+    .item{
+        height: 23px;
+        line-height: 23px;
+        font-size: 0.8rem;
+    }
+    .inf{
+        margin-left: 20px;
+    }
+    .name{
+        height: 50px;
+        line-height: 63px;
+        font-size: 1.2rem;
+    }
+    .department{
+        color: #b2b2b2;
+    }
 }
 </style>

@@ -7,12 +7,12 @@
     p >
 
   ul.organization
-    li(v-for="item in listCheck")
-      a(:href="'#/Organization/'+item")
+    li(v-for="item in List")
+      a(:href="'#/Organization/'+item.orgName + '/' + item.orgID")
         img(src="../assets/Organization.png")
-        p.organization-name {{item}}
-        p.organization-number.ico &#xe61b; 0
-        p.organization-people.ico &#xe60c; 24
+        p.organization-name {{item.orgName}}
+        p.organization-number.ico &#xe61b; {{item.subOrgNum}}
+        p.organization-people.ico &#xe60c; {{item.subUserNum}}
   BottomBar(index="2")
 </template>
 
@@ -21,6 +21,7 @@ import Search from './brick/Search'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
+import {Timestamp} from "./method.js" 
 export default {
   components: {
     TitleBar,
@@ -28,8 +29,22 @@ export default {
     Search
   },
   created () {
+    const _this = this
     Order.$on('Toast', (message) => {
       this.searchText = message
+    })
+    const nowTime = new Date().getTime()
+    if(nowTime - Timestamp.value > 120000){
+      window.location.href="#/TimeOut";
+      return null
+    }
+    Timestamp.value = nowTime
+    new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+      const foo = channel.objects.content;
+      foo.callback.connect(function(receive) {
+        _this.List = JSON.parse(receive).orgs
+      });
+      foo.getSonOrgs("1")
     })
   },
   computed: {
@@ -43,7 +58,7 @@ export default {
   },
   data () {
     return {
-      List:['办公厅','计划部','科研部','科质部'],
+      List:null,
       searchText:""
     }
   },
@@ -74,6 +89,7 @@ export default {
         line-height: 61px;
         width: calc(~"100% - 160px");
         font-size: 0.9rem;
+        overflow: hidden;
     }
     .ico{
         height: 61px;
