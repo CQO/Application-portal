@@ -47,5 +47,6 @@ const post = function (url,data,fn) {
   obj.send(postData);
 };
 
+let Timestamp = {value:null};
 
-export {get, cutString, post};
+export {get, cutString, post, Timestamp};

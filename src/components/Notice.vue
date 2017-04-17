@@ -41,6 +41,12 @@ export default {
     const _this = this
     //取出用户数据
     localforage.getItem("appData",function(err,appData){
+      const nowTime = new Date().getTime()
+      if(nowTime - Timestamp.value > 120000){
+        window.location.href="#/TimeOut";
+        return null
+      }
+      Timestamp.value = nowTime
       //如果能进到这个页面但数据库中存储的 *应用数据* 获取不到，那么原因未知
       if( appData !==null ){
         //拷贝一份 *应用数据* 里的 *用户数据*

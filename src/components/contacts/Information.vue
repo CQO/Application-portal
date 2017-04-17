@@ -28,28 +28,18 @@ export default {
   methods: {
     sendMes:function(){
       const data={scheme:"sms:"+"18092852085"+"?body="};
-      post("http://localhost:9999/open",data,function(d){
-        if(d !=="" && d !==null){
-          const Data = JSON.parse(d);
-          _this.showList = Data;
-        }
-        else{
-          _this.textAlert = '网络错误'
-          _this.showPositionValue = true
-        }
+      //发短信
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        const foo = channel.objects.content;
+        foo.opensopApp(JSON.stringify(data))
       });
     },
     call:function(){
       const data={call:this.text};
-      post("http://localhost:9999/call",data,function(d){
-        if(d !=="" && d !==null){
-          const Data = JSON.parse(d);
-          _this.showList = Data;
-        }
-        else{
-          _this.textAlert = '网络错误'
-          _this.showPositionValue = true
-        }
+      //打电话
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        const foo = channel.objects.content;
+        foo.callPhone(JSON.stringify(data))
       });
     },
     yuanyuan:function(){
@@ -60,9 +50,10 @@ export default {
         "scheme":"linkdood:showlinkdood?id=110108198512314993&pwd=123456",
         "name":"linkdood"
       };
-      //向9999端口发送Post请求打开应用
-      post("http://localhost:9999/open",app1,function(date){
-        console.log(date)
+      //打开应用
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        const foo = channel.objects.content;
+        foo.opensopApp(JSON.stringify(app1))
       });
     }
   }

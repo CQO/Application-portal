@@ -29,7 +29,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {post} from "./method.js"
+import {post,Timestamp} from "./method.js"
 import localforage from 'localforage'
 
 export default {
@@ -63,11 +63,13 @@ export default {
       //判断用户名和密码是否为空
       if(userName === "" || password === ""){ Order.$emit('Toast', '请输入账号和密码') }
       else{
+        // userName : 用户名
+        // password : 密码
         const postData = {userName:_this.userName,password:_this.password};
         Order.$emit('Loading', 'show')
         //登陆请求
         new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-          var foo = channel.objects.content;
+          const foo = channel.objects.content;
           foo.callback.connect(function(receive) {
             Order.$emit('Loading', 'hide')
             //判断是否取到数据
@@ -98,9 +100,16 @@ export default {
         foo.callback.connect(function(receive) {
           const Data = JSON.parse(receive);
           if(Data.code == 0 || Data.code == 113){
+            //保存登陆用户信息和时间戳
+            const nowTime = new Date().getTime()
             const appData ={
-                userData:{userName:name, idCard:idCard, key:unitId}
+              // userName : 用户名
+              // idCard   : 身份信息
+              // key      : ID
+              userData:{ userName:name, idCard:idCard, key:unitId },
+              Timestamp: nowTime
             }
+            Timestamp.value = nowTime
             //保存用户信息
             localforage.setItem('appData', appData,function (err){
                 if(err){
@@ -116,8 +125,7 @@ export default {
             _this.selectList = null
           }
         });
-        foo.login( JSON.stringify(postData))
-
+        foo.login(JSON.stringify(postData))
       });
     }
   },

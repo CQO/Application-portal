@@ -16,7 +16,7 @@ export default {
   data () {
     return {
       list: [
-        { title: '更改密码', id:"1000",url:"#"}, 
+        { title: '更改密码', id:"1000",url:"ChangePassword"}, 
         { title: '消息免打扰', id:"1001",url:"#"},
       ]
     }

@@ -59,9 +59,10 @@ export default {
         "scheme":"linkdood:showlinkdood?id="+this.idCard,
         "name":"linkdood"
       };
-      //向9999端口发送Post请求打开应用
-      post("http://localhost:9999/open",app1,function(date){
-        console.log(date)
+      //打开应用
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        const foo = channel.objects.content;
+        foo.opensopApp(JSON.stringify(app1))
       });
     },
     installApp: function(item,key){

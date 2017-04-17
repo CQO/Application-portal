@@ -18,7 +18,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {post} from "./method.js"
+import {post, Timestamp} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 export default {
@@ -46,6 +46,12 @@ export default {
   },
   created(){
     localforage.getItem("appData",(err,appData) =>{
+      const nowTime = new Date().getTime()
+      if(nowTime - Timestamp.value > 120000){
+        window.location.href="#/TimeOut";
+        return null
+      }
+      Timestamp.value = nowTime
       this.userName = appData.userData.userName
     })
   },
