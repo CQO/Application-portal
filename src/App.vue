@@ -28,7 +28,8 @@ body{
   width: 100%;
   background-color: #f4f4f4;
   overflow: hidden;
-  margin: 46px 0 51px 0px;
+  margin: 0;
+  margin-top: 46px;
 }
 .root-box{
   height: 100%;

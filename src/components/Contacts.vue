@@ -2,15 +2,19 @@
 .contacts-box
   TitleBar(title='通讯录')
   Search
-  OrganizationBar(:tree="tree")
+  .organization-bar
+    template(v-for="(item, key) in tree")
+        a(v-on:click="clickTree(item, key)") {{item.name}}
+        span >
   ul.organization(v-if="List")
     li(v-for="item in List",v-on:click="load(item.orgName,item.orgID)")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
+    .placeholder
   .load(v-else)
-    img(src="../assets/loading.gif")
+    img(src="../assets/penguin.gif")
   BottomBar(index="2")
 </template>
 
@@ -18,7 +22,7 @@
 import Search from './brick/Search'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
-import OrganizationBar from './brick/OrganizationBar'
+import Organization from './list/Organization'
 import { Order } from './Order.js'
 import {Timestamp} from "./method.js" 
 export default {
@@ -26,7 +30,7 @@ export default {
     TitleBar,
     BottomBar,
     Search,
-    OrganizationBar
+    Organization
   },
   created () {
     const _this = this
@@ -62,6 +66,10 @@ export default {
         });
         foo.getSonOrgs(id)
       })
+    },
+    clickTree:function(item, key){
+      this.tree = this.tree.slice(0,key)
+      this.load(item.name,item.id)
     }
   },
   data () {
@@ -109,5 +117,22 @@ export default {
 .load{
     display: flex;
     justify-content: center;
+}
+.organization-bar{
+    height:45px;
+    display: flex;
+    line-height: 45px;
+    font-size: 0.8rem;
+    overflow: hidden;
+    a {
+        color: #2c84ff;
+        margin: 0 10px;
+    }
+    p {
+        color: #787878
+    }
+}
+.placeholder{
+  height: 50px;
 }
 </style>

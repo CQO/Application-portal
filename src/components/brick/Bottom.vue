@@ -68,7 +68,7 @@ export default {
   width:100%;
   position:fixed;
   z-index:5;
-  top: 520px;
+  bottom: 0;
   display: flex;
   z-index: 9999;
   .item{
@@ -95,6 +95,11 @@ export default {
     .ico, .name{
       color: blueviolet;
     }
+  }
+}
+@media screen and (max-height: 200px){
+  .bottomBar{
+    display: none
   }
 }
 </style>

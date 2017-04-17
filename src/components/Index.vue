@@ -137,7 +137,7 @@ export default {
     width: 180px;
     margin: 0 auto;
     height: 180px;
-    padding-top: 60px;
+    padding-top: 20px;
     display:block;
     img{
         height: 80px;
