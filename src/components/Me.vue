@@ -31,13 +31,16 @@ export default {
   methods: {
     quitApp: function(url) { //退出登录
       const _this = this;
-      const postData={userName:this.userName,password:this.password};
       Order.$emit('Loading', 'show')
-      post("http://localhost:9999/loginout",postData,function(data){
-        //隐藏退出提示
-        Order.$emit('Loading', 'hide')
-        //收到消息就返回主界面
-        window.location.href="#/Quit";
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        const foo = channel.objects.content;
+        foo.callback.connect(function(receive) {
+          //隐藏退出提示
+          Order.$emit('Loading', 'hide')
+          //收到消息就返回主界面
+          window.location.href="#/Quit";
+        });
+        foo.loginout()
       });
     }
   },
