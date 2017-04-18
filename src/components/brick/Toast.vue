@@ -21,7 +21,7 @@ export default {
       function hide(){
         _this.show = false
       }
-      setTimeout(hide,2000)
+      setTimeout(hide,3000)
     })
   },
 }

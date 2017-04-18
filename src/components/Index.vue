@@ -124,8 +124,8 @@ export default {
             });
           }
           else{
-            Order.$emit('Toast', '密码错误！')
             _this.selectList = null
+            Order.$emit('Toast', `密码错误:${Data.code}`)
           }
         });
         //调用登录接口

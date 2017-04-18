@@ -2,13 +2,15 @@
 .change-password-box
   TitleBar(title='更改密码',leftIcon="flase")
   .title 当前密码
-  input(v-model="oldPassword", type="text", placeholder="当前密码")
+  input(v-model="oldPassword", type="text")
   .title 新密码
-  input(v-model="password", type="text", placeholder="新密码")
-  .title 重复新密码
-  input(v-model="repeatPassword", type="text", placeholder="重复新密码")
+  input(v-model="password", type="text")
+  .title 确认密码
+  input(v-model="repeatPassword", type="text")
+  .prompt 建议:密码长度为8-16位，至少有数字、字母或符号的两种组合，字母区分大小写
   .button(v-on:click="verification") 确定
   Loading(text="正在登录...")
+  Toast
 </template>
 
 
@@ -20,7 +22,8 @@ import Toast from '../brick/Toast'
 export default {
   components: {
     TitleBar,
-    Loading
+    Loading,
+    Toast
   },
   methods: {
     //更改密码验证
@@ -29,9 +32,13 @@ export default {
       new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         const foo = channel.objects.content;
         foo.callback.connect( (receive) => {
-          const Data = JSON.parse(receiveData);
+          const Data = JSON.parse(receive);
           switch(Data.code){
-            case 543 : Order.$emit('Toast', '原密码不正确')
+            case 543 :  Order.$emit('Toast', '当前密码不正确') ; break;
+            case 542 :  Order.$emit('Toast', '新密码不合法') ; break;
+            case 541 :  Order.$emit('Toast', '用户不存在') ; break;
+            case 0 :  Order.$emit('Toast', '修改成功') ; break;
+            default : Order.$emit('Toast', Data.code) ;
           }
         });
         const data = {oldPwd : this.oldPassword, newPwd : this.password}
@@ -61,7 +68,7 @@ export default {
     }
     input{
         width: 100%;
-        height: 50px;
+        height: 30px;
         border: none;
         padding: 0 10px;
         font-size: 1rem;
@@ -76,6 +83,11 @@ export default {
         border-radius: 5px;
         color: white;
         margin-top: 50px;
+    }
+    .prompt{
+        margin: 10px;
+        font-size: 13px;
+        color: cadetblue;
     }
 }
 </style>

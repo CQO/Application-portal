@@ -2,7 +2,7 @@
   .title-bar
     .add.titleButton.ico(v-bind:class="{ hidden: !leftIcon }",v-on:click="back") &#xe601;
     p.title {{title}}
-    router-link.add.titleButton.ico(v-bind:class="{ hidden: !rightIcon }",to="\AppStore") &#xe626;
+    router-link.add.titleButton.ico(v-bind:class="{ hidden: !rightIcon }",to="\Store") &#xe626;
 </template>
 
 <script>
