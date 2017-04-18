@@ -28,7 +28,8 @@ export default {
   methods: {
     //更改密码验证
     verification () { 
-      if(this.new !== this.news) return null; //密码验证
+      if(this.oldPassword && this.password && this.repeatPassword) Order.$emit('Toast', '当前密码不正确'); return null; //密码验证
+      if(this.password !== this.repeatPassword) return null; //密码验证
       new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         const foo = channel.objects.content;
         foo.callback.connect( (receive) => {
@@ -37,7 +38,7 @@ export default {
             case 543 :  Order.$emit('Toast', '当前密码不正确') ; break;
             case 542 :  Order.$emit('Toast', '新密码不合法') ; break;
             case 541 :  Order.$emit('Toast', '用户不存在') ; break;
-            case 0 :  Order.$emit('Toast', '修改成功') ; break;
+            case 0 :  Order.$emit('Toast', '修改成功') ; history.go(-1); break;
             default : Order.$emit('Toast', Data.code) ;
           }
         });

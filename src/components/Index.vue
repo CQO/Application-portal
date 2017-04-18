@@ -76,17 +76,17 @@ export default {
             if(receive !=="" && receive !==null){
                 const Data = JSON.parse(receive);
                 switch(Data.length){
-                case 0  : Order.$emit('Toast', '登录失败'); break; 
-                //如果用户所属的组织只有一个，那么自动帮用户选择登录
-                case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
-                default : _this.promptText = '第二步:请选择所属组织'; _this.selectList=Data;
+                  case 0  : Order.$emit('Toast', '登录失败'); break; 
+                  //如果用户所属的组织只有一个，那么自动帮用户选择登录
+                  case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
+                  default : _this.promptText = '第二步:请选择所属组织'; _this.selectList = Data;
                 }
             }
             else{
                 Order.$emit('Toast', '登录信息错误')
             }
           });
-          foo.preLogin( JSON.stringify(postData))
+          foo.preLogin(JSON.stringify(postData))
         });
       }
     },
@@ -98,11 +98,11 @@ export default {
                 unitId : unitId,userName:name
             };
       Order.$emit('Loading', 'show')
-      new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-        Order.$emit('Loading', 'hide')
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         //成功回掉
-        foo.callback.connect((receive) => {
+        foo.callback.connect(function(receive) {
+          Order.$emit('Loading', 'hide')
           const Data = JSON.parse(receive);
           //判断错误码是否为 0:成功 113:已登录
           if(Data.code == 0 || Data.code == 113){
