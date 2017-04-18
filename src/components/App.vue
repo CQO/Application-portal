@@ -28,7 +28,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { post, Timestamp} from "./method.js" 
+import { post, timeoutDetection} from "./method.js" 
 import localforage from 'localforage'
 
 import Vue from 'vue';
@@ -109,46 +109,32 @@ export default {
   created(){
     const _this = this;
     localforage.getItem("appData",function(err,appData){
-      const nowTime = new Date().getTime()
-      if(nowTime - Timestamp.value > 1200000){
-        window.location.href="#/TimeOut";
-        return null
-      }
-      Timestamp.value = nowTime
-      const userData = appData.userData
-      _this.userData = userData
+      //超时检测
+      if(timeoutDetection()) return null
+      const userData = _this.userData = appData.userData
       //轮播图处理阶段
-      if( appData !== null && appData.showList != null){
-        _this.showList = appData.showList
-      }
-      else{ 
-        //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
-        //向后台发送获取轮播图数据请求 {type:5}是约定的字段
-        new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-          const foo = channel.objects.content;
-          foo.callback.connect(function(receive) {
-            if(receiveData !=="" && receiveData !==null){
-              const Data = JSON.parse(receiveData);
-              _this.showList = Data
-              appData.showList = Data
-              localforage.setItem('appData', appData,function (err){
-                if(err){
-                  Order.$emit('Toast', '缓存用户数据失败')
-                }
-              });
-            }
-            else{ //如果没有请求到数据，那么有可能是浏览器不允许跨域，或者URL，服务器出问题了
-              //使用内置数据
-              _this.showList = [
-                {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
-                {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
-              ]
-              Order.$emit('Toast', '轮播图数据获取失败')
-            }
-          });
-          foo.slidesshow(JSON.stringify({type:"5"}))
-        })
-      }
+      if( appData !== null && appData.showList != null){ _this.showList = appData.showList; return null}
+      //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
+      //向后台发送获取轮播图数据请求 {type:5}是约定的字段
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        const foo = channel.objects.content;
+        foo.callback.connect(function(receive) {
+          if(receiveData !=="" && receiveData !==null){
+            const Data = JSON.parse(receiveData);
+            _this.showList = appData.showList = Data
+            localforage.setItem('appData', appData);
+          }
+          else{ //如果没有请求到数据，那么有可能是浏览器不允许跨域，或者URL，服务器出问题了
+            //使用内置数据
+            _this.showList = [
+              {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
+              {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
+            ]
+            Order.$emit('Toast', '轮播图数据获取失败')
+          }
+        });
+        foo.slidesshow(JSON.stringify({type:"5"}))
+      })
       //--------------------------------------------------应用处理阶段--------------------------------------------------
       if(appData.appList != null){
         _this.appList = appData.appList

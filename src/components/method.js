@@ -49,4 +49,22 @@ const post = function (url,data,fn) {
 
 let Timestamp = {value:null};
 
-export {get, cutString, post, Timestamp};
+const timeoutDetection = function(){
+  const nowTime = new Date().getTime();
+  //检测距离上次操作是否已经过去1200000毫秒(20分钟)
+  if(nowTime - Timestamp.value > 1200000){
+    window.location.href="#/TimeOut";
+    return true;
+  }
+  Timestamp.value = nowTime;
+  return false;
+};
+
+
+
+let orgData = {
+  orgList : {},
+  orgTree : []
+};
+
+export {get, cutString, post, Timestamp, timeoutDetection, orgData};

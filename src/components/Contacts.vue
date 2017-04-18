@@ -7,14 +7,15 @@
         a(v-on:click="clickTree(item, key)") {{item.name}}
         span >
   ul.organization(v-if="List")
-    li(v-for="item in List",v-on:click="load(item.orgName,item.orgID)")
+    li(v-for="item in List.orgs",v-on:click="load(item.orgName,item.orgID)")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
+    Organization(v-for="item in List.orgusers",:name="item.enName",:text="item.orgName")
     .placeholder
   .load(v-else)
-    img(src="../assets/penguin.gif")
+    img(src="../assets/loading.gif")
   BottomBar(index="2")
 </template>
 
@@ -24,7 +25,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import {Timestamp} from "./method.js" 
+import {timeoutDetection, orgData} from "./method.js" 
 export default {
   components: {
     TitleBar,
@@ -33,50 +34,45 @@ export default {
     Organization
   },
   created () {
-    const _this = this
-    Order.$on('Toast', (message) => {
-      this.searchText = message
-    })
-    const nowTime = new Date().getTime()
-    if(nowTime - Timestamp.value > 1200000){
-      window.location.href="#/TimeOut";
-      return null
-    }
-    Timestamp.value = nowTime
-    _this.load("中国航天科工集团","1")
-  },
-  computed: {
-    //筛选应用
-    listCheck: function () {
-      const _this = this
-      return this.List.filter(function (text) {
-        return text.indexOf(_this.searchText) >= 0
-      })
-    }
+    Order.$on('Toast', (message) => { this.searchText = message }) //注册搜索
+    //超时检测
+    if(timeoutDetection()) return null
+    this.clickTree({name:"中国航天科工集团",id:"1"},0)
   },
   methods: {
     load:function(name,id){
       const _this = this
-      _this.List = null
+      this.List = null
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
-        foo.callback.connect(function(receive) {
-          _this.tree.push({name:name,id:id})
-          _this.List = JSON.parse(receive).orgs
+        foo.callback.connect( function(receive) {
+          orgData.orgTree.push({name:name,id:id})
+          orgData.orgList[id] = JSON.parse(receive)
+          _this.List = orgData.orgList[id]
+          _this.tree = orgData.orgTree
         });
         foo.getSonOrgs(id)
       })
     },
     clickTree:function(item, key){
-      this.tree = this.tree.slice(0,key)
-      this.load(item.name,item.id)
+
+      if(orgData.orgList[item.id] !== undefined){
+        orgData.orgTree = orgData.orgTree.slice(0,key + 1)
+        this.List = orgData.orgList[item.id]
+        this.tree = orgData.orgTree
+      }
+      else{
+        orgData.orgTree = orgData.orgTree.slice(0,key + 1)
+        this.tree = orgData.orgTree
+        this.load(item.name,item.id)
+      }  
     }
   },
   data () {
     return {
       List:null,
       searchText:"",
-      tree:[]
+      tree:null
     }
   },
 }

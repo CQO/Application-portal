@@ -19,7 +19,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString} from "./method.js" 
+import {get, cutString, timeoutDetection} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
 export default {
@@ -39,62 +39,41 @@ export default {
   },
   created(){
     const _this = this
-    //取出用户数据
+    //从本地数据库中取出用户数据
     localforage.getItem("appData",function(err,appData){
-      const nowTime = new Date().getTime()
-      if(nowTime - Timestamp.value > 1200000){
-        window.location.href="#/TimeOut";
-        return null
-      }
-      Timestamp.value = nowTime
-      //如果能进到这个页面但数据库中存储的 *应用数据* 获取不到，那么原因未知
-      if( appData !==null ){
-        //拷贝一份 *应用数据* 里的 *用户数据*
-        const userData = appData.userData
-        if(userData.key == "1"){
-          //判断 *应用数据* 中 是否有 *通知数据*
-          if(appData.notice){
-            //如果有 *通知数据* 直接将它显示出来
-            _this.notice = appData.notice
+      //拷贝一份 *应用数据* 里的 *用户数据*
+      const userData = appData.userData
+
+      if(timeoutDetection()) { return null } //超时检测
+      if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
+      if(userData.key != "1") { return null } //集团用户检测
+      if(appData.notice){ _this.notice = appData.notice } //缓存检测
+      else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
+        //拉取数据的URL
+        const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
+        //通过Get请求请求通知数据
+        get( noticeURL, function(receive){
+          if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+          //给 *应用数据* 的备份 增加 *通知数据*
+          appData.noticeData = {
+            xietongbangong:{ // 协同办公项
+              img    : $bangongxitong,
+              name   : '协同办公',
+              text   : cutString(receive,"Title>","<"),
+              time   : cutString(receive,"SentTime>","<"),
+              notice : cutString(receive,"wdNum>","<"),
+              url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
+            }
           }
-          else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
-            //拉取数据的URL
-            const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
-            //通过Get请求请求通知数据
-            get( noticeURL, function(receive){
-              //判断是否GET请求到数据
-              if(receive !=="" && receive !==null){
-                //给 *应用数据* 的备份 增加 *通知数据*
-                appData.noticeData = {
-                  xietongbangong:{ // 协同办公项
-                    img    : $bangongxitong,
-                    name   : '协同办公',
-                    text   : cutString(receive,"Title>","<"),
-                    time   : cutString(receive,"SentTime>","<"),
-                    notice : cutString(receive,"wdNum>","<"),
-                    url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
-                  }
-                }
-                
-                // 将 *应用数据* 显示在界面上
-                _this.notice = appData.noticeData
-                // 将修改后的 *应用数据* 覆盖原来的应用数据
-                localforage.setItem('appData', appData,function (err){
-                  if(err !== null){ //错误处理
-                    Order.$emit('Toast', '数据存储失败')
-                  }
-                })
-              }
-              else{
-                Order.$emit('Toast', '获取通知数据失败')
-              }
-            })
-          }
-        }
-      }
-      else{
-        Order.$emit('Toast', '非法登录')
-        //window.location.href="#/Quit"
+          // 将 *应用数据* 显示在界面上
+          _this.notice = appData.noticeData
+          // 将修改后的 *应用数据* 覆盖原来的应用数据
+          localforage.setItem('appData', appData,function (err){
+            if(err !== null){ //错误处理
+              Order.$emit('Toast', '数据存储失败')
+            }
+          })
+        })
       }
     })
   },

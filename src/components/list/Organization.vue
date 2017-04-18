@@ -1,8 +1,8 @@
 <template lang="pug">
-router-link.organization-list(:to="'/Information/'+neme")
-  img.user-img(src='../../assets/Organization.png')
+router-link.organization-list(:to="'/Information/'+name")
+  img.user-img(src='../../assets/user.png')
   .message
-    p {{neme}}
+    p.name {{name}}
     p.text {{text}}
 </template>
 
@@ -10,7 +10,7 @@ router-link.organization-list(:to="'/Information/'+neme")
 export default {
   name: 'page-tabbar',
   props: {
-    neme: {
+    name: {
       type: String,
       required: true
     },
@@ -33,14 +33,21 @@ export default {
       width: 45px;
       height: 45px;
       margin: 10px;
+      border-radius: 5px;
+    }
+    .name{
+      height: 25px;
+      line-height: 25px;
     }
     .message{
-      margin: 10px;
+      margin: 10px 0;
       width: calc(~'100% - 130px');
     }
     .text{
       color: #8c8c8c;
       font-size: 0.8rem;
+      height: 20px;
+      line-height: 20px;
     }
   }
 </style>

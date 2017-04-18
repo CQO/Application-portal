@@ -92,32 +92,35 @@ export default {
     },
     login:function(name,num,idCard,unitId){ //登录函数
       const _this    = this,
-            postData = {usbkeyidentification:idCard,password:this.password,unitId:unitId,userName:name};
+            postData = {
+                usbkeyidentification : idCard,
+                password : this.password,
+                unitId : unitId,userName:name
+            };
       Order.$emit('Loading', 'show')
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+      new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         Order.$emit('Loading', 'hide')
         const foo = channel.objects.content;
-        foo.callback.connect(function(receive) {
+        //成功回掉
+        foo.callback.connect((receive) => {
           const Data = JSON.parse(receive);
+          //判断错误码是否为 0:成功 113:已登录
           if(Data.code == 0 || Data.code == 113){
             //保存登陆用户信息和时间戳
             const nowTime = new Date().getTime()
             const appData ={
-              // userName : 用户名
-              // idCard   : 身份信息
-              // key      : ID
-              userData:{ userName:name, idCard:idCard, key:unitId },
-              Timestamp: nowTime
+              userData:{ //用户信息
+                  userName : name,   //用户名
+                  idCard   : idCard, //身份信息
+                  key      : unitId  //ID
+              }, 
+              Timestamp: nowTime //时间戳
             }
             Timestamp.value = nowTime
             //保存用户信息
             localforage.setItem('appData', appData,function (err){
-                if(err){
-                  Order.$emit('Toast', '缓存用户数据失败')
-                }
-                else{
-                  window.location.href="#/Main"
-                }
+              if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
+              window.location.href="#/Main"
             });
           }
           else{
@@ -125,6 +128,7 @@ export default {
             _this.selectList = null
           }
         });
+        //调用登录接口
         foo.login(JSON.stringify(postData))
       });
     }

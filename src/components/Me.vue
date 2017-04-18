@@ -18,7 +18,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {post, Timestamp} from "./method.js"
+import {post, timeoutDetection} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 export default {
@@ -46,12 +46,8 @@ export default {
   },
   created(){
     localforage.getItem("appData",(err,appData) =>{
-      const nowTime = new Date().getTime()
-      if(nowTime - Timestamp.value > 1200000){
-        window.location.href="#/TimeOut";
-        return null
-      }
-      Timestamp.value = nowTime
+      //超时检测
+      if(timeoutDetection()) return null
       this.userName = appData.userData.userName
     })
   },
@@ -65,7 +61,7 @@ export default {
       visible: true,
       list1: [['小米', 'iPhone', '华为', '情怀', '三星', '其他', '不告诉你']],
       value1: ['iPhone'],
-      userName: '测试用户',
+      userName: '',
       sexList:["未填写","男","女"],
       sex:""
     }
