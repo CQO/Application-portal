@@ -18,7 +18,6 @@ const routes = [
   { path: '/Details', name: 'Details', component: require('./components/me/Details') },
   { path: '/Information/:name', name: 'Information', component: require('./components/contacts/Information') },
   { path: '/Version', name: 'Version', component: require('./components/me/Version') },
-  { path: '/Sett', name: 'Sett', component: require('./components/me/Sett') },
   { path: '/Help', name: 'Help', component: require('./components/me/Help') },
   { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') },
   { path: '/TimeOut', name: 'TimeOut', component: require('./components/brick/TimeOut') },

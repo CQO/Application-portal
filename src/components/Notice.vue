@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',v-on:click="turn(item.url)")
+    li(v-for='item in notice',v-on:click="window.location.href = url")
       img.user-img(:src='item.img')
       .message
         p {{item.name}}
@@ -32,10 +32,6 @@ export default {
     return {
       notice: {}
     }
-  },
-  methods: {
-    //跳转到某个地址
-    turn (url) { window.location.href=url; }
   },
   created(){
     const _this = this

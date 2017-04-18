@@ -2,24 +2,48 @@
 .change-password-box
   TitleBar(title='更改密码',leftIcon="flase")
   .title 当前密码
-  input(v-model="searchText",class="text-input",type="text",name="fname",placeholder="当前密码")
+  input(v-model="oldPassword", type="text", placeholder="当前密码")
   .title 新密码
-  input(v-model="searchText",class="text-input",type="text",name="fname",placeholder="新密码")
+  input(v-model="password", type="text", placeholder="新密码")
   .title 重复新密码
-  input(v-model="searchText",class="text-input",type="text",name="fname",placeholder="重复新密码")
-  .button 确定
+  input(v-model="repeatPassword", type="text", placeholder="重复新密码")
+  .button(v-on:click="verification") 确定
+  Loading(text="正在登录...")
 </template>
 
 
 <script>
 import TitleBar from '../brick/Title'
+import Loading from '../brick/Loading'
+import { Order } from '../Order.js'
+import Toast from '../brick/Toast'
 export default {
   components: {
-    TitleBar
+    TitleBar,
+    Loading
+  },
+  methods: {
+    //更改密码验证
+    verification () { 
+      if(this.new !== this.news) return null; //密码验证
+      new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
+        const foo = channel.objects.content;
+        foo.callback.connect( (receive) => {
+          const Data = JSON.parse(receiveData);
+          switch(Data.code){
+            case 543 : Order.$emit('Toast', '原密码不正确')
+          }
+        });
+        const data = {oldPwd : this.oldPassword, newPwd : this.password}
+        foo.changedPwd(JSON.stringify(data))
+      })
+    }
   },
   data () {
     return {
-      searchText:""
+      oldPassword:"",
+      password:"",
+      repeatPassword:""
     }
   },
 }
