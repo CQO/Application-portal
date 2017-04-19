@@ -26,6 +26,11 @@ export default {
     Loading,
     Toast
   },
+  created(){
+    Order.$on('back', (msg) => {
+      this.password = "sdsd"
+    })
+  },
   methods: {
     //更改密码验证
     verification () { 

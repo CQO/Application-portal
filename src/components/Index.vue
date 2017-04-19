@@ -14,7 +14,7 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="(item,num) in selectList",v-on:click="login(item.usbkeyname,num,item.usbkeyidentification,item.unitId)") {{item.unitName}}
+            li(v-for="item in selectList",v-on:click.stop="login(item.usbkeyname,item.usbkeyidentification,item.unitId)") {{item.unitName}}
     .step
         .login-button(@click="PreLogin()",:class="{ hide: selectList }") 登录
         p {{promptText}}
@@ -32,7 +32,7 @@ import { Order } from './Order.js'
 import {post,Timestamp} from "./method.js"
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"
-var preData = null
+
 export default {
   data () {
     return {
@@ -53,31 +53,51 @@ export default {
     const _this = this
     new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         _this.foo = channel.objects.content;
-        _this.foo.log("kaishi");
     });
-    function pre(){
-        if(preData === null){
-            setTimeout(pre,1000);
-            return null
+    Order.$on('preLogin', (preData) => {     
+      Order.$emit('Loading', 'hide')
+      //判断是否取到数据
+      if(preData !=="" && preData !==null){
+        const Data = JSON.parse(preData);
+        switch(Data.length){
+          case 0  : Order.$emit('Toast', '登录失败'); break; 
+          //如果用户所属的组织只有一个，那么自动帮用户选择登录
+          case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
+          default : _this.promptText = '第二步:请选择所属组织'; _this.selectList = Data;
         }
-        Order.$emit('Loading', 'hide')
-        //判断是否取到数据
-        if(preData !=="" && preData !==null){
-            const Data = JSON.parse(preData);
-            switch(Data.length){
-                case 0  : Order.$emit('Toast', '登录失败'); break; 
-                //如果用户所属的组织只有一个，那么自动帮用户选择登录
-                case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
-                default : _this.promptText = '第二步:请选择所属组织'; _this.selectList = Data;
-            }
+      }
+      else{
+        Order.$emit('Toast', '登录信息错误')
+      }
+    })
+
+    Order.$once('login', (data) => {
+      Order.$emit('Loading', 'hide')
+      const Data = JSON.parse(data.receive);
+      //判断错误码是否为 0:成功 113:已登录
+      if(Data.code == 0 || Data.code == 113){
+        //保存登陆用户信息和时间戳
+        const nowTime = new Date().getTime()
+        const appData ={
+          userData:{ //用户信息
+            userName : data.userName,   //用户名
+            idCard   : data.idCard, //身份信息
+            key      : data.key  //ID
+          }, 
+          Timestamp: nowTime //时间戳
         }
-        else{
-            Order.$emit('Toast', '登录信息错误')
-        }
-        preData = null
-    }
-    setTimeout(pre,1000);
-    
+        Timestamp.value = nowTime
+        //保存用户信息
+        localforage.setItem('appData', appData,function (err){
+          if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
+          window.location.href="#/Main"
+        });
+      }
+      else {
+        this.selectList = null
+        Order.$emit('Toast', `登录失败:${Data.code}`)
+      }
+    })
   },
   methods: {
     PreLogin: function(){ //预登录函数
@@ -94,12 +114,12 @@ export default {
         Order.$emit('Loading', 'show')
         //登陆请求
         _this.foo.callback.connect(function(receive) {
-            preData = receive
+            Order.$emit('preLogin', receive)
         });
         _this.foo.preLogin(JSON.stringify(postData))
       }
     },
-    login:function(name,num,idCard,unitId){ //登录函数
+    login:function(name,idCard,unitId){ //登录函数
       const _this    = this,
             postData = {
                 usbkeyidentification : idCard,
@@ -108,31 +128,13 @@ export default {
             };
       Order.$emit('Loading', 'show')
       _this.foo.callback.connect(function(receive) {
-          Order.$emit('Loading', 'hide')
-          const Data = JSON.parse(receive);
-          //判断错误码是否为 0:成功 113:已登录
-          if(Data.code == 0 || Data.code == 113){
-            //保存登陆用户信息和时间戳
-            const nowTime = new Date().getTime()
-            const appData ={
-              userData:{ //用户信息
-                  userName : name,   //用户名
-                  idCard   : idCard, //身份信息
-                  key      : unitId  //ID
-              }, 
-              Timestamp: nowTime //时间戳
-            }
-            Timestamp.value = nowTime
-            //保存用户信息
-            localforage.setItem('appData', appData,function (err){
-              if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
-              window.location.href="#/Main"
-            });
-          }
-          else{
-            _this.selectList = null
-            Order.$emit('Toast', `密码错误:${Data.code}`)
-          }
+        const data = {
+          receive : receive,
+          userName    : name,
+          idCard:idCard,
+          key:unitId
+        }
+        Order.$emit('login', data)
       });
       _this.foo.login(JSON.stringify(postData))
     }

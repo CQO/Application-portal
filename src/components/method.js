@@ -1,4 +1,5 @@
 "use strict";
+
 const get = function(url,fn){
   const obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
   obj.open('GET',url,true);
@@ -59,8 +60,6 @@ const timeoutDetection = function(){
   Timestamp.value = nowTime;
   return false;
 };
-
-
 
 let orgData = {
   orgList : {},

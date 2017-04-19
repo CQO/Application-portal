@@ -1,5 +1,5 @@
 <template>
-  <div class="toast-box" v-show="show">
+  <div class="toast-box" v-show="text">
     <span class="text">{{text}}</span>
   </div>
 </template>
@@ -9,18 +9,15 @@ import { Order } from '../Order.js'
 export default {
   data () {
     return {
-      show: false,
-      text: "..."
+      text: null
     }
   },
   created () {
     const _this = this
     Order.$on('Toast', function(message) {
-      this.text = message
-      this.show = true
-      const _this = this
+      _this.text = message
       function hide(){
-        _this.show = false
+        _this.text = null
       }
       setTimeout(hide,3000)
     })

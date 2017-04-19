@@ -16,7 +16,7 @@
       img(slot="icon",:src="item.icon")
       p {{item.name}}
       .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
-  .delate(v-on:click="delateApp",v-if="showDelateButton") 删除
+  .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
   Toast
   BottomBar(index="1")
 </template>
@@ -104,7 +104,6 @@ export default {
           exist:true
         }
       },
-      showDelateButton: false,//显示删除按钮
       selectNumber:0,
       appData:null
     }
@@ -124,7 +123,7 @@ export default {
     setTimeout(pre,1000)
     localforage.getItem("appData",function(err,appData){
       //超时检测
-      if(timeoutDetection()) return null
+      //if(timeoutDetection()) return null
       _this.appData = appData
       const userData =  appData.userData
       _this.userData = appData.userData
@@ -186,14 +185,10 @@ export default {
         this.appList[key].isSelect = false
         //选中计数减少1
         this.selectNumber--
-        if(this.selectNumber === 0){
-          //入过已经没有应用被选中了 删除按钮消失
-          this.showDelateButton = false
-        }
       }
       else{
         //如果它没有被选中，但是在选择模式下
-        if(this.showDelateButton === true){
+        if(this.selectNumber > 0){
           //将点击项改为选中状态
           this.appList[key].isSelect = true
           //计数加1
@@ -212,8 +207,6 @@ export default {
     pressItem:function(key){ //长按app事件
       //将对应的appItem改为可视
       this.appList[key].isSelect = true
-      //显示删除按钮
-      this.showDelateButton = true
       //计数加1
       this.selectNumber++
     },
@@ -243,8 +236,6 @@ export default {
           });
         })
       }
-      //将删除按钮隐藏
-      _this.showDelateButton = false
     }
   }
 }
