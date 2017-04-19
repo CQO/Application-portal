@@ -19,6 +19,7 @@ import TitleBar from '../brick/Title'
 import Loading from '../brick/Loading'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
+import { QWebChannel } from  "../QTWebChannel"
 export default {
   components: {
     TitleBar,
@@ -29,8 +30,8 @@ export default {
     //更改密码验证
     verification () { 
       const _this = this
-      if(this.oldPassword && this.password && this.repeatPassword) Order.$emit('Toast', '当前密码不正确'); return null; //密码验证
-      if(this.password !== this.repeatPassword) return null; //密码验证
+      // if(this.oldPassword && this.password && this.repeatPassword) Order.$emit('Toast', '当前密码不正确'); return null; //密码验证
+      // if(this.password !== this.repeatPassword) return null; //密码验证
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         foo.callback.connect( function(receive) {

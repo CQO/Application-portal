@@ -32,7 +32,7 @@ import { Order } from './Order.js'
 import {post,Timestamp} from "./method.js"
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"
-let preData = null
+var preData = null
 export default {
   data () {
     return {
@@ -40,7 +40,8 @@ export default {
       password:'123456',
       promptText:'第一步:输入您的用户名和密码',
       selectList:null,
-      needLog:true
+      needLog:true,
+      foo: null
     }
   },
   components: {
@@ -48,13 +49,35 @@ export default {
     Loading
   },
   created(){
+    "use strict";
     const _this = this
-    const appData = {}
-    localforage.getItem("appData",function(err,value){
-      if( value == null ||  value.userData == null){
-
-      }
-    })
+    new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+        _this.foo = channel.objects.content;
+        _this.foo.log("kaishi");
+    });
+    function pre(){
+        if(preData === null){
+            setTimeout(pre,1000);
+            return null
+        }
+        Order.$emit('Loading', 'hide')
+        //判断是否取到数据
+        if(preData !=="" && preData !==null){
+            const Data = JSON.parse(preData);
+            switch(Data.length){
+                case 0  : Order.$emit('Toast', '登录失败'); break; 
+                //如果用户所属的组织只有一个，那么自动帮用户选择登录
+                case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
+                default : _this.promptText = '第二步:请选择所属组织'; _this.selectList = Data;
+            }
+        }
+        else{
+            Order.$emit('Toast', '登录信息错误')
+        }
+        preData = null
+    }
+    setTimeout(pre,1000);
+    
   },
   methods: {
     PreLogin: function(){ //预登录函数
@@ -67,38 +90,13 @@ export default {
         // userName : 用户名
         // password : 密码
         const postData = {userName:_this.userName,password:_this.password};
-        function pre(){
-            if(preData === null){
-                setTimeout("pre()",1000);
-                return null
-            }
-            Order.$emit('Loading', 'hide')
-            //判断是否取到数据
-            if(preData !=="" && preData !==null){
-                const Data = JSON.parse(preData);
-                switch(Data.length){
-                  case 0  : Order.$emit('Toast', '登录失败'); break; 
-                  //如果用户所属的组织只有一个，那么自动帮用户选择登录
-                  case 1  : const data = Data[0]; _this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
-                  default : _this.promptText = '第二步:请选择所属组织'; _this.selectList = Data;
-                }
-            }
-            else{
-                Order.$emit('Toast', '登录信息错误')
-            }
-            preData = null
-            setTimeout("pre()",1000);
-        }
-        setTimeout("pre()",1000);
+
         Order.$emit('Loading', 'show')
         //登陆请求
-        new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-          const foo = channel.objects.content;
-          foo.callback.connect(function(receive) {
+        _this.foo.callback.connect(function(receive) {
             preData = receive
-          });
-          foo.preLogin(JSON.stringify(postData))
         });
+        _this.foo.preLogin(JSON.stringify(postData))
       }
     },
     login:function(name,num,idCard,unitId){ //登录函数
@@ -109,10 +107,7 @@ export default {
                 unitId : unitId,userName:name
             };
       Order.$emit('Loading', 'show')
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        //成功回掉
-        foo.callback.connect(function(receive) {
+      _this.foo.callback.connect(function(receive) {
           Order.$emit('Loading', 'hide')
           const Data = JSON.parse(receive);
           //判断错误码是否为 0:成功 113:已登录
@@ -138,10 +133,8 @@ export default {
             _this.selectList = null
             Order.$emit('Toast', `密码错误:${Data.code}`)
           }
-        });
-        //调用登录接口
-        foo.login(JSON.stringify(postData))
       });
+      _this.foo.login(JSON.stringify(postData))
     }
   },
 }

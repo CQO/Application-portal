@@ -30,10 +30,12 @@ import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import { post, timeoutDetection} from "./method.js" 
 import localforage from 'localforage'
+import { QWebChannel } from  "./QTWebChannel"
 
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
+var myData = null
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -103,43 +105,43 @@ export default {
         }
       },
       showDelateButton: false,//显示删除按钮
-      selectNumber:0
+      selectNumber:0,
+      appData:null
     }
   },
   created(){
     const _this = this;
+    function pre(){
+      if(myData === null){
+        setTimeout(pre,1000)
+        return null
+      }
+      const Data = JSON.parse(myData);
+      _this.showList  = Data
+      _this.appData.showList = Data
+      localforage.setItem('appData', _this.appData);
+    }
+    setTimeout(pre,1000)
     localforage.getItem("appData",function(err,appData){
       //超时检测
       if(timeoutDetection()) return null
+      _this.appData = appData
       const userData =  appData.userData
       _this.userData = appData.userData
       //轮播图处理阶段
-      if( appData !== null && appData.showList != null){ _this.showList = appData.showList; return null}
+      if( _this.appData !== null && _this.appData.showList != null){ _this.showList = _this.appData.showList; return null}
       //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
       //向后台发送获取轮播图数据请求 {type:5}是约定的字段
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         foo.callback.connect(function(receive) {
-          if(receiveData !=="" && receiveData !==null){
-            const Data = JSON.parse(receiveData);
-            _this.showList  = Data
-            appData.showList = Data
-            localforage.setItem('appData', appData);
-          }
-          else{ //如果没有请求到数据，那么有可能是浏览器不允许跨域，或者URL，服务器出问题了
-            //使用内置数据
-            _this.showList = [
-              {url: 'http://www.casic.com.cn/n101/index.html',img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/c.png',title: ''},
-              {url: 'http://www.casic.com.cn/n101/index.html', img: 'http://puge-10017157.cossh.myqcloud.com/tianzhi/d.png', title: ''}
-            ]
-            Order.$emit('Toast', '轮播图数据获取失败')
-          }
+          myData = receive
         });
         foo.slidesshow(JSON.stringify({type:"5"}))
       })
       //--------------------------------------------------应用处理阶段--------------------------------------------------
-      if(appData.appList != null){
-        _this.appList = appData.appList
+      if(_this.appData.appList != null){
+        _this.appList = _this.appData.appList
       }
       const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
       //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
@@ -148,10 +150,10 @@ export default {
         _this.appList["bangongxitong"].available = true
       }
       _this.appList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
-      appData.appList = _this.appList
+      _this.appData.appList = _this.appList
       //--------------------------------------------------------------------------------------------------------------
       //把更改的 *应用数据* 存入数据库
-      localforage.setItem('appData', appData,function (err){
+      localforage.setItem('appData', _this.appData,function (err){
         if(err){
           Order.$emit('Toast', '缓存用户数据失败')
         }

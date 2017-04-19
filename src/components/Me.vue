@@ -21,6 +21,7 @@ import P42 from './panel/P42'
 import {post, timeoutDetection} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
+import { QWebChannel } from  "./QTWebChannel"
 export default {
   components: {
     TitleBar,

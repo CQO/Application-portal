@@ -26,6 +26,8 @@ import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
 import {timeoutDetection, orgData} from "./method.js" 
+import { QWebChannel } from  "./QTWebChannel"
+var myData = null
 export default {
   components: {
     TitleBar,
@@ -34,9 +36,21 @@ export default {
     Organization
   },
   created () {
+    const _this = this
     Order.$on('Toast', function(message) { this.searchText = message }) //注册搜索
     //超时检测
     if(timeoutDetection()) return null
+    function pre(){
+      if(myData === null){
+        return null
+      }
+      orgData.orgTree.push({name:myData[1],id:myData[2]})
+      orgData.orgList[myData[2]] = JSON.parse(myData[0])
+      _this.List = orgData.orgList[id]
+      _this.tree = orgData.orgTree
+      myData = null
+    }
+    setInterval(pre,1000)
     this.clickTree({name:"中国航天科工集团",id:"1"},0)
   },
   methods: {
@@ -45,11 +59,8 @@ export default {
       this.List = null
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
-        foo.callback.connect( function(receive) {
-          orgData.orgTree.push({name:name,id:id})
-          orgData.orgList[id] = JSON.parse(receive)
-          _this.List = orgData.orgList[id]
-          _this.tree = orgData.orgTree
+        foo.connect( function(receive) {
+          myData = [receive,name,id]
         });
         foo.getSonOrgs(id)
       })
