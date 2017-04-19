@@ -45,10 +45,11 @@ export default {
     }
   },
   created(){
-    localforage.getItem("appData",(err,appData) =>{
+    const _this = this
+    localforage.getItem("appData",function(err,appData){
       //超时检测
       if(timeoutDetection()) return null
-      this.userName = appData.userData.userName
+      _this.userName = appData.userData.userName
     })
   },
   data () {

@@ -34,7 +34,7 @@ export default {
     Organization
   },
   created () {
-    Order.$on('Toast', (message) => { this.searchText = message }) //注册搜索
+    Order.$on('Toast', function(message) { this.searchText = message }) //注册搜索
     //超时检测
     if(timeoutDetection()) return null
     this.clickTree({name:"中国航天科工集团",id:"1"},0)

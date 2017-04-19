@@ -111,7 +111,8 @@ export default {
     localforage.getItem("appData",function(err,appData){
       //超时检测
       if(timeoutDetection()) return null
-      const userData = _this.userData = appData.userData
+      const userData =  appData.userData
+      _this.userData = appData.userData
       //轮播图处理阶段
       if( appData !== null && appData.showList != null){ _this.showList = appData.showList; return null}
       //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
@@ -121,7 +122,8 @@ export default {
         foo.callback.connect(function(receive) {
           if(receiveData !=="" && receiveData !==null){
             const Data = JSON.parse(receiveData);
-            _this.showList = appData.showList = Data
+            _this.showList  = Data
+            appData.showList = Data
             localforage.setItem('appData', appData);
           }
           else{ //如果没有请求到数据，那么有可能是浏览器不允许跨域，或者URL，服务器出问题了

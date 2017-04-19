@@ -28,11 +28,12 @@ export default {
   methods: {
     //更改密码验证
     verification () { 
+      const _this = this
       if(this.oldPassword && this.password && this.repeatPassword) Order.$emit('Toast', '当前密码不正确'); return null; //密码验证
       if(this.password !== this.repeatPassword) return null; //密码验证
-      new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
+      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
-        foo.callback.connect( (receive) => {
+        foo.callback.connect( function(receive) {
           const Data = JSON.parse(receive);
           switch(Data.code){
             case 543 :  Order.$emit('Toast', '当前密码不正确') ; break;
@@ -42,7 +43,7 @@ export default {
             default : Order.$emit('Toast', Data.code) ;
           }
         });
-        const data = {oldPwd : this.oldPassword, newPwd : this.password}
+        const data = {oldPwd : _this.oldPassword, newPwd : _this.password}
         foo.changedPwd(JSON.stringify(data))
       })
     }

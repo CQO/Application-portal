@@ -14,7 +14,8 @@ export default {
     }
   },
   created () {
-    Order.$on('Toast', (message) => {
+    const _this = this
+    Order.$on('Toast', function(message) {
       this.text = message
       this.show = true
       const _this = this

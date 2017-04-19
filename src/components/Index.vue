@@ -31,7 +31,8 @@ import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import {post,Timestamp} from "./method.js"
 import localforage from 'localforage'
-
+import { QWebChannel } from  "./QTWebChannel"
+let preData = null
 export default {
   data () {
     return {
@@ -66,15 +67,15 @@ export default {
         // userName : 用户名
         // password : 密码
         const postData = {userName:_this.userName,password:_this.password};
-        Order.$emit('Loading', 'show')
-        //登陆请求
-        new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-          const foo = channel.objects.content;
-          foo.callback.connect(function(receive) {
+        function pre(){
+            if(preData === null){
+                setTimeout("pre()",1000);
+                return null
+            }
             Order.$emit('Loading', 'hide')
             //判断是否取到数据
-            if(receive !=="" && receive !==null){
-                const Data = JSON.parse(receive);
+            if(preData !=="" && preData !==null){
+                const Data = JSON.parse(preData);
                 switch(Data.length){
                   case 0  : Order.$emit('Toast', '登录失败'); break; 
                   //如果用户所属的组织只有一个，那么自动帮用户选择登录
@@ -85,6 +86,16 @@ export default {
             else{
                 Order.$emit('Toast', '登录信息错误')
             }
+            preData = null
+            setTimeout("pre()",1000);
+        }
+        setTimeout("pre()",1000);
+        Order.$emit('Loading', 'show')
+        //登陆请求
+        new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+          const foo = channel.objects.content;
+          foo.callback.connect(function(receive) {
+            preData = receive
           });
           foo.preLogin(JSON.stringify(postData))
         });
