@@ -34,16 +34,15 @@ export default {
     }
   },
   created(){
-    const _this = this
     //从本地数据库中取出用户数据
-    localforage.getItem("appData",function(err,appData){
+    localforage.getItem("appData",(err,appData) => {
       //拷贝一份 *应用数据* 里的 *用户数据*
       const userData = appData.userData
 
       if(timeoutDetection()) { return null } //超时检测
       if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
       if(userData.key != "1") { return null } //集团用户检测
-      if(appData.notice){ _this.notice = appData.notice } //缓存检测
+      if(appData.notice){ this.notice = appData.notice } //缓存检测
       else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
         //拉取数据的URL
         const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
@@ -62,7 +61,7 @@ export default {
             }
           }
           // 将 *应用数据* 显示在界面上
-          _this.notice = appData.noticeData
+          this.notice = appData.noticeData
           // 将修改后的 *应用数据* 覆盖原来的应用数据
           localforage.setItem('appData', appData,function (err){
             if(err !== null){ //错误处理

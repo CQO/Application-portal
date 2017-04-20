@@ -12,7 +12,7 @@
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
-    Organization(v-for="item in List.orgusers",:name="item.enName",:text="item.orgName")
+    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName")
     .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
@@ -27,6 +27,7 @@ import Organization from './list/Organization'
 import { Order } from './Order.js'
 import {timeoutDetection, orgData} from "./method.js" 
 import { QWebChannel } from  "./QTWebChannel"
+import localforage from 'localforage'
 var myData = null;
 export default {
   components: {
@@ -38,6 +39,11 @@ export default {
   created () {
     "use strict";
     const _this = this
+    localforage.getItem("appData",function(err,appData){
+      //超时检测
+      if(timeoutDetection()) return null
+      _this.userData = appData.userData
+    })
     new QWebChannel(navigator.qtWebChannelTransport, function(channel) {  
       _this.foo = channel.objects.content;
     });
@@ -65,7 +71,8 @@ export default {
         //if(subOrgNum === 0) document.write(receive)
         myData = [receive,name,id]
       });
-      if(subOrgNum === 0) _this.foo.queryEnOS(id)
+      const enOS = { enterId: 602, orgId: id,type: 3 }
+      if(subOrgNum === 0) {_this.foo.queryEnOS(JSON.stringify(enOS));}
       else _this.foo.getSonOrgs(id)
     },
     clickTree:function(item, key){
@@ -88,35 +95,27 @@ export default {
         "code": 0,
         "contactVisible": 1,
         "orgs": [
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011010","orgID": 10,"orgName": "中国航天科工防御技术研究院","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工防御技术研究院","subOrgNum": 24,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011015","orgID": 254,"orgName": "中国航天科工运载技术研究院","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工运载技术研究院","subOrgNum": 30,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011016","orgID": 488,"orgName": "航天工业机关服务中心","parentOrgID": 1,"remark": "中国航天科工集团公司-航天工业机关服务中心","subOrgNum": 10,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011005","orgID": 232,"orgName": "中国航天建设集团有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天建设集团有限公司","subOrgNum": 14,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011011","orgID": 992,"orgName": "中国华腾工业有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-中国华腾工业有限公司","subOrgNum": 15,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011001","orgID": 212,"orgName": "中国航天科工动力技术研究院","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工动力技术研究院","subOrgNum": 15,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 2,"orderNum": 999,"orgCode": "10011009","orgID": 207,"orgName": "航天晨光股份有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天晨光股份有限公司","subOrgNum": 29,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011020","orgID": 1993,"orgName": "航天工业发展股份有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天工业发展股份有限公司","subOrgNum": 21,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011003","orgID": 1963,"orgName": "航天云网科技发展有限责任公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天云网科技发展有限责任公司","subOrgNum": 19,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011014","orgID": 418,"orgName": "河南航天工业总公司","parentOrgID": 1,"remark": "中国航天科工集团公司-河南航天工业总公司","subOrgNum": 15,"subUserNum": 1},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011017","orgID": 395,"orgName": "湖南航天有限责任公司","parentOrgID": 1,"remark": "中国航天科工集团公司-湖南航天有限责任公司","subOrgNum": 26,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011008","orgID": 363,"orgName": "航天精工股份有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天精工股份有限公司","subOrgNum": 4,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011004","orgID": 2146,"orgName": "深圳航天工业技术研究院有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-深圳航天工业技术研究院有限公司","subOrgNum": 22,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011013","orgID": 607,"orgName": "航天信息股份有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天信息股份有限公司","subOrgNum": 89,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011018","orgID": 606,"orgName": "航天通信控股集团股份有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天通信控股集团股份有限公司","subOrgNum": 18,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 2,"orderNum": 999,"orgCode": "10011012","orgID": 604,"orgName": "航天科工财务有限责任公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天科工财务有限责任公司","subOrgNum": 13,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011019","orgID": 90,"orgName": "中国航天科工飞航技术研究院","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工飞航技术研究院","subOrgNum": 34,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011021","orgID": 596,"orgName": "中国航天科工集团公司培训中心","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工集团公司培训中心","subOrgNum": 8,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011022","orgID": 584,"orgName": "中国航天汽车有限责任公司","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天汽车有限责任公司","subOrgNum": 20,"subUserNum": 48},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011007","orgID": 317,"orgName": "中国航天科工集团贵州航天技术研究院","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工集团贵州航天技术研究院","subOrgNum": 25,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011002","orgID": 792,"orgName": "航天科工资产管理有限公司","parentOrgID": 1,"remark": "中国航天科工集团公司-航天科工资产管理有限公司","subOrgNum": 21,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 999,"orgCode": "10011006","orgID": 10000,"orgName": "中国航天科工信息技术研究院","parentOrgID": 1,"remark": "中国航天科工集团公司-中国航天科工信息技术研究院","subOrgNum": 21,"subUserNum": 0},
-          {"enterpriseID": 454,"leaf": 1,"orderNum": 9999900000,"orgCode": "10011023","orgID": 2920082167275313,"orgName": "集团公司总部","parentOrgID": 1,"remark": "中国航天科工集团公司-集团公司总部","subOrgNum": 19,"subUserNum": 0}
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051006","orgID": 1642,"orgName": "北京航天龙华建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-北京航天龙华建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051011","orgID": 885,"orgName": "北京市航云建筑工程有限责任公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-北京市航云建筑工程有限责任公司","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051007","orgID": 384,"orgName": "贵州航天房地产开发有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-贵州航天房地产开发有限公司","subOrgNum": 1,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051005","orgID": 407,"orgName": "湖南航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-湖南航天建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051009","orgID": 424,"orgName": "河南航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-河南航天建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051001","orgID": 955,"orgName": "航天建设集团深圳有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-航天建设集团深圳有限公司","subOrgNum": 3,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051010","orgID": 981,"orgName": "湖北三江航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-湖北三江航天建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 1,"orderNum": 999,"orgCode": "100110051004","orgID": 236,"orgName": "中航天建设工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-中航天建设工程有限公司","subOrgNum": 3,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 1,"orderNum": 999,"orgCode": "100110051013","orgID": 237,"orgName": "陕西航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-陕西航天建筑工程有限公司","subOrgNum": 3,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051012","orgID": 238,"orgName": "航天建筑设计研究院有限公司勘察设计研究院","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-航天建筑设计研究院有限公司勘察设计研究院","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051002","orgID": 245,"orgName": "北京航天华阳环境工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-北京航天华阳环境工程有限公司","subOrgNum": 5,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051003","orgID": 248,"orgName": "华航置业有限责任公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-华航置业有限责任公司","subOrgNum": 2,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051008","orgID": 250,"orgName": "陕西航天房地产开发有限责任公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-陕西航天房地产开发有限责任公司","subOrgNum": 3,"subUserNum": 0},
+          {"enterpriseID": 602,"leaf": 1,"orderNum": 9999900000,"orgCode": "100110051014","orgID": 2920082167264271,"orgName": "院本部","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-院本部","subOrgNum": 37,"subUserNum": 0}
         ],
         "orgusers": []
       },
       searchText:"",
       tree:[{name:"中国航天科工集团公司",id:"1"}],
-      foo: null
+      foo: null,
+      userData: null
     }
   },
 }

@@ -9,44 +9,37 @@
   input(v-model="repeatPassword", type="text")
   .prompt 建议:密码长度为8-16位，至少有数字、字母或符号的两种组合，字母区分大小写
   .button(v-on:click="verification") 确定
-  Loading(text="正在登录...")
   Toast
 </template>
 
 
 <script>
 import TitleBar from '../brick/Title'
-import Loading from '../brick/Loading'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
 import { QWebChannel } from  "../QTWebChannel"
 export default {
   components: {
     TitleBar,
-    Loading,
     Toast
-  },
-  created(){
-    Order.$on('back', (msg) => {
-      this.password = "sdsd"
-    })
   },
   methods: {
     //更改密码验证
     verification () { 
       const _this = this
-      // if(this.oldPassword && this.password && this.repeatPassword) Order.$emit('Toast', '当前密码不正确'); return null; //密码验证
-      // if(this.password !== this.repeatPassword) return null; //密码验证
+      if(!this.oldPassword || !this.password || !this.repeatPassword) {Order.$emit('Toast', '当前密码不正确'); return null;} //密码验证
+      if(this.password !== this.repeatPassword) {Order.$emit('Toast', '密码不一致'); return null;} //密码验证
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         foo.callback.connect( function(receive) {
           const Data = JSON.parse(receive);
+          Order.$emit('Toast', Data.code) ;
           switch(Data.code){
             case 543 :  Order.$emit('Toast', '当前密码不正确') ; break;
             case 542 :  Order.$emit('Toast', '新密码不合法') ; break;
             case 541 :  Order.$emit('Toast', '用户不存在') ; break;
-            case 0 :  Order.$emit('Toast', '修改成功') ; history.go(-1); break;
-            default : Order.$emit('Toast', Data.code) ;
+            case 0   :  Order.$emit('Toast', '修改成功') ;  break;
+            default  :  Order.$emit('Toast', `遇到错误:${Data.code}`) ;
           }
         });
         const data = {oldPwd : _this.oldPassword, newPwd : _this.password}
@@ -56,9 +49,9 @@ export default {
   },
   data () {
     return {
-      oldPassword:"",
-      password:"",
-      repeatPassword:""
+      oldPassword:"123456",
+      password:"123456",
+      repeatPassword:"123456"
     }
   },
 }
