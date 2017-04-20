@@ -28,13 +28,14 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { post, timeoutDetection} from "./method.js" 
+import { timeoutDetection } from "./method.js" 
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"
-
+//------------------触摸控件------------------
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
+//-------------------------------------------
 var myData = null
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
@@ -53,7 +54,6 @@ export default {
     return {
       index: 0,
       showList: [],
-      userData:null,
       appList  : null,
       selectNumber:0,
       appData:null
@@ -61,9 +61,10 @@ export default {
   },
   created(){
     const _this = this;
-    function pre(){
+    //检测函数
+    function detection(){
       if(myData === null){
-        setTimeout(pre,1000)
+        setTimeout(detection,1000)
         return null
       }
       const Data = JSON.parse(myData);
@@ -71,16 +72,14 @@ export default {
       _this.appData.showList = Data
       localforage.setItem('appData', _this.appData);
     }
-    setTimeout(pre,1000)
+    //定时器
+    setTimeout(detection,1000)
     localforage.getItem("appData",(err,appData) => {
-      //超时检测
-      if(timeoutDetection()) return null
+      if( timeoutDetection() ) { return null} //时间处理
       this.appData = appData
-      const userData =  appData.userData
-      this.userData = appData.userData
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //检测缓存是否存在
-      if( this.appData && this.appData.showList && this.appData.appList ){ 
+      if( appData && appData.showList ){ 
         Order.$emit('Toast', '使用缓存')
         //替换轮播图数据
         this.showList = appData.showList
@@ -104,13 +103,13 @@ export default {
         youjian:{id: "10002", name: "邮件", icon: $youjian,url: '', special: "url", type: "office", detail:"版本号:1.6",isSelect: false,available: true,exist:true},
         xinxifabu:{id: "10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', special: "url", type:"office" ,detail:"版本号:0.8",isSelect: false,available: true,exist:true}
       }
-      const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
+      const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+appData.userData.userName+'&PID='+appData.userData.idCard+'&webService=&SessionID='
       //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
-      if(userData.key == "1"){
+      if(appData.userData.key !== "1"){
         newAppList["bangongxitong"].url = BanGongURL
         newAppList["bangongxitong"].available = true
       }
-      newAppList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
+      newAppList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard
       this.appList = newAppList
       this.appData.appList = newAppList
       //--------------------------------------------------------------------------------------------------------------
@@ -131,7 +130,7 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=" + this.userData.idCard,
+        "scheme":"linkdood:showlinkdood?id=" + this.appData.userData.idCard,
         "name":"linkdood"
       };
       //打开应用
@@ -177,6 +176,7 @@ export default {
       const oldList = this.appList,
             _this   = this;
       let   mark    = false ;//用于标记用户是否有删除app
+      this.selectNumber = 0
       for(let item in oldList){
         //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
         if(oldList[item].isSelect){ 

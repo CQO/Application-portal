@@ -67,4 +67,8 @@ let orgData = {
   orgTree : []
 };
 
-export {get, cutString, post, Timestamp, timeoutDetection, orgData};
+let theUser = {
+  name : ""
+};
+
+export {get, cutString, post, Timestamp, timeoutDetection, orgData, theUser};

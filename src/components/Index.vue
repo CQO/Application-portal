@@ -28,7 +28,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {post,Timestamp} from "./method.js"
+import {post,Timestamp,theUser} from "./method.js"
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"
 var preData = [0,null]
@@ -48,6 +48,7 @@ export default {
   created(){
     //清空全局变量
     preData = [0,null]
+    //document.write(theUser.name)
     //建立传输通道
     new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         this.foo = channel.objects.content;
