@@ -49,9 +49,20 @@ export default {
   },
   data () {
     return {
-      oldPassword:"123456",
-      password:"123456",
-      repeatPassword:"123456"
+      oldPassword:"",
+      password:"",
+      repeatPassword:""
+    }
+  },
+  watch: {
+    oldPassword(val) {
+      this.oldPassword = this.oldPassword.replace(/[^\w\.\/]/ig,'')
+    },
+    password(val) {
+      this.password = this.password.replace(/[^\w\.\/]/ig,'')
+    },
+    repeatPassword(val) {
+      this.oldPassword = this.repeatPassword.replace(/[^\w\.\/]/ig,'')
     }
   },
 }

@@ -22,7 +22,7 @@ export default {
   },
   watch: {
     searchText(val) {
-      Order.$emit('Toast', val)
+      Order.$emit('Search', val)
     }
   }
 }

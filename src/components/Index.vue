@@ -35,8 +35,8 @@ var preData = [0,null]
 export default {
   data () {
     return {
-      userName: '刘霞',
-      password:'123456',
+      userName: '',
+      password:'',
       selectList:null,
       foo: null
     }
@@ -48,7 +48,7 @@ export default {
   created(){
     //清空全局变量
     preData = [0,null]
-    //document.write(theUser.name)
+    if(theUser.name) this.userName = theUser.name
     //建立传输通道
     new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         this.foo = channel.objects.content;
@@ -116,6 +116,7 @@ export default {
       const _this    = this,
             userName = this.userName,
             password = this.password;
+      theUser.name = userName
       //判断用户名和密码是否为空
       if(userName === "" || password === ""){ Order.$emit('Toast', '请输入账号和密码') }
       else{

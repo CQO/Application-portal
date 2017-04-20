@@ -18,10 +18,12 @@
 
 <script>
 import { Checker, CheckerItem } from 'vux'
-import Search from '../panel/Search'
+import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import { post} from "../method.js" 
 import localforage from 'localforage'
+import { QWebChannel } from  "../QTWebChannel"
+import { Order } from '../Order.js'
 //引入图片资源
 const $tiangongyuanyuan = require('../../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../../assets/xinxifabu.png'),
@@ -40,6 +42,9 @@ export default {
       _this.appData = appData
       _this.appList = appData.appList
     })
+    Order.$on('Search', function(message) {
+      _this.text = message
+    })
   },
   methods: {
     onIndexChange: function(index) {
@@ -56,7 +61,7 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id="+this.idCard,
+        "scheme":"linkdood:showlinkdood?id=" + this.appData.userData.idCard,
         "name":"linkdood"
       };
       //打开应用
@@ -79,7 +84,8 @@ export default {
     return {
       select: 'all',
       appList: {},
-      appData: null
+      appData: null,
+      text:""
     }
   },
   computed: {
@@ -91,7 +97,9 @@ export default {
         //判断应用列表的类型是否和选择的类型一致
         if(_this.select === "all" || _this.appList[item].type === _this.select){
           if(_this.appList[item].available === true) {
-            newList[item] = _this.appList[item]
+            if(_this.text =="" || _this.appList[item].name.indexOf(_this.text) > -1) {
+              newList[item] = _this.appList[item]
+            }
           }
         }
       }

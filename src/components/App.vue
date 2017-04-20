@@ -80,7 +80,6 @@ export default {
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //检测缓存是否存在
       if( appData && appData.showList ){ 
-        Order.$emit('Toast', '使用缓存')
         //替换轮播图数据
         this.showList = appData.showList
         //替换应用列表数据
@@ -105,7 +104,7 @@ export default {
       }
       const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+appData.userData.userName+'&PID='+appData.userData.idCard+'&webService=&SessionID='
       //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
-      if(appData.userData.key !== "1"){
+      if(appData.userData.key == "1"){
         newAppList["bangongxitong"].url = BanGongURL
         newAppList["bangongxitong"].available = true
       }

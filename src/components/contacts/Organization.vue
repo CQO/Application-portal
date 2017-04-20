@@ -20,7 +20,7 @@
 <script>
 import Organization from '../list/Organization';
 import TitleBar from '../brick/Title'
-import Search from '../panel/Search'
+import Search from '../brick/Search'
 import BottomBar from '../brick/Bottom'
 export default {
   components: {
