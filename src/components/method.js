@@ -53,7 +53,8 @@ let Timestamp = {value:null};
 const timeoutDetection = function(){
   const nowTime = new Date().getTime();
   //检测距离上次操作是否已经过去1200000毫秒(20分钟)
-  if(nowTime - Timestamp.value > 1200000){
+  if(nowTime - Timestamp.value > 120000){
+    if( Timestamp.value === null ) {return false;}//数据清楚检测
     window.location.href="#/TimeOut";
     return true;
   }

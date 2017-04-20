@@ -37,7 +37,6 @@ export default {
     Organization
   },
   created () {
-    "use strict";
     const _this = this
     localforage.getItem("appData",function(err,appData){
       //超时检测
@@ -61,7 +60,7 @@ export default {
       myData = null
       _this.tree = orgData.orgTree
     }
-    const time = setInterval(pre,1000);    
+    this.interval = setInterval(pre,1000);    
   },
   methods: {
     load:function(name,id,subOrgNum){
@@ -87,6 +86,9 @@ export default {
         this.load(item.name,item.id)
       }  
     }
+  },
+  beforeDestroy(){
+    clearInterval(this.interval);
   },
   data () {
     return {
@@ -115,7 +117,8 @@ export default {
       searchText:"",
       tree:[{name:"中国航天科工集团公司",id:"1"}],
       foo: null,
-      userData: null
+      userData: null,
+      interval: null
     }
   },
 }

@@ -2,14 +2,14 @@
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
   swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
-  AppTitle(title="办公类")
+  AppTitle(title="办公类",v-show="appList")
   .grid
     .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'office'")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
       .choose.ico(v-show="item.isSelect") &#xe608;
-  AppTitle(title="通讯类")
+  AppTitle(title="通讯类",v-show="appList")
   .grid
     .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'communication'")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
@@ -54,56 +54,7 @@ export default {
       index: 0,
       showList: [],
       userData:null,
-      appList  : {
-        tiangongyuanyuan:{
-          id: "10000", 
-          name: "天工圆圆", 
-          icon: $tiangongyuanyuan,
-          url: '', 
-          special: "open", 
-          type: "communication",
-          detail:"版本号:1.41",
-          isSelect: false,
-          available: true,
-          exist:true
-        },
-        bangongxitong:{
-          id:"10004", 
-          name:"协同办公", 
-          icon:$bangongxitong,
-          url:'', 
-          special:"url", 
-          type:"office",
-          detail:"版本号:0.2",
-          isSelect:false,
-          available: false,
-          exist:true
-        },
-        youjian:{
-          id: "10002", 
-          name: "邮件", 
-          icon: $youjian,
-          url: '', 
-          special: "url", 
-          type: "office", 
-          detail:"版本号:1.6",
-          isSelect: false,
-          available: true,
-          exist:true
-        },
-        xinxifabu:{
-          id: "10001", 
-          name: "信息发布", 
-          icon: $xinxifabu, 
-          url: 'http://info.casic.cs/jeecms2/index/mobile/', 
-          special: "url", 
-          type:"office" ,
-          detail:"版本号:0.8",
-          isSelect: false,
-          available: true,
-          exist:true
-        }
-      },
+      appList  : null,
       selectNumber:0,
       appData:null
     }
@@ -121,14 +72,22 @@ export default {
       localforage.setItem('appData', _this.appData);
     }
     setTimeout(pre,1000)
-    localforage.getItem("appData",function(err,appData){
+    localforage.getItem("appData",(err,appData) => {
       //超时检测
-      //if(timeoutDetection()) return null
-      _this.appData = appData
+      if(timeoutDetection()) return null
+      this.appData = appData
       const userData =  appData.userData
-      _this.userData = appData.userData
-      //轮播图处理阶段
-      if( _this.appData !== null && _this.appData.showList != null){ _this.showList = _this.appData.showList; return null}
+      this.userData = appData.userData
+      //--------------------------------------------------轮播图处理阶段--------------------------------------------------
+      //检测缓存是否存在
+      if( this.appData && this.appData.showList && this.appData.appList ){ 
+        Order.$emit('Toast', '使用缓存')
+        //替换轮播图数据
+        this.showList = appData.showList
+        //替换应用列表数据
+        this.appList = appData.appList
+        return null
+      }
       //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
       //向后台发送获取轮播图数据请求 {type:5}是约定的字段
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
@@ -139,20 +98,24 @@ export default {
         foo.slidesshow(JSON.stringify({type:"5"}))
       })
       //--------------------------------------------------应用处理阶段--------------------------------------------------
-      if(_this.appData.appList != null){
-        _this.appList = _this.appData.appList
+      let newAppList = {
+        tiangongyuanyuan:{id: "10000", name: "天工圆圆", icon: $tiangongyuanyuan,url: '', special: "open", type: "communication",detail:"版本号:1.41",isSelect: false,available: true,exist:true},
+        bangongxitong:{id:"10004", name:"协同办公", icon:$bangongxitong,url:'', special:"url", type:"office",detail:"版本号:0.2",isSelect:false,available: false,exist:true},
+        youjian:{id: "10002", name: "邮件", icon: $youjian,url: '', special: "url", type: "office", detail:"版本号:1.6",isSelect: false,available: true,exist:true},
+        xinxifabu:{id: "10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', special: "url", type:"office" ,detail:"版本号:0.8",isSelect: false,available: true,exist:true}
       }
       const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService=&SessionID='
       //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
       if(userData.key == "1"){
-        _this.appList["bangongxitong"].url = BanGongURL
-        _this.appList["bangongxitong"].available = true
+        newAppList["bangongxitong"].url = BanGongURL
+        newAppList["bangongxitong"].available = true
       }
-      _this.appList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
-      _this.appData.appList = _this.appList
+      newAppList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+userData.idCard
+      this.appList = newAppList
+      this.appData.appList = newAppList
       //--------------------------------------------------------------------------------------------------------------
       //把更改的 *应用数据* 存入数据库
-      localforage.setItem('appData', _this.appData,function (err){
+      localforage.setItem('appData', this.appData,function (err){
         if(err){
           Order.$emit('Toast', '缓存用户数据失败')
         }

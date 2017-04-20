@@ -46,16 +46,20 @@ export default {
     Loading
   },
   created(){
+    //清空全局变量
+    preData = [0,null]
     //建立传输通道
     new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         this.foo = channel.objects.content;
     });
     //预登录方法
-    const stepOne = (preData) => {    
+    const stepOne = (receive) => {
+      preData[0] = 0
       Order.$emit('Loading', 'hide')
       //判断是否取到数据
-      if(preData !=="" && preData !==null){
-        const Data = JSON.parse(preData);
+      
+      if(receive !=="" && receive !==null){
+        const Data = JSON.parse(receive);
         switch(Data.length){
           case 0  : Order.$emit('Toast', '登录失败'); break; 
           //如果用户所属的组织只有一个，那么自动帮用户选择登录
@@ -71,16 +75,16 @@ export default {
     const stepTwo = (receive) => {
         preData[0] = 0;
         Order.$emit('Loading', 'hide')
-        const Data = JSON.parse(receive);
+        const Res = JSON.parse(receive.receive);
         //判断错误码是否为 0:成功 113:已登录
-        if(Data.code == 0 || Data.code == 113){
+        if(Res.code == 0 || Res.code == 113){
           //保存登陆用户信息和时间戳
           const nowTime = new Date().getTime()
-          const appData ={
+          const appData = {
             userData:{ //用户信息
-              userName : preData[2],   //用户名
-              idCard   : preData[4], //身份信息
-              key      : preData[5]  //ID
+              userName : receive.userName,   //用户名
+              idCard   : receive.idCard, //身份信息
+              key      : receive.key  //ID
             }, 
             Timestamp: nowTime //时间戳
           }
@@ -91,11 +95,11 @@ export default {
             clearInterval(time);
             window.location.href="#/Main"
           });
-          }
-          else{
-            this.selectList = null
-            Order.$emit('Toast', `登录失败 Code:${Data.code}`)
-          }
+        }
+        else{
+           this.selectList = null
+           Order.$emit('Toast', `登录失败 Code:${Res.code}`)
+        }
     }
     //定时器
     const time = setInterval(() => {
@@ -104,7 +108,6 @@ export default {
         case 1 : stepOne(preData[1]); break;
         case 2 : stepTwo(preData[1]); break;
       }
-      preData[0] = 0;
     },1000);
   },
   methods: {
@@ -136,7 +139,14 @@ export default {
       };
       Order.$emit('Loading', 'show')
       this.foo.callback.connect(function(receive) {
-        preData = [2,receive,name,num,idCard,unitId]
+        const data = {
+          receive:receive,
+          userName:name,
+          num:num,
+          idCard:idCard,
+          key:unitId
+        }
+        preData = [2,data]
       });
       this.foo.login(JSON.stringify(postData))
     }

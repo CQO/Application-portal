@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',v-on:click="window.location.href = url")
+    li(v-for='item in notice',v-on:click="goTo(url)")
       img.user-img(:src='item.img')
       .message
         p {{item.name}}
@@ -33,21 +33,24 @@ export default {
       notice: {}
     }
   },
+  goTo:function(url) {
+    window.location.href = url
+  },
   created(){
     //从本地数据库中取出用户数据
     localforage.getItem("appData",(err,appData) => {
       //拷贝一份 *应用数据* 里的 *用户数据*
       const userData = appData.userData
-
       if(timeoutDetection()) { return null } //超时检测
       if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
       if(userData.key != "1") { return null } //集团用户检测
-      if(appData.notice){ this.notice = appData.notice } //缓存检测
+      if(appData.notice){Order.$emit('Toast', '使用缓存'); this.notice = appData.notice } //缓存检测
       else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
         //拉取数据的URL
         const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
         //通过Get请求请求通知数据
         get( noticeURL, function(receive){
+          //document.write(receive)
           if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
           //给 *应用数据* 的备份 增加 *通知数据*
           appData.noticeData = {
@@ -131,6 +134,10 @@ export default {
       font-size: 12px;
       overflow: hidden;
     }
+  }
+  li:active{
+    background-color: #4899E0;
+    color: #FFF;
   }
 }
 </style>
