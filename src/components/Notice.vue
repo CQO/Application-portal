@@ -34,9 +34,6 @@ export default {
       notice: {}
     }
   },
-  goTo:function(url) {
-    window.location.href = url
-  },
   created(){
     const _this = this
     //从本地数据库中取出用户数据
@@ -76,6 +73,11 @@ export default {
       }
     })
   },
+  methods:{
+    goTo:function(url) {
+      window.location.href = url
+    }
+  }
 }
 </script>
 
