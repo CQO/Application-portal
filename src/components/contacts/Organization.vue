@@ -22,6 +22,7 @@ import Organization from '../list/Organization';
 import TitleBar from '../brick/Title'
 import Search from '../brick/Search'
 import BottomBar from '../brick/Bottom'
+import { timeoutDetection } from "../method.js" 
 export default {
   components: {
     Search,
@@ -40,6 +41,7 @@ export default {
   },
   created () {
     const _this = this
+    if( timeoutDetection() ) { return null} //时间处理
     new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
       const foo = channel.objects.content;
       foo.callback.connect(function(receive) {

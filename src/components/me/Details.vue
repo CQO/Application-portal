@@ -16,12 +16,14 @@
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
+import { timeoutDetection } from "../method.js" 
 export default {
   components: {
     Pa42,
     TitleBar
   },
   created(){
+    if( timeoutDetection() ) { return null} //时间处理
     localforage.getItem("appData",(err,appData) =>{
       this.name = appData.userData.userName
       this.phoneNumber = appData.userData.phoneNumber

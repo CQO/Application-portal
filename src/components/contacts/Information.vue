@@ -10,22 +10,27 @@
     .Pan42(v-on:click="call")
       .item 职位
       .text 产品经理
-    .message
-      p 联系方式
-      .chat.ico(v-on:click="yuanyuan") &#xe60a;
-      .mess.ico(v-on:click="sendMes") &#xe619;
-    .Pan42(v-on:click="call")
+      
+    .Pan42
       .item 手机号码
-      .text 18092852085
-    
+      .text(v-on:click.stop="call") 18092852085
+      .call-box
+        .chat.ico(v-on:click.stop="yuanyuan") &#xe60a;
+        .mess.ico(v-on:click.stop="sendMes") &#xe619;
 </template>
 
 <script>
 import TitleBar from '../brick/Title'
 import {post} from "../method.js" 
+import { QWebChannel } from  "../QTWebChannel"
 export default {
   components: {
     TitleBar
+  },
+  data () {
+    return {
+      number:"18092852085"
+    }
   },
   methods: {
     sendMes:function(){
@@ -37,11 +42,10 @@ export default {
       });
     },
     call:function(){
-      const data={call:this.text};
       //打电话
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+      new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         const foo = channel.objects.content;
-        foo.callPhone(JSON.stringify(data))
+        foo.callPhone(this.number)
       });
     },
     yuanyuan:function(){
@@ -58,7 +62,7 @@ export default {
         foo.opensopApp(JSON.stringify(app1))
       });
     }
-  }
+  },
 }
 </script>
 
@@ -66,23 +70,7 @@ export default {
 .details,.phone{
   margin: 20px 0;
 }
-.message{
-  height: 42px;
-  line-height: 42px;
-  padding: 0 15px;
-  background-color: white;
-  display: flex;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #eaeaea;
-  p{
-    width: 65px;
-  }
-  .ico{
-    margin: 0 10px;
-    font-size: 1.2rem;
-    color: burlywood;
-  }
-}
+
 .Pan42{
   height: 42px;
   line-height: 42px;
@@ -95,8 +83,16 @@ export default {
     width: 65px;
   }
   .text{
-    width: 65px;
+    width: 160px;
     margin: 0 10px;
+  }
+  .ico{
+    margin: 0 10px;
+    font-size: 1.2rem;
+    color: burlywood;
+  }
+  .ico:active{
+    color: skyblue;
   }
 }
 .pre-inf{

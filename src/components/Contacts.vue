@@ -115,7 +115,7 @@ export default {
         "orgusers": []
       },
       searchText:"",
-      tree:[{name:"中国航天科工集团公司",id:"1"}],
+      tree:[{ name:"中国航天科工集团公司",id:"1" }],
       foo: null,
       userData: null,
       interval: null

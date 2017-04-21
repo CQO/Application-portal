@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',v-on:click="goTo(url)")
+    li(v-for='item in notice',v-on:click="goTo(item.url)")
       img.user-img(:src='item.img')
       .message
         p {{item.name}}
@@ -42,7 +42,7 @@ export default {
       const userData = appData.userData
       if(timeoutDetection()) { return null } //超时检测
       if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
-      //if(userData.key != "1") { return null } //集团用户检测
+      if(userData.key != "1") { return null } //集团用户检测
       if(appData.notice){Order.$emit('Toast', '使用缓存'); this.notice = appData.notice } //缓存检测
       else{ //在 *应用数据* 中 没有 *通知数据* 那么证明是第一次显示 或者 以前没有拉取成功过 需要拉取数据并保存
         //拉取数据的URL

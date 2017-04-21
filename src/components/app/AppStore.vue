@@ -24,6 +24,7 @@ import { post} from "../method.js"
 import localforage from 'localforage'
 import { QWebChannel } from  "../QTWebChannel"
 import { Order } from '../Order.js'
+import { timeoutDetection } from "../method.js" 
 //引入图片资源
 const $tiangongyuanyuan = require('../../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../../assets/xinxifabu.png'),
@@ -38,6 +39,7 @@ export default {
   },
   created(){
     const _this = this
+    if( timeoutDetection() ) { return null} //时间处理
     localforage.getItem("appData",function(err,appData){
       _this.appData = appData
       _this.appList = appData.appList

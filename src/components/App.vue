@@ -72,10 +72,10 @@ export default {
       _this.appData.showList = Data
       localforage.setItem('appData', _this.appData);
     }
+    if( timeoutDetection() ) { return null} //时间处理
     //定时器
     setTimeout(detection,1000)
     localforage.getItem("appData",(err,appData) => {
-      if( timeoutDetection() ) { return null} //时间处理
       this.appData = appData
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //检测缓存是否存在

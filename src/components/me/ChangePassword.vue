@@ -62,7 +62,7 @@ export default {
       this.password = this.password.replace(/[^\w\.\/]/ig,'')
     },
     repeatPassword(val) {
-      this.oldPassword = this.repeatPassword.replace(/[^\w\.\/]/ig,'')
+      this.repeatPassword = this.repeatPassword.replace(/[^\w\.\/]/ig,'')
     }
   },
 }
