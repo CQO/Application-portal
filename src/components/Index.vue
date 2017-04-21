@@ -85,7 +85,8 @@ export default {
             userData:{ //用户信息
               userName : receive.userName,   //用户名
               idCard   : receive.idCard, //身份信息
-              key      : receive.key  //ID
+              key      : receive.key,  //ID
+              gender   : 3
             }, 
             Timestamp: nowTime //时间戳
           }
@@ -140,7 +141,7 @@ export default {
         usbkeyidentification : idCard,
         password : this.password,
         unitId : unitId,
-        userName:name
+        userName:name,
       };
       Order.$emit('Loading', 'show')
       this.foo.callback.connect(function(receive) {

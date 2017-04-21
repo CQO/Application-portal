@@ -250,5 +250,6 @@ export default {
   text-align: center;
   height: 45px;
   line-height: 45px;
+  z-index: 999
 }
 </style>

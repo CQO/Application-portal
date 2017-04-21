@@ -5,8 +5,8 @@
     span.text 头像
     img(src="../../assets/user.png")
   .details
-    Pa42(item="姓名", :text="name",to="TimeOut")
-    Pa42(item="性别", text="未填写",to="GenderSetting")
+    Pa42(item="姓名", :text="name",to="GenderSetting")
+    Pa42(item="性别", :text="gender",to="GenderSetting")
   .phone
     .item 手机号码
     input(type="text",v-model="phoneNumber",v-on:change="phoneNumberChange")
@@ -25,6 +25,11 @@ export default {
   created(){
     if( timeoutDetection() ) { return null} //时间处理
     localforage.getItem("appData",(err,appData) =>{
+      switch(appData.userData.gender){
+        case 1 : this.gender = "男"; break;
+        case 2 : this.gender = "女"; break;
+        case 3 : this.gender = "未设置"; break;
+      }
       this.name = appData.userData.userName
       this.phoneNumber = appData.userData.phoneNumber
     })
@@ -32,7 +37,8 @@ export default {
   data () {
     return {
       phoneNumber:'',
-      name: ''
+      name: '',
+      gender: ''
     }
   },
   methods: {

@@ -61,10 +61,7 @@ export default {
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
       visible: true,
-      list1: [['小米', 'iPhone', '华为', '情怀', '三星', '其他', '不告诉你']],
-      value1: ['iPhone'],
       userName: '',
-      sexList:["未填写","男","女"],
       sex:""
     }
   }

@@ -7,7 +7,7 @@
         a(v-on:click="clickTree(item, key)") {{item.name}}
         span >
   ul.organization(v-if="List")
-    li(v-for="item in List.orgs",v-on:click="load(item.orgName,item.orgID,item.subOrgNum)")
+    li(v-for="item in List.depts",v-on:click="load(item.orgName,item.orgID,item.subOrgNum)")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
@@ -42,6 +42,7 @@ export default {
       //超时检测
       if(timeoutDetection()) return null
       _this.userData = appData.userData
+      _this.load("我的组织", appData.userData.key,1)
     })
     new QWebChannel(navigator.qtWebChannelTransport, function(channel) {  
       _this.foo = channel.objects.content;
@@ -70,9 +71,15 @@ export default {
         //if(subOrgNum === 0) document.write(receive)
         myData = [receive,name,id]
       });
-      const enOS = { enterId: 602, orgId: id,type: 3 }
-      if(subOrgNum === 0) {_this.foo.queryEnOS(JSON.stringify(enOS));}
-      else _this.foo.getSonOrgs(id)
+      
+      if(subOrgNum === 0) {
+        const enOS = { enterId: 602, orgId: id ,type: 3 }
+        _this.foo.queryEnOS(JSON.stringify(enOS));
+      }
+      else {
+        const enOS = { enterId: 602, orgId: id ,type: 4 }
+        _this.foo.queryEnOS(JSON.stringify(enOS));
+      }
     },
     clickTree:function(item, key){
       if(orgData.orgList[item.id] !== undefined){
@@ -92,30 +99,9 @@ export default {
   },
   data () {
     return {
-      List:{
-        "allowChat": 1,
-        "code": 0,
-        "contactVisible": 1,
-        "orgs": [
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051006","orgID": 1642,"orgName": "北京航天龙华建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-北京航天龙华建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051011","orgID": 885,"orgName": "北京市航云建筑工程有限责任公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-北京市航云建筑工程有限责任公司","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051007","orgID": 384,"orgName": "贵州航天房地产开发有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-贵州航天房地产开发有限公司","subOrgNum": 1,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051005","orgID": 407,"orgName": "湖南航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-湖南航天建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051009","orgID": 424,"orgName": "河南航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-河南航天建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051001","orgID": 955,"orgName": "航天建设集团深圳有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-航天建设集团深圳有限公司","subOrgNum": 3,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051010","orgID": 981,"orgName": "湖北三江航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-湖北三江航天建筑工程有限公司","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 1,"orderNum": 999,"orgCode": "100110051004","orgID": 236,"orgName": "中航天建设工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-中航天建设工程有限公司","subOrgNum": 3,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 1,"orderNum": 999,"orgCode": "100110051013","orgID": 237,"orgName": "陕西航天建筑工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-陕西航天建筑工程有限公司","subOrgNum": 3,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051012","orgID": 238,"orgName": "航天建筑设计研究院有限公司勘察设计研究院","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-航天建筑设计研究院有限公司勘察设计研究院","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051002","orgID": 245,"orgName": "北京航天华阳环境工程有限公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-北京航天华阳环境工程有限公司","subOrgNum": 5,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051003","orgID": 248,"orgName": "华航置业有限责任公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-华航置业有限责任公司","subOrgNum": 2,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 2,"orderNum": 999,"orgCode": "100110051008","orgID": 250,"orgName": "陕西航天房地产开发有限责任公司","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-陕西航天房地产开发有限责任公司","subOrgNum": 3,"subUserNum": 0},
-          {"enterpriseID": 602,"leaf": 1,"orderNum": 9999900000,"orgCode": "100110051014","orgID": 2920082167264271,"orgName": "院本部","parentOrgID": 232,"remark": "中国航天科工集团公司-中国航天建设集团有限公司-院本部","subOrgNum": 37,"subUserNum": 0}
-        ],
-        "orgusers": []
-      },
+      List: null,
       searchText:"",
-      tree:[{ name:"中国航天科工集团公司",id:"1" }],
+      tree:"",
       foo: null,
       userData: null,
       interval: null
