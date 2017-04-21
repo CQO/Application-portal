@@ -1,5 +1,5 @@
 <template lang="pug">
-router-link.organization-list(:to="'/Information/'+name")
+router-link.organization-list(:to="'/Information/'+ name + '/' + text")
   img.user-img(src='../../assets/user.png')
   .message
     p.name {{name}}

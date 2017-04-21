@@ -8,7 +8,7 @@
         p {{item.name}}
         p.text {{item.text}}
       .time {{item.time}}
-      .notice(v-if='item.notice') {{item.notice}}
+      .notice(v-if='item.notice != "0"') {{item.notice}}
   Toast
   BottomBar(index="0")
 </template>

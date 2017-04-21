@@ -98,8 +98,11 @@ export default {
           });
         }
         else{
-           this.selectList = null
-           Order.$emit('Toast', `登录失败 Code:${Res.code}`)
+          this.selectList = null
+          switch(Res.code){
+            case 112:  Order.$emit('Toast', `用户名或密码错误`); break;
+            default :  Order.$emit('Toast', `登录失败 Code:${Res.code}`)
+          }
         }
     }
     //定时器

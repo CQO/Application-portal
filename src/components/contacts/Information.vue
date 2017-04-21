@@ -5,7 +5,7 @@
     img(src="../../assets/user.png")
     .inf
         p.name.item {{$route.params.name}}
-        p.department.item 科研部
+        p.department.item {{$route.params.org}}
   .phone
     .Pan42(v-on:click="call")
       .item 职位
