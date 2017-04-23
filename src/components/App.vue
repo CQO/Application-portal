@@ -1,17 +1,17 @@
 <template lang="pug">
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
-  swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
-  AppTitle(title="办公类",v-show="appList")
+  swiper(:list="appData.showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
+  AppTitle(title="办公类",v-show="appData.appList")
   .grid
-    .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'office'")
+    .grid-item(v-for="(item,key) in appData.appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'office'")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
       .choose.ico(v-show="item.isSelect") &#xe608;
-  AppTitle(title="通讯类",v-show="appList")
+  AppTitle(title="通讯类",v-show="appData.appList")
   .grid
-    .grid-item(v-for="(item,key) in appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'communication'")
+    .grid-item(v-for="(item,key) in appData.appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'communication'")
       v-touch.touch(tag="div",v-on:press="pressItem(key)",v-on:tap="openStart(item.url, item.special, key)")
       img(slot="icon",:src="item.icon")
       p {{item.name}}
@@ -53,41 +53,32 @@ export default {
   data () {
     return {
       index: 0,
-      showList: [],
-      appList  : null,
-      selectNumber:0,
-      appData:null
+      selectNumber:0, //长按选中个数
+      appData:{
+        showList: null,
+        appList: null
+      }
     }
   },
   created(){
-    const _this = this;
-    //检测函数
-    function detection(){
+    if( timeoutDetection() ) { return null} //时间处理
+    //定时器
+    setTimeout( ()=> {
       if(myData === null){
         setTimeout(detection,1000)
         return null
       }
       const Data = JSON.parse(myData);
-      _this.showList  = Data
-      _this.appData.showList = Data
-      localforage.setItem('appData', _this.appData);
-    }
-    if( timeoutDetection() ) { return null} //时间处理
-    //定时器
-    setTimeout(detection,1000)
+      this.appData.showList = Data
+      localforage.setItem('appData', this.appData);
+    },1000)
+    //取数据库
     localforage.getItem("appData",(err,appData) => {
       this.appData = appData
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //检测缓存是否存在
-      if( appData && appData.showList ){ 
-        //替换轮播图数据
-        this.showList = appData.showList
-        //替换应用列表数据
-        this.appList = appData.appList
-        return null
-      }
-      //*应用数据* 或者 *轮播数据* 如果为空那就证明1.出了未知错误 2.第一次获取轮播数据或以前获取时获取失败了
-      //向后台发送获取轮播图数据请求 {type:5}是约定的字段
+      if( appData && appData.showList ){ return null }
+      //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         foo.callback.connect(function(receive) {
@@ -109,7 +100,6 @@ export default {
         newAppList["bangongxitong"].available = true
       }
       newAppList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard
-      this.appList = newAppList
       this.appData.appList = newAppList
       //--------------------------------------------------------------------------------------------------------------
       //把更改的 *应用数据* 存入数据库
@@ -139,11 +129,10 @@ export default {
       });
     },
     openStart:function(url,special,key){ //判断以何种方式打开应用
-      const _this = this
       //首先判断当前点击项目是否已经被选中
-      if(this.appList[key].isSelect === true){
+      if(this.appData.appList[key].isSelect === true){
         //如果被选中 那么将它取消选中
-        this.appList[key].isSelect = false
+        this.appData.appList[key].isSelect = false
         //选中计数减少1
         this.selectNumber--
       }
@@ -151,7 +140,7 @@ export default {
         //如果它没有被选中，但是在选择模式下
         if(this.selectNumber > 0){
           //将点击项改为选中状态
-          this.appList[key].isSelect = true
+          this.appData.appList[key].isSelect = true
           //计数加1
           this.selectNumber++
         }
@@ -167,36 +156,33 @@ export default {
     },
     pressItem:function(key){ //长按app事件
       //将对应的appItem改为可视
-      this.appList[key].isSelect = true
+      this.appData.appList[key].isSelect = true
       //计数加1
       this.selectNumber++
     },
     delateApp:function(){
-      const oldList = this.appList,
+      const oldList = this.appData.appList,
             _this   = this;
       let   mark    = false ;//用于标记用户是否有删除app
       this.selectNumber = 0
       for(let item in oldList){
         //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
-        if(oldList[item].isSelect){ 
+        if(this.appData.appList[item].isSelect){ 
           //将应用标记为不存在
-          oldList[item].exist = false
+          _this.appData.appList[item].exist = false
           //将应用标记为未选择
-          oldList[item].isSelect = false
+          _this.appData.appList[item].isSelect = false
           mark = true
         }
       }
       //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
       if(mark) {
         //把应用列表存储到起来
-        localforage.getItem("appData",function(err,appData){
-          appData.appList = _this.appList
-          localforage.setItem('appData', appData,function (err){
-            if(err){
-              Order.$emit('Toast', '缓存用户数据失败')
-            }
-          });
-        })
+        localforage.setItem('appData', this.appData,function (err){
+          if(err){
+            Order.$emit('Toast', '缓存用户数据失败')
+          }
+        });
       }
     }
   }
