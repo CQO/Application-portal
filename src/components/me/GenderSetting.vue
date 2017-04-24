@@ -14,8 +14,7 @@
 
 <script>
 import TitleBar from '../brick/Title'
-import { QWebChannel } from  "../QTWebChannel"
-import localforage from 'localforage'
+import { CHANNEL } from "../method.js" 
 export default {
   components: {
     TitleBar,
@@ -34,11 +33,7 @@ export default {
     }
   },
   beforeDestroy(){
-    const _this = this
-    new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.updateAccount(JSON.stringify({type:3, gander:_this.gender}))
-    });
+    CHANNEL.updateAccount(JSON.stringify({type:3, gander:_this.gender}))
   },
 }
 </script>

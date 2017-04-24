@@ -15,11 +15,8 @@
 <script>
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
-import localforage from 'localforage'
 import { Order } from '../Order.js'
 import { timeoutDetection, CHANNEL } from "../method.js" 
-import { QWebChannel } from  "../QTWebChannel"
-
 
 export default {
   components: {
