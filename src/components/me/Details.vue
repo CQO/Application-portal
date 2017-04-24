@@ -4,9 +4,9 @@
   .avatar
     span.text 头像
     img(src="../../assets/user.png")
-  .details
-    Pa42(item="姓名", :text="name",to="GenderSetting")
-    Pa42(item="性别", :text="gender",to="GenderSetting")
+  .details#details
+    Pa42(item="姓名", :text="name",to="/GenderSetting")
+    Pa42(item="性别", :text="gender",:to="'/GenderSetting/'+id")
   .phone
     .item 手机号码
     input(type="text",v-model="phoneNumber",v-on:change="phoneNumberChange")
@@ -17,7 +17,7 @@ import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
-import { timeoutDetection } from "../method.js" 
+import { timeoutDetection, CHANNEL } from "../method.js" 
 import { QWebChannel } from  "../QTWebChannel"
 
 
@@ -28,28 +28,22 @@ export default {
   },
   created(){
     if( timeoutDetection() ) { return null} //时间处理
-    const _this = this
     Order.$on('getAccountInfo', (msg) => {
       this.name = msg.name
       this.oldPhone = msg.phone
       this.phoneNumber = msg.phone
+      this.id = msg.gender
       switch(msg.gender){
         case 1 : this.gender = "男"; break;
         case 2 : this.gender = "女"; break;
         case 0 : this.gender = "保密"; break;
       }
-      this.$forceUpdate()
     })
-    new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-      //document.write(channel)
-      _this.communication = channel.objects.content;
-      _this.communication.callback.connect(function(receive) {
-        _this.phoneNumber = "sdsd"
-        Order.$emit('getAccountInfo', JSON.parse(receive))
-        //_this.$forceUpdate()
-      });
-      _this.communication.getAccountInfo()
-    })
+    CHANNEL.callback.connect((receive) => {
+      Order.$emit('getAccountInfo', JSON.parse(receive))
+      CHANNEL.callback.connect(null)
+    });
+    CHANNEL.getAccountInfo()
   },
   beforeDestroy(){
     if(this.oldPhone !== this.phoneNumber){
@@ -62,6 +56,7 @@ export default {
       phoneNumber:'',
       name: '',
       gender: '',
+      id:3,
       communication: null
     }
   },

@@ -18,7 +18,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {post, timeoutDetection, orgData} from "./method.js"
+import {timeoutDetection, orgData} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"

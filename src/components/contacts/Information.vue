@@ -21,7 +21,6 @@
 
 <script>
 import TitleBar from '../brick/Title'
-import {post} from "../method.js" 
 import { QWebChannel } from  "../QTWebChannel"
 export default {
   components: {

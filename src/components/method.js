@@ -35,18 +35,6 @@ const cutString = function(original,before,after,index){
     }
 };
 
-const post = function (url,data,fn) {
-  const postData = JSON.stringify(data);
-  const obj = new XMLHttpRequest();
-  obj.open("POST", url, true);
-  obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
-  obj.onreadystatechange = function () {
-    if (obj.readyState === 4 ) {  // 304未修改
-      fn.call(this, obj.responseText);
-    }
-  };
-  obj.send(postData);
-};
 
 let Timestamp = {value:null};
 
@@ -72,4 +60,10 @@ let theUser = {
   name : ""
 };
 
-export {get, cutString, post, Timestamp, timeoutDetection, orgData, theUser};
+import { QWebChannel } from  "./QTWebChannel"
+let CHANNEL = null;
+new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
+  CHANNEL = channel.objects.content;
+});
+
+export {get, cutString, Timestamp, timeoutDetection, orgData, theUser,CHANNEL};

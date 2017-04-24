@@ -3,6 +3,8 @@
     router-view
 </template>
 
+
+
 <style lang="less">
 p,ul{
   margin: 0;

@@ -13,21 +13,21 @@ var QWebChannelMessageTypes = {
     response: 10,
 };
 
-let cccccccc = {};
-
 const QWebChannel = function(transport, initCallback) {
     if (typeof transport !== "object" || typeof transport.send !== "function") {
         console.error(`QWebChannel参数一至少应为一个对象.transport：${typeof(transport)} transport.send：${typeof(transport.send)}`);
         return null;
     }
     var channel = this;
-    cccccccc.transport = transport;
-    cccccccc.send = function(data) {
+    this.transport = transport;
+
+    this.send = function(data) {
         if (typeof(data) !== "string") {
             data = JSON.stringify(data);
         }
-        cccccccc.transport.send(data);
-    };
+        channel.transport.send(data);
+    }
+
     this.transport.onmessage = function(message){
         var data = message.data;
         if (typeof data === "string") {
@@ -35,13 +35,13 @@ const QWebChannel = function(transport, initCallback) {
         }
         switch (data.type) {
             case QWebChannelMessageTypes.signal:
-                cccccccc.handleSignal(data);
+                channel.handleSignal(data);
                 break;
             case QWebChannelMessageTypes.response:
-                cccccccc.handleResponse(data);
+                channel.handleResponse(data);
                 break;
             case QWebChannelMessageTypes.propertyUpdate:
-                cccccccc.handlePropertyUpdate(data);
+                channel.handlePropertyUpdate(data);
                 break;
             default:
                 console.error("invalid message received:", message.data);
@@ -49,26 +49,26 @@ const QWebChannel = function(transport, initCallback) {
         }
     }
 
-    cccccccc.execCallbacks = {};
-    cccccccc.execId = 0;
+    this.execCallbacks = {};
+    this.execId = 0;
     this.exec = function(data, callback) {
         if (!callback) {
             // 如果没有回调，直接发送
-            cccccccc.send(data);
+            channel.send(data);
             return;
         }
         if (data.hasOwnProperty("id")) {
             console.error("Cannot exec message with property id: " + JSON.stringify(data));
             return;
         }
-        data.id = cccccccc.execId++;
-        cccccccc.execCallbacks[data.id] = callback;
-        cccccccc.send(data);
+        data.id = channel.execId++;
+        channel.execCallbacks[data.id] = callback;
+        channel.send(data);
     };
 
     this.objects = {};
 
-    cccccccc.handleSignal = function(message) {
+    this.handleSignal = function(message) {
         var object = channel.objects[message.object];
         if (object) {
             object.signalEmitted(message.signal, message.args);
@@ -77,16 +77,16 @@ const QWebChannel = function(transport, initCallback) {
         }
     }
 
-    cccccccc.handleResponse = function(message){
+    this.handleResponse = function(message){
         if (!message.hasOwnProperty("id")) {
             console.error("Invalid response message received: ", JSON.stringify(message));
             return;
         }
-        cccccccc.execCallbacks[message.id](message.data);
-        delete cccccccc.execCallbacks[message.id];
+        channel.execCallbacks[message.id](message.data);
+        delete channel.execCallbacks[message.id];
     }
 
-    cccccccc.handlePropertyUpdate = function(message){
+    this.handlePropertyUpdate = function(message){
         for (var i in message.data) {
             var data = message.data[i];
             var object = channel.objects[data.object];
@@ -99,8 +99,8 @@ const QWebChannel = function(transport, initCallback) {
         channel.exec({type: QWebChannelMessageTypes.idle});
     }
 
-    cccccccc.debug = function(message) {
-        cccccccc.send({type: QWebChannelMessageTypes.debug, data: message});
+    this.debug = function(message) {
+        channel.send({type: QWebChannelMessageTypes.debug, data: message});
     };
 
     channel.exec({type: QWebChannelMessageTypes.init}, function(data) {

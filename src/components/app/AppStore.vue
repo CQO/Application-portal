@@ -20,7 +20,6 @@
 import { Checker, CheckerItem } from 'vux'
 import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
-import { post} from "../method.js" 
 import localforage from 'localforage'
 import { QWebChannel } from  "../QTWebChannel"
 import { Order } from '../Order.js'

@@ -14,7 +14,7 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="(item,num) in selectList",v-on:click="login(item.usbkeyname,num,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
+            li(v-for="item in selectList",v-on:click="login(item.usbkeyname,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
     .step
         .login-button(@click.stop="PreLogin()",:class="{ hide: selectList }") 登录
         .point
@@ -28,15 +28,15 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {post,Timestamp,theUser} from "./method.js"
+import {Timestamp,theUser, CHANNEL} from "./method.js"
 import localforage from 'localforage'
-import { QWebChannel } from  "./QTWebChannel"
+
 var preData = [0,null]
 export default {
   data () {
     return {
-      userName: '',
-      password:'',
+      userName: '刘霞',
+      password:'123456',
       selectList:null,
       foo: null
     }
@@ -48,11 +48,7 @@ export default {
   created(){
     //清空全局变量
     preData = [0,null]
-    if(theUser.name) this.userName = theUser.name
-    //建立传输通道
-    new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-        this.foo = channel.objects.content;
-    });
+    if(theUser.name) this.userName = theUser.name //智能保存用户名
     //预登录方法
     const stepOne = (receive) => {
       preData[0] = 0
@@ -128,36 +124,34 @@ export default {
       else{
         // userName : 用户名
         // password : 密码
-        const postData = {userName:_this.userName,password:_this.password};
-
+        const postData = { userName:this.userName,password:this.password };
         Order.$emit('Loading', 'show')
         //登陆请求
-        _this.foo.callback.connect(function(receive) {
+        CHANNEL.callback.connect(function(receive) {
             preData = [1,receive]
         });
-        _this.foo.preLogin(JSON.stringify(postData))
+        CHANNEL.preLogin( JSON.stringify(postData) )
       }
     },
-    login:function(name,num,idCard,unitId, unitName){ //登录函数
+    login:function(name,idCard,unitId, unitName){ //登录函数
       const postData = {
-        usbkeyidentification : idCard,
-        password : this.password,
-        unitId : unitId,
+        usbkeyidentification : idCard, //身份证
+        password : this.password, //密码
+        unitId : unitId, //
         userName:name,
       };
       Order.$emit('Loading', 'show')
-      this.foo.callback.connect(function(receive) {
+      CHANNEL.callback.connect(function(receive) {
         const data = {
           receive:receive,
           userName:name,
-          num:num,
           idCard:idCard,
           key:unitId,
           unitName: unitName
         }
         preData = [2,data]
       });
-      this.foo.login(JSON.stringify(postData))
+      CHANNEL.login(JSON.stringify(postData))
     }
   },
 }
