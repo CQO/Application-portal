@@ -64,7 +64,8 @@ const timeoutDetection = function(){
 
 let orgData = {
   orgList : {},
-  orgTree : []
+  orgTree : [],
+  id : 0
 };
 
 let theUser = {

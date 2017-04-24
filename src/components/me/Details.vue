@@ -16,7 +16,11 @@
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
+import { Order } from '../Order.js'
 import { timeoutDetection } from "../method.js" 
+import { QWebChannel } from  "../QTWebChannel"
+
+
 export default {
   components: {
     Pa42,
@@ -24,21 +28,41 @@ export default {
   },
   created(){
     if( timeoutDetection() ) { return null} //时间处理
-    localforage.getItem("appData",(err,appData) =>{
-      switch(appData.userData.gender){
+    const _this = this
+    Order.$on('getAccountInfo', (msg) => {
+      this.name = msg.name
+      this.oldPhone = msg.phone
+      this.phoneNumber = msg.phone
+      switch(msg.gender){
         case 1 : this.gender = "男"; break;
         case 2 : this.gender = "女"; break;
-        case 3 : this.gender = "未设置"; break;
+        case 0 : this.gender = "保密"; break;
       }
-      this.name = appData.userData.userName
-      this.phoneNumber = appData.userData.phoneNumber
+      this.$forceUpdate()
     })
+    new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
+      //document.write(channel)
+      _this.communication = channel.objects.content;
+      _this.communication.callback.connect(function(receive) {
+        _this.phoneNumber = "sdsd"
+        Order.$emit('getAccountInfo', JSON.parse(receive))
+        //_this.$forceUpdate()
+      });
+      _this.communication.getAccountInfo()
+    })
+  },
+  beforeDestroy(){
+    if(this.oldPhone !== this.phoneNumber){
+      this.communication.updateAccount(JSON.stringify({type:2, phone:this.phoneNumber}))
+    }
   },
   data () {
     return {
+      oldPhone:'',
       phoneNumber:'',
       name: '',
-      gender: ''
+      gender: '',
+      communication: null
     }
   },
   methods: {

@@ -57,27 +57,33 @@ export default {
       appData:{
         showList: [""],
         appList: null,
-      },
-      list : 'sd'
+      }
     }
   },
   created(){
     const _this = this
     if( timeoutDetection() ) { return null} //时间处理
+
+    Order.$on('test', function (msg) {
+      _this.appData.showList = msg
+      _this.$forceUpdate()
+    })
+
     //取数据库
     localforage.getItem("appData",(err,appData) => {
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //检测缓存是否存在
       if( appData && appData.showList ){ this.appData = appData; return null; }
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
-      
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         foo.callback.connect(function(receive) {
           const Data = JSON.parse(receive);
-          _this.appData.showList = Data
-          _this.$forceUpdate()
-          localforage.setItem('appData', _this.appData)
+          // _this.appData.showList = Data
+          // Order.$emit('Toast', _this.appData.showList)
+          Order.$emit('test', Data)
+          //localforage.setItem('appData', _this.appData)
+          // _this.$forceUpdate()
         });
         foo.slidesshow(JSON.stringify({type:"5"}))
       })
@@ -96,7 +102,6 @@ export default {
       }
       newAppList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard
       this.appData.appList = newAppList
-
     })
   },
   methods: {

@@ -31,20 +31,11 @@ export default {
       this.gender = genderID
     }
   },
-  created(){
-    const _this = this
-    localforage.getItem("appData",function(err,appData){
-      _this.appData = appData
-      _this.gender = appData.userData.gender
-    })
-  },
   beforeDestroy(){
     const _this = this
     new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;
         foo.updateAccount(JSON.stringify({type:3, gander:_this.gender}))
-        _this.appData.userData.gender = _this.gender
-        localforage.setItem('appData', _this.appData);
     });
   },
 }

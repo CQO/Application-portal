@@ -42,7 +42,13 @@ export default {
       //超时检测
       if(timeoutDetection()) return null
       _this.userData = appData.userData
-      _this.load("我的组织", appData.userData.key,1)
+      _this.tree = orgData.orgTree
+      if( orgData.orgList[orgData.id] ) {
+        _this.List = orgData.orgList[orgData.id]
+      }
+      else{
+        _this.load(_this.userData.unitName, appData.userData.key,0)
+      }
     })
     new QWebChannel(navigator.qtWebChannelTransport, function(channel) {  
       _this.foo = channel.objects.content;
@@ -57,6 +63,7 @@ export default {
       }
       orgData.orgTree.push({name:myData[1],id:myData[2]})
       orgData.orgList[myData[2]] = JSON.parse(myData[0])
+      orgData.id = myData[2]
       _this.List = orgData.orgList[myData[2]]
       myData = null
       _this.tree = orgData.orgTree
@@ -72,13 +79,14 @@ export default {
         myData = [receive,name,id]
       });
       
-      if(subOrgNum === 0) {
-        const enOS = { enterId: 602, orgId: id ,type: 3 }
+      if( subOrgNum === 0 ) {
+        const enOS = { enterId: 602, orgId: id + "",type: 4 }
         _this.foo.queryEnOS(JSON.stringify(enOS));
+        
       }
       else {
-        const enOS = { enterId: 602, orgId: id ,type: 4 }
-        _this.foo.queryEnOS(JSON.stringify(enOS));
+        const enOS = { enterId: 602, orgId: id + "" ,type: 3 }
+        _this.foo.queryEnOS( JSON.stringify(enOS) );
       }
     },
     clickTree:function(item, key){

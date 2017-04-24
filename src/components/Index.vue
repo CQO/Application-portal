@@ -14,7 +14,7 @@
         .title
             span.ok 选择需要登陆的用户
         ul.list
-            li(v-for="(item,num) in selectList",v-on:click="login(item.usbkeyname,num,item.usbkeyidentification,item.unitId)") {{item.unitName}}
+            li(v-for="(item,num) in selectList",v-on:click="login(item.usbkeyname,num,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
     .step
         .login-button(@click.stop="PreLogin()",:class="{ hide: selectList }") 登录
         .point
@@ -35,8 +35,8 @@ var preData = [0,null]
 export default {
   data () {
     return {
-      userName: '刘霞',
-      password:'123456',
+      userName: '',
+      password:'',
       selectList:null,
       foo: null
     }
@@ -58,13 +58,12 @@ export default {
       preData[0] = 0
       Order.$emit('Loading', 'hide')
       //判断是否取到数据
-      
       if(receive !=="" && receive !==null){
         const Data = JSON.parse(receive);
         switch(Data.length){
           case 0  : Order.$emit('Toast', '登录失败'); break; 
           //如果用户所属的组织只有一个，那么自动帮用户选择登录
-          case 1  : const data = Data[0]; this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId); break;
+          case 1  : const data = Data[0]; this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId,data.unitName); break;
           default : this.selectList = Data;
         }
       }
@@ -86,11 +85,14 @@ export default {
               userName : receive.userName,   //用户名
               idCard   : receive.idCard, //身份信息
               key      : receive.key,  //ID
+              unitName : receive.unitName,
               gender   : 3
+
             }, 
             Timestamp: nowTime //时间戳
           }
           Timestamp.value = nowTime
+
           //保存用户信息
           localforage.setItem('appData', appData,function (err){
             if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
@@ -136,7 +138,7 @@ export default {
         _this.foo.preLogin(JSON.stringify(postData))
       }
     },
-    login:function(name,num,idCard,unitId){ //登录函数
+    login:function(name,num,idCard,unitId, unitName){ //登录函数
       const postData = {
         usbkeyidentification : idCard,
         password : this.password,
@@ -150,7 +152,8 @@ export default {
           userName:name,
           num:num,
           idCard:idCard,
-          key:unitId
+          key:unitId,
+          unitName: unitName
         }
         preData = [2,data]
       });
