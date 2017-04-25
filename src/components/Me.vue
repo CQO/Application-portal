@@ -18,10 +18,9 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {timeoutDetection, DATA} from "./method.js"
+import {timeoutDetection, DATA, CHANNEL} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import { QWebChannel } from  "./QTWebChannel"
 export default {
   components: {
     TitleBar,
@@ -33,19 +32,16 @@ export default {
     quitApp: function(url) { //退出登录
       const _this = this;
       Order.$emit('Loading', 'show')
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.callback.connect(function(receive) {
-          //隐藏退出提示
-          Order.$emit('Loading', 'hide')
-          DATA.orgTree =  []
-          DATA.orgList = {}
-          DATA.id = 0
-          //收到消息就返回主界面
-          window.location.href="#/Quit";
-        });
-        foo.loginout()
+      CHANNEL.callback.connect(function(receive) {
+        //隐藏退出提示
+        Order.$emit('Loading', 'hide')
+        DATA.orgTree =  []
+        DATA.orgList = {}
+        DATA.id = 0
+        //收到消息就返回主界面
+        window.location.href="#/Quit";
       });
+      CHANNEL.loginout()
     }
   },
   created(){

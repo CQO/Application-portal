@@ -25,8 +25,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import {timeoutDetection, DATA} from "./method.js" 
-import { QWebChannel } from  "./QTWebChannel"
+import {timeoutDetection, DATA, CHANNEL} from "./method.js" 
 import localforage from 'localforage'
 var myData = null;
 export default {
@@ -41,26 +40,21 @@ export default {
     localforage.getItem("appData",function(err,appData){
       //超时检测
       if(timeoutDetection()) return null
-      _this.userData = appData.userData
+      const userData = appData.userData
       _this.tree = DATA.orgTree
       if( DATA.orgList[DATA.id] ) {
         _this.List = DATA.orgList[DATA.id]
       }
       else{
-        _this.load(_this.userData.unitName, appData.userData.key,0)
+        _this.load(userData.unitName, userData.key,0)
       }
     })
-    new QWebChannel(navigator.qtWebChannelTransport, function(channel) {  
-      _this.foo = channel.objects.content;
-    });
     Order.$on('Toast', function(message) { this.searchText = message }) //注册搜索
     //超时检测
     if(timeoutDetection()) return null
     function pre(){
-      _this.foo.log(myData)
-      if(myData === null){
-        return null
-      }
+      CHANNEL.log(myData)
+      if(myData === null){ return null }
       DATA.orgTree.push({name:myData[1],id:myData[2]})
       DATA.orgList[myData[2]] = JSON.parse(myData[0])
       DATA.id = myData[2]
@@ -74,19 +68,19 @@ export default {
     load:function(name,id,subOrgNum){
       const _this = this
       this.List = null
-      _this.foo.callback.connect(function(receive) {
+      CHANNEL.callback.connect(function(receive) {
         //if(subOrgNum === 0) document.write(receive)
         myData = [receive,name,id]
       });
       
       if( subOrgNum === 0 ) {
         const enOS = { enterId: 602, orgId: id + "",type: 4 }
-        _this.foo.queryEnOS(JSON.stringify(enOS));
+        CHANNEL.queryEnOS(JSON.stringify(enOS));
         
       }
       else {
         const enOS = { enterId: 602, orgId: id + "" ,type: 3 }
-        _this.foo.queryEnOS( JSON.stringify(enOS) );
+        CHANNEL.queryEnOS( JSON.stringify(enOS) );
       }
     },
     clickTree:function(item, key){
@@ -110,7 +104,6 @@ export default {
       List: null,
       searchText:"",
       tree:"",
-      foo: null,
       userData: null,
       interval: null
     }

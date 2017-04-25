@@ -30,7 +30,6 @@ import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import { timeoutDetection, CHANNEL } from "./method.js" 
 import localforage from 'localforage'
-import { QWebChannel } from  "./QTWebChannel"
 //------------------触摸控件------------------
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
@@ -110,10 +109,7 @@ export default {
         "name":"linkdood"
       };
       //打开应用
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.opensopApp(JSON.stringify(app1))
-      });
+      CHANNEL.opensopApp(JSON.stringify(app1))
     },
     openStart:function(url,special,key){ //判断以何种方式打开应用
       //首先判断当前点击项目是否已经被选中
