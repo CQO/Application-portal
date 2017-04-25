@@ -12,7 +12,7 @@
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
-    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName")
+    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty")
     .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
@@ -27,7 +27,7 @@ import Organization from './list/Organization'
 import { Order } from './Order.js'
 import {timeoutDetection, DATA, CHANNEL} from "./method.js" 
 import localforage from 'localforage'
-var myData = null;
+var contactsData = null;
 export default {
   components: {
     TitleBar,
@@ -37,9 +37,21 @@ export default {
   },
   created () {
     const _this = this
+    this.interval = setInterval( ()=>{
+      if(contactsData === null){ return null }
+      DATA.orgTree.push({name:contactsData[1],id:contactsData[2]})
+      DATA.id = contactsData[2]
+      DATA.orgList[DATA.id] = JSON.parse(contactsData[0])
+      
+      _this.List = JSON.parse(contactsData[0])
+      _this.tree = DATA.orgTree
+      contactsData = null
+      
+      //clearInterval(time)
+    },1000); 
+    if(DATA.orgTree.length > 0){this.tree = DATA.orgTree; _this.List = DATA.orgList[DATA.id];return null;}
     timeoutDetection()
     localforage.getItem("appData",function(err,appData){
-      //超时检测
       const userData = appData.userData
       _this.tree = DATA.orgTree
       if( DATA.orgList[DATA.id] ) {
@@ -49,18 +61,10 @@ export default {
         _this.load(userData.unitName, userData.key,1)
       }
     })
-    Order.$on('Toast', function(message) { this.searchText = message }) //注册搜索
-    function pre(){
-      CHANNEL.log(myData)
-      if(myData === null){ return null }
-      DATA.orgTree.push({name:myData[1],id:myData[2]})
-      DATA.orgList[myData[2]] = JSON.parse(myData[0])
-      DATA.id = myData[2]
-      _this.List = DATA.orgList[myData[2]]
-      myData = null
-      _this.tree = DATA.orgTree
-    }
-    this.interval = setInterval(pre,1000);    
+   
+  },
+  beforeDestroy(){
+    clearInterval(this.interval)
   },
   methods: {
     load:function(name,id,subOrgNum){
@@ -68,30 +72,24 @@ export default {
       this.List = null
       CHANNEL.callback.connect(function(receive) {
         //if(subOrgNum === 0) document.write(receive)
-        myData = [receive,name,id]
+        contactsData = [receive,name,id]
       });
       
       if( subOrgNum === 0 ) {
-        const enOS = { enterId: 602, orgId: id + "",type: 3 }
+        const enOS = { enterId: 545, orgId: id + "",type: 3 }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
         
       }
       else {
-        const enOS = { enterId: 602, orgId: id + "" ,type: 4 }
+        const enOS = { enterId: 545, orgId: id + "" ,type: 4 }
         CHANNEL.queryEnOS( JSON.stringify(enOS) );
       }
     },
     clickTree:function(item, key){
-      if(DATA.orgList[item.id] !== undefined){
-        DATA.orgTree = DATA.orgTree.slice(0,key + 1)
-        this.List = DATA.orgList[item.id]
-        this.tree = DATA.orgTree
-      }
-      else{
-        DATA.orgTree = DATA.orgTree.slice(0,key + 1)
-        this.tree = DATA.orgTree
-        this.load(item.name,item.id)
-      }  
+      DATA.orgTree = DATA.orgTree.slice(0,key + 1)
+      this.List = DATA.orgList[item.id]
+      this.tree = DATA.orgTree
+      DATA.id = item.id 
     }
   },
   beforeDestroy(){

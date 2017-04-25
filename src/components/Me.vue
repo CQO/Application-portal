@@ -35,12 +35,9 @@ export default {
       CHANNEL.callback.connect(function(receive) {
         //隐藏退出提示
         Order.$emit('Loading', 'hide')
-        DATA.orgTree =  []
-        DATA.orgList = {}
-        DATA.id = 0
         //收到消息就返回主界面
         window.location.href="#/Quit";
-        
+        location.reload()
       });
       CHANNEL.loginout()
     }

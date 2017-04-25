@@ -1,5 +1,5 @@
 <template lang="pug">
-router-link.organization-list(:to="'/Information/'+ name + '/' + text")
+router-link.organization-list(:to="'/Information/'+ name + '/' + text + '/'+ theEnMobile + '/'+ theDuty")
   img.user-img(src='../../assets/user.png')
   .message
     p.name {{name}}
@@ -18,6 +18,25 @@ export default {
       type: String,
       required: true
     },
+    enMobile: {
+      type: String,
+      required: true
+    },
+    duty: {
+      type: String,
+      required: true
+    },
+  },
+  data () {
+    return{
+      theEnMobile:'未填写',
+      theDuty: '未填写'
+    }
+    
+  },
+  created () {
+    if(enMobile) { theEnMobile = enMobile}
+    if(duty) { theDuty = duty}
   }
 }
 </script>

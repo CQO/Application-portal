@@ -1,7 +1,7 @@
 <template lang="pug">
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
-  swiper(:list="appData.showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
+  swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
   AppTitle(title="办公类",v-show="appData.appList")
   .grid
     .grid-item(v-for="(item,key) in appData.appList",:key="item.id",v-show="item.available && item.exist",v-if="item.type == 'office'")
@@ -54,29 +54,39 @@ export default {
       index: 0,
       selectNumber:0, //长按选中个数
       appData:{
-        showList: [""],
         appList: null,
-      }
+      },
+      showList: [""],
     }
   },
   created(){
     const _this = this
     timeoutDetection()
-
-    Order.$on('test', function (msg) {
-      _this.appData.showList = msg
-      _this.$forceUpdate()
-    })
+    //定时器
+    const time = setInterval(() => {
+      if(myData === null) return null;
+      _this.showList = myData
+      _this.appData.showList = myData
+      myData = null
+      clearInterval(time)
+      //把应用列表存储到起来
+      localforage.setItem('appData', _this.appData,function (err){
+        if(err){
+          Order.$emit('Toast', '缓存用户数据失败')
+        }
+      }); 
+    },1000);
 
     //取数据库
     localforage.getItem("appData",(err,appData) => {
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
+      this.appData = appData;
       //检测缓存是否存在
-      if( appData && appData.showList ){ this.appData = appData; return null; }
+      if( appData && appData.showList ){this.showList = appData.showList; return; }
+      //document.write("sdsdsdsd")
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
       CHANNEL.callback.connect(function(receive) {
-        const Data = JSON.parse(receive);
-        Order.$emit('test', Data)
+        myData = JSON.parse(receive);
       });
       CHANNEL.slidesshow(JSON.stringify({type:"5"}))
       //--------------------------------------------------应用处理阶段--------------------------------------------------

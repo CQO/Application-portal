@@ -9,11 +9,13 @@
   .phone
     .Pan42
       .item 职位
-      .text 
-      
+      .text {{$route.params.duty}}
+    .Pan42
+      .item 固定电话
+      .text(v-on:click.stop="call") 
     .Pan42
       .item 手机号码
-      .text(v-on:click.stop="call") 
+      .text(v-on:click.stop="call") {{$route.params.enMobile}}
       .call-box
         .chat.ico(v-on:click.stop="yuanyuan") &#xe60a;
         .mess.ico(v-on:click.stop="sendMes") &#xe619;
