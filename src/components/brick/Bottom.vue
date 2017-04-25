@@ -91,6 +91,9 @@ export default {
       height: 20px;
     }
   }
+  .item:active{
+      background-color: aqua;
+  }
   .active{
     .ico, .name{
       color: blueviolet;

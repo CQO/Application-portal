@@ -174,6 +174,9 @@ export default {
     color: #b5bac1;
   }
 }
+.P42:active{
+    background-color: aqua;
+}
 .check-box{
   position: absolute;
   bottom: 0px;

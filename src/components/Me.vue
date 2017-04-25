@@ -30,25 +30,18 @@ export default {
   },
   methods: {
     quitApp: function(url) { //退出登录
-      const _this = this;
       Order.$emit('Loading', 'show')
-      CHANNEL.callback.connect(function(receive) {
-        //隐藏退出提示
-        Order.$emit('Loading', 'hide')
-        //收到消息就返回主界面
-        window.location.href="#/Quit";
-        location.reload()
+      CHANNEL.callback.connect((receive) => {
+        Order.$emit('Loading', 'hide') //隐藏退出提示
+        window.location.href="#/Quit" //返回主界面
+        location.reload() //刷新页面以清空变量数据
       });
       CHANNEL.loginout()
     }
   },
   created(){
-    const _this = this
-    localforage.getItem("appData",function(err,appData){
-      //超时检测
-      if(timeoutDetection()) return null
-      _this.userName = appData.userData.userName
-    })
+    if(timeoutDetection()) return null
+    this.userName = DATA.userName
   },
   data () {
     return {
@@ -57,9 +50,7 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      visible: true,
-      userName: '',
-      sex:""
+      userName: ''
     }
   }
 }
@@ -84,6 +75,9 @@ export default {
         border: 1px solid #e5e5e5;
         margin: 20px 0;
     }
+    .quit:active{
+        background-color: aqua;
+    }
     .information{
       height: 61px;
       display: flex;
@@ -103,6 +97,9 @@ export default {
         line-height: 60px;
         color: #a4a9b2;
       }
+    }
+    .information:active{
+        background-color: aqua;
     }
 }
 </style>

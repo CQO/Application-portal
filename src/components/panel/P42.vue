@@ -39,6 +39,9 @@ export default {
         margin: 0 21px;
     }
 }
+.panel42:active{
+    background-color: aqua;
+}
 .isIcon{
     .text{
         margin: 0;

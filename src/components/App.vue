@@ -17,7 +17,6 @@
       p {{item.name}}
       .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
   .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
-  Toast
   BottomBar(index="1")
 </template>
 
@@ -26,7 +25,6 @@ import { Swiper } from 'vux'
 import AppTitle from './brick/AppTitle'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
-import Toast from './brick/Toast'
 import { Order } from './Order.js'
 import { timeoutDetection, CHANNEL } from "./method.js" 
 import localforage from 'localforage'
@@ -35,7 +33,7 @@ import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
 //-------------------------------------------
-var myData = null
+let myData = null
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -46,8 +44,7 @@ export default {
     Swiper,
     AppTitle,
     TitleBar,
-    BottomBar,
-    Toast
+    BottomBar
   },
   data () {
     return {
@@ -61,28 +58,26 @@ export default {
   },
   created(){
     const _this = this
-    timeoutDetection()
+    timeoutDetection() //超时处理
     //定时器
     const time = setInterval(() => {
       if(myData === null) return null;
-      _this.showList = myData
-      _this.appData.showList = myData
-      myData = null
-      clearInterval(time)
-      //把应用列表存储到起来
-      localforage.setItem('appData', _this.appData,function (err){
-        if(err){
-          Order.$emit('Toast', '缓存用户数据失败')
-        }
-      }); 
+      this.showList = myData //显示轮播图
+      this.appData.showList = myData //保存轮播图数据
+      myData = null //清空标识变量
+      clearInterval(time) //清除定时器
+      localforage.setItem('appData', this.appData) //把应用列表存储到起来
     },1000);
 
     //取数据库
     localforage.getItem("appData",(err,appData) => {
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
-      this.appData = appData;
-      //检测缓存是否存在
-      if( appData && appData.showList ){this.showList = appData.showList; return; }
+      this.appData = appData; //保存应用数据
+      
+      if( appData && appData.showList ) { //检测缓存是否存在
+        this.showList = appData.showList //显示轮播图
+        return
+      }
       //document.write("sdsdsdsd")
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
       CHANNEL.callback.connect(function(receive) {
@@ -171,11 +166,7 @@ export default {
       //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
       if(mark) {
         //把应用列表存储到起来
-        localforage.setItem('appData', this.appData,function (err){
-          if(err){
-            Order.$emit('Toast', '缓存用户数据失败')
-          }
-        });
+        localforage.setItem('appData', this.appData);
       }
     }
   }

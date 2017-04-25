@@ -7,7 +7,7 @@
         a(v-on:click="clickTree(item, key)") {{item.name}}
         span >
   ul.organization(v-if="List")
-    li(v-for="item in List.depts",v-on:click="load(item.orgName,item.orgID,item.subOrgNum)",:key="item.orgID")
+    li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
@@ -36,30 +36,32 @@ export default {
     Organization
   },
   created () {
-    const _this = this
+    timeoutDetection() //超时检测
+    //定时器
     this.interval = setInterval( ()=>{
       if(contactsData === null){ return null }
-      DATA.orgTree.push({name:contactsData[1],id:contactsData[2]})
-      DATA.id = contactsData[2]
-      DATA.orgList[DATA.id] = JSON.parse(contactsData[0])
-      
-      _this.List = JSON.parse(contactsData[0])
-      _this.tree = DATA.orgTree
-      contactsData = null
-      
-      //clearInterval(time)
+      DATA.id = contactsData.id //存储所在层级的ID
+      DATA.orgTree.push({name:contactsData.name,id:DATA.id}) //层级树增加一层
+      DATA.orgList[DATA.id] = JSON.parse(contactsData.data) //保存层级数据
+      this.List = DATA.orgList[DATA.id] //显示层级数据
+      this.tree = DATA.orgTree //显示层级树
+      contactsData = null //清空标识变量
     },1000); 
-    if(DATA.orgTree.length > 0){this.tree = DATA.orgTree; _this.List = DATA.orgList[DATA.id];return null;}
-    timeoutDetection()
-    localforage.getItem("appData",function(err,appData){
-      const userData = appData.userData
-      _this.tree = DATA.orgTree
-      if( DATA.orgList[DATA.id] ) {
-        _this.List = DATA.orgList[DATA.id]
+    //判断是否层级树缓存
+    if(DATA.orgTree.length > 0) { 
+      this.tree = DATA.orgTree //显示层级树
+      this.List = DATA.orgList[DATA.id] //显示层级数据
+      return
+    }
+    //取数据库数据
+    localforage.getItem("appData",(err,appData) => {
+      const data = {
+        orgName: appData.userData.unitName,
+        orgID: appData.userData.key,
+        subOrgNum: 666,
+        subUserNum: 666,
       }
-      else{
-        _this.load(userData.unitName, userData.key,1)
-      }
+      this.load(data)
     })
    
   },
@@ -67,32 +69,47 @@ export default {
     clearInterval(this.interval)
   },
   methods: {
-    load:function(name,id,subOrgNum){
-      const _this = this
-      this.List = null
+    load:function(Data){ //拉取层级数据
+      this.List = null //显示加载动画
       CHANNEL.callback.connect(function(receive) {
-        //if(subOrgNum === 0) document.write(receive)
-        contactsData = [receive,name,id]
+        contactsData = {
+          data:receive,
+          name:Data.orgName,
+          id:Data.orgID
+        }
       });
-      
-      if( subOrgNum === 0 ) {
-        const enOS = { enterId: 545, orgId: id + "",type: 3 }
-        CHANNEL.queryEnOS(JSON.stringify(enOS));
-        
+      //判断组织数是否为空
+      if( Data.subOrgNum === 0 ) {
+        //服务器说 组织 和 人员数 都为空那就请求组织吧
+        if( Data.subUserNum === 0) {
+          //请求组织信息
+          const enOS = { enterId: 545, orgId: Data.orgID + "" ,type: 4 }
+          CHANNEL.queryEnOS(JSON.stringify(enOS));
+          return
+        }
+        //请求人员信息
+        const enOS = { enterId: 545, orgId: Data.orgID + "",type: 3 }
+        CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
-        const enOS = { enterId: 545, orgId: id + "" ,type: 4 }
-        CHANNEL.queryEnOS( JSON.stringify(enOS) );
+        //请求组织信息
+        const enOS = { enterId: 545, orgId: Data.orgID + "" ,type: 4 }
+        CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
     clickTree:function(item, key){
+      //保存截取的层级树
       DATA.orgTree = DATA.orgTree.slice(0,key + 1)
+      //显示组织信息
       this.List = DATA.orgList[item.id]
+      //显示层级树
       this.tree = DATA.orgTree
+      //刷新所在层级的ID
       DATA.id = item.id 
     }
   },
   beforeDestroy(){
+    //清除定时器
     clearInterval(this.interval);
   },
   data () {
@@ -116,6 +133,9 @@ export default {
         background-color: white;
         display: flex;
         border-bottom: 1px solid #eaeaea;
+    }
+    li:active{
+        background-color: aqua;
     }
     img{
         height: 45px;
@@ -152,6 +172,9 @@ export default {
     a {
         color: #2c84ff;
         margin: 0 10px;
+    }
+    a:active{
+        background-color: aqua;
     }
     p {
         color: #787878

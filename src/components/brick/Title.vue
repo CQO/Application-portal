@@ -49,5 +49,8 @@ export default {
     font-size: 1.4rem;
     color: #1865ff;
   }
+  .titleButton:active{
+    background-color: aqua;
+  }
 }
 </style>
