@@ -5,18 +5,38 @@
     span.text 头像
     img(src="../../assets/user.png")
   .details#details
-    Pa42(item="姓名", :text="name",to="/GenderSetting")
-    Pa42(item="性别", :text="gender",:to="'/GenderSetting/'+id")
+    .P42
+      .item 姓名
+      .text {{name}}
+      .ico.enter &#xe607;
+    .P42(v-on:click.stop="showCheck = true")
+      .item 性别
+      .text {{gender}}
+      .ico.enter &#xe607;
   .phone
     .item 手机号码
     input(type="text",v-model="phoneNumber",v-on:change="phoneNumberChange")
+  .check-box(v-if="showCheck")
+    .title
+      .button(v-on:click="changeGender") 确定
+    .gender-box
+      .item(v-on:click.stop = "id = 0")
+        span 保密
+        .ico(v-show="id == 0") &#xe609;
+      .item(v-on:click.stop = "id = 1")
+        span 男
+        .ico(v-show="id == 1") &#xe609;
+      .item(v-on:click.stop = "id = 2")
+        span 女
+        .ico(v-show="id == 2") &#xe609;
 </template>
 
 <script>
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
-import { timeoutDetection, CHANNEL } from "../method.js" 
+import { timeoutDetection, CHANNEL, DATA } from "../method.js" 
+var myData = null
 
 export default {
   components: {
@@ -24,27 +44,31 @@ export default {
     TitleBar
   },
   created(){
-    if( timeoutDetection() ) { return null} //时间处理
-    Order.$on('getAccountInfo', (msg) => {
-      this.name = msg.name
-      this.oldPhone = msg.phone
-      this.phoneNumber = msg.phone
-      this.id = msg.gender
-      switch(msg.gender){
+    //if( timeoutDetection() ) { return null} //时间处理
+    //定时器
+    const time = setInterval(() => {
+      if(myData === null) return null;
+      
+      this.name = myData.name
+      this.oldPhone = myData.phone
+      this.phoneNumber = myData.phone
+      this.id = myData.gender
+      switch(myData.gender){
         case 1 : this.gender = "男"; break;
         case 2 : this.gender = "女"; break;
         case 0 : this.gender = "保密"; break;
       }
-    })
+      clearInterval(time)
+      myData = null
+    },1000);
     CHANNEL.callback.connect((receive) => {
-      Order.$emit('getAccountInfo', JSON.parse(receive))
-      CHANNEL.callback.connect(null)
+      myData = JSON.parse(receive)
     });
     CHANNEL.getAccountInfo()
   },
   beforeDestroy(){
     if(this.oldPhone !== this.phoneNumber){
-      this.communication.updateAccount(JSON.stringify({type:2, phone:this.phoneNumber}))
+      CHANNEL.updateAccount(JSON.stringify({type:2, phone:this.phoneNumber}))
     }
   },
   data () {
@@ -53,13 +77,22 @@ export default {
       phoneNumber:'',
       name: '',
       gender: '',
-      id:3,
-      communication: null
+      id:0,
+      showCheck:false
     }
   },
   methods: {
     phoneNumberChange () {
       this.phoneNumber = this.phoneNumber
+    },
+    changeGender () {
+      switch(this.id){
+        case 1 : this.gender = "男"; break;
+        case 2 : this.gender = "女"; break;
+        case 0 : this.gender = "保密"; break;
+      }
+      CHANNEL.updateAccount( JSON.stringify({type:3, gander: this.id}) )
+      this.showCheck = false
     }
   },
 }
@@ -115,5 +148,60 @@ export default {
         line-height: 85px;
         font-size: 1.2rem;
     }
+}
+.P42{
+  height: 42px;
+  line-height: 42px;
+  padding: 0 15px;
+  background-color: white;
+  display: flex;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eaeaea;
+  .item{
+    width: 65px;
+  }
+  .text{
+    width: 65px;
+    margin: 0 10px;
+    color: #b5bac1;
+    font-weight: 300;
+    text-align: right;
+    width: calc(~"100% - 115px");
+  }
+  .ico{
+    width: 30px;
+    text-align: center;
+    color: #b5bac1;
+  }
+}
+.check-box{
+  position: absolute;
+  bottom: 0px;
+  height: 160px;
+  width: 100%;
+  background-color: #f8f8f8;
+  .title{
+    background-color:gainsboro;
+    height:40px;
+    line-height:40px;
+    display: flex;
+    justify-content: Flex-end;
+    .button{
+      width:50px;
+      text-align: center;
+    }
+  }
+  .gender-box{
+    height: 150px;
+  }
+  .item{
+    height: 39px;
+    text-align: center;
+    line-height: 39px;
+    border-bottom: 1px solid #dfdde8;
+    .ico{
+      color: yellow;
+    }
+  }
 }
 </style>

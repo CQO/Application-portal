@@ -61,7 +61,7 @@ export default {
   },
   created(){
     const _this = this
-    if( timeoutDetection() ) { return null} //时间处理
+    timeoutDetection()
 
     Order.$on('test', function (msg) {
       _this.appData.showList = msg
@@ -74,7 +74,7 @@ export default {
       //检测缓存是否存在
       if( appData && appData.showList ){ this.appData = appData; return null; }
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
-      CHANNEL.connect(function(receive) {
+      CHANNEL.callback.connect(function(receive) {
         const Data = JSON.parse(receive);
         Order.$emit('test', Data)
       });

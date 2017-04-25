@@ -55,13 +55,17 @@ let DATA = {
   userName:'',
   orgList:{},
   orgTree : [],
-  id : 0
+  id : 0,
+  phoneNumber : null,
+  
 };
 
 import { QWebChannel } from  "./QTWebChannel";
 let CHANNEL = null;
 new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-  CHANNEL = channel.objects.content;
+  if(CHANNEL === null){
+    CHANNEL = channel.objects.content;
+  }
 });
 
 export {get, cutString, Timestamp, timeoutDetection, CHANNEL, DATA};

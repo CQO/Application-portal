@@ -37,21 +37,19 @@ export default {
   },
   created () {
     const _this = this
+    timeoutDetection()
     localforage.getItem("appData",function(err,appData){
       //超时检测
-      if(timeoutDetection()) return null
       const userData = appData.userData
       _this.tree = DATA.orgTree
       if( DATA.orgList[DATA.id] ) {
         _this.List = DATA.orgList[DATA.id]
       }
       else{
-        _this.load(userData.unitName, userData.key,0)
+        _this.load(userData.unitName, userData.key,1)
       }
     })
     Order.$on('Toast', function(message) { this.searchText = message }) //注册搜索
-    //超时检测
-    if(timeoutDetection()) return null
     function pre(){
       CHANNEL.log(myData)
       if(myData === null){ return null }
@@ -74,12 +72,12 @@ export default {
       });
       
       if( subOrgNum === 0 ) {
-        const enOS = { enterId: 602, orgId: id + "",type: 4 }
+        const enOS = { enterId: 602, orgId: id + "",type: 3 }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
         
       }
       else {
-        const enOS = { enterId: 602, orgId: id + "" ,type: 3 }
+        const enOS = { enterId: 602, orgId: id + "" ,type: 4 }
         CHANNEL.queryEnOS( JSON.stringify(enOS) );
       }
     },

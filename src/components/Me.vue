@@ -40,6 +40,7 @@ export default {
         DATA.id = 0
         //收到消息就返回主界面
         window.location.href="#/Quit";
+        
       });
       CHANNEL.loginout()
     }

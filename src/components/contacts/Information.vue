@@ -7,13 +7,13 @@
         p.name.item {{$route.params.name}}
         p.department.item {{$route.params.org}}
   .phone
-    .Pan42(v-on:click="call")
+    .Pan42
       .item 职位
-      .text 产品经理
+      .text 
       
     .Pan42
       .item 手机号码
-      .text(v-on:click.stop="call") 18092852085
+      .text(v-on:click.stop="call") 
       .call-box
         .chat.ico(v-on:click.stop="yuanyuan") &#xe60a;
         .mess.ico(v-on:click.stop="sendMes") &#xe619;
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     sendMes:function(){
-      const data={scheme:"sms:"+"18092852085"+"?body="};
+      const data={scheme:"sms:"+""+"?body="};
       //发短信
       new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
         const foo = channel.objects.content;

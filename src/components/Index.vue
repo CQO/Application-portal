@@ -59,7 +59,7 @@ export default {
         switch(Data.length){
           case 0  : Order.$emit('Toast', '登录失败'); break; 
           //如果用户所属的组织只有一个，那么自动帮用户选择登录
-          case 1  : const data = Data[0]; this.login(data.usbkeyname,0,data.usbkeyidentification,data.unitId,data.unitName); break;
+          case 1  : const data = Data[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
           default : this.selectList = Data;
         }
       }
