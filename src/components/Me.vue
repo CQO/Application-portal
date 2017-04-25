@@ -18,7 +18,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {timeoutDetection, orgData} from "./method.js"
+import {timeoutDetection, DATA} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"
@@ -38,9 +38,9 @@ export default {
         foo.callback.connect(function(receive) {
           //隐藏退出提示
           Order.$emit('Loading', 'hide')
-          orgData.orgTree =  []
-          orgData.orgList = {}
-          orgData.id = 0
+          DATA.orgTree =  []
+          DATA.orgList = {}
+          DATA.id = 0
           //收到消息就返回主界面
           window.location.href="#/Quit";
         });

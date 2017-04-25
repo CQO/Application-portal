@@ -28,7 +28,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {Timestamp,theUser, CHANNEL} from "./method.js"
+import {Timestamp, CHANNEL, DATA} from "./method.js"
 import localforage from 'localforage'
 
 var preData = [0,null]
@@ -48,7 +48,7 @@ export default {
   created(){
     //清空全局变量
     preData = [0,null]
-    if(theUser.name) this.userName = theUser.name //智能保存用户名
+    if(DATA.userName) this.userName = DATA.userName //智能保存用户名
     //预登录方法
     const stepOne = (receive) => {
       preData[0] = 0
@@ -118,7 +118,7 @@ export default {
       const _this    = this,
             userName = this.userName,
             password = this.password;
-      theUser.name = userName
+      DATA.userName = userName
       //判断用户名和密码是否为空
       if(userName === "" || password === ""){ Order.$emit('Toast', '请输入账号和密码') }
       else{

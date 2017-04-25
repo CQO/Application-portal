@@ -7,7 +7,7 @@
         a(v-on:click="clickTree(item, key)") {{item.name}}
         span >
   ul.organization(v-if="List")
-    li(v-for="item in List.depts",v-on:click="load(item.orgName,item.orgID,item.subOrgNum)")
+    li(v-for="item in List.depts",v-on:click="load(item.orgName,item.orgID,item.subOrgNum)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
@@ -25,7 +25,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import {timeoutDetection, orgData} from "./method.js" 
+import {timeoutDetection, DATA} from "./method.js" 
 import { QWebChannel } from  "./QTWebChannel"
 import localforage from 'localforage'
 var myData = null;
@@ -42,9 +42,9 @@ export default {
       //超时检测
       if(timeoutDetection()) return null
       _this.userData = appData.userData
-      _this.tree = orgData.orgTree
-      if( orgData.orgList[orgData.id] ) {
-        _this.List = orgData.orgList[orgData.id]
+      _this.tree = DATA.orgTree
+      if( DATA.orgList[DATA.id] ) {
+        _this.List = DATA.orgList[DATA.id]
       }
       else{
         _this.load(_this.userData.unitName, appData.userData.key,0)
@@ -61,12 +61,12 @@ export default {
       if(myData === null){
         return null
       }
-      orgData.orgTree.push({name:myData[1],id:myData[2]})
-      orgData.orgList[myData[2]] = JSON.parse(myData[0])
-      orgData.id = myData[2]
-      _this.List = orgData.orgList[myData[2]]
+      DATA.orgTree.push({name:myData[1],id:myData[2]})
+      DATA.orgList[myData[2]] = JSON.parse(myData[0])
+      DATA.id = myData[2]
+      _this.List = DATA.orgList[myData[2]]
       myData = null
-      _this.tree = orgData.orgTree
+      _this.tree = DATA.orgTree
     }
     this.interval = setInterval(pre,1000);    
   },
@@ -90,14 +90,14 @@ export default {
       }
     },
     clickTree:function(item, key){
-      if(orgData.orgList[item.id] !== undefined){
-        orgData.orgTree = orgData.orgTree.slice(0,key + 1)
-        this.List = orgData.orgList[item.id]
-        this.tree = orgData.orgTree
+      if(DATA.orgList[item.id] !== undefined){
+        DATA.orgTree = DATA.orgTree.slice(0,key + 1)
+        this.List = DATA.orgList[item.id]
+        this.tree = DATA.orgTree
       }
       else{
-        orgData.orgTree = orgData.orgTree.slice(0,key + 1)
-        this.tree = orgData.orgTree
+        DATA.orgTree = DATA.orgTree.slice(0,key + 1)
+        this.tree = DATA.orgTree
         this.load(item.name,item.id)
       }  
     }

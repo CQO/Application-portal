@@ -3,13 +3,13 @@
     TitleBar(title='性别',leftIcon="flase")
     .option-box(@click="checkGender(0)")
       .text 未设置
-      .is-check.ico(v-show="gender == 0") &#xe609;
+      .is-check.ico(v-show="$route.params.id == 3") &#xe609;
     .option-box(@click="checkGender(1)")
       .text 男
-      .is-check.ico(v-show="gender == 1") &#xe609;
+      .is-check.ico(v-show="$route.params.id == 1") &#xe609;
     .option-box(@click="checkGender(2)")
       .text 女
-      .is-check.ico(v-show="gender == 2") &#xe609;
+      .is-check.ico(v-show="$route.params.id == 2") &#xe609;
 </template>
 
 <script>
@@ -19,22 +19,11 @@ export default {
   components: {
     TitleBar,
   },
-  data () {
-    return {
-      gender:3
-    }
-  },
-  created() {
-    this.gender = this.$route.params.id
-  },
   methods: {
     checkGender (genderID){
-      this.gender = genderID
+      CHANNEL.updateAccount( JSON.stringify({type:3, gander: genderID}) )
     }
-  },
-  beforeDestroy(){
-    CHANNEL.updateAccount(JSON.stringify({type:3, gander:_this.gender}))
-  },
+  }
 }
 </script>
 

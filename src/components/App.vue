@@ -28,7 +28,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { timeoutDetection } from "./method.js" 
+import { timeoutDetection, CHANNEL } from "./method.js" 
 import localforage from 'localforage'
 import { QWebChannel } from  "./QTWebChannel"
 //------------------触摸控件------------------
@@ -75,18 +75,11 @@ export default {
       //检测缓存是否存在
       if( appData && appData.showList ){ this.appData = appData; return null; }
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.callback.connect(function(receive) {
-          const Data = JSON.parse(receive);
-          // _this.appData.showList = Data
-          // Order.$emit('Toast', _this.appData.showList)
-          Order.$emit('test', Data)
-          //localforage.setItem('appData', _this.appData)
-          // _this.$forceUpdate()
-        });
-        foo.slidesshow(JSON.stringify({type:"5"}))
-      })
+      CHANNEL.connect(function(receive) {
+        const Data = JSON.parse(receive);
+        Order.$emit('test', Data)
+      });
+      CHANNEL.slidesshow(JSON.stringify({type:"5"}))
       //--------------------------------------------------应用处理阶段--------------------------------------------------
       let newAppList = {
         tiangongyuanyuan:{id: "10000", name: "天工圆圆", icon: $tiangongyuanyuan,url: '', special: "open", type: "communication",detail:"版本号:1.41",isSelect: false,available: true,exist:true},

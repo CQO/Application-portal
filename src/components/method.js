@@ -50,20 +50,18 @@ const timeoutDetection = function(){
   return false;
 };
 
-let orgData = {
-  orgList : {},
+
+let DATA = {
+  userName:'',
+  orgList:{},
   orgTree : [],
   id : 0
 };
 
-let theUser = {
-  name : ""
-};
-
-import { QWebChannel } from  "./QTWebChannel"
+import { QWebChannel } from  "./QTWebChannel";
 let CHANNEL = null;
 new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
   CHANNEL = channel.objects.content;
 });
 
-export {get, cutString, Timestamp, timeoutDetection, orgData, theUser,CHANNEL};
+export {get, cutString, Timestamp, timeoutDetection, CHANNEL, DATA};
