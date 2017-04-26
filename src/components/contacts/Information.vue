@@ -30,7 +30,7 @@ export default {
   },
   data () {
     return {
-      number:"18092852085"
+      number:""
     }
   },
   methods: {
@@ -46,7 +46,7 @@ export default {
       //打电话
       new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
         const foo = channel.objects.content;
-        foo.callPhone(this.number)
+        foo.callPhone(this.$route.params.enMobile)
       });
     },
     yuanyuan:function(){
