@@ -12,11 +12,15 @@
       .text {{$route.params.duty}}
     .Pan42
       .item 固定电话
-      .text(v-on:click.stop="call") {{$route.params.telPhone}}
+      .text {{$route.params.telPhone}}
+      .call-box
+        .tel.ico(v-on:click.stop="callTel") &#xe603;
+      
     .Pan42
       .item 手机号码
-      .text(v-on:click.stop="call") {{$route.params.enMobile}}
+      .text {{$route.params.enMobile}}
       .call-box
+        .phone.ico(v-on:click.stop="call") &#xe604;
         .chat.ico(v-on:click.stop="yuanyuan") &#xe60a;
         .mess.ico(v-on:click.stop="sendMes") &#xe619;
 </template>
@@ -42,6 +46,10 @@ export default {
     call:function(){
       //打电话
       CHANNEL.callPhone(this.$route.params.enMobile)
+    },
+    callTel:function(){
+      //打电话
+      CHANNEL.callPhone(this.$route.params.telPhone)
     },
     yuanyuan:function(){
       const app1 = {
@@ -75,7 +83,7 @@ export default {
     width: 65px;
   }
   .text{
-    width: 160px;
+    width: 120px;
     margin: 0 10px;
   }
   .ico{

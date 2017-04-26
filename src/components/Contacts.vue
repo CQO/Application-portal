@@ -7,12 +7,12 @@
         a(v-on:click="clickTree(item, key)") {{item.name}}
         span >
   ul.organization(v-if="List")
-    li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
+    li(v-for="item in searchPeople",v-on:click="load(item)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
-    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+    Organization(v-for="item in searchOrg",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
     .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
@@ -37,6 +37,10 @@ export default {
   },
   created () {
     timeoutDetection() //超时检测
+    //注册搜索
+    Order.$on('Search',(message) => {
+      this.searchText = message
+    })
     //定时器
     this.interval = setInterval( ()=>{
       if(contactsData === null){ return null }
@@ -47,9 +51,10 @@ export default {
       if(thisData.entUsers.length > 0){
         //人员排序
         thisData.entUsers.sort((a,b) =>{
-          return (a.orderNum < b.orderNum) ? true : false
+          return (a.orderNum < b.orderNum) ? -1 : 1
         })
       }
+      
       DATA.orgList[DATA.id] = thisData //保存层级数据
       this.List = DATA.orgList[DATA.id] //显示层级数据
       this.tree = DATA.orgTree //显示层级树
@@ -70,7 +75,6 @@ export default {
       }
       this.load(data)
     })
-   
   },
   beforeDestroy(){
     clearInterval(this.interval)
@@ -91,17 +95,17 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
@@ -116,9 +120,29 @@ export default {
       DATA.id = item.id 
     }
   },
-  beforeDestroy(){
-    //清除定时器
-    clearInterval(this.interval);
+  computed: {
+    searchPeople: function(){
+      const List = this.List.depts
+      const newList =[]
+      if(!this.searchText) return List
+      for(let item in List){
+        if(List[item].orgName.indexOf(this.searchText) > -1){
+          newList.push(List[item])
+        }
+      }
+      return newList
+    },
+    searchOrg: function(){
+      const List = this.List.entUsers
+      const newList =[]
+      if(!this.searchText) return List
+      for(let item in List){
+        if(List[item].enName.indexOf(this.searchText) > -1){
+          newList.push(List[item])
+        }
+      }
+      return newList
+    },
   },
   data () {
     return {
@@ -141,9 +165,6 @@ export default {
         background-color: white;
         display: flex;
         border-bottom: 1px solid #eaeaea;
-    }
-    li:active{
-        background-color: aqua;
     }
     img{
         height: 45px;
@@ -180,9 +201,6 @@ export default {
     a {
         color: #2c84ff;
         margin: 0 10px;
-    }
-    a:active{
-        background-color: aqua;
     }
     p {
         color: #787878
