@@ -12,7 +12,7 @@
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
-    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty")
+    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
     .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
@@ -40,14 +40,19 @@ export default {
     //定时器
     this.interval = setInterval( ()=>{
       if(contactsData === null){ return null }
-      // CHANNEL.log("------定时器------")
-      // CHANNEL.log(contactsData)
       DATA.id = contactsData.id //存储所在层级的ID
       DATA.orgTree.push({name:contactsData.name,id:DATA.id}) //层级树增加一层
-      DATA.orgList[DATA.id] = contactsData.data //保存层级数据
+      let thisData = contactsData.data
+      contactsData = null //清空标识变量
+      if(thisData.entUsers.length > 0){
+        //人员排序
+        thisData.entUsers.sort((a,b) =>{
+          return (a.orderNum < b.orderNum) ? true : false
+        })
+      }
+      DATA.orgList[DATA.id] = thisData //保存层级数据
       this.List = DATA.orgList[DATA.id] //显示层级数据
       this.tree = DATA.orgTree //显示层级树
-      contactsData = null //清空标识变量
     },1000); 
     //判断是否层级树缓存
     if(DATA.orgTree.length > 0) { 
@@ -86,17 +91,17 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },

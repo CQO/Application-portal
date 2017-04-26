@@ -15,7 +15,7 @@ const routes = [
   { path: '/Me', name: 'Me', component: require('./components/Me') },
   { path: '/Store', name: 'AppStore', component: require('./components/app/AppStore') },
   { path: '/Details', name: 'Details', component: require('./components/me/Details') },
-  { path: '/Information/:name/:org/:enMobile/:duty', name: 'Information', component: require('./components/contacts/Information') },
+  { path: '/Information/:name/:org/:enMobile/:duty/:telPhone', name: 'Information', component: require('./components/contacts/Information') },
   { path: '/Version', name: 'Version', component: require('./components/me/Version') },
   { path: '/Help', name: 'Help', component: require('./components/me/Help') },
   { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') },

@@ -15,7 +15,10 @@
       .ico.enter &#xe607;
   .phone
     .item 手机号码
-    input(type="text",v-model="phoneNumber",v-on:change="phoneNumberChange")
+    input(type="text",v-model="phoneNumber")
+  .phone
+    .item 固定电话
+    input(type="text",v-model="telPhone")
   .check-box(v-if="showCheck")
     .title
       .button(v-on:click="changeGender") 确定
@@ -52,6 +55,8 @@ export default {
       this.name = myData.name
       this.oldPhone = myData.phone
       this.phoneNumber = myData.phone
+      this.oldTelPhone = myData.telPhone
+      this.telPhone = myData.telPhone
       this.id = myData.gender
       switch(myData.gender){
         case 1 : this.gender = "男"; break;
@@ -68,14 +73,20 @@ export default {
     CHANNEL.getAccountInfo()
   },
   beforeDestroy(){
-    if(this.oldPhone !== this.phoneNumber){
-      CHANNEL.updateAccount(JSON.stringify({type:2, phone:this.phoneNumber}))
+    if(this.oldPhone !== this.phoneNumber || this.oldTelPhone !== this.telPhone){
+      CHANNEL.updateAccount(JSON.stringify({
+        type:2, 
+        phone:this.phoneNumber ,
+        telPhone: this.telPhone 
+      }))
     }
   },
   data () {
     return {
       oldPhone:'',
       phoneNumber:'',
+      oldTelPhone:null,
+      telPhone:'',
       name: '',
       gender: '',
       id:0,
@@ -83,9 +94,6 @@ export default {
     }
   },
   methods: {
-    phoneNumberChange () {
-      this.phoneNumber = this.phoneNumber
-    },
     changeGender () {
       switch(this.id){
         case 1 : this.gender = "男"; break;

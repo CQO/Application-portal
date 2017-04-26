@@ -12,7 +12,7 @@
       .text {{$route.params.duty}}
     .Pan42
       .item 固定电话
-      .text(v-on:click.stop="call") 
+      .text(v-on:click.stop="call") {{$route.params.telPhone}}
     .Pan42
       .item 手机号码
       .text(v-on:click.stop="call") {{$route.params.enMobile}}
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     sendMes:function(){
-      const data={scheme:"sms:"+""+"?body="};
+      const data={scheme:"sms:"+ this.$route.params.enMobile +"?body="};
       //发短信
       CHANNEL.opensopApp(JSON.stringify(data))
     },
