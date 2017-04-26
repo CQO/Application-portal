@@ -86,17 +86,17 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },

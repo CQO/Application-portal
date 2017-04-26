@@ -21,9 +21,9 @@ import { Checker, CheckerItem } from 'vux'
 import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
-import { QWebChannel } from  "../QTWebChannel"
 import { Order } from '../Order.js'
 import { timeoutDetection } from "../method.js" 
+import { CHANNEL } from "../method.js" 
 //引入图片资源
 const $tiangongyuanyuan = require('../../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../../assets/xinxifabu.png'),
@@ -66,10 +66,7 @@ export default {
         "name":"linkdood"
       };
       //打开应用
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.opensopApp(JSON.stringify(app1))
-      });
+      CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item,key){
       this.appList[key].exist = true

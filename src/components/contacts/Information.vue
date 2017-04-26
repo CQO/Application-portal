@@ -23,7 +23,7 @@
 
 <script>
 import TitleBar from '../brick/Title'
-import { QWebChannel } from  "../QTWebChannel"
+import { CHANNEL } from "../method.js" 
 export default {
   components: {
     TitleBar
@@ -37,17 +37,11 @@ export default {
     sendMes:function(){
       const data={scheme:"sms:"+""+"?body="};
       //发短信
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.opensopApp(JSON.stringify(data))
-      });
+      CHANNEL.opensopApp(JSON.stringify(data))
     },
     call:function(){
       //打电话
-      new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-        const foo = channel.objects.content;
-        foo.callPhone(this.$route.params.enMobile)
-      });
+      CHANNEL.callPhone(this.$route.params.enMobile)
     },
     yuanyuan:function(){
       const app1 = {
@@ -58,10 +52,7 @@ export default {
         "name":"linkdood"
       };
       //打开应用
-      new QWebChannel(navigator.qtWebChannelTransport, function(channel) {
-        const foo = channel.objects.content;
-        foo.opensopApp(JSON.stringify(app1))
-      });
+      CHANNEL.opensopApp(JSON.stringify(app1))
     }
   },
 }

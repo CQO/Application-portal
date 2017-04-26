@@ -42,7 +42,15 @@ export default {
   },
   created(){
     if(timeoutDetection()) return null
-    this.userName = DATA.userName
+    if(DATA.userName){
+      this.userName = DATA.userName
+    }
+    else{
+      localforage.getItem("appData",(err,appData) => {
+        this.userName = appData.userData.userName
+      })
+    }
+    
   },
   data () {
     return {
