@@ -61,10 +61,17 @@ let DATA = {
 };
 
 import { QWebChannel } from  "./QTWebChannel";
+import { Order } from './Order.js';
 let CHANNEL = null;
+
+
 new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
   if(CHANNEL === null){
     CHANNEL = channel.objects.content;
+    CHANNEL.callback.connect(function(receive) {
+      const Data = JSON.parse(receive);
+      Order.$emit(Data.fName, Data.data);
+    });
   }
 });
 

@@ -40,9 +40,11 @@ export default {
     //定时器
     this.interval = setInterval( ()=>{
       if(contactsData === null){ return null }
+      // CHANNEL.log("------定时器------")
+      // CHANNEL.log(contactsData)
       DATA.id = contactsData.id //存储所在层级的ID
       DATA.orgTree.push({name:contactsData.name,id:DATA.id}) //层级树增加一层
-      DATA.orgList[DATA.id] = JSON.parse(contactsData.data) //保存层级数据
+      DATA.orgList[DATA.id] = contactsData.data //保存层级数据
       this.List = DATA.orgList[DATA.id] //显示层级数据
       this.tree = DATA.orgTree //显示层级树
       contactsData = null //清空标识变量
@@ -71,13 +73,14 @@ export default {
   methods: {
     load:function(Data){ //拉取层级数据
       this.List = null //显示加载动画
-      CHANNEL.callback.connect(function(receive) {
+      //预登录信号监听
+      Order.$on('queryEnOS', function(message) {
         contactsData = {
-          data:receive,
+          data:message,
           name:Data.orgName,
           id:Data.orgID
         }
-      });
+      })
       //判断组织数是否为空
       if( Data.subOrgNum === 0 ) {
         //服务器说 组织 和 人员数 都为空那就请求组织吧

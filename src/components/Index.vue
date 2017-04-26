@@ -48,6 +48,10 @@ export default {
   created(){
     //清空全局变量
     preData = [0,null]
+    //预登录信号监听
+    Order.$on('preLogin', function(message) {
+      preData = [1,message]
+    })
     if(DATA.userName) this.userName = DATA.userName //智能保存用户名
     //预登录方法
     const stepOne = (receive) => {
@@ -55,7 +59,7 @@ export default {
       Order.$emit('Loading', 'hide')
       //判断是否取到数据
       if(receive !=="" && receive !==null){
-        const Data = JSON.parse(receive);
+        const Data = receive
         switch(Data.length){
           case 0  : Order.$emit('Toast', '登录失败'); break; 
           //如果用户所属的组织只有一个，那么自动帮用户选择登录
@@ -67,11 +71,11 @@ export default {
         Order.$emit('Toast', '登录信息错误')
       }
     }
-    //正式登陆方法
+        //正式登陆方法
     const stepTwo = (receive) => {
         preData[0] = 0;
         Order.$emit('Loading', 'hide')
-        const Res = JSON.parse(receive.receive);
+        const Res = receive.receive;
         //判断错误码是否为 0:成功 113:已登录
         if(Res.code == 0 || Res.code == 113){
           //保存登陆用户信息和时间戳
@@ -112,6 +116,7 @@ export default {
         case 2 : stepTwo(preData[1]); break;
       }
     },1000);
+
   },
   methods: {
     PreLogin: function(){ //预登录函数
@@ -126,10 +131,6 @@ export default {
         // password : 密码
         const postData = { userName:this.userName,password:this.password };
         Order.$emit('Loading', 'show')
-        //登陆请求
-        CHANNEL.callback.connect(function(receive) {
-            preData = [1,receive]
-        });
         CHANNEL.preLogin( JSON.stringify(postData) )
       }
     },
@@ -141,16 +142,17 @@ export default {
         userName:name,
       };
       Order.$emit('Loading', 'show')
-      CHANNEL.callback.connect(function(receive) {
+      //登录信号监听
+      Order.$on('login', function(message) {
         const data = {
-          receive:receive,
+          receive:message,
           userName:name,
           idCard:idCard,
           key:unitId,
           unitName: unitName
         }
         preData = [2,data]
-      });
+      })
       CHANNEL.login(JSON.stringify(postData))
     }
   },

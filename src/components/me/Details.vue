@@ -61,9 +61,10 @@ export default {
       clearInterval(time)
       myData = null
     },1000);
-    CHANNEL.callback.connect((receive) => {
-      myData = JSON.parse(receive)
-    });
+    //退出信号监听
+    Order.$on('getAccountInfo', function(message) {
+      myData = message
+    })
     CHANNEL.getAccountInfo()
   },
   beforeDestroy(){

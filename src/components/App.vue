@@ -73,16 +73,18 @@ export default {
     localforage.getItem("appData",(err,appData) => {
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       this.appData = appData; //保存应用数据
-      
+      //document.write(appData.showList)
       if( appData && appData.showList ) { //检测缓存是否存在
+        CHANNEL.log("------[应用]使用缓存------")
+        CHANNEL.log(appData.showList)
         this.showList = appData.showList //显示轮播图
         return
       }
-      //document.write("sdsdsdsd")
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
-      CHANNEL.callback.connect(function(receive) {
-        myData = JSON.parse(receive);
-      });
+      //轮播图信号监听
+      Order.$on('slidesshow', function(message) {
+        myData = message
+      })
       CHANNEL.slidesshow(JSON.stringify({type:"5"}))
       //--------------------------------------------------应用处理阶段--------------------------------------------------
       let newAppList = {
