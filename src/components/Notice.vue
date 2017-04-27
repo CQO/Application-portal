@@ -35,7 +35,6 @@ export default {
     }
   },
   created(){
-    const _this = this
     //从本地数据库中取出用户数据
     localforage.getItem("appData",(err,appData) => {
       //拷贝一份 *应用数据* 里的 *用户数据*

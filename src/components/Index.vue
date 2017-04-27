@@ -48,11 +48,10 @@ export default {
   created(){
     //清空全局变量
     preData = [0,null]
-    //预登录信号监听
-    Order.$on('preLogin', function(message) {
-      preData = [1,message]
-    })
     if(DATA.userName) this.userName = DATA.userName //智能保存用户名
+
+  },
+  beforeMount(){
     //预登录方法
     const stepOne = (receive) => {
       preData[0] = 0
@@ -116,7 +115,6 @@ export default {
         case 2 : stepTwo(preData[1]); break;
       }
     },1000);
-
   },
   methods: {
     PreLogin: function(){ //预登录函数
@@ -125,14 +123,13 @@ export default {
             password = this.password;
       DATA.userName = userName
       //判断用户名和密码是否为空
-      if(userName === "" || password === ""){ Order.$emit('Toast', '请输入账号和密码') }
-      else{
-        // userName : 用户名
-        // password : 密码
-        const postData = { userName:this.userName,password:this.password };
-        Order.$emit('Loading', 'show')
-        CHANNEL.preLogin( JSON.stringify(postData) )
-      }
+      //if( userName === '' || password === '' ) Order.$emit('Toast', '请输入账号和密码'); return null;
+      //预登录信号监听
+      Order.$on('preLogin', function(message) {
+        preData = [1,message]
+      })
+      Order.$emit('Loading', 'show')
+      CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
     login:function(name,idCard,unitId, unitName){ //登录函数
       const postData = {
@@ -141,6 +138,8 @@ export default {
         unitId : unitId, //
         userName:name,
       };
+      DATA.unitId = unitId //保存unitId
+      DATA.idCard = idCard //保存身份证信息
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$on('login', function(message) {

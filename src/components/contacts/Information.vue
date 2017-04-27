@@ -27,7 +27,7 @@
 
 <script>
 import TitleBar from '../brick/Title'
-import { CHANNEL } from "../method.js" 
+import { CHANNEL, DATA } from "../method.js" 
 export default {
   components: {
     TitleBar
@@ -52,11 +52,12 @@ export default {
       CHANNEL.callPhone(this.$route.params.telPhone)
     },
     yuanyuan:function(){
+      // document.write(DATA.idCard)
       const app1 = {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=110108198512314993&pwd=123456",
+        "scheme":"linkdood:showlinkdood?id=" + DATA.idCard + "&pwd=123456",
         "name":"linkdood"
       };
       //打开应用

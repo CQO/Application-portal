@@ -59,24 +59,12 @@ export default {
   created(){
     const _this = this
     timeoutDetection() //超时处理
-    //定时器
-    const time = setInterval(() => {
-      if(myData === null) return null;
-      this.showList = myData //显示轮播图
-      this.appData.showList = myData //保存轮播图数据
-      myData = null //清空标识变量
-      clearInterval(time) //清除定时器
-      localforage.setItem('appData', this.appData) //把应用列表存储到起来
-    },1000);
-
     //取数据库
     localforage.getItem("appData",(err,appData) => {
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
-      this.appData = appData; //保存应用数据
       //document.write(appData.showList)
       if( appData && appData.showList ) { //检测缓存是否存在
-        CHANNEL.log("------[应用]使用缓存------")
-        CHANNEL.log(appData.showList)
+        this.appData = appData; //保存应用数据
         this.showList = appData.showList //显示轮播图
         return
       }
@@ -102,6 +90,17 @@ export default {
       newAppList["youjian"].url = 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard
       this.appData.appList = newAppList
     })
+  },
+  beforeMount(){
+    //定时器
+    const time = setInterval(() => {
+      if(myData === null) return null;
+      this.showList = myData //显示轮播图
+      this.appData.showList = myData //保存轮播图数据
+      myData = null //清空标识变量
+      clearInterval(time) //清除定时器
+      localforage.setItem('appData', this.appData) //把应用列表存储到起来
+    },1000);
   },
   methods: {
     onIndexChange: function(index) { //轮播图

@@ -53,6 +53,8 @@ const timeoutDetection = function(){
 
 let DATA = {
   userName:'',
+  idCard: null,
+  unitId: null,
   orgList:{},
   orgTree : [],
   id : 0,
