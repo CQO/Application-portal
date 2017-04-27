@@ -31,6 +31,7 @@ body{
   overflow: hidden;
   margin: 0;
   margin-top: 46px;
+  -webkit-overflow-scrolling: touch;//允许独立的滚动区域和触摸回弹
 }
 .root-box{
   height: 100%;

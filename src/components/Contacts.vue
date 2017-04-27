@@ -13,7 +13,6 @@
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-    .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
   .search-result(v-if="searchResult")
@@ -55,39 +54,30 @@ export default {
       }
       this.load(data)
     })
-
   },
   beforeMount(){
-    //定时器
-    this.interval = setInterval( ()=>{
-      if(contactsData === null){ return null }
-      DATA.id = contactsData.id //存储所在层级的ID
-      DATA.orgTree.push({name:contactsData.name,id:DATA.id}) //层级树增加一层
-      let thisData = contactsData.data
-      contactsData = null //清空标识变量
-      if(thisData.entUsers.length > 0){
-        //人员排序
-        thisData.entUsers.sort((a,b) =>{
-          return (a.orderNum < b.orderNum) ? -1 : 1
-        })
-      }
-      
-      DATA.orgList[DATA.id] = thisData //保存层级数据
-      this.List = DATA.orgList[DATA.id] //显示层级数据
-      this.tree = DATA.orgTree //显示层级树
-    },1000); 
+
     //注册搜索
     Order.$on('searchEnOS',(message) => {
-      this.searchResult = message.entUsers
+      contactsData = message.entUsers
+      //定时器
+      this.interval = setInterval( ()=>{
+        clearInterval(this.interval) //清除定时器
+        this.searchResult = contactsData
+      },1000); 
+      
     }) 
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 454, orgId: DATA.unitId + "" ,type: 2, name:message }
+        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
-        this.searchResult = null 
+        this.interval = setInterval( ()=>{
+          clearInterval(this.interval) //清除定时器
+          this.searchResult = null
+        },1000); 
       }
     }) 
   },
@@ -98,7 +88,26 @@ export default {
     load:function(Data){ //拉取层级数据
       this.List = null //显示加载动画
       //预登录信号监听
-      Order.$on('queryEnOS', function(message) {
+      Order.$on('queryEnOS', (message) => {
+        //定时器
+        this.interval = setInterval( ()=>{
+          clearInterval(this.interval) //清除定时器
+          if(contactsData === null){ return null }
+          DATA.id = contactsData.id //存储所在层级的ID
+          DATA.orgTree.push({name:contactsData.name,id:DATA.id}) //层级树增加一层
+          let thisData = contactsData.data
+          contactsData = null //清空标识变量
+          if(thisData.entUsers.length > 0){
+            //人员排序
+            thisData.entUsers.sort((a,b) =>{
+              return (a.orderNum < b.orderNum) ? -1 : 1
+            })
+          }
+          DATA.orgList[DATA.id] = thisData //保存层级数据
+          this.List = DATA.orgList[DATA.id] //显示层级数据
+          this.tree = DATA.orgTree //显示层级树
+          
+        },1000); 
         contactsData = {
           data:message,
           name:Data.orgName,
@@ -110,17 +119,17 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
@@ -149,7 +158,8 @@ export default {
 
 <style lang='less' scoped>
 .organization{
-    height: 381px;
+    overflow-y: scroll;
+    height: 385px;
     li{
         height: 61px;
         background-color: white;
@@ -195,9 +205,6 @@ export default {
     p {
         color: #787878
     }
-}
-.placeholder{
-  height: 50px;
 }
 .search-result {
   background-color: rgba(248, 248, 248, 0.95);

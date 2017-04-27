@@ -1,5 +1,5 @@
 <template lang="pug">
-router-link.organization-list(:to="'/Information/'+ name + '/' + text + '/'+ theEnMobile + '/'+ theDuty + '/' + theTelPhone")
+router-link.organization-list(tag="div",:to="'/Information/'+ name + '/' + text + '/'+ theEnMobile + '/'+ theDuty + '/' + theTelPhone")
   img.user-img(src='../../assets/user.png')
   .message
     p.name {{name}}
@@ -37,7 +37,6 @@ export default {
       theDuty: '未设置',
       theTelPhone: '未设置'
     }
-    
   },
   created () {
     if(this.enMobile) { this.theEnMobile = this.enMobile}
