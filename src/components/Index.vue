@@ -35,8 +35,8 @@ var preData = [0,null]
 export default {
   data () {
     return {
-      userName: '',
-      password:'',
+      userName: '朱光晨',
+      password:'123456',
       selectList:null,
       foo: null
     }

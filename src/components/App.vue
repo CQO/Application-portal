@@ -26,14 +26,14 @@ import AppTitle from './brick/AppTitle'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
-import { timeoutDetection, CHANNEL } from "./method.js" 
+import { timeoutDetection, CHANNEL, DATA } from "./method.js" 
 import localforage from 'localforage'
 //------------------触摸控件------------------
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
 //-------------------------------------------
-let myData = null
+
 //引入图片资源
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
@@ -61,17 +61,21 @@ export default {
     timeoutDetection() //超时处理
     //取数据库
     localforage.getItem("appData",(err,appData) => {
+      this.appData = appData; //保存应用数据
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //document.write(appData.showList)
       if( appData && appData.showList ) { //检测缓存是否存在
-        this.appData = appData; //保存应用数据
         this.showList = appData.showList //显示轮播图
         return
       }
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
       //轮播图信号监听
-      Order.$on('slidesshow', function(message) {
-        myData = message
+      Order.$on('slidesshow', (message) => {
+        setTimeout(() => {
+          this.showList = message //显示轮播图
+          this.appData.showList = message //保存轮播图数据
+          localforage.setItem('appData', this.appData) //把应用列表存储到起来
+        },0);
       })
       CHANNEL.slidesshow(JSON.stringify({type:"5"}))
       //--------------------------------------------------应用处理阶段--------------------------------------------------
@@ -91,27 +95,17 @@ export default {
       this.appData.appList = newAppList
     })
   },
-  beforeMount(){
-    //定时器
-    const time = setInterval(() => {
-      if(myData === null) return null;
-      this.showList = myData //显示轮播图
-      this.appData.showList = myData //保存轮播图数据
-      myData = null //清空标识变量
-      clearInterval(time) //清除定时器
-      localforage.setItem('appData', this.appData) //把应用列表存储到起来
-    },1000);
-  },
   methods: {
     onIndexChange: function(index) { //轮播图
       this.index = index
     },
     openApp: function () { //打开应用
+
       const app1 = {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=" + this.appData.userData.idCard,
+        "scheme":"linkdood:showlinkdood?id=" + DATA.idCard,
         "name":"linkdood"
       };
       //打开应用
@@ -166,6 +160,7 @@ export default {
       }
       //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
       if(mark) {
+        //CHANNEL.log(this.appData)
         //把应用列表存储到起来
         localforage.setItem('appData', this.appData);
       }
