@@ -29,7 +29,6 @@ import Organization from './list/Organization'
 import { Order } from './Order.js'
 import {timeoutDetection, DATA, CHANNEL} from "./method.js" 
 import localforage from 'localforage'
-var contactsData = null;
 
 export default {
   components: {
@@ -59,7 +58,6 @@ export default {
   beforeMount(){
     //注册搜索
     Order.$on('searchEnOS',(message) => {
-      //contactsData = message.entUsers
       //定时器
       setTimeout( ()=>{
         this.searchResult = message.entUsers
@@ -69,7 +67,7 @@ export default {
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
+        const enOS = { enterId: 454, orgId: DATA.unitId + "" ,type: 2, name:message }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
@@ -107,19 +105,19 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.log(`[通讯录]请求组织信息`)
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
         CHANNEL.log(`[通讯录]请求人员信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.log(`[通讯录]请求组织信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
@@ -175,21 +173,20 @@ export default {
         text-align: center;
         font-size: 0.9rem;
     }
-    
 }
 .load{
     display: flex;
     justify-content: center;
 }
 .organization-bar{
-    height:45px;
+    height:30px;
     display: flex;
-    line-height: 45px;
+    line-height: 30px;
     font-size: 0.8rem;
-    overflow: hidden;
+    overflow: auto;
     a {
         color: #2c84ff;
-        margin: 0 10px;
+        margin: 0 5px;
     }
     p {
         color: #787878

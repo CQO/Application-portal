@@ -55,20 +55,7 @@ export default {
     //预登录方法
     const stepOne = (receive) => {
       preData[0] = 0
-      Order.$emit('Loading', 'hide')
-      //判断是否取到数据
-      if(receive !=="" && receive !==null){
-        const Data = receive
-        switch(Data.length){
-          case 0  : Order.$emit('Toast', '登录失败'); break; 
-          //如果用户所属的组织只有一个，那么自动帮用户选择登录
-          case 1  : const data = Data[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
-          default : this.selectList = Data;
-        }
-      }
-      else{
-        Order.$emit('Toast', '登录信息错误')
-      }
+
     }
         //正式登陆方法
     const stepTwo = (receive) => {
@@ -111,13 +98,12 @@ export default {
     const time = setInterval(() => {
       switch(preData[0]){
         case 0 : return null; break;
-        case 1 : stepOne(preData[1]); break;
         case 2 : stepTwo(preData[1]); break;
       }
     },1000);
   },
   methods: {
-    PreLogin: function(){ //预登录函数
+    PreLogin: function() { //预登录函数
       const _this    = this,
             userName = this.userName,
             password = this.password;
@@ -125,8 +111,23 @@ export default {
       //判断用户名和密码是否为空
       //if( userName === '' || password === '' ) Order.$emit('Toast', '请输入账号和密码'); return null;
       //预登录信号监听
-      Order.$on('preLogin', function(message) {
-        preData = [1,message]
+      Order.$on('preLogin', (message) => {
+        setTimeout( ()=>{
+          Order.$emit('Loading', 'hide')
+          //判断是否取到数据
+          if(message !=="" && message !==null){
+            const Data = message
+            switch(Data.length){
+              case 0  : Order.$emit('Toast', '登录失败'); break; 
+              //如果用户所属的组织只有一个，那么自动帮用户选择登录
+              case 1  : const data = Data[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
+              default : this.selectList = Data;
+            }
+          }
+          else{
+            Order.$emit('Toast', '登录信息错误')
+          }
+        },0);
       })
       Order.$emit('Loading', 'show')
       CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )

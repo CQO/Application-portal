@@ -100,7 +100,6 @@ export default {
       this.index = index
     },
     openApp: function () { //打开应用
-
       const app1 = {
         "type":2,
         "sopid":"com.vrv.linkDood",
@@ -135,7 +134,6 @@ export default {
         }
         
       }
-      
     },
     pressItem:function(key){ //长按app事件
       //将对应的appItem改为可视

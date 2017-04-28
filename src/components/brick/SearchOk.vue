@@ -67,6 +67,7 @@ export default {
         border-radius: 5px;
         color: #757575;
         font-size: 14px;
+        border: 1px solid #dbdbdb;
     }
     .button:active{
         background-color: aqua;
