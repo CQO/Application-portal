@@ -4,8 +4,7 @@
   Search
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
-    checker-item(value="office") 办公类
-    checker-item(value="communication") 通讯录
+    checker-item(v-for="item in selectItem",:value="item.classifyID") {{item.classifyName}}
   ul
     li.app-list(v-for="(item,key) in classification",:key="item.id")
       img(:src="item.icon")
@@ -46,11 +45,16 @@ export default {
     Order.$on('Search', function(message) {
       _this.text = message
     })
+    //轮播图信号监听
+    Order.$on('classifyBeans', (message) => {
+      //document.write(message)
+      setTimeout(() => {
+        _this.selectItem = message.classifyBeans
+      }, 0);
+    })
+    CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
   },
   methods: {
-    onIndexChange: function(index) {
-      this.index = index
-    },
     openStart:function(url,special){ //判断以何种方式打开应用
       switch(special){
         case 'open':this.openApp();break; //启动应用
@@ -81,6 +85,7 @@ export default {
   data () {
     return {
       select: 'all',
+      selectItem: null,
       appList: {},
       appData: null,
       text:""
