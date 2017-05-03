@@ -4,7 +4,7 @@
   Search
   .organization-bar
     template(v-for="(item, key) in tree")
-        a(v-on:click="clickTree(item, key)") {{item.name}}
+        span.organization-item(v-on:click="clickTree(item, key)") {{item.name}}
         span >
   ul.organization(v-if="List")
     li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
@@ -180,11 +180,10 @@ export default {
 }
 .organization-bar{
     height:30px;
-    display: flex;
     line-height: 30px;
     font-size: 0.8rem;
-    overflow: auto;
-    a {
+    overflow-x: scroll;
+    .organization-item {
         color: #2c84ff;
         margin: 0 5px;
     }
