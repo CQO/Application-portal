@@ -6,7 +6,7 @@
     template(v-for="(item, key) in tree")
         span.organization-item(v-on:click="clickTree(item, key)") {{item.name}}
         span >
-  ul.organization(v-if="List")
+  ul.organization(v-if="List && !searchResult")
     li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
@@ -18,6 +18,7 @@
     img(src="../assets/loading.gif")
   .search-result(v-if="searchResult")
     Organization(v-for="item in searchResult",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+    .placeholder
   BottomBar(index="2")
 </template>
 
@@ -67,7 +68,7 @@ export default {
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 454, orgId: DATA.unitId + "" ,type: 2, name:message }
+        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
@@ -105,19 +106,19 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.log(`[通讯录]请求组织信息`)
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
         CHANNEL.log(`[通讯录]请求人员信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.log(`[通讯录]请求组织信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
@@ -192,7 +193,7 @@ export default {
     }
 }
 .search-result {
-  background-color: rgba(248, 248, 248, 0.95);
+  background-color: rgba(248, 248, 248, 1);
   position: absolute;
   top: 87px;
   bottom: 50px;

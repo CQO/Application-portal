@@ -46,78 +46,21 @@ export default {
     Loading
   },
   created(){
-    //清空全局变量
-    preData = [0,null]
     if(DATA.userName) this.userName = DATA.userName //智能保存用户名
-
-  },
-  beforeMount(){
-    //预登录方法
-    const stepOne = (receive) => {
-      preData[0] = 0
-
-    }
-        //正式登陆方法
-    const stepTwo = (receive) => {
-        preData[0] = 0;
-        Order.$emit('Loading', 'hide')
-        const Res = receive.receive;
-        //判断错误码是否为 0:成功 113:已登录
-        if(Res.code == 0 || Res.code == 113){
-          //保存登陆用户信息和时间戳
-          const nowTime = new Date().getTime()
-          const appData = {
-            userData:{ //用户信息
-              userName : receive.userName,   //用户名
-              idCard   : receive.idCard, //身份信息
-              key      : receive.key,  //ID
-              unitName : receive.unitName,
-              gender   : 3
-
-            }, 
-            Timestamp: nowTime //时间戳
-          }
-          Timestamp.value = nowTime
-
-          //保存用户信息
-          localforage.setItem('appData', appData,function (err){
-            if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
-            clearInterval(time);
-            window.location.href="#/Main"
-          });
-        }
-        else{
-          this.selectList = null
-          switch(Res.code){
-            case 112:  Order.$emit('Toast', `用户名或密码错误`); break;
-            default :  Order.$emit('Toast', `登录失败 Code:${Res.code}`)
-          }
-        }
-    }
-    //定时器
-    const time = setInterval(() => {
-      switch(preData[0]){
-        case 0 : return null; break;
-        case 2 : stepTwo(preData[1]); break;
-      }
-    },1000);
   },
   methods: {
     PreLogin: function() { //预登录函数
-      const _this    = this,
-            userName = this.userName,
-            password = this.password;
-      DATA.userName = userName
+      //存储登录的用户名
+      DATA.userName = this.userName 
       //判断用户名和密码是否为空
-      //if( userName === '' || password === '' ) Order.$emit('Toast', '请输入账号和密码'); return null;
+      if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请输入账号和密码'); return null; }
       //预登录信号监听
       Order.$on('preLogin', (message) => {
         setTimeout( ()=>{
           Order.$emit('Loading', 'hide')
-          //判断是否取到数据
-          if(message !=="" && message !==null){
+          if(message !=="" && message !==null){ //空数据判断
             const Data = message
-            switch(Data.length){
+            switch(Data.length){ //判断同名用户数量
               case 0  : Order.$emit('Toast', '登录失败'); break; 
               //如果用户所属的组织只有一个，那么自动帮用户选择登录
               case 1  : const data = Data[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
@@ -133,27 +76,49 @@ export default {
       CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
     login:function(name,idCard,unitId, unitName){ //登录函数
-      const postData = {
-        usbkeyidentification : idCard, //身份证
-        password : this.password, //密码
-        unitId : unitId, //
-        userName:name,
-      };
       DATA.unitId = unitId //保存unitId
       DATA.idCard = idCard //保存身份证信息
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$on('login', function(message) {
-        const data = {
-          receive:message,
-          userName:name,
-          idCard:idCard,
-          key:unitId,
-          unitName: unitName
-        }
-        preData = [2,data]
+        setTimeout(()=>{
+          Order.$emit('Loading', 'hide')
+          const Res = message;
+          //判断错误码是否为 0:成功 113:已登录
+          if(Res.code == 0 || Res.code == 113){ //保存登陆用户信息和时间戳
+            const nowTime = new Date().getTime()
+            const appData = {
+              userData:{ //用户信息
+                userName : name,   //用户名
+                idCard   : idCard, //身份信息
+                key      : unitId,  //ID
+                unitName : unitName,
+                gender   : 3
+              }, 
+              Timestamp: nowTime //时间戳
+            }
+            Timestamp.value = nowTime
+            //保存用户信息
+            localforage.setItem('appData', appData,function (err){
+                if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
+                window.location.href="#/Main"
+            });
+          }
+          else{
+            this.selectList = null
+            switch(Res.code){
+                case 112:  Order.$emit('Toast', `用户名或密码错误`); break;
+                default :  Order.$emit('Toast', `登录失败 Code:${Res.code}`)
+            }
+          }
+        },0)
       })
-      CHANNEL.login(JSON.stringify(postData))
+      CHANNEL.login(JSON.stringify({
+        usbkeyidentification : idCard, //身份证
+        password : this.password, //密码
+        unitId : unitId, //
+        userName:name,
+      }))
     }
   },
 }
