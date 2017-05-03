@@ -2,9 +2,7 @@
   <div class="search-box">
     <div class="text-bar">
       <input v-model="searchText" class="text-input" type="text" name="fname"/>
-      <div class="button" v-on:click="search">
-        {{buttonText}}
-      </div>
+      <div class="button" v-on:click="search">搜索</div>
     </div>
   </div>
 </template>
@@ -14,22 +12,12 @@ import { Order } from '../Order.js'
 export default {
   data () {
     return {
-      searchText:"",
-      buttonText: '搜索'
+      searchText:""
     }
   },
   methods: {
     search () {
-      if(this.searchText && this.buttonText === '搜索') {
-        this.buttonText = '取消'
-        Order.$emit('SEARCHOK', this.searchText)
-        
-      }
-      else{
-        Order.$emit('SEARCHOK', '')
-        this.buttonText = '搜索'
-        this.searchText = null
-      }
+      Order.$emit('SEARCHOK', this.searchText)
     }
   },
 }

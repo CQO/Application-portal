@@ -1,18 +1,18 @@
 <template lang="pug">
-.login-box(:class="{ two: selectList }",@click.stop="selectList = null")
+.login-box
     .logo-box
-        img.logo(src="../assets/logo.png")
+        img(src="../assets/logo.png")
         p 智慧企业运行平台
-    .user-name-box
+    .user-name-box(:class="{ hide: selectList }")
         .user.ico &#xe60c;
         input(v-model="userName",placeholder="用户名")
-    .password-box
+    .password-box(:class="{ hide: selectList }")
         .password.ico &#xe623;
         input(type="password",v-model="password",placeholder="密码")
-    
     .select-list(v-show="selectList")
         .title
             span.ok 选择需要登陆的用户
+            .close.ico(@click.stop="selectList = null") &#xe697;
         ul.list
             li(v-for="item in selectList",v-on:click="login(item.usbkeyname,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
     .step
@@ -55,7 +55,7 @@ export default {
       //判断用户名和密码是否为空
       if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请输入账号和密码'); return null; }
       //预登录信号监听
-      Order.$on('preLogin', (message) => {
+      Order.$once('preLogin', (message) => {
         setTimeout( ()=>{
           Order.$emit('Loading', 'hide')
           if(message !=="" && message !==null){ //空数据判断
@@ -80,7 +80,7 @@ export default {
       DATA.idCard = idCard //保存身份证信息
       Order.$emit('Loading', 'show')
       //登录信号监听
-      Order.$on('login', function(message) {
+      Order.$once('login', function(message) {
         setTimeout(()=>{
           Order.$emit('Loading', 'hide')
           const Res = message;
@@ -167,8 +167,7 @@ export default {
     }
 }
 .select-list{
-    height: 240px;
-    background-color: white;
+    height: 280px;
     margin: 0 auto;
     position: absolute;
     top: 200px;
@@ -180,16 +179,23 @@ export default {
         height: 40px;
         background-color: #dcd6d6;
         border-radius: 5px 5px 0 0;
+        position:relative;
+        .ico{
+            color: cadetblue;
+            position: absolute;
+            right: 7px;
+            top: 7px;
+        }
     }
     .ok{
-        color: cornflowerblue;
+        color: cadetblue;
         line-height: 40px;
         margin-left: 10px;
     }
     .list{
-        height: 160px;
         overflow-y: auto;
         user-select:none;
+        background-color: white;
         li{
             padding: 10px;
             border-bottom: 1px solid #dcecec;

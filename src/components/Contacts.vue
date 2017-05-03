@@ -17,6 +17,9 @@
   .load(v-else)
     img(src="../assets/loading.gif")
   .search-result(v-if="searchResult")
+    .search-result-title
+      span 共搜索到了{{searchResult.length}}条结果
+      .close.ico(@click.stop="searchResult = null") &#xe697;
     Organization(v-for="item in searchResult",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
     .placeholder
   BottomBar(index="2")
@@ -68,7 +71,7 @@ export default {
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
+        const enOS = { enterId: 454, orgId: DATA.unitId + "" ,type: 2, name:message }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
@@ -81,10 +84,7 @@ export default {
       this.List = null //显示加载动画
       //预登录信号监听
       Order.$once('queryEnOS', (message) => {
-        //document.write("*")
-        //定时器
         setTimeout( ()=>{
-          //clearInterval(this.interval) //清除定时器
           DATA.orgTree.push({name:Data.orgName, id:Data.orgID}) //层级树增加一层
           let thisData = message
           if(thisData.entUsers.length > 0){
@@ -95,6 +95,7 @@ export default {
           }
           CHANNEL.log(`----------message------------`)
           CHANNEL.log(Data)
+          DATA.id = Data.orgID
           DATA.orgList[Data.orgID] = thisData //保存层级数据
           this.List = DATA.orgList[Data.orgID] //显示层级数据
           this.tree = DATA.orgTree //显示层级树
@@ -106,19 +107,19 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.log(`[通讯录]请求组织信息`)
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
         CHANNEL.log(`[通讯录]请求人员信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.log(`[通讯录]请求组织信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
@@ -195,10 +196,24 @@ export default {
 .search-result {
   background-color: rgba(248, 248, 248, 1);
   position: absolute;
-  top: 87px;
+  top: 45px;
   bottom: 50px;
   left: 0;
   right: 0;
+  .search-result-title{
+    height: 30px;
+    line-height: 30px;
+    background-color: gainsboro;
+    color: ivory;
+    padding-left: 10px;
+    position: relitive;
+    .close{
+      position: absolute;
+      right: 5px;
+      font-size: 1.2rem;
+      color: cadetblue;
+    }
+  }
 }
 .placeholder{
   height: 50px;

@@ -19,7 +19,6 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import axios from 'axios'
 import {get, cutString, timeoutDetection, CHANNEL} from "./method.js" 
 //引入图片资源
 const $bangongxitong    = require('../assets/bangongxitong.png')
@@ -38,23 +37,22 @@ export default {
     const _this = this
     //从本地数据库中取出用户数据
     localforage.getItem("appData",(err,appData) => {
-      CHANNEL.log('[通知]获取到用户数据')
+      //CHANNEL.log('[通知]获取到用户数据')
       //拷贝一份 *应用数据* 里的 *用户数据*
       const userData = appData.userData
       if(timeoutDetection()) { return null } //超时检测
-      CHANNEL.log(`[通知]没有超时`)
+      //CHANNEL.log(`[通知]没有超时`)
       if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
-      CHANNEL.log(`[通知]用户key:${userData.key}`)
+      //CHANNEL.log(`[通知]用户key:${userData.key}`)
       if(userData.key != "1") { return null } //集团用户检测
       if(appData.notice){Order.$emit('Toast', '使用缓存'); this.notice = appData.notice; return null } //缓存检测
       //拉取数据的URL
       const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
       //通过Get请求请求通知数据
-      CHANNEL.log('开始发送GET请求')
+      //CHANNEL.log('开始发送GET请求')
       get( noticeURL, function(receive){
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
         //给 *应用数据* 的备份 增加 *通知数据*
-        
         appData.noticeData = {
           xietongbangong:{ // 协同办公项
             img    : $bangongxitong,
