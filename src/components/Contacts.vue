@@ -148,10 +148,6 @@ export default {
 
 <style lang='less' scoped>
 .organization{
-  	position: relative;
-	  height: 400px;
-	  overflow: scroll;
-
 	  /* Prevent native touch events on Windows */
 	  -ms-touch-action: none;
 

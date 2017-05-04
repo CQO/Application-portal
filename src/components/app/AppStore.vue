@@ -11,7 +11,7 @@
       .info
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
-      .button.open(v-if="item.exist",v-on:click="openStart(item.url, item.special)") 打开
+      .button.open(v-if="item.exist",v-on:click="openStart(item)") 打开
       .button.down(v-else,v-on:click="installApp(item,key)") 安装
 </template>
 
@@ -40,7 +40,6 @@ export default {
     if( timeoutDetection() ) { return null} //时间处理
     localforage.getItem("appData",function(err,appData){
       _this.appData = appData
-      _this.appList = appData.appList
     })
     Order.$on('Search', function(message) {
       _this.text = message
@@ -60,11 +59,8 @@ export default {
     CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
   },
   methods: {
-    openStart:function(url,special){ //判断以何种方式打开应用
-      switch(special){
-        case 'open':this.openApp();break; //启动应用
-        case 'url':window.location.href=url;break; //跳转到Url
-      }
+    openStart:function(item){ //判断以何种方式打开应用
+      window.location.href=item.homeUrl;
     },
     openApp: function () { //打开应用
       const app1 = {
@@ -81,13 +77,6 @@ export default {
       if(item.type === 2){
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
-      // this.appList[key].exist = true
-      // this.appData.appList = this.appList
-      // localforage.setItem('appData', this.appData,function (err){
-      //   if(err){
-      //     Order.$emit('Toast', '缓存用户数据失败')
-      //   }
-      // })
     }
   },
   data () {
@@ -110,6 +99,12 @@ export default {
           if(_this.appList[item].status === 1) {
             if(_this.text =="" || _this.appList[item].name.indexOf(_this.text) > -1) {
               newList[item] = _this.appList[item]
+              _this.appData.appList.forEach(function(element) {
+                element.appInfoList.forEach(function(itemS) {
+                  if(newList[item].id === itemS.id) {newList[item].exist = true; }
+                }, this);
+              }, this);
+              
             }
           }
         }
