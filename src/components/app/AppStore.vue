@@ -4,14 +4,14 @@
   Search
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
-    checker-item(v-for="item in selectItem",:value="item.classifyID") {{item.classifyName}}
+    checker-item(v-for="(item,key) in selectItem",:value="key") {{item}}
   ul
     li.app-list(v-for="(item,key) in classification",:key="item.id")
       img(:src="item.icon")
       .info
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
-      .button.open(v-if="item.exist",v-on:click="openStart(item)") 打开
+      .button.open(v-if="item.exist") {{item.status}}
       .button.down(v-else,v-on:click="installApp(item,key)") 安装
 </template>
 
@@ -39,24 +39,40 @@ export default {
     const _this = this
     if( timeoutDetection() ) { return null} //时间处理
     localforage.getItem("appData",function(err,appData){
+      //document.write(appData.onlionAppID)
       _this.appData = appData
+      if(appData.selectItem){
+        _this.selectItem = appData.selectItem
+        _this.appList = appData.appInfoList
+      }
+      else{
+        Order.$on('classifyBeans', (message) => {
+          const json = {}
+          message.classifyBeans.forEach(function(element) {
+            json[element.classifyID + ""] = element.classifyName
+          }, this);
+          _this.appData.selectItem = json
+          localforage.setItem('appData', _this.appData) //把应用列表存储到起来
+          setTimeout(() => {
+            _this.selectItem = json
+          }, 0);
+        })
+        CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
+        Order.$on('appStores', (message) => {
+          _this.appData.appInfoList = message.appStore.appInfoList
+          localforage.setItem('appData', _this.appData) //把应用列表存储到起来
+          setTimeout(() => {
+            _this.appList = message.appStore.appInfoList
+          }, 0);
+        })
+        CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
+      }
     })
     Order.$on('Search', function(message) {
       _this.text = message
     })
-    Order.$on('classifyBeans', (message) => {
-      //document.write(message)
-      setTimeout(() => {
-        _this.selectItem = message.classifyBeans
-      }, 0);
-    })
-    CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
-    Order.$on('appStores', (message) => {
-      setTimeout(() => {
-        _this.appList = message.appStore.appInfoList
-      }, 0);
-    })
-    CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
+
+
   },
   methods: {
     openStart:function(item){ //判断以何种方式打开应用
@@ -74,7 +90,23 @@ export default {
       CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item,key){
-      if(item.type === 2){
+      if(item.type === 2){ //判断是否是H5应用
+        this.appData.onlionAppID += `[${item.id}]`
+        const json = {
+          id: item.id,
+          name: item.name,
+          icon: item.icon,
+          url: item.homeUrl,
+          status: 1
+        }
+        //document.write(this.selectItem[item.classify])
+        if(this.appData.appList[this.selectItem[item.classify]]){
+          this.appData.appList[this.selectItem[item.classify]].push(json)
+        }
+        else{
+          this.appData.appList[this.selectItem[item.classify]] = [json]
+        }
+        localforage.setItem('appData', this.appData) //把应用列表存储到起来
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
     }
@@ -95,16 +127,11 @@ export default {
       const newList ={}
       for(let item in _this.appList){
         //判断应用列表的类型是否和选择的类型一致
-        if(_this.select === "all" || _this.appList[item].classify === _this.select){
+        if(_this.select === "all" || _this.appList[item].classify == _this.select){
           if(_this.appList[item].status === 1) {
             if(_this.text =="" || _this.appList[item].name.indexOf(_this.text) > -1) {
               newList[item] = _this.appList[item]
-              _this.appData.appList.forEach(function(element) {
-                element.appInfoList.forEach(function(itemS) {
-                  if(newList[item].id === itemS.id) {newList[item].exist = true; }
-                }, this);
-              }, this);
-              
+              if(_this.appData.onlionAppID.indexOf(`[${_this.appList[item].id}]`) > -1) newList[item].exist = true
             }
           }
         }

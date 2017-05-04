@@ -2,22 +2,10 @@
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
   swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
-  AppTitle(title="办公应用")
-  .grid
-    .grid-item(v-for="item in newAppList",:key="item.id") 
-      v-touch.touch(tag="div",v-on:tap="openUrl(item.url)")
-      img(slot="icon",:src="item.icon")
-      p {{item.name}}
-  AppTitle(title="通讯应用")
-  .grid
-    .grid-item
-      v-touch.touch(tag="div",v-on:tap="openUrl()")
-      img(slot="icon",src="../assets/tiangongyuanyuan.png")
-      p 天宫圆圆
   template(v-for="(sortItem,sortKey) in appList")
-    AppTitle(:title="sortItem.appClassify.classifyName")
+    AppTitle(:title="sortKey")
     .grid
-      .grid-item(v-for="(item,key) in sortItem.appInfoList",:key="item.id",v-show="item.status == 1") 
+      .grid-item(v-for="(item,key) in sortItem",:key="item.id",v-show="item.status == 1") 
         v-touch.touch(tag="div",v-on:press="pressItem(item)",v-on:tap="openStart(item)")
         img(slot="icon",:src="item.icon")
         p {{item.name}}
@@ -60,8 +48,7 @@ export default {
       appData: null,
       appList: null,
       showList: [""],
-      appInfos: {},
-      newAppList: null
+      onlionAppID: [],
     }
   },
   created(){
@@ -74,7 +61,6 @@ export default {
       if( appData && appData.showList ) { //检测缓存是否存在
         this.showList = appData.showList //显示轮播图
         this.appList = appData.appList
-        this.newAppList = appData.newAppList
         return
       }
       //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
@@ -91,46 +77,45 @@ export default {
       //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
       let officeApplication = {
         url: '',
-        available: false
+        status: 0
       };
       if(appData.userData.key == "1"){
         officeApplication.url = BanGongURL
-        officeApplication.available = true
+        officeApplication.status = 1
       }
-      this.newAppList = {
+      this.appList = {
         "办公应用": [
-          { id:"10004", name: "协同办公", icon:$bangongxitong, url: officeApplication.url },
-          { id:"10002", name: "邮件", icon: $youjian, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard },
-          { id:"10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/'}
+          { id:"10004", name: "协同办公", icon:$bangongxitong, url: officeApplication.url, status: officeApplication.status },
+          { id:"10002", name: "邮件", icon: $youjian, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard, status: 1 },
+          { id:"10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1}
         ],
         "通讯应用":[
-          { id:"10003", name: "天宫圆圆", icon:$tiangongyuanyuan, url: "#" },
+          { id:"10003", name: "天宫圆圆", icon:$tiangongyuanyuan, url: "#", status: 1 },
         ]
       }
       Order.$on('appInfos', (message) => {
         message.appInfos.forEach(function(element) {
-          const className = appClassify.classifyName
+          const className = element.appClassify.classifyName
           element.appInfoList.forEach(function(item) {
+            this.onlionAppID+=`[${item.id}]`
             const json = {
               id: item.id,
               name: item.name,
               icon: item.icon,
               url: item.homeUrl,
+              status: 1
             }
-            document.write("sd")
-            if(newAppList[className]){
-              newAppList[className].push(json)
+            if(this.appList[className]){
+              this.appList[className].push(json)
             }
             else{
-              document.write(newAppList[className])
-              newAppList[className] = [json]
+              this.appList[className] = [json]
             }
           }, this);
         }, this);
         setTimeout(() => {
-          this.appList = message.appInfos
           this.appData.appList = this.appList
-          this.appData.newAppList = this.newAppList
+          this.appData.onlionAppID = this.onlionAppID
           localforage.setItem('appData', this.appData) //把应用列表存储到起来
         }, 0);
       })
@@ -165,15 +150,16 @@ export default {
       this.selectNumber++
     },
     delateApp:function(){
-      const oldList = this.appList;
       let   mark    = false ;  //用于标记用户是否有删除app
-      for(let Item in oldList){
-        for(let thisApp in oldList[Item].appInfoList) {
+      for(let Item in this.appList){
+        for(let thisApp in this.appList[Item]) {
           //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
-          if(oldList[Item].appInfoList[thisApp].isSelect){ 
-            oldList[Item].appInfoList[thisApp].status = 0
-            oldList[Item].appInfoList[thisApp].id = 'x'
-            CHANNEL.queryAppStore(JSON.stringify({type:"7",id:oldList[Item].appInfoList[thisApp].id}))
+          if(this.appList[Item][thisApp].isSelect){ 
+            this.appList[Item][thisApp].status = 0
+            //document.write(this.appData.onlionAppID,oldList[Item][thisApp].id)
+            this.appData.onlionAppID = this.appData.onlionAppID.replace(`[${this.appList[Item][thisApp].id}]`,"")
+            CHANNEL.queryAppStore(JSON.stringify({type:"7",id:this.appList[Item][thisApp].id}))
+            this.appList[Item][thisApp].id = 'x'
             mark = true
           }
         }
