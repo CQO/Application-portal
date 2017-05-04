@@ -10,7 +10,7 @@
       img(:src="item.icon")
       .info
         p.name {{item.name}}
-        p.detail {{item.detail}}
+        p.detail 版本号:{{item.version}}
       .button.open(v-if="item.exist",v-on:click="openStart(item.url, item.special)") 打开
       .button.down(v-else,v-on:click="installApp(item,key)") 安装
 </template>
@@ -45,7 +45,6 @@ export default {
     Order.$on('Search', function(message) {
       _this.text = message
     })
-    //轮播图信号监听
     Order.$on('classifyBeans', (message) => {
       //document.write(message)
       setTimeout(() => {
@@ -53,6 +52,12 @@ export default {
       }, 0);
     })
     CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
+    Order.$on('appStores', (message) => {
+      setTimeout(() => {
+        _this.appList = message.appStore.appInfoList
+      }, 0);
+    })
+    CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
   },
   methods: {
     openStart:function(url,special){ //判断以何种方式打开应用
@@ -73,13 +78,16 @@ export default {
       CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item,key){
-      this.appList[key].exist = true
-      this.appData.appList = this.appList
-      localforage.setItem('appData', this.appData,function (err){
-        if(err){
-          Order.$emit('Toast', '缓存用户数据失败')
-        }
-      })
+      if(item.type === 2){
+        CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+      }
+      // this.appList[key].exist = true
+      // this.appData.appList = this.appList
+      // localforage.setItem('appData', this.appData,function (err){
+      //   if(err){
+      //     Order.$emit('Toast', '缓存用户数据失败')
+      //   }
+      // })
     }
   },
   data () {
@@ -98,8 +106,8 @@ export default {
       const newList ={}
       for(let item in _this.appList){
         //判断应用列表的类型是否和选择的类型一致
-        if(_this.select === "all" || _this.appList[item].type === _this.select){
-          if(_this.appList[item].available === true) {
+        if(_this.select === "all" || _this.appList[item].classify === _this.select){
+          if(_this.appList[item].status === 1) {
             if(_this.text =="" || _this.appList[item].name.indexOf(_this.text) > -1) {
               newList[item] = _this.appList[item]
             }

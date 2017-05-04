@@ -10,6 +10,13 @@
         img(slot="icon",:src="item.icon")
         p {{item.name}}
         .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
+  template(v-for="(sortItem,sortKey) in appInfos")
+    AppTitle(:title="sortItem.appClassify.classifyName")
+    .grid
+      .grid-item(v-for="(item,key) in sortItem.appInfoList",:key="item.id",v-show="item.status === 1") 
+        v-touch.touch(tag="div",v-on:press="pressItem(sortKey,key)",v-on:tap="openStart(item.homeUrl, item.type,sortKey, key)")
+        img(slot="icon",:src="item.icon")
+        p {{item.name}}
   .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
   BottomBar(index="1")
 </template>
@@ -47,12 +54,19 @@ export default {
       appData: null,
       appList: null,
       showList: [""],
+      appInfos: {}
     }
   },
   created(){
     timeoutDetection() //超时处理
     //取数据库
     localforage.getItem("appData",(err,appData) => {
+      Order.$on('appInfos', (message) => {
+        setTimeout(() => {
+          this.appInfos = message.appInfos
+        }, 0);
+      })
+      CHANNEL.queryAppStore(JSON.stringify({type:"1"}))
       this.appData = appData; //保存应用数据
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //document.write(appData.showList)
