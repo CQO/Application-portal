@@ -109,6 +109,10 @@ export default {
         localforage.setItem('appData', this.appData) //把应用列表存储到起来
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
+      else{
+        //CHANNEL.log(item)
+        CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
+      }
     }
   },
   data () {

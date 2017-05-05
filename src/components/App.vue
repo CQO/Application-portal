@@ -33,7 +33,7 @@ Vue.use(VueTouch, {name: 'v-touch'});
 const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../assets/xinxifabu.png'),
       $youjian          = require('../assets/youjian.png'),
-      $bangongxitong    = require('../assets/bangongxitong.png');
+      $officeApp    = require('../assets/bangongxitong.png');
 export default {
   components: {
     Swiper,
@@ -56,14 +56,15 @@ export default {
     //取数据库
     localforage.getItem("appData",(err,appData) => {
       this.appData = appData; //保存应用数据
-      //--------------------------------------------------轮播图处理阶段--------------------------------------------------
-      //document.write(appData.showList)
+      //---------------------------------------------------缓存处理阶段---------------------------------------------------
       if( appData && appData.showList ) { //检测缓存是否存在
         this.showList = appData.showList //显示轮播图
         this.appList = appData.appList
         return
       }
-      //如果缓存不存在向后台发送获取轮播图数据请求 {type:5}是约定的字段
+      //----------------------------------------------------------------------------------------------------------------
+
+      //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //轮播图信号监听
       Order.$on('slidesshow', (message) => {
         setTimeout(() => {
@@ -71,21 +72,12 @@ export default {
           this.appData.showList = message //保存轮播图数据     
         },0);
       })
-      CHANNEL.slidesshow(JSON.stringify({type:"5"})) //请求轮播数据
+      //请求轮播数据
+      CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
+
       //--------------------------------------------------应用处理阶段--------------------------------------------------
-      const BanGongURL = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+appData.userData.userName+'&PID='+appData.userData.idCard+'&webService=&SessionID='
-      //判断用户标识是否为 1 如果不是则将 协同办公 应用available属性设置为 false
-      let officeApplication = {
-        url: '',
-        status: 0
-      };
-      if(appData.userData.key == "1"){
-        officeApplication.url = BanGongURL
-        officeApplication.status = 1
-      }
       this.appList = {
         "办公应用": [
-          { id:"10004", name: "协同办公", icon:$bangongxitong, url: officeApplication.url, status: officeApplication.status, main:true },
           { id:"10002", name: "邮件", icon: $youjian, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard, status: 1, main:true },
           { id:"10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
         ],
@@ -93,24 +85,38 @@ export default {
           { id:"10003", name: "天宫圆圆", icon:$tiangongyuanyuan, url: "#", status: 1, main:true },
         ]
       }
+      //--------------------------------------------------集团用户判断--------------------------------------------------
+      if(appData.userData.key == "1"){
+        const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+appData.userData.userName+'&PID='+appData.userData.idCard+'&webService=&SessionID='
+        this.appList["办公应用"].push({ 
+          id:"10004", 
+          name: "协同办公", 
+          icon: $officeApp, 
+          url: officeAppUrl,
+          status: 1, 
+          main: true 
+        })
+      }
+
+      //--------------------------------------------------处理在线应用--------------------------------------------------
       Order.$on('appInfos', (message) => {
         message.appInfos.forEach(function(element) {
-          const className = element.appClassify.classifyName
+          const className = element.appClassify.classifyName //应用分类名称
           element.appInfoList.forEach(function(item) {
-            this.onlionAppID+=`[${item.id}]`
-            const json = {
-              id: item.id,
-              name: item.name,
-              icon: item.icon,
-              url: item.homeUrl,
-              status: 1
-            }
-            if(this.appList[className]){
-              this.appList[className].push(json)
-            }
-            else{
-              this.appList[className] = [json]
-            }
+            //将此应用的ID添加到已安装应用名单
+            this.onlionAppID+=`[${item.id}]`                 //  |--------------------------------------------|
+            const newAppData = {                             //  |   message                                  |
+              id: item.id,                                   //  |                  |---------------------|   |
+              name: item.name,                               //  |  |----------|    |  element            |   |
+              icon: item.icon,                               //  |  | element  |    |   |--------------|  |   |
+              url: item.homeUrl,                             //  |  |----------|    |   |     item     |  |   |
+              status: 1                                      //  |                  |   |--------------|  |   |
+            }                                                //  |                  |---------------------|   |
+                                                             //  |--------------------------------------------|
+                                                             //  message:原始数据  element:分类应用层 item:应用个体
+            //应用列表是否包含此分类检测                         
+            if(this.appList[className] === undefined){ this.appList[className] = []}
+            this.appList[className].push(newAppData)
           }, this);
         }, this);
         setTimeout(() => {
@@ -127,6 +133,7 @@ export default {
       this.index = index
     },
     openStart:function(thisApp){ //判断以何种方式打开应用
+
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
@@ -139,7 +146,21 @@ export default {
           this.selectNumber++
         }
         else{
-          window.location.href = thisApp.homeUrl;
+          if(thisApp.url === '#'){
+            if(!DATA.idCard) DATA.idCard = this.appData.userData.idCard
+            const app1 = {
+              "type":2,
+              "sopid":"com.vrv.linkDood",
+              "pkgpath":"com.vrv.linkDood-1.0.45.sop",
+              "scheme":"linkdood:showlinkdood?id=" + DATA.idCard,
+              "name":"linkdood"
+            };
+            //打开应用
+            CHANNEL.opensopApp(JSON.stringify(app1))
+          }
+          else{
+            window.location.href = thisApp.url;
+          }
         }
       }
     },
