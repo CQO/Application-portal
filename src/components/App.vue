@@ -10,6 +10,7 @@
         img(slot="icon",:src="item.icon")
         p {{item.name}}
         .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
+      .clear
   .placeholder
   .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
   BottomBar(index="1")
@@ -48,7 +49,7 @@ export default {
       appData: null,
       appList: null,
       showList: [""],
-      onlionAppID: [],
+      onlionAppID: {},
     }
   },
   created(){
@@ -100,11 +101,13 @@ export default {
 
       //--------------------------------------------------处理在线应用--------------------------------------------------
       Order.$on('appInfos', (message) => {
+        const _this = this
+        //整理数据
         message.appInfos.forEach(function(element) {
           const className = element.appClassify.classifyName //应用分类名称
           element.appInfoList.forEach(function(item) {
             //将此应用的ID添加到已安装应用名单
-            this.onlionAppID+=`[${item.id}]`                 //  |--------------------------------------------|
+            _this.onlionAppID[item.id] = 1                 //  |--------------------------------------------|
             const newAppData = {                             //  |   message                                  |
               id: item.id,                                   //  |                  |---------------------|   |
               name: item.name,                               //  |  |----------|    |  element            |   |
@@ -113,16 +116,16 @@ export default {
               status: 1                                      //  |                  |   |--------------|  |   |
             }                                                //  |                  |---------------------|   |
                                                              //  |--------------------------------------------|
-                                                             //  message:原始数据  element:分类应用层 item:应用个体
-            //应用列表是否包含此分类检测                         
+            //应用列表是否包含此分类检测                              message:原始数据  element:分类应用层 item:应用个体
             if(this.appList[className] === undefined){ this.appList[className] = []}
             this.appList[className].push(newAppData)
           }, this);
         }, this);
+        //存储数据
         setTimeout(() => {
           this.appData.appList = this.appList
           this.appData.onlionAppID = this.onlionAppID
-          localforage.setItem('appData', this.appData) //把应用列表存储到起来
+          localforage.setItem('appData', this.appData) 
         }, 0);
       })
       CHANNEL.queryAppStore(JSON.stringify({type:"1"}))
@@ -178,8 +181,7 @@ export default {
           //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
           if(this.appList[Item][thisApp].isSelect){ 
             this.appList[Item][thisApp].status = 0
-            //document.write(this.appData.onlionAppID,oldList[Item][thisApp].id)
-            this.appData.onlionAppID = this.appData.onlionAppID.replace(`[${this.appList[Item][thisApp].id}]`,"")
+            this.appData.onlionAppID[this.appList[Item][thisApp].id] = 0
             CHANNEL.queryAppStore(JSON.stringify({type:"7",id:this.appList[Item][thisApp].id}))
             this.appList[Item][thisApp].id = 'x'
             mark = true
@@ -215,11 +217,11 @@ export default {
 
 <style lang='less'>
 .grid{
-  display: flex;
   .grid-item{
     width: 75px;
     margin: 10px;
     position: relative;
+    float:left;
   }
   .grid-item:active{
     background-color: aquamarine;
@@ -264,5 +266,8 @@ export default {
 }
 .placeholder{
   height: 50px;
+}
+.clear{
+  clear: both;
 }
 </style>

@@ -13,6 +13,7 @@
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+    .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
   .search-result(v-if="searchResult")
@@ -50,6 +51,7 @@ export default {
     }
     //取数据库数据
     localforage.getItem("appData",(err,appData) => {
+      if(appData.userData.key == 1)  appData.userData.unitName = "集团公司总部"
       this.load({
         orgName: appData.userData.unitName,
         orgID: appData.userData.key,

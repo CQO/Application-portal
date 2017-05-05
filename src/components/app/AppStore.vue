@@ -11,8 +11,8 @@
       .info
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
-      .button.open(v-if="appData.onlionAppID.indexOf(`[${item.id}]`)",v-on:click="installApp(item,key)") 安装
-      .button.down(v-else) 已安装
+      .button.open(v-if="appData.onlionAppID[item.id] === 1 || item.key === 9999") 已安装
+      .button.down(v-else,v-on:click="installApp(item)") 安装
 </template>
 
 <script>
@@ -38,9 +38,12 @@ export default {
   created(){
     const _this = this
     if( timeoutDetection() ) { return null} //时间处理
-    localforage.getItem("appData",function(err,appData){
+    localforage.getItem("appData",(err,appData) => {
       //document.write(appData.onlionAppID)
       _this.appData = appData
+      // for(let item in this.appData.onlionAppID){
+      //   document.write(item + ":" + this.appData.onlionAppID[item])
+      // }
       if(appData.selectItem){
         _this.selectItem = appData.selectItem
         _this.appList = appData.appInfoList
@@ -89,9 +92,14 @@ export default {
       //打开应用
       CHANNEL.opensopApp(JSON.stringify(app1))
     },
-    installApp: function(item,key){
+    installApp: function(item){
+      const _this = this
       if(item.type === 2){ //判断是否是H5应用
-        this.appData.onlionAppID += `[${item.id}]`
+        //document.write(appData.onlionAppID[item.id])
+        setTimeout(()=>{
+          _this.appData.onlionAppID[item.id] = 1
+        },0)
+        item.key = 9999
         const json = {
           id: item.id,
           name: item.name,
@@ -107,6 +115,10 @@ export default {
           this.appData.appList[this.selectItem[item.classify]] = [json]
         }
         localforage.setItem('appData', this.appData) //把应用列表存储到起来
+        for(let item in this.appData.onlionAppID){
+          //document.write(item + ":" + this.appData.onlionAppID[item] + "\r\n")
+        }
+        //document.write(item.id,item.classify)
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
       else{
@@ -135,7 +147,7 @@ export default {
           if(_this.appList[item].status === 1) {
             if(_this.text =="" || _this.appList[item].name.indexOf(_this.text) > -1) {
               newList[item] = _this.appList[item]
-              if(_this.appData.onlionAppID.indexOf(`[${_this.appList[item].id}]`) > -1) newList[item].exist = true
+              if(_this.appData.onlionAppID[_this.appList[item].id]) newList[item].exist = true
             }
           }
         }
