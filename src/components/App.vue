@@ -85,12 +85,12 @@ export default {
       }
       this.appList = {
         "办公应用": [
-          { id:"10004", name: "协同办公", icon:$bangongxitong, url: officeApplication.url, status: officeApplication.status },
-          { id:"10002", name: "邮件", icon: $youjian, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard, status: 1 },
-          { id:"10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1}
+          { id:"10004", name: "协同办公", icon:$bangongxitong, url: officeApplication.url, status: officeApplication.status, main:true },
+          { id:"10002", name: "邮件", icon: $youjian, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard, status: 1, main:true },
+          { id:"10001", name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
         ],
         "通讯应用":[
-          { id:"10003", name: "天宫圆圆", icon:$tiangongyuanyuan, url: "#", status: 1 },
+          { id:"10003", name: "天宫圆圆", icon:$tiangongyuanyuan, url: "#", status: 1, main:true },
         ]
       }
       Order.$on('appInfos', (message) => {
@@ -144,6 +144,7 @@ export default {
       }
     },
     pressItem:function(thisApp){ //长按app事件
+      if(thisApp.main) return //如果是系统应用不可删除
       //将对应的appItem改为可视
       thisApp.isSelect = true
       //计数加1

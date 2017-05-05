@@ -11,8 +11,8 @@
       .info
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
-      .button.open(v-if="item.exist") {{item.status}}
-      .button.down(v-else,v-on:click="installApp(item,key)") 安装
+      .button.open(v-if="appData.onlionAppID.indexOf(`[${item.id}]`)",v-on:click="installApp(item,key)") 安装
+      .button.down(v-else) 已安装
 </template>
 
 <script>
