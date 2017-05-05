@@ -89,7 +89,7 @@ export default {
       //--------------------------------------------------集团用户判断--------------------------------------------------
       if(appData.userData.key == "1"){
         const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+appData.userData.userName+'&PID='+appData.userData.idCard+'&webService=&SessionID='
-        this.appList["办公应用"].push({ 
+        this.appList["办公应用"].unshift({ 
           id:"10004", 
           name: "协同办公", 
           icon: $officeApp, 
@@ -107,7 +107,7 @@ export default {
           const className = element.appClassify.classifyName //应用分类名称
           element.appInfoList.forEach(function(item) {
             //将此应用的ID添加到已安装应用名单
-            _this.onlionAppID[item.id] = 1                 //  |--------------------------------------------|
+            _this.onlionAppID[item.id] = 1                   //  |--------------------------------------------|
             const newAppData = {                             //  |   message                                  |
               id: item.id,                                   //  |                  |---------------------|   |
               name: item.name,                               //  |  |----------|    |  element            |   |
