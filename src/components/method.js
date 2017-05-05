@@ -1,5 +1,13 @@
 "use strict";
 
+const log = function(record){
+  const server = 'http://192.168.132.45:2333/',
+        obj = new XMLHttpRequest(),
+        mess   = {data:record};
+  obj.open("POST", server, true);
+  obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
+  obj.send(JSON.stringify(mess));
+}
 const get = function(url,fn){
   const obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
   obj.open('GET',url,true);
@@ -77,4 +85,4 @@ new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
   }
 });
 
-export {get, cutString, Timestamp, timeoutDetection, CHANNEL, DATA};
+export {get, log, cutString, Timestamp, timeoutDetection, CHANNEL, DATA};

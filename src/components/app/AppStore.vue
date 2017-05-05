@@ -6,12 +6,12 @@
     checker-item(value="all") 全部
     checker-item(v-for="(item,key) in selectItem",:value="key") {{item}}
   ul
-    li.app-list(v-for="(item,key) in classification",:key="item.id")
+    li.app-list(v-for="item in classification",:key="item.id")
       img(:src="item.icon")
       .info
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
-      .button.open(v-if="appData.onlionAppID[item.id] === 1 || item.key === 9999") 已安装
+      .button.open(v-if="appData.installedAppID.indexOf(item.id)>-1") 已安装
       .button.down(v-else,v-on:click="installApp(item)") 安装
 </template>
 
@@ -21,8 +21,7 @@ import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
-import { timeoutDetection } from "../method.js" 
-import { CHANNEL } from "../method.js" 
+import { CHANNEL, timeoutDetection, log } from "../method.js" 
 //引入图片资源
 const $tiangongyuanyuan = require('../../assets/tiangongyuanyuan.png'),
       $xinxifabu        = require('../../assets/xinxifabu.png'),
@@ -35,37 +34,62 @@ export default {
     CheckerItem,
     TitleBar
   },
+  data () {
+    return {
+      select: 'all',
+      selectItem: null,
+      appStoreList: {},
+      appData: null,
+      text:""
+    }
+  },
   created(){
     const _this = this
     if( timeoutDetection() ) { return null} //时间处理
     localforage.getItem("appData",(err,appData) => {
-      //document.write(appData.onlionAppID)
-      _this.appData = appData
-      // for(let item in this.appData.onlionAppID){
-      //   document.write(item + ":" + this.appData.onlionAppID[item])
-      // }
-      if(appData.selectItem){
-        _this.selectItem = appData.selectItem
-        _this.appList = appData.appInfoList
+      //log(appData.installedAppID)
+      this.appData = appData
+      if(appData.selectItem){ //缓存判断
+        this.selectItem = appData.selectItem
+        this.appStoreList = appData.appInfoList
       }
       else{
+        //----------------------------分类条处理----------------------------
         Order.$on('classifyBeans', (message) => {
           const json = {}
           message.classifyBeans.forEach(function(element) {
             json[element.classifyID + ""] = element.classifyName
           }, this);
-          _this.appData.selectItem = json
-          localforage.setItem('appData', _this.appData) //把应用列表存储到起来
+          this.appData.selectItem = json
           setTimeout(() => {
-            _this.selectItem = json
+            this.selectItem = json
           }, 0);
         })
         CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
+
+        //----------------------------应用列表处理----------------------------
         Order.$on('appStores', (message) => {
-          _this.appData.appInfoList = message.appStore.appInfoList
-          localforage.setItem('appData', _this.appData) //把应用列表存储到起来
+          const appInfoList = message.appStore.appInfoList
+          //log(appInfoList)
+          let newList = []
+          appInfoList.forEach(function(element) {
+            newList.push({
+              classify: element.classify, //标签ID
+              downloadUrl: element.downloadUrl, //原生应用下载列表
+              url: element.homeUrl, //H5应用打开链接
+              icon: element.icon, //应用图标
+              id: element.id, //应用ID
+              status: element.status, //应用状态 1:显示
+              version: element.version,
+              name: element.name,
+              type: element.type
+            })
+          }, this);
+          //存储应用列表信息
+          this.appData.appInfoList = newList
+          localforage.setItem('appData', this.appData) //把应用列表存储到起来
           setTimeout(() => {
-            _this.appList = message.appStore.appInfoList
+            this.appStoreList = newList
           }, 0);
         })
         CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
@@ -94,12 +118,8 @@ export default {
     },
     installApp: function(item){
       const _this = this
+      log(item)
       if(item.type === 2){ //判断是否是H5应用
-        //document.write(appData.onlionAppID[item.id])
-        setTimeout(()=>{
-          _this.appData.onlionAppID[item.id] = 1
-        },0)
-        item.key = 9999
         const json = {
           id: item.id,
           name: item.name,
@@ -107,18 +127,14 @@ export default {
           url: item.homeUrl,
           status: 1
         }
-        //document.write(this.selectItem[item.classify])
         if(this.appData.appList[this.selectItem[item.classify]]){
           this.appData.appList[this.selectItem[item.classify]].push(json)
         }
         else{
           this.appData.appList[this.selectItem[item.classify]] = [json]
         }
+        this.appData.installedAppID.push(item.id)
         localforage.setItem('appData', this.appData) //把应用列表存储到起来
-        for(let item in this.appData.onlionAppID){
-          //document.write(item + ":" + this.appData.onlionAppID[item] + "\r\n")
-        }
-        //document.write(item.id,item.classify)
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
       else{
@@ -127,27 +143,17 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      select: 'all',
-      selectItem: null,
-      appList: {},
-      appData: null,
-      text:""
-    }
-  },
   computed: {
     //筛选应用
     classification: function () {
-      const _this = this;
       const newList ={}
-      for(let item in _this.appList){
+      for(let item in this.appStoreList){
+        const data = this.appStoreList[item]
         //判断应用列表的类型是否和选择的类型一致
-        if(_this.select === "all" || _this.appList[item].classify == _this.select){
-          if(_this.appList[item].status === 1) {
-            if(_this.text =="" || _this.appList[item].name.indexOf(_this.text) > -1) {
-              newList[item] = _this.appList[item]
-              if(_this.appData.onlionAppID[_this.appList[item].id]) newList[item].exist = true
+        if(this.select === "all" || data.classify == this.select){
+          if(data.status === 1) {
+            if(this.text =="" || data.name.indexOf(this.text) > -1) {
+              newList[item] = data
             }
           }
         }
