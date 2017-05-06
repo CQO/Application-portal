@@ -21,7 +21,7 @@ import { Order } from './Order.js'
 import localforage from 'localforage'
 import {get, cutString, timeoutDetection, CHANNEL} from "./method.js" 
 //引入图片资源
-const $bangongxitong    = require('../assets/bangongxitong.png')
+const $XTBG    = require('../assets/XTBG.png')
 export default {
   components: {
     TitleBar,
@@ -55,7 +55,7 @@ export default {
         //给 *应用数据* 的备份 增加 *通知数据*
         appData.noticeData = {
           xietongbangong:{ // 协同办公项
-            img    : $bangongxitong,
+            img    : $XTBG,
             name   : '协同办公',
             text   : cutString(receive,"Title>","<"),
             time   : cutString(receive,"SentTime>","<"),

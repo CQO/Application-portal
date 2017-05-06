@@ -22,11 +22,7 @@ import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
 import { CHANNEL, timeoutDetection, log } from "../method.js" 
-//引入图片资源
-const $tiangongyuanyuan = require('../../assets/tiangongyuanyuan.png'),
-      $xinxifabu        = require('../../assets/xinxifabu.png'),
-      $youjian          = require('../../assets/youjian.png'),
-      $bangongxitong    = require('../../assets/bangongxitong.png');
+
 export default {
   components: {
     Search,

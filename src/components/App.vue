@@ -32,10 +32,10 @@ Vue.use(VueTouch, {name: 'v-touch'});
 //-------------------------------------------
 
 //引入图片资源
-const $tiangongyuanyuan = require('../assets/tiangongyuanyuan.png'),
-      $xinxifabu        = require('../assets/xinxifabu.png'),
-      $youjian          = require('../assets/youjian.png'),
-      $officeApp    = require('../assets/bangongxitong.png');
+const $TGYY = require('../assets/TGYY.png'),
+      $XXFB        = require('../assets/XXFB.png'),
+      $YJ          = require('../assets/YJ.png'),
+      $XTBG    = require('../assets/XTBG.png');
 export default {
   components: {
     Swiper,
@@ -79,11 +79,11 @@ export default {
       //--------------------------------------------------应用处理阶段--------------------------------------------------
       this.appList = {
         "办公应用": [
-          { id:10002, name: "邮件", icon: $youjian, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard, status: 1, main:true },
-          { id:10001, name: "信息发布", icon: $xinxifabu, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+          { id:10002, name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+appData.userData.idCard, status: 1, main:true },
+          { id:10001, name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
         ],
         "通讯应用":[
-          { id:10003, name: "天宫圆圆", icon:$tiangongyuanyuan, url: "#", status: 1, main:true },
+          { id:10003, name: "天宫圆圆", icon:$TGYY, url: "#", status: 1, main:true },
         ]
       }
       this.installedAppID = ["10002","10001","10003"]
@@ -93,7 +93,7 @@ export default {
         this.appList["办公应用"].unshift({ 
           id:10004, 
           name: "协同办公", 
-          icon: $officeApp, 
+          icon: $XTBG, 
           url: officeAppUrl,
           status: 1, 
           main: true 
@@ -224,10 +224,6 @@ export default {
 </script>
 
 <style lang='less'>
-.app-box{
-  height: 100%;
-  width: 100%;
-}
 .grid{
   .grid-item{
     width: 75px;
@@ -277,9 +273,7 @@ export default {
   line-height: 45px;
   z-index: 999
 }
-.placeholder{
-  height: 50px;
-}
+
 .clear{
   clear: both;
 }

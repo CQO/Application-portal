@@ -14,6 +14,7 @@
         p.organization-number.ico &#xe61b; {{item.subOrgNum}}
         p.organization-people.ico &#xe60c; {{item.subUserNum}}
       Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+      .placeholder
     .load(v-else)
       img(src="../assets/loading.gif")
     .search-result(v-if="searchResult")

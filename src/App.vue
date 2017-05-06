@@ -42,6 +42,10 @@ body{
 
 a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 
+.placeholder{
+  height: 50px;
+}
+
 .app-box,.contacts-box{
   width: 100%;
   height: 100%;
@@ -49,7 +53,7 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
     position:sticky !important;
   }
   .content-box{
-    min-height: 100%;
+      min-height: calc(~"100% - 100px");
   }
 }
 </style>
