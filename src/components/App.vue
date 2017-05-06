@@ -1,17 +1,18 @@
 <template lang="pug">
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
-  swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
-  template(v-for="(sortItem,sortKey) in appList")
-    AppTitle(:title="sortKey")
-    .grid
-      .grid-item(v-for="(item,key) in sortItem",:key="item.id") 
-        v-touch.touch(tag="div",v-on:press="pressItem(item)",v-on:tap="openStart(item)")
-        img(slot="icon",:src="item.icon")
-        p {{item.name}}
-        .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
-      .clear
-  .placeholder
+  .content-box
+    swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
+    template(v-for="(sortItem,sortKey) in appList")
+      AppTitle(:title="sortKey")
+      .grid
+        .grid-item(v-for="(item,key) in sortItem",:key="item.id") 
+          v-touch.touch(tag="div",v-on:press="pressItem(item)",v-on:tap="openStart(item)")
+          img(slot="icon",:src="item.icon")
+          p {{item.name}}
+          .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
+        .clear
+    .placeholder
   .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
   BottomBar(index="1")
 </template>
@@ -223,6 +224,10 @@ export default {
 </script>
 
 <style lang='less'>
+.app-box{
+  height: 100%;
+  width: 100%;
+}
 .grid{
   .grid-item{
     width: 75px;
@@ -244,6 +249,7 @@ export default {
   }
   p{
     width: 75px;
+    overflow: hidden;
     text-align: center;
     font-size: 0.9rem;
   }

@@ -1,25 +1,25 @@
 <template lang="pug">
 .contacts-box
   TitleBar(title='通讯录')
-  Search
-  .organization-bar
-    template(v-for="(item, key) in tree")
-        span.organization-item(v-on:click="clickTree(item, key)") {{item.name}}
-        span >
-  iscroll-view.organization(v-if="List && !searchResult")
-    li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
-      img(src="../assets/Organization.png")
-      p.organization-name {{item.orgName}}
-      p.organization-number.ico &#xe61b; {{item.subOrgNum}}
-      p.organization-people.ico &#xe60c; {{item.subUserNum}}
-    Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-  .load(v-else)
-    img(src="../assets/loading.gif")
-  .search-result(v-if="searchResult")
-    .search-result-title
-      span 共搜索到了{{searchResult.length}}条结果
-      .close.ico(@click.stop="searchResult = null") &#xe697;
-    iscroll-view.scroll
+  .content-box
+    Search
+    .organization-bar
+      template(v-for="(item, key) in tree")
+          span.organization-item(v-on:click="clickTree(item, key)") {{item.name}}
+          span >
+    .organization(v-if="List && !searchResult")
+      li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
+        img(src="../assets/Organization.png")
+        p.organization-name {{item.orgName}}
+        p.organization-number.ico &#xe61b; {{item.subOrgNum}}
+        p.organization-people.ico &#xe60c; {{item.subUserNum}}
+      Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+    .load(v-else)
+      img(src="../assets/loading.gif")
+    .search-result(v-if="searchResult")
+      .search-result-title
+        span 共搜索到了{{searchResult.length}}条结果
+        .close.ico(@click.stop="searchResult = null") &#xe697;
       Organization(v-for="item in searchResult",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   BottomBar(index="2")
 </template>
@@ -146,13 +146,13 @@ export default {
 }
 </script>
 
-
 <style lang='less' scoped>
+
 .organization{
 	  touch-action: none;
 	  text-size-adjust: none;
-    overflow: hidden;
-    height: 400px;
+    min-height: calc(~"100% - 450px");
+    
     li{
         height: 61px;
         background-color: white;
@@ -219,14 +219,5 @@ export default {
     }
   }
 }
-.scroll{
-  touch-action: none;
-  position: fixed;
-  top: 75px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 440px;
-  overflow: hidden;
-}
+
 </style>

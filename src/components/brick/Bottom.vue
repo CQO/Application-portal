@@ -14,6 +14,7 @@
       .name 我
 </template>
 <script>
+
 export default {
   props: {
     index: String,
@@ -67,7 +68,6 @@ export default {
   background:#f7f7fa;
   width:100%;
   position:fixed;
-  z-index:5;
   bottom: 0;
   display: flex;
   z-index: 9999;

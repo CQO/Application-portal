@@ -9,11 +9,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "iscroll": "^5.2.0",
     "localforage": "^1.5.0",
     "pug": "^2.0.0-beta11",
     "vue": "^2.3.2",
-    "vue-iscroll-view": "^1.0.2",
     "vue-router": "^2.5.3",
     "vue-touch": "^2.0.0-beta.4",
     "vux": "^2.1.0"

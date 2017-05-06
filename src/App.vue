@@ -25,14 +25,15 @@ p,ul{
 ul{
   list-style:none;
 }
-body{
+html,body{
   height: 100%;
   width: 100%;
+  position: relative;
+}
+body{
   background-color: #f4f4f4;
-  overflow: hidden;
   margin: 0;
-  margin-top: 46px;
-  -webkit-overflow-scrolling: touch;
+  
 }
 .root-box{
   height: 100%;
@@ -41,5 +42,15 @@ body{
 
 a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 
+.app-box,.contacts-box{
+  width: 100%;
+  height: 100%;
+  .title-bar,.bottomBar{
+    position:sticky !important;
+  }
+  .content-box{
+    min-height: 100%;
+  }
+}
 </style>
 
