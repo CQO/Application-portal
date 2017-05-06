@@ -13,7 +13,7 @@
         p.organization-name {{item.orgName}}
         p.organization-number.ico &#xe61b; {{item.subOrgNum}}
         p.organization-people.ico &#xe60c; {{item.subUserNum}}
-      Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+      Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
       .placeholder
     .load(v-else)
       img(src="../assets/loading.gif")
@@ -21,7 +21,7 @@
       .search-result-title
         span 共搜索到了{{searchResult.length}}条结果
         .close.ico(@click.stop="searchResult = null") &#xe697;
-      Organization(v-for="item in searchResult",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+      Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   BottomBar(index="2")
 </template>
 
@@ -31,7 +31,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import {timeoutDetection, DATA, CHANNEL} from "./method.js" 
+import {timeoutDetection, DATA, CHANNEL, log} from "./method.js" 
 import localforage from 'localforage'
 
 export default {
@@ -94,8 +94,6 @@ export default {
               return (a.orderNum < b.orderNum) ? -1 : 1
             })
           }
-          CHANNEL.log(`----------message------------`)
-          CHANNEL.log(Data)
           DATA.id = Data.orgID
           DATA.orgList[Data.orgID] = thisData //保存层级数据
           this.List = DATA.orgList[Data.orgID] //显示层级数据

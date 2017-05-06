@@ -45,7 +45,9 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 .placeholder{
   height: 50px;
 }
-
+.clear{
+  clear: both;
+}
 .app-box,.contacts-box{
   width: 100%;
   height: 100%;

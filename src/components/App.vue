@@ -2,7 +2,10 @@
 .app-box
   TitleBar(title='我的应用',rightIcon="flase")
   .content-box
-    swiper(:list="showList",v-model="index",@on-index-change="onIndexChange",:auto="true")
+    swiper.swiper(:options="swiperOption")
+      swiper-slide(v-for="slide in showList",:key="slide.id")
+        img(:src="slide.img",v-on:click="openUrl(slide.url)")
+      .swiper-pagination
     template(v-for="(sortItem,sortKey) in appList")
       AppTitle(:title="sortKey")
       .grid
@@ -18,13 +21,13 @@
 </template>
 
 <script>
-import { Swiper } from 'vux'
 import AppTitle from './brick/AppTitle'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import { timeoutDetection, CHANNEL, DATA, log } from "./method.js" 
 import localforage from 'localforage'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 //------------------触摸控件------------------
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
@@ -38,10 +41,11 @@ const $TGYY = require('../assets/TGYY.png'),
       $XTBG    = require('../assets/XTBG.png');
 export default {
   components: {
-    Swiper,
     AppTitle,
     TitleBar,
-    BottomBar
+    BottomBar,
+    swiper,
+    swiperSlide
   },
   data () {
     return {
@@ -50,7 +54,11 @@ export default {
       appData: null,
       appList: null,
       showList: [""],
-      installedAppID: []
+      installedAppID: [],
+      swiperOption: {
+          autoplay: 3500,
+          pagination : '.swiper-pagination'
+        }
     }
   },
   created(){
@@ -64,7 +72,6 @@ export default {
         this.appList = appData.appList
         return
       }
-
       //--------------------------------------------------轮播图处理阶段--------------------------------------------------
       //轮播图信号监听
       Order.$on('slidesshow', (message) => {
@@ -135,9 +142,6 @@ export default {
     })
   },
   methods: {
-    onIndexChange: function(index) { //轮播图
-      this.index = index
-    },
     openStart:function(thisApp){ //判断以何种方式打开应用
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
@@ -273,8 +277,11 @@ export default {
   line-height: 45px;
   z-index: 999
 }
-
-.clear{
-  clear: both;
+.swiper,.swiper img{
+  height: 200px;
+  width: 100%;
+  margin: 0;
 }
+
+
 </style>

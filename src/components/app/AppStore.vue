@@ -4,7 +4,7 @@
   Search
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
-    checker-item(v-for="(item,key) in selectItem",:value="key") {{item}}
+    checker-item(v-for="(item,key) in selectItem",:key="item.id",:value="key") {{item}}
   ul
     li.app-list(v-for="item in classification",:key="item.id")
       img(:src="item.icon")
