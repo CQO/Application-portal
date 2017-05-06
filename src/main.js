@@ -3,7 +3,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './App';
-
+import IScrollView from 'vue-iscroll-view'
+import IScroll from 'iscroll/build/iscroll-lite.js'
+Vue.use(IScrollView, IScroll);
 Vue.use(VueRouter);
 
 const routes = [

@@ -6,21 +6,21 @@
     template(v-for="(item, key) in tree")
         span.organization-item(v-on:click="clickTree(item, key)") {{item.name}}
         span >
-  ul.organization(v-if="List && !searchResult")
+  iscroll-view.organization(v-if="List && !searchResult")
     li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-    .placeholder
   .load(v-else)
     img(src="../assets/loading.gif")
   .search-result(v-if="searchResult")
     .search-result-title
       span 共搜索到了{{searchResult.length}}条结果
       .close.ico(@click.stop="searchResult = null") &#xe697;
-    Organization(v-for="item in searchResult",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+    iscroll-view.scroll
+      Organization(v-for="item in searchResult",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   BottomBar(index="2")
 </template>
 
@@ -41,7 +41,6 @@ export default {
     Organization
   },
   created () {
-
     timeoutDetection() //超时检测
     //判断是否层级树缓存
     if(DATA.orgTree.length > 0) { 
@@ -72,7 +71,7 @@ export default {
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
+        const enOS = { enterId: 454, orgId: DATA.unitId + "" ,type: 2, name:message }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
@@ -108,19 +107,19 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
           CHANNEL.log(`[通讯录]请求组织信息`)
           CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
         CHANNEL.log(`[通讯录]请求人员信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
         CHANNEL.log(`[通讯录]请求组织信息`)
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
@@ -150,22 +149,10 @@ export default {
 
 <style lang='less' scoped>
 .organization{
-	  /* Prevent native touch events on Windows */
-	  -ms-touch-action: none;
-
-	  /* Prevent the callout on tap-hold and text selection */
-	  -webkit-touch-callout: none;
-	  -webkit-user-select: none;
-	  -moz-user-select: none;
-	  -ms-user-select: none;
-	  user-select: none;
-
-	  /* Prevent text resize on orientation change, useful for web-apps */
-	  -webkit-text-size-adjust: none;
-	  -moz-text-size-adjust: none;
-	  -ms-text-size-adjust: none;
-	  -o-text-size-adjust: none;
+	  touch-action: none;
 	  text-size-adjust: none;
+    overflow: hidden;
+    height: 400px;
     li{
         height: 61px;
         background-color: white;
@@ -214,7 +201,7 @@ export default {
   background-color: rgba(248, 248, 248, 1);
   position: absolute;
   top: 45px;
-  bottom: 50px;
+  bottom: 0;
   left: 0;
   right: 0;
   .search-result-title{
@@ -232,7 +219,14 @@ export default {
     }
   }
 }
-.placeholder{
-  height: 50px;
+.scroll{
+  touch-action: none;
+  position: fixed;
+  top: 75px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 440px;
+  overflow: hidden;
 }
 </style>
