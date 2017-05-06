@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',v-on:click="goTo(item.url)")
+    li(v-for='item in notice',v-on:click="openURL(item.url)")
       img.user-img(:src='item.img')
       .message
         p {{item.name}}
@@ -75,7 +75,7 @@ export default {
     })
   },
   methods:{
-    goTo:function(url) {
+    openURL:function(url) {
       window.location.href = url
     }
   }

@@ -1,6 +1,7 @@
 <template lang="pug">
   .root-box
-    router-view
+    keep-alive
+      router-view
 </template>
 
 
