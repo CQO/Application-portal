@@ -29,11 +29,12 @@ html,body{
   height: 100%;
   width: 100%;
   position: relative;
+  -webkit-overflow-scrolling:touch;
 }
+html{overflow:hidden;}
 body{
   background-color: #f4f4f4;
   margin: 0;
-  
 }
 .root-box{
   height: 100%;
@@ -52,6 +53,7 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
   width: 100%;
   height: 100%;
   .title-bar,.bottomBar{
+    overflow: hidden;
     position:sticky !important;
   }
   

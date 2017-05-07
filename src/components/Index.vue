@@ -28,17 +28,15 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {Timestamp, CHANNEL, DATA} from "./method.js"
+import {Timestamp, CHANNEL, DATA, log} from "./method.js"
 import localforage from 'localforage'
 
-var preData = [0,null]
 export default {
   data () {
     return {
-      userName: '刘霞',
-      password:'123456',
-      selectList:null,
-      foo: null
+      userName: '',
+      password:'',
+      selectList:null
     }
   },
   components: {
@@ -46,7 +44,7 @@ export default {
     Loading
   },
   created(){
-    if(DATA.userName) this.userName = DATA.userName //智能保存用户名
+    if(this.$route.params.name) this.userName = this.$route.params.name //智能保存用户名
   },
   methods: {
     PreLogin: function() { //预登录函数
@@ -129,7 +127,7 @@ export default {
     width: 180px;
     margin: 0 auto;
     height: 180px;
-    padding-top: 20px;
+    padding-top: 60px;
     display:block;
     img{
         height: 80px;

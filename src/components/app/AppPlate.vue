@@ -164,7 +164,9 @@ export default {
             if(_appList[item].length > 1) { _appList[item].splice(index,1) }
             //删除Json中的属性
             else{ delete _appList[item] }
-            CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
+            setTimeout(()=>{
+              CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
+            },0)
             mark = true
           }
           else{
@@ -203,6 +205,9 @@ export default {
         //打开应用
         CHANNEL.opensopApp(JSON.stringify(app1))
       }
+    },
+    down:function(){
+        log("sdsdsd")
     }
   }
 }

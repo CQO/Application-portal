@@ -133,7 +133,7 @@ export default {
       this.tree = DATA.orgTree
       //刷新所在层级的ID
       DATA.id = item.id 
-    }
+    },
   },
   data () {
     return {

@@ -35,7 +35,7 @@ export default {
       //退出信号监听
       Order.$on('loginout', function(message) {
         Order.$emit('Loading', 'hide') //隐藏退出提示
-        window.location.href="#/Quit" //返回主界面
+        window.location.href=`#/Quit/${DATA.userName}` //返回主界面
         location.reload() //刷新页面以清空变量数据
       })
       CHANNEL.loginout()
