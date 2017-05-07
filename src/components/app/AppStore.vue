@@ -11,7 +11,7 @@
       .info
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
-      .button.open(v-if="appData.installedAppID.indexOf(item.id)>-1") 已安装
+      .button.open(v-if="item.installed") 已安装
       .button.down(v-else,v-on:click="installApp(item)") 安装
 </template>
 
@@ -21,7 +21,7 @@ import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
-import { CHANNEL, timeoutDetection, log } from "../method.js" 
+import { CHANNEL, timeoutDetection, log, DATA } from "../method.js" 
 
 export default {
   components: {
@@ -36,66 +36,65 @@ export default {
       selectItem: null,
       appStoreList: {},
       appData: null,
-      text:""
+      text:"",
+      installedAppID:null
     }
   },
   created(){
     const _this = this
-    if( timeoutDetection() ) { return null} //时间处理
-    localforage.getItem("appData",(err,appData) => {
-      //log(appData.installedAppID)
-      this.appData = appData
-      if(appData.selectItem){ //缓存判断
-        this.selectItem = appData.selectItem
-        this.appStoreList = appData.appInfoList
-      }
-      else{
-        //----------------------------分类条处理----------------------------
-        Order.$on('classifyBeans', (message) => {
-          const json = {}
-          message.classifyBeans.forEach(function(element) {
-            json[element.classifyID + ""] = element.classifyName
-          }, this);
-          this.appData.selectItem = json
-          setTimeout(() => {
-            this.selectItem = json
-          }, 0);
-        })
-        CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
-
-        //----------------------------应用列表处理----------------------------
-        Order.$on('appStores', (message) => {
-          const appInfoList = message.appStore.appInfoList
-          //log(appInfoList)
-          let newList = []
-          appInfoList.forEach(function(element) {
-            newList.push({
-              classify: element.classify, //标签ID
-              downloadUrl: element.downloadUrl, //原生应用下载列表
-              url: element.homeUrl, //H5应用打开链接
-              icon: element.icon, //应用图标
-              id: element.id, //应用ID
-              status: element.status, //应用状态 1:显示
-              version: element.version,
-              name: element.name,
-              type: element.type
-            })
-          }, this);
-          //存储应用列表信息
-          this.appData.appInfoList = newList
-          localforage.setItem('appData', this.appData) //把应用列表存储到起来
-          setTimeout(() => {
-            this.appStoreList = newList
-          }, 0);
-        })
-        CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
-      }
+    this.installedAppID = DATA.installedAppID
+    //监听应用被删除事件
+    Order.$on('delateApp', (message) => {
+      this.installedAppID = message
     })
+    if( timeoutDetection() ) { return null} //时间处理
+    if(DATA.selectItem && DATA.appInfoList){ //缓存判断
+      this.selectItem = DATA.selectItem
+      this.appStoreList = DATA.appInfoList
+    }
+    else{
+      //----------------------------分类条处理----------------------------
+      Order.$on('classifyBeans', (message) => {
+        const json = {}
+        message.classifyBeans.forEach(function(element) {
+          json[element.classifyID + ""] = element.classifyName
+        }, this);
+        DATA.selectItem = json
+        setTimeout(() => {
+          this.selectItem = json
+        }, 0);
+      })
+      CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
+      //----------------------------应用列表处理----------------------------
+      Order.$on('appStores', (message) => {
+        const appInfoList = message.appStore.appInfoList
+        //log(appInfoList)
+        let newList = []
+        appInfoList.forEach(function(element) {
+          newList.push({
+            classify: element.classify, //标签ID
+            downloadUrl: element.downloadUrl, //原生应用下载列表
+            url: element.homeUrl, //H5应用打开链接
+            icon: element.icon, //应用图标
+            id: element.id, //应用ID
+            status: element.status, //应用状态 1:显示
+            version: element.version,
+            name: element.name,
+            type: element.type
+          })
+        }, this);
+        //存储应用列表信息
+        DATA.appInfoList = newList
+        setTimeout(() => {
+          //this.appStoreList = {}
+          this.appStoreList = newList
+        }, 0);
+      })
+      CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
+    }
     Order.$on('Search', function(message) {
       _this.text = message
     })
-
-
   },
   methods: {
     openStart:function(item){ //判断以何种方式打开应用
@@ -114,7 +113,6 @@ export default {
     },
     installApp: function(item){
       const _this = this
-      log(item)
       if(item.type === 2){ //判断是否是H5应用
         const json = {
           id: item.id,
@@ -123,14 +121,15 @@ export default {
           url: item.homeUrl,
           status: 1
         }
-        if(this.appData.appList[this.selectItem[item.classify]]){
-          this.appData.appList[this.selectItem[item.classify]].push(json)
+        if(DATA.appList[this.selectItem[item.classify]]){
+          DATA.appList[this.selectItem[item.classify]].push(json)
         }
         else{
-          this.appData.appList[this.selectItem[item.classify]] = [json]
+          DATA.appList[this.selectItem[item.classify]] = [json]
         }
-        this.appData.installedAppID.push(item.id)
-        localforage.setItem('appData', this.appData) //把应用列表存储到起来
+        DATA.installedAppID.push(item.id)
+        //localforage.setItem('appData', this.appData) //把应用列表存储到起来
+        Order.$emit("appInstall", DATA.appList);
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
       else{
@@ -149,6 +148,7 @@ export default {
         if(this.select === "all" || data.classify == this.select){
           if(data.status === 1) {
             if(this.text =="" || data.name.indexOf(this.text) > -1) {
+              data.installed = this.installedAppID.indexOf(data.id) > -1
               newList[item] = data
             }
           }

@@ -70,7 +70,7 @@ export default {
   position:fixed;
   bottom: 0;
   display: flex;
-  z-index: 9999;
+  z-index: 99;
   .item{
     width: 25%;
     height: 100%;

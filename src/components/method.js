@@ -67,7 +67,10 @@ let DATA = {
   orgTree : [],
   id : 0,
   phoneNumber : null,
-  
+  selectItem: null,
+  appStoreList: null,
+  appList:null,
+  installedAppID: null
 };
 
 import { QWebChannel } from  "./QTWebChannel";

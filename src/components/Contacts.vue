@@ -7,7 +7,7 @@
       template(v-for="(item, key) in tree")
           span.organization-item(v-on:click="clickTree(item, key)") {{item.name}}
           span >
-    .organization(v-if="List && !searchResult")
+    .organization(v-if="List",v-show="!searchResult")
       li(v-for="item in List.depts",v-on:click="load(item)",:key="item.orgID")
         img(src="../assets/Organization.png")
         p.organization-name {{item.orgName}}
@@ -22,7 +22,7 @@
         span 共搜索到了{{searchResult.length}}条结果
         .close.ico(@click.stop="searchResult = null") &#xe697;
       Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-  BottomBar(index="2")
+  BottomBar(index="2",v-show="!searchResult")
 </template>
 
 <script>
@@ -203,6 +203,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 100;
   .search-result-title{
     height: 30px;
     line-height: 30px;

@@ -1,14 +1,15 @@
 <template lang="pug">
 .personal-information
   TitleBar(title='我')
-  .title 个人信息
-  router-link.information(to="\Details")
-    img(src="../assets/user.png")
-    p.name {{userName}} 
-    .ico &#xe659;
-  .title 操作
-  P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url",:key="item.id")
-  .quit(v-on:click="quitApp") 退出登录
+  .content-box
+    .title 个人信息
+    router-link.information(to="\Details")
+      img(src="../assets/user.png")
+      p.name {{userName}} 
+      .ico &#xe659;
+    .title 操作
+    P42(v-for="item in list",:icoCode="item.icon",:text="item.title",:color="item.color",:url="item.url",:key="item.id")
+    .quit(v-on:click="quitApp") 退出登录
   Loading(text="正在退出...")
   BottomBar(index="3")
 </template>

@@ -27,8 +27,8 @@ export default {
 
 <style>
 .toast-box{
-    position: absolute;
-    bottom: 40px;
+    position: fixed;
+    bottom: 60px;
     width: 100%;
     display: flex;
     justify-content: center;

@@ -54,9 +54,10 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
   .title-bar,.bottomBar{
     position:sticky !important;
   }
-  .content-box{
-      min-height: calc(~"100% - 100px");
-  }
+  
+}
+.content-box{
+  min-height: calc(~"100% - 100px");
 }
 </style>
 
