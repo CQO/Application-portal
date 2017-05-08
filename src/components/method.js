@@ -7,7 +7,7 @@ const log = function(record){
   obj.open("POST", server, true);
   obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
   obj.send(JSON.stringify(mess));
-}
+};
 const get = function(url,fn){
   const obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
   obj.open('GET',url,true);
@@ -66,10 +66,8 @@ let DATA = {
   unitId: null,
   orgList:{},
   orgTree : [],
-  id : 0,
-  phoneNumber : null,
+  orgID : 0,
   selectItem: null,
-  appStoreList: null,
   appList:null,
   installedAppID: null
 };

@@ -45,7 +45,7 @@ export default {
       //CHANNEL.log(`[通知]没有超时`)
       if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
       //CHANNEL.log(`[通知]用户key:${userData.key}`)
-      if(userData.key != "1") { return null } //集团用户检测
+      if(userData.unitId != "1") { return null } //集团用户检测
       if(appData.notice){Order.$emit('Toast', '使用缓存'); this.notice = appData.notice; return null } //缓存检测
       //拉取数据的URL
       const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='

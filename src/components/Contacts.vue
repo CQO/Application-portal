@@ -45,15 +45,15 @@ export default {
     //判断是否层级树缓存
     if(DATA.orgTree.length > 0) { 
       this.tree = DATA.orgTree //显示层级树
-      this.List = DATA.orgList[DATA.id] //显示层级数据
+      this.List = DATA.orgList[DATA.orgID] //显示层级数据
       return
     }
     //取数据库数据
     localforage.getItem("appData",(err,appData) => {
-      if(appData.userData.key == 1)  appData.userData.unitName = "集团公司总部"
+      if(appData.userData.unitId == 1)  appData.userData.unitName = "集团公司总部"
       this.load({
         orgName: appData.userData.unitName,
-        orgID: appData.userData.key,
+        orgID: appData.userData.unitId,
         subOrgNum: 666,
         subUserNum: 666,
       })
@@ -93,7 +93,7 @@ export default {
               return (a.orderNum < b.orderNum) ? -1 : 1
             })
           }
-          DATA.id = Data.orgID
+          DATA.orgID = Data.orgID
           DATA.orgList[Data.orgID] = thisData //保存层级数据
           this.List = DATA.orgList[Data.orgID] //显示层级数据
           this.tree = DATA.orgTree //显示层级树
@@ -127,7 +127,7 @@ export default {
       //显示层级树
       this.tree = DATA.orgTree
       //刷新所在层级的ID
-      DATA.id = item.id 
+      DATA.orgID = item.id 
     },
   },
   data () {

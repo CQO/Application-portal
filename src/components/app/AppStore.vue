@@ -80,7 +80,8 @@ export default {
             status: element.status, //应用状态 1:显示
             version: element.version,
             name: element.name,
-            type: element.type
+            type: element.type,
+            packageName: element.packageName
           })
         }, this);
         //存储应用列表信息
@@ -93,6 +94,9 @@ export default {
     }
     Order.$on('Search', function(message) {
       _this.text = message
+    })
+    Order.$on('progress', (message)=> {
+      log(message)
     })
   },
   methods: {
@@ -132,7 +136,14 @@ export default {
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
       else{
-        DATA.CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
+        log(item)
+        Order.$once('downloadApp', function(message) {
+          log(item.downloadUrl)
+          DATA.CHANNEL.installSopApp(item.packageName)
+          log("sdsdsddd")
+        })
+        DATA.CHANNEL.downloadApp(item.packageName,item.downloadUrl)
+        //DATA.CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
       }
     }
   },

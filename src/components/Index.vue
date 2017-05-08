@@ -48,74 +48,68 @@ export default {
   },
   methods: {
     PreLogin: function() { //预登录函数
-      //存储登录的用户名
-      DATA.userName = this.userName 
+      
       //判断用户名和密码是否为空
-      if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请输入账号和密码'); return null; }
+      if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请正确输入账号和密码'); return null; }
       //预登录信号监听
       Order.$once('preLogin', (message) => {
         setTimeout( ()=>{
           Order.$emit('Loading', 'hide')
-          if(message !=="" && message !==null){ //空数据判断
-            const Data = message
-            switch(Data.length){ //判断同名用户数量
-              case 0  : Order.$emit('Toast', '登录失败'); break; 
-              //如果用户所属的组织只有一个，那么自动帮用户选择登录
-              case 1  : const data = Data[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
-              default : this.selectList = Data;
-            }
-          }
-          else{
-            Order.$emit('Toast', '登录信息错误')
+          if(!message) {Order.$emit('Toast', '返回数据为空！');return;}
+          switch(message.length){ //判断同名用户数量
+            case 0  : Order.$emit('Toast', '登录失败'); break; 
+            //如果用户所属的组织只有一个，那么自动帮用户选择登录
+            case 1  : const data = message[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
+            default : this.selectList = message;
           }
         },0);
       })
       Order.$emit('Loading', 'show')
       DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
-    login:function(name,idCard,unitId, unitName){ //登录函数
+    login:function(userName,idCard,unitId, unitName){ //登录函数
       DATA.unitId = unitId //保存unitId
       DATA.idCard = idCard //保存身份证信息
+      DATA.userName = userName //存储登录的用户名
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$once('login', function(message) {
         setTimeout(()=>{
           Order.$emit('Loading', 'hide')
           const Res = message;
-          //判断错误码是否为 0:成功 113:已登录
-          if(Res.code == 0 || Res.code == 113){ //保存登陆用户信息和时间戳
+          function loginSuccess(){
             const nowTime = new Date().getTime()
             const appData = {
               userData:{ //用户信息
                 userName : name,   //用户名
                 idCard   : idCard, //身份信息
-                key      : unitId,  //ID
-                unitName : unitName,
-                gender   : 3
+                unitId   : unitId,  //ID
+                unitName : unitName
               }, 
               Timestamp: nowTime //时间戳
             }
             Timestamp.value = nowTime
             //保存用户信息
             localforage.setItem('appData', appData,function (err){
-                if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
-                window.location.href="#/Main"
+              if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
+              window.location.href="#/Main"
             });
           }
-          else{
-            this.selectList = null
-            switch(Res.code){
-                case 112:  Order.$emit('Toast', `用户名或密码错误`); break;
-                default :  Order.$emit('Toast', `登录失败 Code:${Res.code}`)
-            }
+          //判断错误码是否为 0:成功 113:已登录
+          switch(Res.code){
+            case 0  :  loginSuccess(); break;
+            case 113:  loginSuccess(); break;
+            case 112:  Order.$emit('Toast', `用户名或密码错误`); break;
+            default :  Order.$emit('Toast', `登录失败 Code:${Res.code}`)
           }
+          this.selectList = null
         },0)
       })
       DATA.CHANNEL.login(JSON.stringify({
         usbkeyidentification : idCard, //身份证
         password : this.password, //密码
         unitId : unitId, //
-        userName:name,
+        userName: userName,
       }))
     }
   },

@@ -59,7 +59,7 @@ export default {
         const userData = appData.userData
         DATA.userName = userData.userName
         DATA.idCard = userData.idCard
-        DATA.unitId = userData.key
+        DATA.unitId = userData.unitId
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
         this.appList = appData.appList
