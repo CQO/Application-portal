@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
-      判断当前点击项目是否已经被选中
+      //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
         this.selectNumber--

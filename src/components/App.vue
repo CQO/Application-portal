@@ -5,7 +5,8 @@
     .swiper
       swiper(:options="swiperOption")
         swiper-slide(v-for="slide in showList",:key="slide.id")
-          img(:src="slide.img",v-on:click="openUrl(slide.url)")
+          a(:href="slide.url")
+            img(:src="slide.img")
       .swiper-pagination
     AppPlate
     .placeholder
@@ -38,6 +39,7 @@ export default {
         autoplay: 3500,
         pagination : '.swiper-pagination',
         autoplayDisableOnInteraction : false,
+        preventClicks : false,
       }
     }
   },
