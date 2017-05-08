@@ -16,9 +16,10 @@
 <script>
 import AppTitle from '../brick/AppTitle'
 import { Order } from '../Order.js'
-import { timeoutDetection, CHANNEL, DATA, log } from "../method.js" 
+import { timeoutDetection, DATA, log, recover } from "../method.js" 
 import Toast from '../brick/Toast'
 import localforage from 'localforage'
+import { QWebChannel } from  "../QTWebChannel"
 //------------------触摸控件------------------
 import Vue from 'vue';
 import VueTouch from 'vue-touch';
@@ -46,10 +47,26 @@ export default {
     }
   },
   created(){
+    //监听应用安装通知
     Order.$on('appInstall', (message) => {
       this.appList = {} //不知道为什么需要清除一次
       this.appList = message
     })
+    if(!DATA.userName){
+      const qtWebChannelTransport = navigator.qtWebChannelTransport
+      localforage.getItem("appData",(err,appData) => {
+        //log(appData)
+        const userData = appData.userData
+        DATA.userName = userData.userName
+        DATA.idCard = userData.idCard
+        DATA.unitId = userData.key
+        DATA.appList = appData.appList
+        DATA.installedAppID = appData.installedAppID
+        this.appList = appData.appList
+      })
+      return;
+    }
+
     this.appList = {
       "办公应用": [
         { id:10002, name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
@@ -75,9 +92,8 @@ export default {
     }
     DATA.appList = this.appList //存储
     //--------------------------------------------------处理在线应用--------------------------------------------------
-    Order.$on('appInfos', (message) => {
+    Order.$once('appInfos', (message) => {
       let newAppList = this.appList
-      
       //整理数据
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
@@ -109,11 +125,12 @@ export default {
         })
       }, 0);
     })
-    CHANNEL.queryAppStore(JSON.stringify({type:"1"}))
+    //log(DATA.CHANNEL)
+    DATA.CHANNEL.queryAppStore(JSON.stringify({type:"1"}))
   },
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
-      //判断当前点击项目是否已经被选中
+      判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
         this.selectNumber--
@@ -135,7 +152,7 @@ export default {
               "name":"linkdood"
             };
             //打开应用
-            CHANNEL.opensopApp(JSON.stringify(app1))
+            DATA.CHANNEL.opensopApp(JSON.stringify(app1))
           }
           else{
             window.location.href = thisApp.url;
@@ -165,7 +182,7 @@ export default {
             //删除Json中的属性
             else{ delete _appList[item] }
             setTimeout(()=>{
-              CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
+              DATA.CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
             },0)
             mark = true
           }
@@ -189,25 +206,6 @@ export default {
       }
       this.selectNumber = 0
       Order.$emit('Toast', '应用卸载成功！');
-    },
-    openUrl:function(url){
-      if(url) {
-        window.location.href = url
-      }
-      else{
-        const app1 = {
-          "type":2,
-          "sopid":"com.vrv.linkDood",
-          "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-          "scheme":"linkdood:showlinkdood?id=" + DATA.idCard,
-          "name":"linkdood"
-        };
-        //打开应用
-        CHANNEL.opensopApp(JSON.stringify(app1))
-      }
-    },
-    down:function(){
-        log("sdsdsd")
     }
   }
 }

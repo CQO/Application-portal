@@ -19,7 +19,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {timeoutDetection, DATA, CHANNEL} from "./method.js"
+import {timeoutDetection, DATA} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 export default {
@@ -35,10 +35,16 @@ export default {
       //退出信号监听
       Order.$on('loginout', function(message) {
         Order.$emit('Loading', 'hide') //隐藏退出提示
-        window.location.href=`#/Quit/${DATA.userName}` //返回主界面
+        //用户名缓存判断
+        if(DATA.userName){
+          window.location.href=`#/Quit/${DATA.userName}` //返回记录用户名的登录界面
+        }
+        else{
+          window.location.href=`#/` //返回登录界面
+        }
         location.reload() //刷新页面以清空变量数据
       })
-      CHANNEL.loginout()
+      DATA.CHANNEL.loginout()
     }
   },
   created(){

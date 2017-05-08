@@ -60,7 +60,8 @@ const timeoutDetection = function(){
 
 
 let DATA = {
-  userName:'',
+  CHANNEL: null,
+  userName: '',
   idCard: null,
   unitId: null,
   orgList:{},
@@ -75,17 +76,16 @@ let DATA = {
 
 import { QWebChannel } from  "./QTWebChannel";
 import { Order } from './Order.js';
-let CHANNEL = null;
-
 
 new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-  if(CHANNEL === null){
-    CHANNEL = channel.objects.content;
-    CHANNEL.callback.connect(function(receive) {
+  if(DATA.CHANNEL === null){
+    DATA.CHANNEL = channel.objects.content;
+    DATA.CHANNEL.callback.connect(function(receive) {
       const Data = JSON.parse(receive);
       Order.$emit(Data.fName, Data.data);
     });
   }
 });
 
-export {get, log, cutString, Timestamp, timeoutDetection, CHANNEL, DATA};
+
+export {get, log, cutString, Timestamp, timeoutDetection, DATA};

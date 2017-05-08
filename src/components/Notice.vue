@@ -20,7 +20,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection, CHANNEL} from "./method.js" 
+import {get, cutString, timeoutDetection} from "./method.js" 
 //引入图片资源
 const $XTBG    = require('../assets/XTBG.png')
 export default {

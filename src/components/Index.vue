@@ -28,7 +28,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {Timestamp, CHANNEL, DATA, log} from "./method.js"
+import {Timestamp, DATA, log} from "./method.js"
 import localforage from 'localforage'
 
 export default {
@@ -71,7 +71,7 @@ export default {
         },0);
       })
       Order.$emit('Loading', 'show')
-      CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
+      DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
     login:function(name,idCard,unitId, unitName){ //登录函数
       DATA.unitId = unitId //保存unitId
@@ -111,7 +111,7 @@ export default {
           }
         },0)
       })
-      CHANNEL.login(JSON.stringify({
+      DATA.CHANNEL.login(JSON.stringify({
         usbkeyidentification : idCard, //身份证
         password : this.password, //密码
         unitId : unitId, //

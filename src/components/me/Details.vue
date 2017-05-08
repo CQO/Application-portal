@@ -38,7 +38,7 @@
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
-import { timeoutDetection, CHANNEL, DATA } from "../method.js" 
+import { timeoutDetection, DATA } from "../method.js" 
 var myData = null
 
 export default {
@@ -70,11 +70,11 @@ export default {
     Order.$on('getAccountInfo', function(message) {
       myData = message
     })
-    CHANNEL.getAccountInfo()
+    DATA.CHANNEL.getAccountInfo()
   },
   beforeDestroy(){
     if(this.oldPhone !== this.phoneNumber || this.oldTelPhone !== this.telPhone){
-      CHANNEL.updateAccount(JSON.stringify({
+      DATA.CHANNEL.updateAccount(JSON.stringify({
         type:2, 
         phone:this.phoneNumber ,
         telPhone: this.telPhone 
@@ -100,7 +100,7 @@ export default {
         case 2 : this.gender = "女"; break;
         case 0 : this.gender = "保密"; break;
       }
-      CHANNEL.updateAccount( JSON.stringify({type:3, gander: this.id}) )
+      DATA.CHANNEL.updateAccount( JSON.stringify({type:3, gander: this.id}) )
       this.showCheck = false
     }
   },

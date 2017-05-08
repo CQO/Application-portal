@@ -21,7 +21,7 @@ import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
-import { CHANNEL, timeoutDetection, log, DATA } from "../method.js" 
+import { timeoutDetection, log, DATA } from "../method.js" 
 
 export default {
   components: {
@@ -34,7 +34,7 @@ export default {
     return {
       select: 'all',
       selectItem: null,
-      appStoreList: {},
+      appStoreList: null,
       appData: null,
       text:"",
       installedAppID:null
@@ -64,7 +64,7 @@ export default {
           this.selectItem = json
         }, 0);
       })
-      CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
+      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$on('appStores', (message) => {
         const appInfoList = message.appStore.appInfoList
@@ -86,11 +86,10 @@ export default {
         //存储应用列表信息
         DATA.appInfoList = newList
         setTimeout(() => {
-          //this.appStoreList = {}
-          this.appStoreList = newList
+          _this.appStoreList = newList
         }, 0);
       })
-      CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
+      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
     }
     Order.$on('Search', function(message) {
       _this.text = message
@@ -109,7 +108,7 @@ export default {
         "name":"linkdood"
       };
       //打开应用
-      CHANNEL.opensopApp(JSON.stringify(app1))
+      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item){
       const _this = this
@@ -118,7 +117,7 @@ export default {
           id: item.id,
           name: item.name,
           icon: item.icon,
-          url: item.homeUrl,
+          url: item.url,
           status: 1
         }
         if(DATA.appList[this.selectItem[item.classify]]){
@@ -130,11 +129,10 @@ export default {
         DATA.installedAppID.push(item.id)
         //localforage.setItem('appData', this.appData) //把应用列表存储到起来
         Order.$emit("appInstall", DATA.appList);
-        CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+        DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
       else{
-        //CHANNEL.log(item)
-        CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
+        DATA.CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
       }
     }
   },
@@ -154,6 +152,7 @@ export default {
           }
         }
       }
+      //log(newList)
       return newList
     }
   }

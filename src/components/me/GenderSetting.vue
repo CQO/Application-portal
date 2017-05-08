@@ -14,7 +14,7 @@
 
 <script>
 import TitleBar from '../brick/Title'
-import { CHANNEL } from "../method.js" 
+import { DATA } from "../method.js" 
 export default {
   components: {
     TitleBar,

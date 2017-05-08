@@ -14,7 +14,6 @@
         p.organization-number.ico &#xe61b; {{item.subOrgNum}}
         p.organization-people.ico &#xe60c; {{item.subUserNum}}
       Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-      .placeholder
     .load(v-else)
       img(src="../assets/loading.gif")
     .search-result(v-if="searchResult")
@@ -31,7 +30,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import {timeoutDetection, DATA, CHANNEL, log} from "./method.js" 
+import {timeoutDetection, DATA, log} from "./method.js" 
 import localforage from 'localforage'
 
 export default {
@@ -72,8 +71,8 @@ export default {
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 454, orgId: DATA.unitId + "" ,type: 2, name:message }
-        CHANNEL.queryEnOS(JSON.stringify(enOS));
+        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
+        DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
         this.searchResult = null
@@ -106,28 +105,24 @@ export default {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
-          CHANNEL.log(`[通讯录]请求组织信息`)
-          CHANNEL.queryEnOS(JSON.stringify(enOS));
+          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+          DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "",type: 3 }
-        CHANNEL.log(`[通讯录]请求人员信息`)
-        CHANNEL.queryEnOS(JSON.stringify(enOS)); 
+        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
+        DATA.CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 454, orgId: Data.orgID + "" ,type: 4 }
-        CHANNEL.log(`[通讯录]请求组织信息`)
-        CHANNEL.queryEnOS(JSON.stringify(enOS));
+        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+        DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
     clickTree:function(item, key){
       //保存截取的层级树
       DATA.orgTree = DATA.orgTree.slice(0,key + 1)
       //显示组织信息
-      CHANNEL.log(item.id)
       this.List = DATA.orgList[item.id]
       //显示层级树
       this.tree = DATA.orgTree

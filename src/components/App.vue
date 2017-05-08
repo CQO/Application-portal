@@ -17,7 +17,7 @@ import TitleBar from './brick/Title'
 import AppPlate from './app/AppPlate'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
-import { timeoutDetection, CHANNEL, DATA, log } from "./method.js" 
+import { timeoutDetection, DATA, log } from "./method.js" 
 import localforage from 'localforage'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
@@ -61,7 +61,7 @@ export default {
         },0);
       })
       //请求轮播数据
-      CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
+      DATA.CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
 
     })
   }
