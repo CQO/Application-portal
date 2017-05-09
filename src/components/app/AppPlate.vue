@@ -53,10 +53,6 @@ export default {
       this.installedAppID = DATA.installedAppID
       this.appList = {} //不知道为什么需要清除一次
       this.appList = message
-      localforage.getItem("appData",(err,appData) => {
-        appData.appList = message
-        localforage.setItem('appData', appData)
-      })
     })
     if(!DATA.userName){
       localforage.getItem("appData",(err,appData) => {
@@ -73,11 +69,11 @@ export default {
 
     this.appList = {
       "办公应用": [
-        { id:10002, name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
-        { id:10001, name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+        { id:10002, isH5:true , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
+        { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://baidu.com', status: 1, main:true}
       ],
       "通讯应用":[
-        { id:10003, name: "天宫圆圆", icon:$TGYY, url: "#", status: 1, main:true },
+        { id:10003, isH5:false , name: "天宫圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
       ]
     }
     this.installedAppID = ["10002","10001","10003"]
@@ -88,6 +84,7 @@ export default {
         id:10004, 
         name: "协同办公", 
         icon: $XTBG, 
+        isH5: true,
         url: officeAppUrl,
         status: 1, 
         main: true 
@@ -99,12 +96,14 @@ export default {
         id:10005, 
         name: "公文管理", 
         icon: $GWGL, 
-        url: '##',
+        isH5: false,
+        url: 'casicoa:showOA?pid{{idCard}}&sessionID=54545333',
         status: 1, 
         main: true 
       })
       this.installedAppID.push("10004")
     }
+
     DATA.appList = this.appList //存储
     //--------------------------------------------------处理在线应用--------------------------------------------------
     Order.$once('appInfos', (message) => {
@@ -153,33 +152,19 @@ export default {
       else{
         //判断是否有应用被选中
         if(this.selectNumber > 0){
+          if(thisApp.main) {Order.$emit('Toast', '系统应用不可卸载！'); return;} //如果是系统应用不可删除
           thisApp.isSelect = true
           this.selectNumber++
         }
         else{
-          if(thisApp.url === '#'){
-            if(!DATA.idCard) DATA.idCard = DATA.idCard
-            const app1 = {
-              "scheme":"linkdood:showlinkdood?id=" + DATA.idCard,
-            };
-            const GWGL = {
-              "scheme":`casicoa:showOA?pid${DATA.idCard}&sessionID=54545333`,
-            }
-            //打开应用
-            DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+          if(thisApp.isH5){
+            window.location.href = thisApp.url;
           }
           else{
-            if(thisApp.url === '##'){
-              if(!DATA.idCard) DATA.idCard = DATA.idCard
-              const GWGL = {
-                "scheme":`casicoa:showOA?pid=${DATA.idCard}&sessionID=54545333`,
-              }
-              //打开应用
-              DATA.CHANNEL.opensopApp(JSON.stringify(GWGL))
+            const app =  {
+              "scheme": thisApp.url.replace("{{idCard}}",DATA.idCard)
             }
-            else{
-              window.location.href = thisApp.url;
-            }
+            DATA.CHANNEL.opensopApp(JSON.stringify(app))
           }
         }
       }
@@ -194,23 +179,18 @@ export default {
       }
     },
     delateApp:function(){
-      const _appList = this.appList
       let   mark    = false ;  //用于标记用户是否有删除app
       this.installedAppID = [] //清空已安装应用列表
-      for(let item in _appList){
-        _appList[item].forEach(function(element,index) {
+      let newList = {}
+      for(let item in DATA.appList){
+        newList[item] = []
+        DATA.appList[item].forEach(function(element,index) {
           //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
           if(element.isSelect){
-            //删除数组中的一项
-            if(_appList[item].length > 1) { _appList[item].splice(index,1) }
-            //删除Json中的属性
-            else{ delete _appList[item] }
-            setTimeout(()=>{
-              DATA.CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
-            },0)
             mark = true
           }
           else{
+            newList[item].push(element)
             this.installedAppID.push(element.id)
           }
         }, this);
@@ -218,14 +198,15 @@ export default {
       if(mark) {  //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
         DATA.installedAppID = this.installedAppID
         Order.$emit("delateApp", this.installedAppID);
+        log(newList)
+        DATA.appList = newList
+        localforage.getItem("appData",(err,appData) => {
+          appData.appList = newList
+          appData.installedAppID = DATA.installedAppID
+          localforage.setItem('appData', appData)
+        })
         setTimeout(() => {
-          //this.appList = {} //不知道为什么需要清空一次
-          this.appList = _appList
-          localforage.getItem("appData",(err,appData) => {
-            appData.appList = newAppList
-            appData.installedAppID = this.installedAppID
-            localforage.setItem('appData', appData)
-          })
+          this.appList = DATA.appList
         }, 0);
       }
       this.selectNumber = 0

@@ -1,6 +1,6 @@
 <template lang="pug">
 .details-box
-  TitleBar(title='个人信息',leftIcon="ok",rightIcon="save")
+  TitleBar(title='个人信息',leftIcon="ok",:rightIcon="rightIcon")
   .avatar
     span.text 头像
     img(src="../../assets/user.png")
@@ -48,27 +48,22 @@ export default {
   },
   created(){
     //if( timeoutDetection() ) { return null} //时间处理
-    //定时器
-    const time = setInterval(() => {
-      if(myData === null) return null;
-      
-      this.name = myData.name
-      this.oldPhone = myData.phone
-      this.phoneNumber = myData.phone
-      this.oldTelPhone = myData.telPhone
-      this.telPhone = myData.telPhone
-      this.id = myData.gender
-      switch(myData.gender){
-        case 1 : this.gender = "男"; break;
-        case 2 : this.gender = "女"; break;
-        case 0 : this.gender = "保密"; break;
-      }
-      clearInterval(time)
-      myData = null
-    },1000);
     //退出信号监听
-    Order.$on('getAccountInfo', function(message) {
-      myData = message
+    Order.$on('getAccountInfo', (message)=> {
+      setTimeout(()=>{
+        this.name = message.name
+        this.oldPhone = message.phone
+        this.phoneNumber = message.phone
+        this.oldTelPhone = message.telPhone
+        this.telPhone = message.telPhone
+        this.id = message.gender
+        switch(message.gender){
+          case 1 : this.gender = "男"; break;
+          case 2 : this.gender = "女"; break;
+          case 0 : this.gender = "保密"; break;
+        }
+        this.rightIcon = 'save'
+      },0)
     })
     Order.$on('TITLEBUTTONCLICK', (message)=> {
       DATA.CHANNEL.updateAccount(JSON.stringify({
@@ -88,7 +83,8 @@ export default {
       name: '',
       gender: '',
       id:0,
-      showCheck:false
+      showCheck:false,
+      rightIcon:"loading"
     }
   },
   methods: {

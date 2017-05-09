@@ -1,6 +1,6 @@
 <template lang="pug">
 .app-box
-  TitleBar(title='我的应用',rightIcon="add")
+  TitleBar(title='我的应用',:rightIcon="rightIcon")
   .content-box
     .swiper
       swiper(:options="swiperOption")
@@ -35,6 +35,7 @@ export default {
       appData: null,
       appList: null,
       showList: null,
+      rightIcon: 'loading',
       swiperOption: {
         autoplay: 3500,
         pagination : '.swiper-pagination',
@@ -59,7 +60,8 @@ export default {
       Order.$once('slidesshow', (message) => {
         setTimeout(() => {
           this.showList = message //显示轮播图
-          this.appData.showList = message //保存轮播图数据     
+          this.appData.showList = message //保存轮播图数据
+          this.rightIcon = 'add'  
         },0);
       })
       //请求轮播数据

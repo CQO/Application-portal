@@ -1,6 +1,6 @@
 <template lang="pug">
 .app-store-box
-  TitleBar(title='应用商店',leftIcon="flase")
+  TitleBar(title='应用商店',leftIcon="ok",:rightIcon="leftIcon")
   Search
   Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
     checker-item(value="all") 全部
@@ -37,7 +37,8 @@ export default {
       appStoreList: null,
       appData: null,
       text:"",
-      installedAppID:null
+      installedAppID:null,
+      leftIcon:"loading"
     }
   },
   created(){
@@ -46,10 +47,6 @@ export default {
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {
       this.installedAppID = message
-      localforage.getItem("appData",(err,appData) => {
-        appData.appList = DATA.appList
-        localforage.setItem('appData', appData)
-      })
     })
     if( timeoutDetection() ) { return null} //时间处理
     if(DATA.selectItem && DATA.appInfoList){ //缓存判断
@@ -91,6 +88,7 @@ export default {
         DATA.appInfoList = newList
         setTimeout(() => {
           _this.appStoreList = newList
+          this.leftIcon = "no"
         }, 0);
       })
       DATA.CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
@@ -135,6 +133,12 @@ export default {
         }
         DATA.installedAppID.push(item.id)
         //localforage.setItem('appData', this.appData) //把应用列表存储到起来
+            //监听应用安装通知
+        localforage.getItem("appData",(err,appData) => {
+          appData.appList = DATA.appList
+          appData.installedAppID = DATA.installedAppID
+          localforage.setItem('appData', appData)
+        })
         Order.$emit("appInstall", DATA.appList);
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
