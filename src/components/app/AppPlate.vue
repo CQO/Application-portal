@@ -28,9 +28,10 @@ Vue.use(VueTouch, {name: 'v-touch'});
 
 //引入图片资源
 const $TGYY = require('../../assets/TGYY.png'),
-      $XXFB        = require('../../assets/XXFB.png'),
-      $YJ          = require('../../assets/YJ.png'),
-      $XTBG    = require('../../assets/XTBG.png');
+      $XXFB    = require('../../assets/XXFB.png'),
+      $YJ      = require('../../assets/YJ.png'),
+      $XTBG    = require('../../assets/XTBG.png'),
+      $GWGL    = require('../../assets/GWGL.png');
 export default {
   components: {
     AppTitle,
@@ -52,9 +53,12 @@ export default {
       this.installedAppID = DATA.installedAppID
       this.appList = {} //不知道为什么需要清除一次
       this.appList = message
+      localforage.getItem("appData",(err,appData) => {
+        appData.appList = message
+        localforage.setItem('appData', appData)
+      })
     })
     if(!DATA.userName){
-      const qtWebChannelTransport = navigator.qtWebChannelTransport
       localforage.getItem("appData",(err,appData) => {
         const userData = appData.userData
         DATA.userName = userData.userName
@@ -85,6 +89,17 @@ export default {
         name: "协同办公", 
         icon: $XTBG, 
         url: officeAppUrl,
+        status: 1, 
+        main: true 
+      })
+      this.installedAppID.push("10004")
+    }
+    else{
+      this.appList["办公应用"].unshift({ 
+        id:10005, 
+        name: "公文管理", 
+        icon: $GWGL, 
+        url: '##',
         status: 1, 
         main: true 
       })
@@ -143,19 +158,28 @@ export default {
         }
         else{
           if(thisApp.url === '#'){
-            if(!DATA.idCard) DATA.idCard = this.appData.userData.idCard
+            if(!DATA.idCard) DATA.idCard = DATA.idCard
             const app1 = {
-              "type":2,
-              "sopid":"com.vrv.linkDood",
-              "pkgpath":"com.vrv.linkDood-1.0.45.sop",
               "scheme":"linkdood:showlinkdood?id=" + DATA.idCard,
-              "name":"linkdood"
             };
+            const GWGL = {
+              "scheme":`casicoa:showOA?pid${DATA.idCard}&sessionID=54545333`,
+            }
             //打开应用
             DATA.CHANNEL.opensopApp(JSON.stringify(app1))
           }
           else{
-            window.location.href = thisApp.url;
+            if(thisApp.url === '##'){
+              if(!DATA.idCard) DATA.idCard = DATA.idCard
+              const GWGL = {
+                "scheme":`casicoa:showOA?pid=${DATA.idCard}&sessionID=54545333`,
+              }
+              //打开应用
+              DATA.CHANNEL.opensopApp(JSON.stringify(GWGL))
+            }
+            else{
+              window.location.href = thisApp.url;
+            }
           }
         }
       }

@@ -81,7 +81,7 @@ export default {
             const nowTime = new Date().getTime()
             const appData = {
               userData:{ //用户信息
-                userName : name,   //用户名
+                userName : userName,   //用户名
                 idCard   : idCard, //身份信息
                 unitId   : unitId,  //ID
                 unitName : unitName
@@ -90,7 +90,7 @@ export default {
             }
             Timestamp.value = nowTime
             //保存用户信息
-            localforage.setItem('appData', appData,function (err){
+            localforage.setItem('appData', appData, function (err){
               if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
               window.location.href="#/Main"
             });

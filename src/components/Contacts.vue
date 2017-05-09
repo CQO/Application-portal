@@ -30,7 +30,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import {timeoutDetection, DATA, log} from "./method.js" 
+import { timeoutDetection, DATA, log } from "./method.js" 
 import localforage from 'localforage'
 
 export default {

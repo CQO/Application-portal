@@ -1,6 +1,6 @@
 <template lang="pug">
 .details-box
-  TitleBar(title='个人信息',leftIcon="flase")
+  TitleBar(title='个人信息',leftIcon="ok",rightIcon="save")
   .avatar
     span.text 头像
     img(src="../../assets/user.png")
@@ -38,7 +38,7 @@
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
-import { timeoutDetection, DATA } from "../method.js" 
+import { timeoutDetection, DATA, log } from "../method.js" 
 var myData = null
 
 export default {
@@ -70,16 +70,14 @@ export default {
     Order.$on('getAccountInfo', function(message) {
       myData = message
     })
-    DATA.CHANNEL.getAccountInfo()
-  },
-  beforeDestroy(){
-    if(this.oldPhone !== this.phoneNumber || this.oldTelPhone !== this.telPhone){
+    Order.$on('TITLEBUTTONCLICK', (message)=> {
       DATA.CHANNEL.updateAccount(JSON.stringify({
         type:2, 
         phone:this.phoneNumber ,
         telPhone: this.telPhone 
       }))
-    }
+    })
+    DATA.CHANNEL.getAccountInfo()
   },
   data () {
     return {

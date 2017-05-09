@@ -1,11 +1,13 @@
 <template lang="pug">
   .title-bar
-    .add.titleButton.ico(v-bind:class="{ hidden: !leftIcon }",v-on:click="back") &#xe601;
+    .titleButton.ico(v-bind:class="{ hidden: !leftIcon }",v-on:click="back") &#xe601;
     p.title {{title}}
-    router-link.add.titleButton.ico(v-bind:class="{ hidden: !rightIcon }",to="\Store") &#xe626;
+    router-link.titleButton.ico(v-if="rightIcon === 'add'",to="\Store") &#xe626;
+    .titleButton(v-if="rightIcon === 'save'",v-on:click="save") 保存
 </template>
 
 <script>
+import { Order } from '../Order.js'
 export default {
     props: {
         title: String,
@@ -16,6 +18,9 @@ export default {
       back () {
         history.go(-1);
       },
+      save () {
+        Order.$emit('TITLEBUTTONCLICK', 'save')
+      }
   },
 }
 
@@ -45,9 +50,13 @@ export default {
   /*标题栏按钮样式*/
   .titleButton{
     height: 45px;
+    line-height: 45px;
     width: 45px;
-    font-size: 1.4rem;
+    font-size: 1rem;
     color: #1865ff;
+  }
+  .ico{
+    font-size: 1.4rem;
   }
   .titleButton:active{
     background-color: aqua;

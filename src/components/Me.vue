@@ -19,7 +19,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {timeoutDetection, DATA} from "./method.js"
+import {timeoutDetection, DATA, log} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 export default {

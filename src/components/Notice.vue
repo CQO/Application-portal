@@ -20,7 +20,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection} from "./method.js" 
+import {get, cutString, timeoutDetection, DATA} from "./method.js" 
 //引入图片资源
 const $XTBG    = require('../assets/XTBG.png')
 export default {
@@ -38,6 +38,14 @@ export default {
     const _this = this
     //从本地数据库中取出用户数据
     localforage.getItem("appData",(err,appData) => {
+      if(!DATA.userName){
+        const userData = appData.userData
+        DATA.userName = userData.userName
+        DATA.idCard = userData.idCard
+        DATA.unitId = userData.unitId
+        DATA.appList = appData.appList
+        DATA.installedAppID = appData.installedAppID
+      }
       //CHANNEL.log('[通知]获取到用户数据')
       //拷贝一份 *应用数据* 里的 *用户数据*
       const userData = appData.userData

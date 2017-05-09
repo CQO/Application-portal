@@ -46,6 +46,10 @@ export default {
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {
       this.installedAppID = message
+      localforage.getItem("appData",(err,appData) => {
+        appData.appList = DATA.appList
+        localforage.setItem('appData', appData)
+      })
     })
     if( timeoutDetection() ) { return null} //时间处理
     if(DATA.selectItem && DATA.appInfoList){ //缓存判断

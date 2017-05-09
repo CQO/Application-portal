@@ -1,6 +1,6 @@
 <template lang="pug">
 .app-box
-  TitleBar(title='我的应用',rightIcon="flase")
+  TitleBar(title='我的应用',rightIcon="add")
   .content-box
     .swiper
       swiper(:options="swiperOption")
