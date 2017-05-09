@@ -49,13 +49,13 @@ export default {
   created(){
     //监听应用安装通知
     Order.$on('appInstall', (message) => {
+      this.installedAppID = DATA.installedAppID
       this.appList = {} //不知道为什么需要清除一次
       this.appList = message
     })
     if(!DATA.userName){
       const qtWebChannelTransport = navigator.qtWebChannelTransport
       localforage.getItem("appData",(err,appData) => {
-        //log(appData)
         const userData = appData.userData
         DATA.userName = userData.userName
         DATA.idCard = userData.idCard
@@ -187,7 +187,7 @@ export default {
             mark = true
           }
           else{
-            this.installedAppID.push(element.id + "")
+            this.installedAppID.push(element.id)
           }
         }, this);
       }
@@ -215,7 +215,7 @@ export default {
 .grid{
   .grid-item{
     width: 75px;
-    margin: 10px;
+    margin: 7px;
     position: relative;
     float:left;
   }

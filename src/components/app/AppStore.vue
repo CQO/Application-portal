@@ -68,7 +68,6 @@ export default {
       //----------------------------应用列表处理----------------------------
       Order.$on('appStores', (message) => {
         const appInfoList = message.appStore.appInfoList
-        //log(appInfoList)
         let newList = []
         appInfoList.forEach(function(element) {
           newList.push({
@@ -136,11 +135,8 @@ export default {
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
       }
       else{
-        log(item)
         Order.$once('downloadApp', function(message) {
-          log(item.downloadUrl)
           DATA.CHANNEL.installSopApp(item.packageName)
-          log("sdsdsddd")
         })
         DATA.CHANNEL.downloadApp(item.packageName,item.downloadUrl)
         //DATA.CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
@@ -163,7 +159,6 @@ export default {
           }
         }
       }
-      //log(newList)
       return newList
     }
   }
