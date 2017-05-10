@@ -70,7 +70,7 @@ export default {
     this.appList = {
       "办公应用": [
         { id:10002, isH5:true , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
-        { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://baidu.com', status: 1, main:true}
+        { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
       ],
       "通讯应用":[
         { id:10003, isH5:false , name: "天宫圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
@@ -97,7 +97,7 @@ export default {
         name: "公文管理", 
         icon: $GWGL, 
         isH5: false,
-        url: 'casicoa:showOA?pid{{idCard}}&sessionID=54545333',
+        url: 'casicoa:showOA?pid={{idCard}}&sessionID=54545333',
         status: 1, 
         main: true 
       })
@@ -112,6 +112,7 @@ export default {
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
         element.appInfoList.forEach(function(item) {
+          if(item.type === 1) item.homeUrl = item.activityName
           //将此应用的ID添加到已安装应用名单
           const newAppData = {
             id: item.id,
@@ -183,13 +184,14 @@ export default {
       this.installedAppID = [] //清空已安装应用列表
       let newList = {}
       for(let item in DATA.appList){
-        newList[item] = []
         DATA.appList[item].forEach(function(element,index) {
           //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
           if(element.isSelect){
             mark = true
+            DATA.CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
           }
           else{
+            if(!newList[item])  newList[item] = []
             newList[item].push(element)
             this.installedAppID.push(element.id)
           }
@@ -198,7 +200,6 @@ export default {
       if(mark) {  //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
         DATA.installedAppID = this.installedAppID
         Order.$emit("delateApp", this.installedAppID);
-        log(newList)
         DATA.appList = newList
         localforage.getItem("appData",(err,appData) => {
           appData.appList = newList

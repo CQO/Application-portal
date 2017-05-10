@@ -15,10 +15,10 @@
       .ico.enter &#xe607;
   .phone
     .item 手机号码
-    input(type="text",v-model="phoneNumber")
+    input(type="number",v-model="phoneNumber")
   .phone
     .item 固定电话
-    input(type="text",v-model="telPhone")
+    input(type="number",v-model="telPhone")
   .check-box(v-if="showCheck")
     .title
       .button(v-on:click="changeGender") 确定

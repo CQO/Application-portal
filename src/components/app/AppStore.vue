@@ -12,7 +12,8 @@
         p.name {{item.name}}
         p.detail 版本号:{{item.version}}
       .button.open(v-if="item.installed") 已安装
-      .button.down(v-else,v-on:click="installApp(item)") 安装
+      .button.down(v-else,v-on:click="installApp(item,$event)") 安装
+  Toast
 </template>
 
 <script>
@@ -21,6 +22,7 @@ import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
+import Toast from '../brick/Toast'
 import { timeoutDetection, log, DATA } from "../method.js" 
 
 export default {
@@ -28,7 +30,8 @@ export default {
     Search,
     Checker,
     CheckerItem,
-    TitleBar
+    TitleBar,
+    Toast
   },
   data () {
     return {
@@ -38,7 +41,8 @@ export default {
       appData: null,
       text:"",
       installedAppID:null,
-      leftIcon:"loading"
+      leftIcon:"loading",
+      downloading: false
     }
   },
   created(){
@@ -71,6 +75,7 @@ export default {
         const appInfoList = message.appStore.appInfoList
         let newList = []
         appInfoList.forEach(function(element) {
+          log(element)
           newList.push({
             classify: element.classify, //标签ID
             downloadUrl: element.downloadUrl, //原生应用下载列表
@@ -81,7 +86,8 @@ export default {
             version: element.version,
             name: element.name,
             type: element.type,
-            packageName: element.packageName
+            packageName: element.packageName,
+            activityName: element.activityName
           })
         }, this);
         //存储应用列表信息
@@ -95,9 +101,6 @@ export default {
     }
     Order.$on('Search', function(message) {
       _this.text = message
-    })
-    Order.$on('progress', (message)=> {
-      log(message)
     })
   },
   methods: {
@@ -115,40 +118,52 @@ export default {
       //打开应用
       DATA.CHANNEL.opensopApp(JSON.stringify(app1))
     },
-    installApp: function(item){
+    installApp: function(item,element){
       const _this = this
+      let appInformation = {
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+        status: 1
+      }
       if(item.type === 2){ //判断是否是H5应用
-        const json = {
-          id: item.id,
-          name: item.name,
-          icon: item.icon,
-          url: item.url,
-          status: 1
-        }
-        if(DATA.appList[this.selectItem[item.classify]]){
-          DATA.appList[this.selectItem[item.classify]].push(json)
-        }
-        else{
-          DATA.appList[this.selectItem[item.classify]] = [json]
-        }
-        DATA.installedAppID.push(item.id)
-        //localforage.setItem('appData', this.appData) //把应用列表存储到起来
-            //监听应用安装通知
-        localforage.getItem("appData",(err,appData) => {
-          appData.appList = DATA.appList
-          appData.installedAppID = DATA.installedAppID
-          localforage.setItem('appData', appData)
-        })
-        Order.$emit("appInstall", DATA.appList);
+        appInformation.url = item.url
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+        DATA.installedAppID.push(item.id)
       }
       else{
+        appInformation.url = item.activityName
+        //log(item)
+        if( this.downloading ) { Order.$emit('Toast', '正在下载请稍后'); return;}
+        this.downloading = true
+        Order.$on('progress', (message)=> {
+          //log(message)
+          element.target.innerHTML = `${message.progress}%`
+        })
         Order.$once('downloadApp', function(message) {
-          DATA.CHANNEL.installSopApp(item.packageName)
+          Order.$off("progress")
+          DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+          setTimeout(()=>{
+            this.downloading = false
+            DATA.installedAppID.push(item.id)
+            DATA.CHANNEL.installSopApp(item.packageName)
+          },0)
         })
         DATA.CHANNEL.downloadApp(item.packageName,item.downloadUrl)
-        //DATA.CHANNEL.installSopApp(JSON.stringify({url:item.downloadUrl}))
       }
+      if(DATA.appList[this.selectItem[item.classify]]){
+        DATA.appList[this.selectItem[item.classify]].push(appInformation)
+      }
+      else{
+        DATA.appList[this.selectItem[item.classify]] = [appInformation]
+      }
+      
+      localforage.getItem("appData",(err,appData) => {
+        appData.appList = DATA.appList
+        appData.installedAppID = DATA.installedAppID
+        localforage.setItem('appData', appData)
+      })
+      Order.$emit("appInstall", DATA.appList);
     }
   },
   computed: {
