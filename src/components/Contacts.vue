@@ -178,6 +178,14 @@ export default {
 .load{
     display: flex;
     justify-content: center;
+    img{
+      margin: auto;
+      position: absolute;
+      top: 0; 
+      left: 0; 
+      bottom: 0; 
+      right: 0;
+    }
 }
 .organization-bar{
     height:30px;
