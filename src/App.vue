@@ -1,7 +1,8 @@
 <template lang="pug">
   .root-box
+    .title-bar-seat
     keep-alive
-      router-view
+      router-view.main-box
 </template>
 
 
@@ -49,11 +50,16 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 .clear{
   clear: both;
 }
-.app-box,.contacts-box{
+.app-box{
   width: 100%;
+  height: calc(~"100% - 95px");
+  overflow: hidden;
 }
-.content-box{
-  min-height: 473px;
+.title-bar-seat{
+  height: 45px;
+}
+.main-box{
+  height: calc(~"100% - 45px");
 }
 </style>
 

@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     PreLogin: function() { //预登录函数
-      
       //判断用户名和密码是否为空
       if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请正确输入账号和密码'); return null; }
       //预登录信号监听
@@ -121,7 +120,7 @@ export default {
     width: 180px;
     margin: 0 auto;
     height: 180px;
-    padding-top: 60px;
+    padding-top: 40px;
     display:block;
     img{
         height: 80px;

@@ -1,14 +1,15 @@
 <template lang="pug">
 .app-plate
-  template(v-for="(sortItem,sortKey) in appList")
-    AppTitle(:title="sortKey")
-    .grid
-      .grid-item(v-for="(item,key) in sortItem",:key="item.id") 
-        v-touch.touch(tag="div",v-on:press="pressItem(item)",v-on:tap="openStart(item)")
-        img(slot="icon",:src="item.icon")
-        p {{item.name}}
-        .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
-      .clear
+  iscroll-view(ref="iscroll",:options="{preventDefault: false}").scroll
+    template(v-for="(sortItem,sortKey) in appList")
+      AppTitle(:title="sortKey")
+      .grid
+        .grid-item(v-for="(item,key) in sortItem",:key="item.id") 
+          v-touch.touch(tag="div",v-on:press="pressItem(item)",v-on:tap="openStart(item)")
+          img(slot="icon",:src="item.icon")
+          p {{item.name}}
+          .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
+        .clear
   .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
   Toast
 </template>
@@ -25,6 +26,11 @@ import Vue from 'vue';
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
 //-------------------------------------------
+import IScrollView from 'vue-iscroll-view'
+ 
+/* Using these kinds of IScroll class for different cases. */
+import IScroll from 'iscroll/build/iscroll-lite.js'
+Vue.use(IScrollView, IScroll)
 
 //引入图片资源
 const $TGYY = require('../../assets/TGYY.png'),
@@ -63,10 +69,11 @@ export default {
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
         this.appList = appData.appList
+        const iscroll = this.$refs.iscroll
+        iscroll.refresh()
       })
       return;
     }
-
     this.appList = {
       "办公应用": [
         { id:10002, isH5:true , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
@@ -87,7 +94,8 @@ export default {
         isH5: true,
         url: officeAppUrl,
         status: 1, 
-        main: true 
+        main: true ,
+        appOK: false
       })
       this.installedAppID.push("10004")
     }
@@ -103,7 +111,6 @@ export default {
       })
       this.installedAppID.push("10004")
     }
-
     DATA.appList = this.appList //存储
     //--------------------------------------------------处理在线应用--------------------------------------------------
     Order.$once('appInfos', (message) => {
@@ -133,6 +140,8 @@ export default {
         this.appList = newAppList
         DATA.appList = this.appList
         DATA.installedAppID = this.installedAppID
+        const iscroll = this.$refs.iscroll
+        iscroll.refresh()
         localforage.getItem("appData",(err,appData) => {
           appData.appList = newAppList
           appData.installedAppID = this.installedAppID
@@ -218,6 +227,15 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.app-plate{
+  height: 100%;
+}
+.scroll{
+  touch-action: none;
+	text-size-adjust: none;
+  overflow: hidden;
+  height: 270px;
+}
 .grid{
   .grid-item{
     width: 75px;

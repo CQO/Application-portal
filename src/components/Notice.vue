@@ -1,15 +1,14 @@
 <template lang="pug">
 .notice-box
   TitleBar(title='通知')
-  .content-box
-    ul.notice-list
-      li(v-for='item in notice',v-on:click="openURL(item.url)")
-        img.user-img(:src='item.img')
-        .message
-          p {{item.name}}
-          p.text {{item.text}}
-        .time {{item.time}}
-        .notice(v-if='item.notice != "0"') {{item.notice}}
+  ul.notice-list
+    li(v-for='item in notice',v-on:click="openURL(item.url)")
+      img.user-img(:src='item.img')
+      .message
+        p {{item.name}}
+        p.text {{item.text}}
+      .time {{item.time}}
+      .notice(v-if='item.notice != "0"') {{item.notice}}
   Toast
   BottomBar(index="0")
 </template>
