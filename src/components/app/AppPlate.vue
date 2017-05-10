@@ -59,6 +59,7 @@ export default {
       this.installedAppID = DATA.installedAppID
       this.appList = {} //不知道为什么需要清除一次
       this.appList = message
+
     })
     if(!DATA.userName){
       localforage.getItem("appData",(err,appData) => {
@@ -69,8 +70,6 @@ export default {
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
         this.appList = appData.appList
-        const iscroll = this.$refs.iscroll
-        iscroll.refresh()
       })
       return;
     }
@@ -217,11 +216,16 @@ export default {
         })
         setTimeout(() => {
           this.appList = DATA.appList
+          this.$refs.iscroll.refresh()
         }, 0);
       }
       this.selectNumber = 0
       Order.$emit('Toast', '应用卸载成功！');
     }
+  },
+  activated(){
+    const iscroll = this.$refs.iscroll
+    iscroll.refresh()
   }
 }
 </script>

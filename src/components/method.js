@@ -69,7 +69,9 @@ let DATA = {
   orgID : 0,
   selectItem: null,
   appList:null,
-  installedAppID: null
+  installedAppID: null,
+  phoneNumber: null,
+  telePhone: null
 };
 
 import { QWebChannel } from  "./QTWebChannel";

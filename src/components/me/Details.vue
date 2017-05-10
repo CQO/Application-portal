@@ -18,7 +18,7 @@
     input(type="number",v-model="phoneNumber")
   .phone
     .item 固定电话
-    input(type="number",v-model="telPhone")
+    input(type="number",v-model="telePhone")
   .check-box(v-if="showCheck")
     .title
       .button(v-on:click="changeGender") 确定
@@ -32,19 +32,21 @@
       .item(v-on:click.stop = "id = 2")
         span 女
         .ico(v-show="id == 2") &#xe609;
+  Toast
 </template>
 
 <script>
 import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
+import Toast from '../brick/Toast'
 import { timeoutDetection, DATA, log } from "../method.js" 
-var myData = null
 
 export default {
   components: {
     Pa42,
-    TitleBar
+    TitleBar,
+    Toast
   },
   created(){
     //if( timeoutDetection() ) { return null} //时间处理
@@ -53,9 +55,9 @@ export default {
       setTimeout(()=>{
         this.name = message.name
         this.oldPhone = message.phone
-        this.phoneNumber = message.phone
-        this.oldTelPhone = message.telPhone
-        this.telPhone = message.telPhone
+        DATA.phoneNumber = this.phoneNumber = message.phone
+        DATA.telePhone = this.oldTelPhone = message.telPhone
+        this.telePhone = message.telPhone
         this.id = message.gender
         switch(message.gender){
           case 1 : this.gender = "男"; break;
@@ -66,10 +68,13 @@ export default {
       },0)
     })
     Order.$on('TITLEBUTTONCLICK', (message)=> {
+      const phoneNumber = DATA.phoneNumber = this.phoneNumber
+      const telePhone = DATA.telePhone = this.telePhone
+      Order.$emit('Toast', '更改成功');
       DATA.CHANNEL.updateAccount(JSON.stringify({
         type:2, 
-        phone:this.phoneNumber ,
-        telPhone: this.telPhone 
+        phone: phoneNumber ,
+        telPhone: telePhone
       }))
     })
     DATA.CHANNEL.getAccountInfo()
@@ -79,12 +84,18 @@ export default {
       oldPhone:'',
       phoneNumber:'',
       oldTelPhone:null,
-      telPhone:'',
+      telePhone:'',
       name: '',
       gender: '',
       id:0,
       showCheck:false,
       rightIcon:"loading"
+    }
+  },
+  activated () {
+    if(DATA.phoneNumber !== null || DATA.telePhone !== null){
+      this.phoneNumber = DATA.phoneNumber
+      this.telePhone = DATA.telePhone
     }
   },
   methods: {
@@ -97,9 +108,6 @@ export default {
       DATA.CHANNEL.updateAccount( JSON.stringify({type:3, gander: this.id}) )
       this.showCheck = false
     }
-  },
-  beforeDestroy(){
-    document.write("sdsd")
   }
 }
 </script>

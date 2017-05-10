@@ -126,20 +126,20 @@ export default {
         status: 1
       }
       if(item.type === 2){ //判断是否是H5应用
+        //log(item)
         appInformation.url = item.url
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
         DATA.installedAppID.push(item.id)
       }
       else{
-        appInformation.url = item.activityName
-        //log(item)
         if( this.downloading ) { Order.$emit('Toast', '正在下载请稍后'); return;}
         this.downloading = true
+        appInformation.url = item.activityName
         Order.$on('progress', (message)=> {
           //log(message)
           element.target.innerHTML = `${message.progress}%`
         })
-        Order.$once('downloadApp', function(message) {
+        Order.$once('downloadApp', (message)=> {
           Order.$off("progress")
           DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
           setTimeout(()=>{
