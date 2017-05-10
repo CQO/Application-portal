@@ -4,7 +4,11 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './App';
 Vue.use(VueRouter);
-
+import IScrollView from 'vue-iscroll-view'
+ 
+/* Using these kinds of IScroll class for different cases. */
+import IScroll from 'iscroll/build/iscroll-lite.js'
+Vue.use(IScrollView, IScroll)
 const routes = [
   { path: '/Main', name: 'Main', component: require('./components/Notice') },
   { path: '/', name: 'Index', component: require('./components/Index') },

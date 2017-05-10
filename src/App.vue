@@ -51,11 +51,6 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 }
 .app-box,.contacts-box{
   width: 100%;
-  .title-bar,.bottomBar{
-    overflow: hidden;
-    position:sticky !important;
-  }
-  
 }
 .content-box{
   min-height: 473px;

@@ -98,6 +98,9 @@ export default {
       this.showCheck = false
     }
   },
+  beforeDestroy(){
+    document.write("sdsd")
+  }
 }
 </script>
 
