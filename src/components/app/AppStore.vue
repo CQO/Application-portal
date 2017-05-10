@@ -2,9 +2,9 @@
 .app-store-box
   TitleBar(title='应用商店',leftIcon="ok",:rightIcon="leftIcon")
   Search
-  Checker(v-model="select",default-item-class="demo1-item",selected-item-class="item-selected")
-    checker-item(value="all") 全部
-    checker-item(v-for="(item,key) in selectItem",:key="item.id",:value="key") {{item}}
+  .checker
+    .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
+    .checker-item(v-for="(item,key) in selectItem",:class="{ 'item-selected': click(key) }",v-on:click="select=key",:key="key") {{item}}
   ul
     li.app-list(v-for="item in classification",:key="item.id")
       img(:src="item.icon")
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { Checker, CheckerItem } from 'vux'
 import Search from '../brick/Search'
 import TitleBar from '../brick/Title'
 import localforage from 'localforage'
@@ -28,8 +27,6 @@ import { timeoutDetection, log, DATA } from "../method.js"
 export default {
   components: {
     Search,
-    Checker,
-    CheckerItem,
     TitleBar,
     Toast
   },
@@ -163,6 +160,9 @@ export default {
         localforage.setItem('appData', appData)
       })
       Order.$emit("appInstall", DATA.appList);
+    },
+    click:function(key){
+      return this.select == key
     }
   },
   computed: {
@@ -189,7 +189,7 @@ export default {
 
 <style lang='less' scoped>
 .app-store-box{
-  .vux-checker-box{
+  .checker{
     height: 24px;
     line-height: 24px;
     padding: 8px;
@@ -198,7 +198,7 @@ export default {
     border-bottom: 1px solid #e5e5e5;
     font-weight: 400;
   }
-  .vux-checker-item{
+  .checker-item{
     height: 24px;
     line-height: 24px;
     text-align: center;

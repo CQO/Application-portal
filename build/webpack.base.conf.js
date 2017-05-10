@@ -1,9 +1,5 @@
 var path = require('path')
 var utils = require('./utils')
-
-var projectRoot = path.resolve(__dirname, '../')
-const vuxLoader = require('vux-loader')
-
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 
@@ -11,7 +7,7 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-let webpackConfig = {
+module.exports = {
   entry: {
     app: './src/main.js'
   },
@@ -24,15 +20,9 @@ let webpackConfig = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
-    modules: [
-      resolve('src'),
-      resolve('node_modules')
-    ],
     alias: {
-      'vue$': 'vue/dist/vue.common.js',
-      'src': resolve('src'),
-      'assets': resolve('src/assets'),
-      'components': resolve('src/components')
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src')
     }
   },
   module: {
@@ -66,15 +56,3 @@ let webpackConfig = {
     ]
   }
 }
-
-
-module.exports = vuxLoader.merge(webpackConfig, {
-  plugins: [
-    {
-      name: 'vux-ui'
-    },
-    {
-      name: 'duplicate-style'
-    }
-  ]
-})

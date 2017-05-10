@@ -16,8 +16,7 @@
     "vue-awesome-swiper": "^2.4.0",
     "vue-iscroll-view": "^1.0.2",
     "vue-router": "^2.5.3",
-    "vue-touch": "^2.0.0-beta.4",
-    "vux": "^2.1.0"
+    "vue-touch": "^2.0.0-beta.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.0.1",
@@ -49,7 +48,6 @@
     "vue-loader": "^12.0.3",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.3.2",
-    "vux-loader": "^1.0.58",
     "webpack": "^2.3.2",
     "webpack-bundle-analyzer": "^2.3.1",
     "webpack-dev-middleware": "^1.10.0",
