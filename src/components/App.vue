@@ -75,8 +75,7 @@ export default {
 <style lang='less' scoped>
 .swiper,.swiper img{
   height: 200px;
-  width: 100%;
-  margin: 0;
+  margin: 2px;
   position: relative;
 }
 .swiper-pagination{
