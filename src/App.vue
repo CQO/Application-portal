@@ -55,6 +55,7 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 .main-box{
   height: calc(~"100% - 45px");
   width: 100%;
+  position: relative;
 }
   
 </style>

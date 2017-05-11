@@ -78,11 +78,10 @@ export default {
   height: calc(~"100% - 95px");
   overflow: hidden;
 }
-.swiper{
-  margin: 2px;
-}
+
 .swiper,.swiper img{
-  height: 200px;
+  height: 180px;
+  width: 100%;
   position: relative;
 }
 .swiper-pagination{

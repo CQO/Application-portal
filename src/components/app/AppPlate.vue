@@ -70,7 +70,7 @@ export default {
         { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
       ],
       "通讯应用":[
-        { id:10003, isH5:false , name: "天宫圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
+        { id:10003, isH5:false , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
       ]
     }
     this.installedAppID = ["10002","10001","10003"]
@@ -231,7 +231,7 @@ export default {
   touch-action: none;
 	text-size-adjust: none;
   overflow: hidden;
-  height: 270px;
+  height: 290px;
 }
 .grid{
   .grid-item{
@@ -257,6 +257,7 @@ export default {
     overflow: hidden;
     text-align: center;
     font-size: 0.9rem;
+    height: 1rem;
   }
   .choose{
     position: absolute;

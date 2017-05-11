@@ -1,27 +1,27 @@
 <template lang="pug">
 .login-box
-    .logo-box
-        img(src="../assets/logo.png")
-        p 智慧企业运行平台
-    .user-name-box(:class="{ hide: selectList }")
-        .user.ico &#xe60c;
-        input(v-model="userName",placeholder="用户名")
-    .password-box(:class="{ hide: selectList }")
-        .password.ico &#xe623;
-        input(type="password",v-model="password",placeholder="密码")
-    .select-list(v-show="selectList")
-        .title
-            span.ok 选择需要登陆的用户
-            .close.ico(@click.stop="selectList = null") &#xe697;
-        ul.list
-            li(v-for="item in selectList",v-on:click="login(item.usbkeyname,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
-    .step
-        .login-button(@click.stop="PreLogin()",:class="{ hide: selectList }") 登录
-        .point
-            .ico(:class = "{ active:!selectList }") &#xe602;
-            .ico(:class = "{ active:selectList }") &#xe602;
-    Loading(text="正在登录")
-    Toast
+  .logo
+    img(src="../assets/logo.png")
+    p 智慧企业运行平台
+  .login
+    .user-name(:class="{ hide: selectList }")
+      .ico &#xe60c;
+      input(v-model="userName",placeholder="用户名")
+    .password(:class="{ hide: selectList }")
+      .ico &#xe623;
+      input(type="password",v-model="password",placeholder="密码")
+    .login-button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
+  .step
+    .ico(:class = "{ active:!selectList }") &#xe602;
+    .ico(:class = "{ active:selectList }") &#xe602;
+  .select-list(v-show="selectList")
+    .title
+      span.ok 选择需要登陆的用户
+      .close.ico(@click.stop="selectList = null") &#xe697;
+    ul.list
+      li(v-for="item in selectList",v-on:click="login(item.usbkeyname,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
+  Loading(text="正在登录")
+  Toast
 </template>
 
 <script>
@@ -47,7 +47,7 @@ export default {
     if(this.$route.params.name) this.userName = this.$route.params.name //智能保存用户名
   },
   methods: {
-    PreLogin: function() { //预登录函数
+    preLogin: function() { //预登录函数
       //判断用户名和密码是否为空
       if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请正确输入账号和密码'); return null; }
       //预登录信号监听
@@ -111,22 +111,15 @@ export default {
         userName: userName,
       }))
     },
-    focus:function(){
-      this.showLogin = false
-    },
-    blur:function(){
-      this.showLogin = true
-    }
   },
 }
 </script>
 
 <style lang='less' scoped>
-.logo-box{
+.logo{
     width: 180px;
     margin: 0 auto;
-    height: 180px;
-    padding-top: 40px;
+    height: 200px;
     display:block;
     img{
         height: 80px;
@@ -139,7 +132,9 @@ export default {
         text-align: center;
     }
 }
-.user-name-box,.password-box{
+.login{
+  height: 275px;
+  .user-name,.password{
     width: 300px;
     height: 50px;
     border: 1px solid #099dff;
@@ -147,27 +142,28 @@ export default {
     margin: 20px auto;
     display: flex;
     input{
-        height: 50px;
-        border: 0;
-        background-color: #f4f4f4;
-        width: 245px;
-        font-size: 1rem;
-        padding: 0;
+      height: 50px;
+      border: 0;
+      background-color: #f4f4f4;
+      width: 245px;
+      font-size: 1rem;
+      padding: 0;
     }
     .ico{
-        height: 50px;
-        width: 50px;
-        font-size: 1.2rem;
-        text-align: center;
-        line-height: 50px;
-        color: #a4a9b2;
+      height: 50px;
+      width: 50px;
+      font-size: 1.2rem;
+      text-align: center;
+      line-height: 50px;
+      color: #a4a9b2;
     }
+  }
 }
 .select-list{
     height: 280px;
     margin: 0 auto;
     position: absolute;
-    top: 200px;
+    top: 160px;
     left: 0;
     right: 0;
     width: 90%;
@@ -222,6 +218,7 @@ export default {
     width: 100%;
     text-align: center;
     color: #ccc;
+    height: 30px;
 }
 .ico{
     font-size: 1.4rem;
@@ -233,5 +230,10 @@ export default {
 
 .hide{
     visibility:hidden;
+}
+@media screen and (max-height: 200px) {
+    .logo{
+        display: none;
+    }
 }
 </style>
