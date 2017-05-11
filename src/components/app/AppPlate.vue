@@ -116,6 +116,7 @@ export default {
             name: item.name,
             icon: item.icon,
             url: item.homeUrl,
+            packageName: item.packageName,
             status: 1
           }
           //应用列表是否包含此分类检测
@@ -187,6 +188,7 @@ export default {
           //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
           if(element.isSelect){
             mark = true
+            DATA.CHANNEL.uninstallSopApp(element.packageName.split("-")[0])
             DATA.CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
           }
           else{

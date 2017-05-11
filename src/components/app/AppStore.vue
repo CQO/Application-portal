@@ -120,6 +120,7 @@ export default {
         id: item.id,
         name: item.name,
         icon: item.icon,
+        packageName: item.packageName,
         status: 1
       }
       if(item.type === 2){ //判断是否是H5应用

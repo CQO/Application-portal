@@ -73,6 +73,11 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.app-box{
+  width: 100%;
+  height: calc(~"100% - 95px");
+  overflow: hidden;
+}
 .swiper{
   margin: 2px;
 }

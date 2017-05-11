@@ -32,7 +32,6 @@ html,body{
   position: relative;
   -webkit-overflow-scrolling:touch;
 }
-html{overflow:hidden;}
 body{
   background-color: #f4f4f4;
   margin: 0;
@@ -50,17 +49,13 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 .clear{
   clear: both;
 }
-.app-box{
-  width: 100%;
-  height: calc(~"100% - 95px");
-  overflow: hidden;
-}
 .title-bar-seat{
   height: 45px;
 }
 .main-box{
   height: calc(~"100% - 45px");
-  overflow: hidden;
+  width: 100%;
 }
+  
 </style>
 
