@@ -1,7 +1,7 @@
 <template lang="pug">
 .version
     TitleBar(title='当前版本',leftIcon="flase")
-    .ver 当前版本:1.0.0
+    .ver 当前版本:1.0.2
 </template>
 
 <script>

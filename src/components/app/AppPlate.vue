@@ -1,6 +1,6 @@
 <template lang="pug">
 .app-plate
-  iscroll-view(ref="iscroll",:options="{preventDefault: false}").scroll
+  iscroll-view.scroll(ref="iscroll",:options="{preventDefault: false}")
     template(v-for="(sortItem,sortKey) in appList")
       AppTitle(:title="sortKey")
       .grid
@@ -21,16 +21,7 @@ import { timeoutDetection, DATA, log, recover } from "../method.js"
 import Toast from '../brick/Toast'
 import localforage from 'localforage'
 import { QWebChannel } from  "../QTWebChannel"
-//------------------触摸控件------------------
-import Vue from 'vue';
-import VueTouch from 'vue-touch';
-Vue.use(VueTouch, {name: 'v-touch'});
-//-------------------------------------------
-import IScrollView from 'vue-iscroll-view'
- 
-/* Using these kinds of IScroll class for different cases. */
-import IScroll from 'iscroll/build/iscroll-lite.js'
-Vue.use(IScrollView, IScroll)
+
 
 //引入图片资源
 const $TGYY = require('../../assets/TGYY.png'),

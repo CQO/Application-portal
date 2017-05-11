@@ -4,11 +4,17 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './App';
 Vue.use(VueRouter);
-
+//------------------触摸控件------------------
+import VueTouch from 'vue-touch';
+Vue.use(VueTouch, {name: 'v-touch'});
+//-------------------------------------------
+import IScrollView from 'vue-iscroll-view';
+import IScroll from 'iscroll/build/iscroll-lite.js';
+Vue.use(IScrollView, IScroll);
 const routes = [
   { path: '/Main', name: 'Main', component: require('./components/Notice') },
-  { path: '/', name: 'Index', component: require('./components/Index') },
-  { path: '/Quit/:name', name: 'Quit', component: require('./components/Index') },
+  { path: '/', name: 'Login', component: require('./components/Login') },
+  { path: '/Quit/:name', name: 'Quit', component: require('./components/Login') },
   { path: '/App', name: 'App', component: require('./components/App') },
   { path: '/Contacts', name: 'Contacts', component: require('./components/Contacts') },
   { path: '/Me', name: 'Me', component: require('./components/Me') },

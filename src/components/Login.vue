@@ -1,6 +1,6 @@
 <template lang="pug">
 .login-box
-    .logo-box
+    .logo-box(v-show="showLogin")
         img(src="../assets/logo.png")
         p 智慧企业运行平台
     .user-name-box(:class="{ hide: selectList }")
@@ -8,7 +8,7 @@
         input(v-model="userName",placeholder="用户名")
     .password-box(:class="{ hide: selectList }")
         .password.ico &#xe623;
-        input(type="password",v-model="password",placeholder="密码")
+        input(type="password",v-model="password",placeholder="密码",v-on:focus="focus()",v-on:blur="blur()")
     .select-list(v-show="selectList")
         .title
             span.ok 选择需要登陆的用户
@@ -35,8 +35,9 @@ export default {
   data () {
     return {
       userName: '',
-      password:'',
-      selectList:null
+      password: '',
+      selectList: null,
+      showLogin: true
     }
   },
   components: {
@@ -110,6 +111,12 @@ export default {
         unitId : unitId, //
         userName: userName,
       }))
+    },
+    focus:function(){
+      this.showLogin = false
+    },
+    blur:function(){
+      this.showLogin = true
     }
   },
 }

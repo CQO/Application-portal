@@ -73,9 +73,11 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.swiper{
+  margin: 2px;
+}
 .swiper,.swiper img{
   height: 200px;
-  margin: 2px;
   position: relative;
 }
 .swiper-pagination{

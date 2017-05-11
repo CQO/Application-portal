@@ -138,10 +138,10 @@ export default {
         })
         Order.$once('downloadApp', (message)=> {
           Order.$off("progress")
-          DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
           setTimeout(()=>{
             this.downloading = false
             DATA.installedAppID.push(item.id)
+            DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
             DATA.CHANNEL.installSopApp(item.packageName)
           },0)
         })
