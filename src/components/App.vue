@@ -2,8 +2,8 @@
 .app-box
   TitleBar(title='我的应用',:rightIcon="rightIcon")
   .content-box
-    .swiper
-      swiper(:options="swiperOption")
+    .swiper-box
+      swiper.swiper(:options="swiperOption")
         swiper-slide(v-for="slide in showList",:key="slide.id")
           a(:href="slide.url")
             img(:src="slide.img")
@@ -79,7 +79,7 @@ export default {
   overflow: hidden;
 }
 
-.swiper,.swiper img{
+.swiper-box,.swiper img{
   height: 180px;
   width: 100%;
   position: relative;
@@ -89,4 +89,8 @@ export default {
   bottom: 5px;
   right: 5px;
 }
+.swiper{
+  position: relative;
+}
+
 </style>

@@ -124,7 +124,6 @@ export default {
         status: 1
       }
       if(item.type === 2){ //判断是否是H5应用
-        //log(item)
         appInformation.url = item.url
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
         DATA.installedAppID.push(item.id)
@@ -134,7 +133,6 @@ export default {
         this.downloading = true
         appInformation.url = item.activityName
         Order.$on('progress', (message)=> {
-          //log(message)
           element.target.innerHTML = `${message.progress}%`
         })
         Order.$once('downloadApp', (message)=> {
