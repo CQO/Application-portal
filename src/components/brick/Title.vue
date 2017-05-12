@@ -30,8 +30,8 @@ export default {
 <style lang='less' scoped>
 /*标题栏样式*/
 .title-bar{
-  height:45px;
-  line-height:45px;
+  height:44px;
+  line-height:44px;
   background:#f8f8f8;
   width:100%;
   text-align:center;

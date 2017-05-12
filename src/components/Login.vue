@@ -1,5 +1,5 @@
 <template lang="pug">
-.login-box
+.login-box(:class = "{ isSelectd: selectList }")
   .logo
     img(src="../assets/logo.png")
     p 智慧企业运行平台
@@ -10,10 +10,10 @@
     .password(:class="{ hide: selectList }")
       .ico &#xe623;
       input(type="password",v-model="password",placeholder="密码")
-    .login-button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
+    .button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
   .step
-    .ico(:class = "{ active:!selectList }") &#xe602;
-    .ico(:class = "{ active:selectList }") &#xe602;
+    .ico.one &#xe602;
+    .ico.two &#xe602;
   .select-list(v-show="selectList")
     .title
       span.ok 选择需要登陆的用户
@@ -28,7 +28,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import {Timestamp, DATA, log} from "./method.js"
+import { Timestamp, DATA, log } from "./method.js"
 import localforage from 'localforage'
 
 export default {
@@ -54,7 +54,7 @@ export default {
       Order.$once('preLogin', (message) => {
         setTimeout( ()=>{
           Order.$emit('Loading', 'hide')
-          if(!message) {Order.$emit('Toast', '返回数据为空！');return;}
+          if(!message) {Order.$emit('Toast', '返回数据为空！'); return;}
           switch(message.length){ //判断同名用户数量
             case 0  : Order.$emit('Toast', '登录失败'); break; 
             //如果用户所属的组织只有一个，那么自动帮用户选择登录
@@ -66,40 +66,40 @@ export default {
       Order.$emit('Loading', 'show')
       DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
-    login:function(userName,idCard,unitId, unitName){ //登录函数
+    login: function(userName,idCard,unitId, unitName){ //登录函数
       DATA.unitId = unitId //保存unitId
       DATA.idCard = idCard //保存身份证信息
       DATA.userName = userName //存储登录的用户名
       Order.$emit('Loading', 'show')
       //登录信号监听
-      Order.$once('login', function(message) {
+      Order.$once('login', (message)=> {
+        //登录验证成功后执行的方法
+        function loginSuccess(){
+          const nowTime = new Date().getTime()
+          const appData = {
+            userData: { //用户信息
+              userName : userName,   //用户名
+              idCard   : idCard, //身份信息
+              unitId   : unitId,  //ID
+              unitName : unitName
+            }, 
+            Timestamp: nowTime //时间戳
+          }
+          Timestamp.value = nowTime
+          //保存用户信息
+          localforage.setItem('appData', appData, function (err){
+            if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
+            window.location.href="#/Main"
+          });
+        }
         setTimeout(()=>{
           Order.$emit('Loading', 'hide')
-          const Res = message;
-          function loginSuccess(){
-            const nowTime = new Date().getTime()
-            const appData = {
-              userData:{ //用户信息
-                userName : userName,   //用户名
-                idCard   : idCard, //身份信息
-                unitId   : unitId,  //ID
-                unitName : unitName
-              }, 
-              Timestamp: nowTime //时间戳
-            }
-            Timestamp.value = nowTime
-            //保存用户信息
-            localforage.setItem('appData', appData, function (err){
-              if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
-              window.location.href="#/Main"
-            });
-          }
           //判断错误码是否为 0:成功 113:已登录
-          switch(Res.code){
+          switch(message.code){
             case 0  :  loginSuccess(); break;
             case 113:  loginSuccess(); break;
             case 112:  Order.$emit('Toast', `用户名或密码错误`); break;
-            default :  Order.$emit('Toast', `登录失败 Code:${Res.code}`)
+            default :  Order.$emit('Toast', `登录失败 Code:${message.code}`)
           }
           this.selectList = null
         },0)
@@ -107,8 +107,8 @@ export default {
       DATA.CHANNEL.login(JSON.stringify({
         usbkeyidentification : idCard, //身份证
         password : this.password, //密码
-        unitId : unitId, //
-        userName: userName,
+        unitId : unitId, //所在组织id
+        userName: userName, //用户名
       }))
     },
   },
@@ -116,24 +116,23 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.logo{
+.logo {
     width: 180px;
     margin: 0 auto;
-    height: 200px;
-    display:block;
-    img{
-        height: 80px;
-        width: 140px;
-        margin: 0 20px;
+    height: 220px;
+    display: block;
+    img {
+        height: 124px;
+        width: 180px;
     }
-    p{
+    p {
         color: #099dff;
         font-size: 22px;
         text-align: center;
     }
 }
 .login{
-  height: 275px;
+  height: 255px;
   .user-name,.password{
     width: 300px;
     height: 50px;
@@ -157,6 +156,20 @@ export default {
       line-height: 50px;
       color: #a4a9b2;
     }
+  }
+  .button{
+    width: 300px;
+    height: 50px;
+    border-radius: 5px;
+    margin: 40px auto;
+    background-color: #099dff;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-size: 1.4rem;
+  }
+  .button:active{
+    background-color: blue;
   }
 }
 .select-list{
@@ -200,40 +213,34 @@ export default {
         }
     }
 }
-.login-button{
-    width: 300px;
-    height: 50px;
-    border-radius: 5px;
-    margin: 40px auto;
-    background-color: #099dff;
-    text-align: center;
-    line-height: 50px;
-    color: white;
-    font-size: 1.4rem;
-}
-.login-button:active{
-    background-color: blue;
-}
+
 .step{
-    width: 100%;
-    text-align: center;
-    color: #ccc;
-    height: 30px;
+  width: 100%;
+  text-align: center;
+  color: #ccc;
+  height: 30px;
+  .one {
+    color: blue;
+  }
 }
 .ico{
-    font-size: 1.4rem;
-    color: #ccc;
+  font-size: 1.4rem;
+  color: #ccc;
 }
-.active{
-    color: blue;
-}
-
 .hide{
-    visibility:hidden;
+  visibility:hidden;
+}
+.isSelectd {
+  .one {
+    color: #ccc;
+  }
+  .two {
+    color: blue;
+  }
 }
 @media screen and (max-height: 200px) {
-    .logo{
-        display: none;
-    }
+  .logo{
+    display: none;
+  }
 }
 </style>

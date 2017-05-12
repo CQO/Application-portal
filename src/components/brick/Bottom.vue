@@ -64,7 +64,7 @@ export default {
 /*底部栏目切换栏*/
 .bottomBar{
   border-top: 1px solid #dfdde8;
-  height:50px;
+  height:49px;
   background:#f7f7fa;
   width:100%;
   position:fixed;

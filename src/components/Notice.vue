@@ -2,8 +2,8 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',v-on:click="openURL(item.url)")
-      img.user-img(:src='item.img')
+    li(v-for='item in notice',@click="openURL(item.url)")
+      img(:src='item.img')
       .message
         p {{item.name}}
         p.text {{item.text}}
@@ -45,20 +45,16 @@ export default {
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
       }
-      //CHANNEL.log('[通知]获取到用户数据')
       //拷贝一份 *应用数据* 里的 *用户数据*
       const userData = appData.userData
       if(timeoutDetection()) { return null } //超时检测
-      //CHANNEL.log(`[通知]没有超时`)
       if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
-      //CHANNEL.log(`[通知]用户key:${userData.key}`)
       if(userData.unitId != "1") { return null } //集团用户检测
       if(appData.notice){Order.$emit('Toast', '使用缓存'); this.notice = appData.notice; return null } //缓存检测
       //拉取数据的URL
       const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
       //通过Get请求请求通知数据
-      //CHANNEL.log('开始发送GET请求')
-      get( noticeURL, function(receive){
+      get( noticeURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
         //给 *应用数据* 的备份 增加 *通知数据*
         appData.noticeData = {
@@ -102,7 +98,7 @@ export default {
     background-color: white;
     overflow: hidden;
     width: 100%;
-    .user-img{
+    img{
       width: 45px;
       height: 45px;
       margin: 10px;
