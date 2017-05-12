@@ -89,7 +89,7 @@ export default {
         //存储应用列表信息
         DATA.appInfoList = newList
         setTimeout(() => {
-          _this.appStoreList = newList
+          this.appStoreList = newList
           this.leftIcon = "no"
         }, 0);
       })
@@ -175,8 +175,8 @@ export default {
         //判断应用列表的类型是否和选择的类型一致
         if(this.select === "all" || data.classify == this.select){
           if(data.status === 1) {
-            if(this.text =="" || data.name.includes(this.text)) {
-              data.installed = this.installedAppID.includes(data.id)
+            if(this.text =="" || data.name.indexOf(this.text) > -1) {
+              data.installed = this.installedAppID.indexOf(data.id) > -1
               newList[item] = data
             }
           }
