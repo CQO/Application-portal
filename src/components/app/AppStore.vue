@@ -5,7 +5,7 @@
   .checker
     .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
     .checker-item(v-for="(item,key) in selectItem",:class="{ 'item-selected': click(key) }",v-on:click="select=key",:key="key") {{item}}
-  ul
+  vroll.store-list
     li.app-list(v-for="item in classification",:key="item.id")
       img(:src="item.icon")
       .info
@@ -44,6 +44,7 @@ export default {
   },
   created(){
     const _this = this
+    return null
     this.installedAppID = DATA.installedAppID
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {
@@ -257,4 +258,9 @@ export default {
       background-color: #1865ff;
     }
   }
+.store-list{
+  height: 443px;
+  touch-action: none;
+  overflow: hidden;
+}
 </style>

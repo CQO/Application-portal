@@ -1,6 +1,6 @@
 <template lang="pug">
 .app-plate
-  v-roll.scroll(ref="iscroll",:options="{preventDefault: false}")
+  vroll.scroll(ref="iscroll",:options="{preventDefault: false}")
     template(v-for="(sortItem,sortKey) in appList")
       AppTitle(:title="sortKey")
       .grid
