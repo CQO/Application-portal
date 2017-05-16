@@ -6,7 +6,7 @@
     template(v-for="(item, key) in tree")
       span.organization-item(v-on:click="clickTree(item, key)") {{item.orgName }}
       span >
-  iscroll-view.organization(ref="iscroll",v-if="List",v-show="!searchResult",:options="{click: true,scrollbars: true}")
+  v-roll.organization(ref="iscroll",v-if="List",v-show="!searchResult",:options="{click: true,scrollbars: true}")
     li(v-for="item in List.depts",v-on:click="load(item,true)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}

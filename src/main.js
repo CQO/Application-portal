@@ -8,9 +8,8 @@ Vue.use(VueRouter);
 import VueTouch from 'vue-touch';
 Vue.use(VueTouch, {name: 'v-touch'});
 //-------------------------------------------
-import IScrollView from 'vue-iscroll-view';
-import IScroll from 'iscroll/build/iscroll-lite.js';
-Vue.use(IScrollView, IScroll);
+import vRoll from 'vroll'
+Vue.use(vRoll);
 const routes = [
   { path: '/Main', name: 'Main', component: require('./components/Notice') },
   { path: '/', name: 'Login', component: require('./components/Login') },
