@@ -88,7 +88,6 @@ export default {
       //预登录信号监听
       Order.$once('queryEnOS', (message) => {
         setTimeout( ()=>{
-          
           let thisData = message
           if(thisData.entUsers.length > 0){
             //人员排序
@@ -104,7 +103,7 @@ export default {
             this.tree = DATA.orgTree //显示层级树
           }
         },0); 
-        
+     
       })
       //判断组织数是否为空
       if( Data.subOrgNum === 0 ) {

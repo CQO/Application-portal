@@ -35,47 +35,40 @@ export default {
   },
   created(){
     const _this = this
-    //从本地数据库中取出用户数据
-    localforage.getItem("appData",(err,appData) => {
-      if(!DATA.userName){
+    if(!DATA.userName){
+      localforage.getItem("appData",(err,appData) => {
         const userData = appData.userData
         DATA.userName = userData.userName
         DATA.idCard = userData.idCard
         DATA.unitId = userData.unitId
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
-      }
-      //拷贝一份 *应用数据* 里的 *用户数据*
-      const userData = appData.userData
-      if(timeoutDetection()) { return null } //超时检测
-      if(appData === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
-      if(userData.unitId != "1") { return null } //集团用户检测
-      if(appData.notice){Order.$emit('Toast', '使用缓存'); this.notice = appData.notice; return null } //缓存检测
-      //拉取数据的URL
-      const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+userData.userName+'&PID='+userData.idCard+'&webService='
-      //通过Get请求请求通知数据
-      get( noticeURL, (receive)=> {
-        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
-        //给 *应用数据* 的备份 增加 *通知数据*
-        appData.noticeData = {
-          xietongbangong:{ // 协同办公项
-            img    : $XTBG,
-            name   : '协同办公',
-            text   : cutString(receive,"Title>","<"),
-            time   : cutString(receive,"SentTime>","<"),
-            notice : cutString(receive,"wdNum>","<"),
-            url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + userData.userName + '&PID='+ userData.idCard + '&webService='
-          }
+      }) 
+    }
+    if(timeoutDetection()) { return null } //超时检测
+    if(DATA.userName === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
+    if(DATA.unitId != "1") { return null } //集团用户检测
+    let noticeData = {};
+    //拉取数据的URL
+    const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+DATA.userName+'&PID='+DATA.idCard+'&webService='
+    //通过Get请求请求通知数据
+    get( noticeURL, (receive)=> {
+      if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+      //给 *应用数据* 的备份 增加 *通知数据*
+      noticeData = {
+        xietongbangong:{ // 协同办公项
+          img    : $XTBG,
+          name   : '协同办公',
+          text   : cutString(receive,"Title>","<"),
+          time   : cutString(receive,"SentTime>","<"),
+          notice : cutString(receive,"wdNum>","<"),
+          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.userName + '&PID='+ DATA.idCard + '&webService='
         }
-        // 将 *应用数据* 显示在界面上
-        _this.notice = appData.noticeData
-        // 将修改后的 *应用数据* 覆盖原来的应用数据
-        localforage.setItem('appData', appData,function (err){
-          if(err !== null){ //错误处理
-            Order.$emit('Toast', '数据存储失败')
-          }
-        })
-      })
+      }
+      // 将 *应用数据* 显示在界面上
+      setTimeout(()=>{
+        _this.notice = noticeData
+      },0)
     })
   },
   methods:{

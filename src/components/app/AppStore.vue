@@ -44,7 +44,6 @@ export default {
   },
   created(){
     const _this = this
-    return null
     this.installedAppID = DATA.installedAppID
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {
