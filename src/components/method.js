@@ -77,15 +77,15 @@ let DATA = {
 import { QWebChannel } from  "./QTWebChannel";
 import { Order } from './Order.js';
 
-new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-  if(DATA.CHANNEL === null){
-    DATA.CHANNEL = channel.objects.content;
-    DATA.CHANNEL.callback.connect(function(receive) {
-      const Data = JSON.parse(receive);
-      Order.$emit(Data.fName, Data.data);
-    });
-  }
-});
+// new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
+//   if(DATA.CHANNEL === null){
+//     DATA.CHANNEL = channel.objects.content;
+//     DATA.CHANNEL.callback.connect(function(receive) {
+//       const Data = JSON.parse(receive);
+//       Order.$emit(Data.fName, Data.data);
+//     });
+//   }
+// });
 
 
 export {get, log, cutString, Timestamp, timeoutDetection, DATA};

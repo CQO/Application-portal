@@ -21,7 +21,7 @@ import { Order } from './Order.js'
 import localforage from 'localforage'
 import {get, cutString, timeoutDetection, DATA} from "./method.js" 
 //引入图片资源
-const $XTBG    = require('../assets/XTBG.png')
+const $XXFB    = require('../assets/XTBG.png')
 export default {
   components: {
     TitleBar,
@@ -50,26 +50,30 @@ export default {
     if(DATA.unitId != "1") { return null } //集团用户检测
     let noticeData = {};
     //拉取数据的URL
-    const noticeURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+DATA.userName+'&PID='+DATA.idCard+'&webService='
+    const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+DATA.userName+'&PID='+DATA.idCard+'&webService='
     //通过Get请求请求通知数据
-    get( noticeURL, (receive)=> {
+    get( XXFBURL, (receive)=> {
       if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
       //给 *应用数据* 的备份 增加 *通知数据*
-      noticeData = {
-        xietongbangong:{ // 协同办公项
-          img    : $XTBG,
-          name   : '协同办公',
-          text   : cutString(receive,"Title>","<"),
-          time   : cutString(receive,"SentTime>","<"),
-          notice : cutString(receive,"wdNum>","<"),
-          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.userName + '&PID='+ DATA.idCard + '&webService='
-        }
+      noticeData.XXFB = { // 协同办公项
+        img    : $XXFB,
+        name   : '协同办公',
+        text   : cutString(receive,"Title>","<"),
+        time   : cutString(receive,"SentTime>","<"),
+        notice : cutString(receive,"wdNum>","<"),
+        url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.userName + '&PID='+ DATA.idCard + '&webService='
       }
       // 将 *应用数据* 显示在界面上
       setTimeout(()=>{
         _this.notice = noticeData
       },0)
     })
+    // const YJURL = `http://192.168.117.63/secmail/GetAppUnreadFileService?id_card=${DATA.idCard}&username=secmail&password=welcome`
+    // get( YJURL, (receive)=> {
+    //   if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+    //   const data = JSON.parse(receive)
+    //   document.write(receive)
+    // })
   },
   methods:{
     openURL:function(url) {
