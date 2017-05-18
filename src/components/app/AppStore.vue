@@ -47,6 +47,15 @@ export default {
     //判断是否为debug模式
     if(DATA.debug){
       this.appStoreList = [
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"},
         {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"}
       ]
       return
