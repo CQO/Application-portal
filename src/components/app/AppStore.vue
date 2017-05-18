@@ -23,7 +23,7 @@ import localforage from 'localforage'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
 import { timeoutDetection, log, DATA } from "../method.js" 
-
+const $TGYY = require('../../assets/TGYY.png')
 export default {
   components: {
     Search,
@@ -44,6 +44,13 @@ export default {
   },
   created(){
     const _this = this
+    //判断是否为debug模式
+    if(DATA.debug){
+      this.appStoreList = [
+        {classify:"all",url:"",icon:$TGYY,id:"0",status:"0",version:"0.1.0",name:"测试应用",type:"all"}
+      ]
+      return
+    }
     this.installedAppID = DATA.installedAppID
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {

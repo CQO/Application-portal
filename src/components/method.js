@@ -43,7 +43,6 @@ const cutString = function(original,before,after,index){
     }
 };
 
-
 let Timestamp = {value:null};
 
 const timeoutDetection = function(){
@@ -60,6 +59,7 @@ const timeoutDetection = function(){
 
 
 let DATA = {
+  debug: true,
   CHANNEL: null,
   userName: '',
   idCard: null,
@@ -77,15 +77,16 @@ let DATA = {
 import { QWebChannel } from  "./QTWebChannel";
 import { Order } from './Order.js';
 
-// new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-//   if(DATA.CHANNEL === null){
-//     DATA.CHANNEL = channel.objects.content;
-//     DATA.CHANNEL.callback.connect(function(receive) {
-//       const Data = JSON.parse(receive);
-//       Order.$emit(Data.fName, Data.data);
-//     });
-//   }
-// });
-
+if(!DATA.debug){
+  new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
+    if(DATA.CHANNEL === null){
+      DATA.CHANNEL = channel.objects.content;
+      DATA.CHANNEL.callback.connect(function(receive) {
+        const Data = JSON.parse(receive);
+        Order.$emit(Data.fName, Data.data);
+      });
+    }
+  });
+}
 
 export {get, log, cutString, Timestamp, timeoutDetection, DATA};

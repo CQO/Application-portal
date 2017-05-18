@@ -34,6 +34,20 @@ export default {
     }
   },
   created(){
+    //判断是否为debug模式
+    if(DATA.debug){
+      let noticeData = {};
+      noticeData.XXFB = { // 协同办公项
+        img    : $XXFB,
+        name   : '协同办公',
+        text   : '这里是邮件的题目',
+        time   : '2066年6月6日',
+        notice : '2',
+        url    : 'owo.help'
+      }
+      this.notice = noticeData
+      return
+    }
     const _this = this
     if(!DATA.userName){
       localforage.getItem("appData",(err,appData) => {

@@ -45,6 +45,15 @@ export default {
     }
   },
   created(){
+    //判断是否为debug模式
+    if(DATA.debug){
+      this.showList = [{
+        url:'http://owo.ink/application/',
+        img:'http://myweb-10017157.cossh.myqcloud.com/2017/0518/1.png'
+      }]
+      this.rightIcon = 'add'
+      return
+    }
     timeoutDetection() //超时处理
     //取数据库
     localforage.getItem("appData",(err,appData) => {

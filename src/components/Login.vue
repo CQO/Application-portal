@@ -48,6 +48,14 @@ export default {
   },
   methods: {
     preLogin: function() { //预登录函数
+      //判断是否为debug模式
+      if(DATA.debug) {
+        DATA.unitId = '666666' 
+        DATA.idCard = '666666' 
+        DATA.userName = '测试用户' 
+        window.location.href="#/Main"
+        return
+      }
       //判断用户名和密码是否为空
       if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请正确输入账号和密码'); return null; }
       //预登录信号监听

@@ -45,6 +45,19 @@ export default {
     }
   },
   created(){
+    //判断是否为debug模式
+    if(DATA.debug){
+      this.appList = {
+        "办公应用": [
+          { id:10002, isH5:true , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
+          { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+        ],
+        "通讯应用":[
+          { id:10003, isH5:false , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
+        ]
+      }
+      return
+    }
     //监听应用安装通知
     Order.$on('appInstall', (message) => {
       this.installedAppID = DATA.installedAppID
