@@ -173,7 +173,7 @@ export default {
         else{
           if(thisApp.isH5){
             DATA.iframeURL = thisApp.url
-            window.location.href = `#/Iframe`;
+            window.location.href = `#/Iframe/${thisApp.name}`;
           }
           else{
             const app =  {

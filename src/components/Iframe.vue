@@ -1,6 +1,6 @@
 <template lang="pug">
 .iframe-box
-  TitleBar(title='详细资料',leftIcon="flase")
+  TitleBar(:title='$route.params.name',leftIcon="flase")
   iframe(:src="iframeURL",frameborder="0")
 </template>
 
@@ -12,7 +12,7 @@ export default {
   components: {
     TitleBar
   },
-  created () {
+  activated () {
     this.iframeURL = DATA.iframeURL
   },
   data () {

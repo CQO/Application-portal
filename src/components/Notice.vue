@@ -78,7 +78,7 @@ export default {
         url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.userName + '&PID='+ DATA.idCard + '&webService='
       }
       // 将 *应用数据* 显示在界面上
-      setTimeout(()=>{
+      setTimeout(()=> {
         _this.notice = noticeData
       },0)
     })
@@ -137,7 +137,7 @@ export default {
       overflow: hidden;
       position: absolute;
       right: 10px;
-      top: 5px;
+      top: 10px;
     }
     .notice{
       width: 18px;
