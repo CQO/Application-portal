@@ -1,7 +1,9 @@
 <template lang="pug">
-.iframe-box
+.iframe-box(v-bind:class="{ isLoad: ok }")
   TitleBar(:title='$route.params.name',leftIcon="flase")
-  iframe(:src="iframeURL",frameborder="0")
+  iframe#iframe(:src="iframeURL",frameborder="0")
+  .load
+    img(src="../assets/loading.gif")
 </template>
 
 <script>
@@ -13,11 +15,18 @@ export default {
     TitleBar
   },
   activated () {
+    this.ok = false
     this.iframeURL = DATA.iframeURL
+    let iframe = document.getElementById("iframe");
+    iframe.onload = (e)=> {
+      this.ok = true
+      //document.write("Sdsdsdsd")
+    }
   },
   data () {
     return {
-      iframeURL: null,
+      iframeURL: 'http://owo.ink/application/',
+      ok: false
     }
   }
 }
@@ -32,7 +41,27 @@ export default {
   iframe{
     height: 100%;
     width: 100%;
+    visibility:hidden
   }
 }
-    
+.load{
+    display: flex;
+    justify-content: center;
+    img{
+      margin: auto;
+      position: absolute;
+      top: 0; 
+      left: 0; 
+      bottom: 0; 
+      right: 0;
+    }
+}
+.isLoad{
+  iframe{
+    visibility: visible;
+  }
+  .load{
+    display: none;
+  }
+}
 </style>

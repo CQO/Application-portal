@@ -59,7 +59,7 @@ const timeoutDetection = function(){
 
 
 let DATA = {
-  debug: true,
+  debug: false,
   CHANNEL: null,
   userName: '',
   idCard: null,

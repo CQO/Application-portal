@@ -173,7 +173,12 @@ export default {
         else{
           if(thisApp.isH5){
             DATA.iframeURL = thisApp.url
-            window.location.href = `#/Iframe/${thisApp.name}`;
+            //window.location.href = `#/Iframe/${thisApp.name}`;
+            const url = thisApp.url.replace("http","browser")
+            const app1 = {
+              "scheme":url,
+            };
+            DATA.CHANNEL.opensopApp(JSON.stringify(app1))
           }
           else{
             const app =  {
