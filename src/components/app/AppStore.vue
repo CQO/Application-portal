@@ -5,7 +5,7 @@
   .checker
     .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
     .checker-item(v-for="(item,key) in selectItem",:class="{ 'item-selected': click(key) }",v-on:click="select=key",:key="key") {{item}}
-  vroll.store-list
+  vroll.store-list(ref="iscroll",:options="{preventDefault: false}")
     li.app-list(v-for="item in classification",:key="item.id")
       img(:src="item.icon")
       .info
@@ -107,6 +107,8 @@ export default {
         setTimeout(() => {
           this.appStoreList = newList
           this.leftIcon = "no"
+          const iscroll = this.$refs.iscroll
+          iscroll.refresh()
         }, 0);
       })
       DATA.CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
@@ -204,6 +206,7 @@ export default {
 
 <style lang='less' scoped>
 .app-store-box{
+  overflow: hidden;
   .checker{
     height: 24px;
     line-height: 24px;
@@ -274,8 +277,9 @@ export default {
     }
   }
 .store-list{
-  height: 443px;
   touch-action: none;
+	text-size-adjust: none;
   overflow: hidden;
+  height: 443px;
 }
 </style>

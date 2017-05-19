@@ -28,7 +28,7 @@ export default {
     BottomBar,
     swiper,
     swiperSlide,
-    AppPlate
+    AppPlate,
   },
   data () {
     return {
@@ -77,6 +77,7 @@ export default {
       DATA.CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
 
     })
+
   }
 }
 </script>
