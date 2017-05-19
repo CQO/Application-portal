@@ -17,7 +17,7 @@ export default {
   },
   data () {
     return {
-      iframeURL: 'http://www.owo.ink',
+      iframeURL: null,
     }
   }
 }
