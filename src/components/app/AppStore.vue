@@ -207,6 +207,7 @@ export default {
 <style lang='less' scoped>
 .app-store-box{
   overflow: hidden;
+  height: calc(~"100% - 45px");
   .checker{
     height: 24px;
     line-height: 24px;
