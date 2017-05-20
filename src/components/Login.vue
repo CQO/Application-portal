@@ -4,12 +4,13 @@
     img(src="../assets/logo.png")
     p 智慧企业运行平台
   .login
-    .user-name(:class="{ hide: selectList }")
-      .ico &#xe60c;
-      input(v-model="userName",placeholder="用户名")
-    .password(:class="{ hide: selectList }")
-      .ico &#xe623;
-      input(type="password",v-model="password",placeholder="密码")
+    .input-box
+      .user-name(:class="{ hide: selectList }")
+        .ico &#xe60c;
+        input(v-model="userName",placeholder="用户名")
+      .password(:class="{ hide: selectList }")
+        .ico &#xe623;
+        input(type="password",v-model="password",placeholder="密码")
     .button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
   .step
     .ico.one &#xe602;
@@ -18,7 +19,7 @@
     .title
       span.ok 选择需要登陆的用户
       .close.ico(@click.stop="selectList = null") &#xe697;
-    ul.list
+    ul.list(ref="iscroll",:options="{preventDefault: false}")
       li(v-for="item in selectList",v-on:click="login(item.usbkeyname,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
   Loading(text="正在登录")
   Toast
@@ -127,11 +128,12 @@ export default {
 .logo {
     width: 180px;
     margin: 0 auto;
-    height: 220px;
+    height: 200px;
     display: block;
     img {
-        height: 124px;
-        width: 180px;
+      height: 95px;
+      width: 150px;
+      margin: 0 12px;
     }
     p {
         color: #099dff;
@@ -139,19 +141,30 @@ export default {
         text-align: center;
     }
 }
+.input-box{
+  width: 300px;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #e3e3e3;
+}
 .login{
   height: 255px;
+  .user-name{
+    border-bottom: 1px solid #fefefe;
+  }
+  .password{
+    border-top: 1px solid #e3e3e3;
+  }
   .user-name,.password{
-    width: 300px;
     height: 50px;
-    border: 1px solid #099dff;
-    border-radius: 5px;
-    margin: 20px auto;
+    width: 100%;
     display: flex;
+    background-color: white;
     input{
       height: 50px;
       border: 0;
-      background-color: #f4f4f4;
+      background-color: white;
       width: 245px;
       font-size: 1rem;
       padding: 0;
@@ -170,11 +183,12 @@ export default {
     height: 50px;
     border-radius: 5px;
     margin: 40px auto;
-    background-color: #099dff;
+    background-color: #0066CC;
     text-align: center;
     line-height: 50px;
     color: white;
     font-size: 1.4rem;
+    box-shadow: 1px 1px 1px #888888;
   }
   .button:active{
     background-color: blue;
@@ -207,9 +221,12 @@ export default {
         margin-left: 10px;
     }
     .list{
-        overflow-y: auto;
-        user-select:none;
-        background-color: white;
+        touch-action: none;
+        text-size-adjust: none;
+        overflow: auto;
+        height: 200px;
+        border: 1px solid #dcecec;
+        border-radius: 0 0 5px 5px;
         li{
             padding: 10px;
             border-bottom: 1px solid #dcecec;
@@ -239,6 +256,9 @@ export default {
   visibility:hidden;
 }
 .isSelectd {
+  width: 100%;
+  overflow: hidden;
+  height: calc(~"100% - 45px");
   .one {
     color: #ccc;
   }

@@ -11,7 +11,7 @@
 <script>
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
-import { timeoutDetection, DATA, log } from "../method.js" 
+import { DATA, log } from "../method.js" 
 import localforage from 'localforage'
 
 import Vue from 'vue'

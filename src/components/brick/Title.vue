@@ -54,7 +54,7 @@ export default {
     line-height: 45px;
     width: 45px;
     font-size: 1rem;
-    color: #1865ff;
+    color: #336699;
   }
   .ico{
     font-size: 1.4rem;

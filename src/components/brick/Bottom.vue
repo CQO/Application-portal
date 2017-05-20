@@ -96,7 +96,7 @@ export default {
   }
   .active{
     .ico, .name{
-      color: blueviolet;
+      color: #336699;
     }
   }
 }

@@ -10,7 +10,7 @@
           p {{item.name}}
           .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
         .clear
-  .delate(v-on:click="delateApp",v-if="selectNumber > 0") 删除
+  .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
   Toast
 </template>
 
@@ -49,11 +49,11 @@ export default {
     if(DATA.debug){
       this.appList = {
         "办公应用": [
-          { id:10002, isH5:true , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
-          { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+          { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:false },
+          { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
         ],
         "通讯应用":[
-          { id:10003, isH5:false , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
+          { id:10003, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
         ]
       }
       return
@@ -173,6 +173,7 @@ export default {
           this.selectNumber++
         }
         else{
+          log(thisApp)
           if(thisApp.type === 2){
             if(thisApp.id === 10002){
               const url = thisApp.url.replace("http","browser")
@@ -298,14 +299,17 @@ export default {
 }
 .delate{
   position: fixed;
-  right: 0;
-  top: 0;
-  background-color: #f8f8f8;
-  color: blue;
-  width: 60px;
+  right: 10px;
+  bottom: 60px;
+  background-color: #99CC33;
+  color: white;
+  width: 45px;
   text-align: center;
   height: 45px;
+  border-radius: 50%;
   line-height: 45px;
-  z-index: 999
+  z-index: 999;
+  font-size: 1.2rem;
+  box-shadow: 1px 2px 1px #888888;
 }
 </style>
