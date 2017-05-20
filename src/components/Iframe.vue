@@ -20,7 +20,6 @@ export default {
     let iframe = document.getElementById("iframe");
     iframe.onload = (e)=> {
       this.ok = true
-      //document.write("Sdsdsdsd")
     }
   },
   data () {

@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',@click="openURL(item.url)")
+    li(v-for='item in notice',@click="openURL(item)")
       img(:src='item.img')
       .message
         p {{item.name}}
@@ -90,8 +90,9 @@ export default {
     // })
   },
   methods:{
-    openURL:function(url) {
-      window.location.href = url
+    openURL:function(item) {
+      DATA.iframeURL = item.url
+      window.location.href = `#/Iframe/${item.name}`;
     }
   }
 }

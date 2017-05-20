@@ -79,11 +79,11 @@ export default {
     }
     this.appList = {
       "办公应用": [
-        { id:10002, isH5:true , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
-        { id:10001, isH5:true , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+        { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
+        { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
       ],
       "通讯应用":[
-        { id:10003, isH5:false , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
+        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
       ]
     }
     this.installedAppID = ["10002","10001","10003"]
@@ -121,6 +121,7 @@ export default {
       //整理数据
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
+        log(element.appInfoList)
         element.appInfoList.forEach(function(item) {
           if(item.type === 1) item.homeUrl = item.activityName
           //将此应用的ID添加到已安装应用名单
@@ -130,7 +131,8 @@ export default {
             icon: item.icon,
             url: item.homeUrl,
             packageName: item.packageName,
-            status: 1
+            status: 1,
+            type: item.type
           }
           //应用列表是否包含此分类检测
           if(newAppList[className] === undefined){ newAppList[className] = []}
@@ -171,14 +173,18 @@ export default {
           this.selectNumber++
         }
         else{
-          if(thisApp.isH5){
-            DATA.iframeURL = thisApp.url
-            //window.location.href = `#/Iframe/${thisApp.name}`;
-            const url = thisApp.url.replace("http","browser")
-            const app1 = {
-              "scheme":url,
-            };
-            DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+          if(thisApp.type === 2){
+            if(thisApp.id === 10002){
+              const url = thisApp.url.replace("http","browser")
+              const app1 = {
+                "scheme":url,
+              };
+              DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+            }
+            else{
+              DATA.iframeURL = thisApp.url
+              window.location.href = `#/Iframe/${thisApp.name}`;
+            }
           }
           else{
             const app =  {
