@@ -11,7 +11,7 @@
       .password(:class="{ hide: selectList }")
         .ico &#xe623;
         input(type="password",v-model="password",placeholder="密码")
-    .button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
+  .button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
   .step
     .ico.one &#xe602;
     .ico.two &#xe602;
@@ -128,16 +128,16 @@ export default {
 .logo {
     width: 180px;
     margin: 0 auto;
-    height: 200px;
+    height: 220px;
     display: block;
     img {
-      height: 95px;
-      width: 150px;
-      margin: 0 12px;
+      height: 120px;
+      width: 180px;
+      margin: 0;
     }
     p {
         color: #099dff;
-        font-size: 22px;
+        font-size: 20px;
         text-align: center;
     }
 }
@@ -149,7 +149,7 @@ export default {
   border: 1px solid #e3e3e3;
 }
 .login{
-  height: 255px;
+  height: 140px;
   .user-name{
     border-bottom: 1px solid #fefefe;
   }
@@ -178,21 +178,22 @@ export default {
       color: #a4a9b2;
     }
   }
-  .button{
-    width: 300px;
-    height: 50px;
-    border-radius: 5px;
-    margin: 40px auto;
-    background-color: #0066CC;
-    text-align: center;
-    line-height: 50px;
-    color: white;
-    font-size: 1.4rem;
-    box-shadow: 1px 1px 1px #888888;
-  }
-  .button:active{
-    background-color: blue;
-  }
+
+}
+.button{
+  width: 300px;
+  height: 50px;
+  border-radius: 5px;
+  margin: 40px auto;
+  background-color: #333366;
+  text-align: center;
+  line-height: 50px;
+  color: white;
+  font-size: 1.4rem;
+  box-shadow: 1px 1px 1px #888888;
+}
+.button:active{
+  background-color: blue;
 }
 .select-list{
     height: 280px;

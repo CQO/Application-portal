@@ -1,11 +1,12 @@
 <template lang="pug">
 .swiper-box
   TitleBar(title='我的应用',:rightIcon="rightIcon")
-  swipe.swiper(:options="swipeOptions",v-if="showList")
-    swipe-item(v-for="slide in showList",:key="slide.id")
+  swiper.swiper(:options="swipeOptions",v-if="showList")
+    swiperSlide(v-for="slide in showList",:key="slide.id")
       .item(v-on:click="clickSwipe(slide)")
         img(:src="slide.img")
         .info {{slide.title}}
+  .swiper-pagination
 </template>
 
 <script>
@@ -13,22 +14,24 @@ import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
 import { DATA, log } from "../method.js" 
 import localforage from 'localforage'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-import Vue from 'vue'
-import VSwipe from 'vswipe'
-Vue.use(VSwipe)
 
 export default {
   components: {
-    TitleBar
+    TitleBar,
+    swiper,
+    swiperSlide
   },
   data () {
     return {
       showList: null,
       rightIcon: 'loading',
       swipeOptions: {
-        speed: 300,
-        auto: 4000,
+        autoplay: 3500,
+        pagination : '.swiper-pagination',
+        autoplayDisableOnInteraction : false,
+        preventClicks : false,
       }
     }
   },
@@ -54,6 +57,9 @@ export default {
     //请求轮播数据
     DATA.CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
   },
+  activated() {
+    log(this.showList)
+  },
   methods: {
     clickSwipe: function(thisSlide){
       DATA.iframeURL = thisSlide.url
@@ -68,10 +74,16 @@ export default {
   height: 180px;
   width: 100%;
   position: relative;
+  overflow: hidden;
   .swiper, .item, img{
     height: 180px;
     width: 100%;
   }
+}
+.swiper-pagination{
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 .info{
   position: absolute;
