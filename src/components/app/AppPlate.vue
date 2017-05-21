@@ -36,11 +36,9 @@ export default {
   },
   data () {
     return {
-      index: 0,
       selectNumber:0, //长按选中个数
       appData: null,
       appList: {},
-      showList: [""],
       installedAppID: []
     }
   },
@@ -49,11 +47,11 @@ export default {
     if(DATA.debug){
       this.appList = {
         "办公应用": [
-          { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:false },
-          { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+          { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, main:false },
+          { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
         ],
         "通讯应用":[
-          { id:10003, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
+          { id:10003, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
         ]
       }
       return
@@ -61,10 +59,11 @@ export default {
     //监听应用安装通知
     Order.$on('appInstall', (message) => {
       this.installedAppID = DATA.installedAppID
-      this.appList = {} //不知道为什么需要清除一次
-      this.appList = message
-
+      setTimeout(()=>{
+        this.appList = message
+      },0)
     })
+    //防止内存数据被清空
     if(!DATA.userName){
       localforage.getItem("appData",(err,appData) => {
         const userData = appData.userData
@@ -77,41 +76,26 @@ export default {
       })
       return;
     }
+    //生成默认应用列表
     this.appList = {
       "办公应用": [
-        { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, status: 1, main:true },
-        { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', status: 1, main:true}
+        { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, main:true },
+        { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
       ],
       "通讯应用":[
-        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", status: 1, main:true },
+        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
       ]
     }
     this.installedAppID = ["10002","10001","10003"]
     //--------------------------------------------------集团用户判断--------------------------------------------------
     if(DATA.unitId == "1"){
       const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+DATA.userName+'&PID='+DATA.idCard+'&webService=&SessionID='
-      this.appList["办公应用"].unshift({ 
-        id:10004, 
-        name: "协同办公", 
-        icon: $XTBG, 
-        isH5: true,
-        url: officeAppUrl,
-        status: 1, 
-        main: true ,
-        appOK: false
-      })
+      this.appList["办公应用"].unshift({ id:10004, type: 2, name: "协同办公", icon: $XTBG, url: officeAppUrl, main: true })
       this.installedAppID.push("10004")
     }
     else{
-      this.appList["办公应用"].unshift({ 
-        id:10005, 
-        name: "公文管理", 
-        icon: $GWGL, 
-        isH5: false,
-        url: 'casicoa:showOA?pid={{idCard}}&sessionID=54545333',
-        status: 1, 
-        main: true 
-      })
+      const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
+      this.appList["办公应用"].unshift({ id:10005, type: 1, name: "公文管理", icon: $GWGL, url: GWGLURL, main: true })
       this.installedAppID.push("10004")
     }
     DATA.appList = this.appList //存储
@@ -121,7 +105,6 @@ export default {
       //整理数据
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
-        log(element.appInfoList)
         element.appInfoList.forEach(function(item) {
           if(item.type === 1) item.homeUrl = item.activityName
           //将此应用的ID添加到已安装应用名单
@@ -131,7 +114,6 @@ export default {
             icon: item.icon,
             url: item.homeUrl,
             packageName: item.packageName,
-            status: 1,
             type: item.type
           }
           //应用列表是否包含此分类检测
@@ -173,9 +155,8 @@ export default {
           this.selectNumber++
         }
         else{
-          log(thisApp)
           if(thisApp.type === 2){
-            if(thisApp.id === 10002){
+            if(thisApp.id === 10002 || thisApp.id === 10004){
               const url = thisApp.url.replace("http","browser")
               const app1 = {
                 "scheme":url,

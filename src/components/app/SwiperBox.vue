@@ -57,13 +57,15 @@ export default {
     //请求轮播数据
     DATA.CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
   },
-  activated() {
-    log(this.showList)
-  },
   methods: {
     clickSwipe: function(thisSlide){
-      DATA.iframeURL = thisSlide.url
-      window.location.href = `#/Iframe/${thisSlide.title}`;
+      // DATA.iframeURL = thisSlide.url
+      // window.location.href = `#/Iframe/${thisSlide.title}`;
+      const url = thisSlide.url.replace("http","browser")
+      const app1 = {
+        "scheme":url,
+      };
+      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
     }
   }
 }
