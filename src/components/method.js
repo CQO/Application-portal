@@ -67,6 +67,7 @@ let DATA = {
   orgList:{},
   orgTree : [],
   orgID : 0,
+  orgCode: null,
   selectItem: null,
   appList:null,
   installedAppID: null,

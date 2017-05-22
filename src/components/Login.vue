@@ -3,12 +3,12 @@
   .logo
     img(src="../assets/logo.png")
     p 智慧企业运行平台
-  .login
+  .login(:class="{ hide: selectList }")
     .input-box
-      .user-name(:class="{ hide: selectList }")
+      .user-name
         .ico &#xe60c;
         input(v-model="userName",placeholder="用户名")
-      .password(:class="{ hide: selectList }")
+      .password
         .ico &#xe623;
         input(type="password",v-model="password",placeholder="密码")
   .button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
@@ -17,10 +17,10 @@
     .ico.two &#xe602;
   .select-list(v-show="selectList")
     .title
-      span.ok 选择需要登陆的用户
+      span.ok 共查找到 {{selectList.length}} 个组织
       .close.ico(@click.stop="selectList = null") &#xe697;
     ul.list(ref="iscroll",:options="{preventDefault: false}")
-      li(v-for="item in selectList",v-on:click="login(item.usbkeyname,item.usbkeyidentification,item.unitId,item.unitName)") {{item.unitName}}
+      li(v-for="item in selectList",v-on:click="login(item)") {{item.unitName}}
   Loading(text="正在登录")
   Toast
 </template>
@@ -75,10 +75,13 @@ export default {
       Order.$emit('Loading', 'show')
       DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
-    login: function(userName,idCard,unitId, unitName){ //登录函数
-      DATA.unitId = unitId //保存unitId
-      DATA.idCard = idCard //保存身份证信息
+    login: function(thisOrg){ //登录函数
+      const userName = this.userName
+      DATA.unitId = thisOrg.unitId //保存unitId
+      DATA.idCard = thisOrg.usbkeyidentification //保存身份证信息
       DATA.userName = userName //存储登录的用户名
+      DATA.orgCode = thisOrg.orgCode
+      DATA.orgID = thisOrg.orgID
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$once('login', (message)=> {
@@ -88,9 +91,11 @@ export default {
           const appData = {
             userData: { //用户信息
               userName : userName,   //用户名
-              idCard   : idCard, //身份信息
-              unitId   : unitId,  //ID
-              unitName : unitName
+              idCard   : thisOrg.usbkeyidentification, //身份信息
+              unitId   : thisOrg.unitId,  //ID
+              unitName : thisOrg.unitName,
+              orgCode  : thisOrg.orgCode,
+              orgID    : thisOrg.orgID
             }, 
             Timestamp: nowTime //时间戳
           }
@@ -114,10 +119,10 @@ export default {
         },0)
       })
       DATA.CHANNEL.login(JSON.stringify({
-        usbkeyidentification : idCard, //身份证
+        usbkeyidentification : DATA.idCard, //身份证
         password : this.password, //密码
-        unitId : unitId, //所在组织id
-        userName: userName, //用户名
+        unitId : DATA.unitId, //所在组织id
+        userName: DATA.userName, //用户名
       }))
     },
   },
@@ -149,7 +154,7 @@ export default {
   border: 1px solid #e3e3e3;
 }
 .login{
-  height: 140px;
+  height: 130px;
   .user-name{
     border-bottom: 1px solid #fefefe;
   }
@@ -182,14 +187,14 @@ export default {
 }
 .button{
   width: 300px;
-  height: 50px;
+  height: 45px;
   border-radius: 5px;
   margin: 40px auto;
   background-color: #333366;
   text-align: center;
-  line-height: 50px;
+  line-height: 45px;
   color: white;
-  font-size: 1.4rem;
+  font-size: 20px;
   box-shadow: 1px 1px 1px #888888;
 }
 .button:active{
@@ -225,7 +230,7 @@ export default {
         touch-action: none;
         text-size-adjust: none;
         overflow: auto;
-        height: 200px;
+        height: 220px;
         border: 1px solid #dcecec;
         border-radius: 0 0 5px 5px;
         li{

@@ -142,6 +142,16 @@ export default {
   },
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
+        // stic.userID = QString::number(mpAuthService->userId()).toStdString();
+        // stic.appType = obj.value("appType").toString().toStdString();
+        // stic.appID = obj.value("appID").toString().toStdString();
+        // stic.orgID = obj.value("orgID").toString().toStdString();
+        // stic.orgCode = obj.value("orgCode").toString().toStdString();
+        // stic.unitID = obj.value("unitID").toString().toStdString();
+      Order.$on('appStatistics', (message)=> {
+        log(message)
+      })
+      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"8",appType: thisApp.type,appID: thisApp.id, orgID: DATA.orgID, unitId: DATA.unitId, orgCode: DATA.orgCode}))
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
