@@ -41,18 +41,13 @@ export default {
   },
   created () {
     timeoutDetection() //超时检测
-    //判断是否层级树缓存
-    if(DATA.orgTree.length > 0) { 
-      this.tree = DATA.orgTree //显示层级树
-      this.List = DATA.orgList[DATA.orgID] //显示层级数据
-      return
-    }
+
     //取数据库数据
     localforage.getItem("appData",(err,appData) => {
-      if(appData.userData.unitId == 1)  appData.userData.unitName = "集团公司总部"
+      if(DATA.org.unitId == 1)  appData.userData.unitName = "集团公司总部"
       this.load({
         orgName: appData.userData.unitName,
-        orgID: appData.userData.unitId,
+        orgID: DATA.org.unitId,
         subOrgNum: 666,
         subUserNum: 666,
       },true)
@@ -70,7 +65,7 @@ export default {
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
       if(message){
-        const enOS = { enterId: 602, orgId: DATA.unitId + "" ,type: 2, name:message }
+        const enOS = { enterId: 602, orgId: DATA.org.unitId + "" ,type: 2, name:message }
         DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
@@ -86,41 +81,41 @@ export default {
     load:function(Data,addTree){ //拉取层级数据
       this.List = null //显示加载动画
       //预登录信号监听
+      
       Order.$once('queryEnOS', (message) => {
-        setTimeout( ()=>{
-          let thisData = message
-          if(thisData.entUsers.length > 0){
-            //人员排序
-            thisData.entUsers.sort((a,b) =>{
-              return (a.orderNum < b.orderNum) ? -1 : 1
-            })
-          }
-          DATA.orgID = Data.orgID
-          DATA.orgList[Data.orgID] = thisData //保存层级数据
-          this.List = DATA.orgList[Data.orgID] //显示层级数据
+        DATA.kkkkkkkkid = Data.orgID
+        setTimeout( ()=>{          
+          this.List = message //显示层级数据
           if(addTree) {
             DATA.orgTree.push(Data) //层级树增加一层
             this.tree = DATA.orgTree //显示层级树
           }
+          if(message.entUsers.length > 0){
+            //人员排序
+            message.entUsers.sort((a,b) =>{
+              return (a.orderNum < b.orderNum) ? -1 : 1
+            })
+          }
         },0); 
      
       })
+      log(Data.kkkkkkkkid)
       //判断组织数是否为空
       if( Data.subOrgNum === 0 ) {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+          const enOS = { enterId: 602, orgId: Data.kkkkkkkkid + "" ,type: 4 }
           DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
+        const enOS = { enterId: 602, orgId: Data.kkkkkkkkid + "",type: 3 }
         DATA.CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
+        const enOS = { enterId: 602, orgId: Data.kkkkkkkkid + "" ,type: 4 }
         DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
@@ -130,7 +125,7 @@ export default {
       //显示层级树
       this.tree = DATA.orgTree
       //刷新所在层级的ID
-      DATA.orgID = item.id 
+      DATA.kkkkkkkkid = item.id 
       this.load(item,false)
     },
   },

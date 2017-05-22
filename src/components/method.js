@@ -57,17 +57,28 @@ const timeoutDetection = function(){
   return false;
 };
 
-
+// DATA = {
+//   org: { 
+//     deptName: '综合办公室',
+//     enname: '刘霞',
+//     isFirstLogin: '0',
+//     orderNum: 99999,
+//     orgCode: '10011001100610011001',
+//     orgID: '2920082167358987',
+//     unitId: '936',
+//     unitName: '内蒙古河西航天科技发展有限公司',
+//     usbkeyidentification: '150102197503261521',
+//     usbkeyname: '刘霞',
+//     userAccount: '3390843' 
+//   }
+// }
 let DATA = {
+  org:{},
   debug: false,
   CHANNEL: null,
-  userName: '',
-  idCard: null,
-  unitId: null,
   orgList:{},
   orgTree : [],
-  orgID : 0,
-  orgCode: null,
+  kkkkkkkkid : 0,
   selectItem: null,
   appList:null,
   installedAppID: null,

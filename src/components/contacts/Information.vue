@@ -52,12 +52,11 @@ export default {
       DATA.CHANNEL.callPhone(this.$route.params.telPhone)
     },
     yuanyuan:function(){
-      // document.write(DATA.idCard)
       const app1 = {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=" + DATA.idCard + "&pwd=123456",
+        "scheme":"linkdood:showlinkdood?id=" + DATA.org.usbkeyidentification + "&pwd=123456",
         "name":"linkdood"
       };
       //打开应用

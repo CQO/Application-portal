@@ -52,9 +52,7 @@ export default {
     preLogin: function() { //预登录函数
       //判断是否为debug模式
       if(DATA.debug) {
-        DATA.unitId = '666666' 
-        DATA.idCard = '666666' 
-        DATA.userName = '测试用户' 
+        DATA.org = { deptName: '综合办公室',enname: '刘霞',isFirstLogin: '0',orderNum: 99999,orgCode: '10011001100610011001',orgID: '2920082167358987',unitId: '936',unitName: '内蒙古河西航天科技发展有限公司',usbkeyidentification: '150102197503261521',usbkeyname: '刘霞',userAccount: '3390843' }
         window.location.href="#/Main"
         return
       }
@@ -77,12 +75,7 @@ export default {
       DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
     login: function(thisOrg){ //登录函数
-      const userName = this.userName
-      DATA.unitId = thisOrg.unitId //保存unitId
-      DATA.idCard = thisOrg.usbkeyidentification //保存身份证信息
-      DATA.userName = userName //存储登录的用户名
-      DATA.orgCode = thisOrg.orgCode
-      DATA.orgID = thisOrg.orgID
+      DATA.org = thisOrg
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$once('login', (message)=> {
@@ -91,14 +84,11 @@ export default {
           const nowTime = new Date().getTime()
           const appData = {
             userData: { //用户信息
-              userName : userName,   //用户名
-              idCard   : thisOrg.usbkeyidentification, //身份信息
-              unitId   : thisOrg.unitId,  //ID
+              unitId   : DATA.org.unitId,  //ID
               unitName : thisOrg.unitName,
-              orgCode  : thisOrg.orgCode,
-              orgID    : thisOrg.orgID
             }, 
-            Timestamp: nowTime //时间戳
+            Timestamp: nowTime, //时间戳
+            org: DATA.org
           }
           Timestamp.value = nowTime
           //保存用户信息
@@ -120,10 +110,10 @@ export default {
         },0)
       })
       DATA.CHANNEL.login(JSON.stringify({
-        usbkeyidentification : DATA.idCard, //身份证
+        usbkeyidentification : DATA.org.usbkeyidentification, //身份证
         password : this.password, //密码
-        unitId : DATA.unitId, //所在组织id
-        userName: DATA.userName, //用户名
+        unitId : DATA.org.unitId, //所在组织id
+        userName: DATA.org.enname, //用户名
       }))
     },
   },

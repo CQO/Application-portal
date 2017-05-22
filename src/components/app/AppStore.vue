@@ -126,7 +126,7 @@ export default {
         "type":2,
         "sopid":"com.vrv.linkDood",
         "pkgpath":"com.vrv.linkDood-1.0.45.sop",
-        "scheme":"linkdood:showlinkdood?id=" + this.appData.userData.idCard,
+        "scheme":"linkdood:showlinkdood?id=" + DATA.org.usbkeyidentification,
         "name":"linkdood"
       };
       //打开应用

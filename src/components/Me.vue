@@ -36,8 +36,8 @@ export default {
       Order.$on('loginout', function(message) {
         Order.$emit('Loading', 'hide') //隐藏退出提示
         //用户名缓存判断
-        if(DATA.userName){
-          window.location.href=`#/Quit/${DATA.userName}` //返回记录用户名的登录界面
+        if(DATA.org.enname){
+          window.location.href=`#/Quit/${DATA.org.enname}` //返回记录用户名的登录界面
         }
         else{
           window.location.href=`#/` //返回登录界面
@@ -49,15 +49,6 @@ export default {
   },
   created(){
     if(timeoutDetection()) return null
-    if(DATA.userName){
-      this.userName = DATA.userName
-    }
-    else{
-      localforage.getItem("appData",(err,appData) => {
-        this.userName = appData.userData.userName
-      })
-    }
-    
   },
   data () {
     return {
@@ -66,7 +57,7 @@ export default {
         { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
         { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
-      userName: ''
+      userName: DATA.org.enname
     }
   }
 }

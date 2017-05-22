@@ -49,22 +49,20 @@ export default {
       return
     }
     const _this = this
-    if(!DATA.userName){
+    if(!DATA.org.enname){
       localforage.getItem("appData",(err,appData) => {
+        DATA.org = appData.org
         const userData = appData.userData
-        DATA.userName = userData.userName
-        DATA.idCard = userData.idCard
-        DATA.unitId = userData.unitId
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
       }) 
     }
     if(timeoutDetection()) { return null } //超时检测
-    if(DATA.userName === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
-    if(DATA.unitId != "1") { return null } //集团用户检测
+    if(DATA.org.enname === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
+    if(DATA.org.unitId != "1") { return null } //集团用户检测
     let noticeData = {};
     //拉取数据的URL
-    const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+DATA.userName+'&PID='+DATA.idCard+'&webService='
+    const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
     //通过Get请求请求通知数据
     get( XXFBURL, (receive)=> {
       if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
@@ -75,14 +73,14 @@ export default {
         text   : cutString(receive,"Title>","<"),
         time   : cutString(receive,"SentTime>","<"),
         notice : cutString(receive,"wdNum>","<"),
-        url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.userName + '&PID='+ DATA.idCard + '&webService='
+        url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
       }
       // 将 *应用数据* 显示在界面上
       setTimeout(()=> {
         _this.notice = noticeData
       },0)
     })
-    // const YJURL = `http://192.168.117.63/secmail/GetAppUnreadFileService?id_card=${DATA.idCard}&username=secmail&password=welcome`
+    // const YJURL = `http://192.168.117.63/secmail/GetAppUnreadFileService?id_card=${DATA.org.usbkeyidentification}&username=secmail&password=welcome`
     // get( YJURL, (receive)=> {
     //   if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
     //   const data = JSON.parse(receive)

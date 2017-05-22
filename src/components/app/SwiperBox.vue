@@ -49,9 +49,9 @@ export default {
     //--------------------------------------------------轮播图处理阶段--------------------------------------------------
     //轮播图信号监听
     Order.$once('slidesshow', (message) => {
+      this.rightIcon = 'add'
       setTimeout(() => {
         this.showList = message //显示轮播图
-        this.rightIcon = 'add'  
       },0);
     })
     //请求轮播数据

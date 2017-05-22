@@ -47,11 +47,11 @@ export default {
     if(DATA.debug){
       this.appList = {
         "办公应用": [
-          { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, main:false },
+          { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:false },
           { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
         ],
         "通讯应用":[
-          { id:10003, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
+          { id:10003, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{usbkeyidentification}}", main:true },
         ]
       }
       return
@@ -64,12 +64,10 @@ export default {
       },0)
     })
     //防止内存数据被清空
-    if(!DATA.userName){
+    if(!DATA.org.enname){
       localforage.getItem("appData",(err,appData) => {
+        DATA.org = appData.org
         const userData = appData.userData
-        DATA.userName = userData.userName
-        DATA.idCard = userData.idCard
-        DATA.unitId = userData.unitId
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
         this.appList = appData.appList
@@ -79,22 +77,22 @@ export default {
     //生成默认应用列表
     this.appList = {
       "办公应用": [
-        { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.idCard, main:true },
+        { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:true },
         { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
       ],
       "通讯应用":[
-        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
+        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{usbkeyidentification}}", main:true },
       ]
     }
     this.installedAppID = ["10002","10001","10003"]
     //--------------------------------------------------集团用户判断--------------------------------------------------
-    if(DATA.unitId == "1"){
-      const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+DATA.userName+'&PID='+DATA.idCard+'&webService=&SessionID='
+    if(DATA.org.unitId == "1"){
+      const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService=&SessionID='
       this.appList["办公应用"].unshift({ id:10004, type: 2, name: "协同办公", icon: $XTBG, url: officeAppUrl, main: true })
       this.installedAppID.push("10004")
     }
     else{
-      const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
+      const GWGLURL = 'casicoa:showOA?pid={{usbkeyidentification}}&sessionID=54545333'
       this.appList["办公应用"].unshift({ id:10005, type: 1, name: "公文管理", icon: $GWGL, url: GWGLURL, main: true })
       this.installedAppID.push("10004")
     }
@@ -128,9 +126,11 @@ export default {
         this.appList = newAppList
         DATA.appList = this.appList
         DATA.installedAppID = this.installedAppID
+        
         const iscroll = this.$refs.iscroll
         iscroll.refresh()
         localforage.getItem("appData",(err,appData) => {
+          appData.org = DATA.org
           appData.appList = newAppList
           appData.installedAppID = this.installedAppID
           localforage.setItem('appData', appData)
@@ -142,16 +142,11 @@ export default {
   },
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
-        // stic.userID = QString::number(mpAuthService->userId()).toStdString();
-        // stic.appType = obj.value("appType").toString().toStdString();
-        // stic.appID = obj.value("appID").toString().toStdString();
-        // stic.orgID = obj.value("orgID").toString().toStdString();
-        // stic.orgCode = obj.value("orgCode").toString().toStdString();
-        // stic.unitID = obj.value("unitID").toString().toStdString();
-      Order.$on('appStatistics', (message)=> {
-        log(message)
-      })
-      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.orgID, unitId: DATA.unitId, orgCode: DATA.orgCode}))
+      //调用统计接口
+      // Order.$on('appStatistics', (message)=> {
+      //   log(message)
+      // })
+      // DATA.CHANNEL.queryAppStore(JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitId: DATA.org.unitId, orgCode: DATA.org.orgCode}))
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
@@ -180,7 +175,7 @@ export default {
           }
           else{
             const app =  {
-              "scheme": thisApp.url.replace("{{idCard}}",DATA.idCard)
+              "scheme": thisApp.url.replace("{{usbkeyidentification}}",DATA.org.usbkeyidentification)
             }
             DATA.CHANNEL.opensopApp(JSON.stringify(app))
           }
