@@ -43,42 +43,39 @@ const cutString = function(original,before,after,index){
     }
 };
 
-let Timestamp = {value:null};
 
 const timeoutDetection = function(){
   const nowTime = new Date().getTime();
   //检测距离上次操作是否已经过去1200000毫秒(20分钟)
-  if(nowTime - Timestamp.value > 7200000){
-    if( Timestamp.value === null ) { return false;}//数据清楚检测
+  if(nowTime - DATA.Timestamp > 7200000){
+    if( DATA.Timestamp === null ) { return false;}//数据清楚检测
     window.location.href="#/TimeOut";
     return true;
   }
-  Timestamp.value = nowTime;
+  DATA.Timestamp = nowTime;
   return false;
 };
 
-// DATA = {
-//   org: { 
-//     deptName: '综合办公室',
-//     enname: '刘霞',
-//     isFirstLogin: '0',
-//     orderNum: 99999,
-//     orgCode: '10011001100610011001',
-//     orgID: '2920082167358987',
-//     unitId: '936',
-//     unitName: '内蒙古河西航天科技发展有限公司',
-//     usbkeyidentification: '150102197503261521',
-//     usbkeyname: '刘霞',
-//     userAccount: '3390843' 
-//   }
-// }
 let DATA = {
-  org:{},
+  org: { 
+    deptName: '综合办公室',
+    enname: '刘霞',
+    isFirstLogin: '0',
+    orderNum: 99999,
+    orgCode: '10011001100610011001',
+    orgID: '2920082167358987',
+    unitId: '936',
+    unitName: '内蒙古河西航天科技发展有限公司',
+    usbkeyidentification: '150102197503261521',
+    usbkeyname: '刘霞',
+    userAccount: '3390843' 
+  },
   debug: false,
+  normal: false,
   CHANNEL: null,
+  Timestamp: null,
   orgList:{},
   orgTree : [],
-  kkkkkkkkid : 0,
   selectItem: null,
   appList:null,
   installedAppID: null,
@@ -102,4 +99,4 @@ if(!DATA.debug){
   });
 }
 
-export {get, log, cutString, Timestamp, timeoutDetection, DATA};
+export {get, log, cutString, timeoutDetection, DATA};

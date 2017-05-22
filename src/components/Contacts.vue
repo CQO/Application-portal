@@ -44,9 +44,10 @@ export default {
 
     //取数据库数据
     localforage.getItem("appData",(err,appData) => {
-      if(DATA.org.unitId == 1)  appData.userData.unitName = "集团公司总部"
+      let orgName = DATA.org.unitName
+      if(DATA.org.unitId == 1)  orgName = "集团公司总部"
       this.load({
-        orgName: appData.userData.unitName,
+        orgName: orgName,
         orgID: DATA.org.unitId,
         subOrgNum: 666,
         subUserNum: 666,
@@ -83,7 +84,6 @@ export default {
       //预登录信号监听
       
       Order.$once('queryEnOS', (message) => {
-        DATA.kkkkkkkkid = Data.orgID
         setTimeout( ()=>{          
           this.List = message //显示层级数据
           if(addTree) {
@@ -99,23 +99,22 @@ export default {
         },0); 
      
       })
-      log(Data.kkkkkkkkid)
       //判断组织数是否为空
       if( Data.subOrgNum === 0 ) {
         //服务器说 组织 和 人员数 都为空那就请求组织吧
         if( Data.subUserNum === 0) {
           //请求组织信息
-          const enOS = { enterId: 602, orgId: Data.kkkkkkkkid + "" ,type: 4 }
+          const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
           DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
-        const enOS = { enterId: 602, orgId: Data.kkkkkkkkid + "",type: 3 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
         DATA.CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
-        const enOS = { enterId: 602, orgId: Data.kkkkkkkkid + "" ,type: 4 }
+        const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
         DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
@@ -143,7 +142,6 @@ export default {
 
 .organization{
 	  touch-action: none;
-	  text-size-adjust: none;
     overflow: hidden;
     height: 400px;
     li{

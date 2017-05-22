@@ -67,7 +67,6 @@ export default {
     if(!DATA.org.enname){
       localforage.getItem("appData",(err,appData) => {
         DATA.org = appData.org
-        const userData = appData.userData
         DATA.appList = appData.appList
         DATA.installedAppID = appData.installedAppID
         this.appList = appData.appList

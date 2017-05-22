@@ -29,7 +29,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { Timestamp, DATA, log } from "./method.js"
+import { DATA, log } from "./method.js"
 import localforage from 'localforage'
 
 export default {
@@ -51,22 +51,18 @@ export default {
   methods: {
     preLogin: function() { //预登录函数
       //判断是否为debug模式
-      if(DATA.debug) {
-        DATA.org = { deptName: '综合办公室',enname: '刘霞',isFirstLogin: '0',orderNum: 99999,orgCode: '10011001100610011001',orgID: '2920082167358987',unitId: '936',unitName: '内蒙古河西航天科技发展有限公司',usbkeyidentification: '150102197503261521',usbkeyname: '刘霞',userAccount: '3390843' }
-        window.location.href="#/Main"
-        return
-      }
+      if(DATA.debug) { window.location.href="#/Main"; DATA.normal = true; return; }
       //判断用户名和密码是否为空
       if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请正确输入账号和密码'); return null; }
       //预登录信号监听
       Order.$once('preLogin', (message) => {
+        if(!message) {Order.$emit('Toast', '返回数据为空！'); return;}
+        Order.$emit('Loading', 'hide')
         setTimeout( ()=>{
-          Order.$emit('Loading', 'hide')
-          if(!message) {Order.$emit('Toast', '返回数据为空！'); return;}
           switch(message.length){ //判断同名用户数量
             case 0  : Order.$emit('Toast', '登录失败'); break; 
             //如果用户所属的组织只有一个，那么自动帮用户选择登录
-            case 1  : const data = message[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
+            case 1  : const data = message[0]; this.login(data); break;
             default : this.selectList = message; this.orgNumber = message.length;
           }
         },0);
@@ -75,22 +71,20 @@ export default {
       DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
     login: function(thisOrg){ //登录函数
-      DATA.org = thisOrg
+      DATA.org = thisOrg //存储组织信息
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$once('login', (message)=> {
+        
+        DATA.normal = true //标记状态为 正常 ，以后根据这个字段的值判断内存是否被清理
         //登录验证成功后执行的方法
         function loginSuccess(){
           const nowTime = new Date().getTime()
           const appData = {
-            userData: { //用户信息
-              unitId   : DATA.org.unitId,  //ID
-              unitName : thisOrg.unitName,
-            }, 
             Timestamp: nowTime, //时间戳
             org: DATA.org
           }
-          Timestamp.value = nowTime
+          DATA.Timestamp = nowTime
           //保存用户信息
           localforage.setItem('appData', appData, function (err){
             if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
