@@ -151,7 +151,7 @@ export default {
       Order.$on('appStatistics', (message)=> {
         log(message)
       })
-      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"8",appType: thisApp.type,appID: thisApp.id, orgID: DATA.orgID, unitId: DATA.unitId, orgCode: DATA.orgCode}))
+      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.orgID, unitId: DATA.unitId, orgCode: DATA.orgCode}))
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 

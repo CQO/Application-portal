@@ -17,7 +17,7 @@
     .ico.two &#xe602;
   .select-list(v-show="selectList")
     .title
-      span.ok 共查找到 {{selectList.length}} 个组织
+      span.ok 共查找到 {{orgNumber}} 个组织
       .close.ico(@click.stop="selectList = null") &#xe697;
     ul.list(ref="iscroll",:options="{preventDefault: false}")
       li(v-for="item in selectList",v-on:click="login(item)") {{item.unitName}}
@@ -37,7 +37,8 @@ export default {
     return {
       userName: '',
       password: '',
-      selectList: null
+      selectList: null,
+      orgNumber: 0
     }
   },
   components: {
@@ -68,7 +69,7 @@ export default {
             case 0  : Order.$emit('Toast', '登录失败'); break; 
             //如果用户所属的组织只有一个，那么自动帮用户选择登录
             case 1  : const data = message[0]; this.login(data.usbkeyname,data.usbkeyidentification,data.unitId,data.unitName); break;
-            default : this.selectList = message;
+            default : this.selectList = message; this.orgNumber = message.length;
           }
         },0);
       })
@@ -131,20 +132,20 @@ export default {
 
 <style lang='less' scoped>
 .logo {
+  width: 180px;
+  margin: 0 auto;
+  height: 220px;
+  display: block;
+  img {
+    height: 120px;
     width: 180px;
-    margin: 0 auto;
-    height: 220px;
-    display: block;
-    img {
-      height: 120px;
-      width: 180px;
-      margin: 0;
-    }
-    p {
-        color: #099dff;
-        font-size: 20px;
-        text-align: center;
-    }
+    margin: 0;
+  }
+  p {
+    color: #099dff;
+    font-size: 20px;
+    text-align: center;
+  }
 }
 .input-box{
   width: 300px;
