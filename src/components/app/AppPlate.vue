@@ -162,14 +162,14 @@ export default {
           newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
           if(thisApp.type === 2){
             if(thisApp.id === 10002 || thisApp.id === 10004){
-              const url = thisApp.url.replace("http","browser")
+              const url = newUrl.replace("http","browser")
               const app1 = {
                 "scheme":url,
               };
               DATA.CHANNEL.opensopApp(JSON.stringify(app1))
             }
             else{
-              DATA.iframeURL = thisApp.url
+              DATA.iframeURL = newUrl
               window.location.href = `#/Iframe/${thisApp.name}`;
             }
           }
