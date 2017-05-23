@@ -42,7 +42,7 @@ export default {
         name   : '协同办公',
         text   : '这里是邮件的题目',
         time   : '2066年6月6日',
-        notice : '2',
+        notice : '99+',
         url    : 'owo.help'
       }
       this.notice = noticeData
@@ -65,13 +65,15 @@ export default {
     //通过Get请求请求通知数据
     get( XXFBURL, (receive)=> {
       if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+      let number = parseInt(cutString(receive,"wdNum>","<"))
+      if(number > 99) number = '99+'
       //给 *应用数据* 的备份 增加 *通知数据*
       noticeData.XXFB = { // 协同办公项
         img    : $XXFB,
         name   : '协同办公',
         text   : cutString(receive,"Title>","<"),
         time   : cutString(receive,"SentTime>","<"),
-        notice : cutString(receive,"wdNum>","<"),
+        notice : number,
         url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
       }
       // 将 *应用数据* 显示在界面上
@@ -138,18 +140,19 @@ export default {
       top: 10px;
     }
     .notice{
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       position: absolute;
       background-color: red;
       top: 2px;
       left: 45px;
       border-radius: 50%;
       color: white;
-      line-height: 18px;
+      line-height: 20px;
       text-align: center;
-      font-size: 12px;
+      font-size: 10px;
       overflow: hidden;
+      font-family: Tahoma;
     }
   }
   li:active{

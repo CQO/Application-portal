@@ -47,7 +47,7 @@ export default {
     if(DATA.debug){
       this.appList = {
         "办公应用": [
-          { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:false },
+          { id:10002, type: 2 , name: "安全邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:false },
           { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
         ],
         "通讯应用":[
@@ -76,22 +76,22 @@ export default {
     //生成默认应用列表
     this.appList = {
       "办公应用": [
-        { id:10002, type: 2 , name: "邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:true },
+        { id:10002, type: 2 , name: "安全邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
         { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
       ],
       "通讯应用":[
-        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{usbkeyidentification}}", main:true },
+        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
       ]
     }
     this.installedAppID = ["10002","10001","10003"]
     //--------------------------------------------------集团用户判断--------------------------------------------------
     if(DATA.org.unitId == "1"){
-      const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService=&SessionID='
+      const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
       this.appList["办公应用"].unshift({ id:10004, type: 2, name: "协同办公", icon: $XTBG, url: officeAppUrl, main: true })
       this.installedAppID.push("10004")
     }
     else{
-      const GWGLURL = 'casicoa:showOA?pid={{usbkeyidentification}}&sessionID=54545333'
+      const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
       this.appList["办公应用"].unshift({ id:10005, type: 1, name: "公文管理", icon: $GWGL, url: GWGLURL, main: true })
       this.installedAppID.push("10004")
     }
@@ -124,8 +124,7 @@ export default {
         this.appList = {} //不知道为什么需要清空一次
         this.appList = newAppList
         DATA.appList = this.appList
-        DATA.installedAppID = this.installedAppID
-        
+        DATA.installedAppID = this.installedAppID 
         const iscroll = this.$refs.iscroll
         iscroll.refresh()
         localforage.getItem("appData",(err,appData) => {
@@ -142,10 +141,9 @@ export default {
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
       //调用统计接口
-      // Order.$on('appStatistics', (message)=> {
-      //   log(message)
-      // })
-      // DATA.CHANNEL.queryAppStore(JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitId: DATA.org.unitId, orgCode: DATA.org.orgCode}))
+      //Order.$on('appStatistics', (message)=> { log(message) })
+      const data = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
+      DATA.CHANNEL.queryAppStore(data)
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
@@ -159,6 +157,9 @@ export default {
           this.selectNumber++
         }
         else{
+          let newUrl = thisApp.url
+          newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
+          newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
           if(thisApp.type === 2){
             if(thisApp.id === 10002 || thisApp.id === 10004){
               const url = thisApp.url.replace("http","browser")
@@ -174,7 +175,7 @@ export default {
           }
           else{
             const app =  {
-              "scheme": thisApp.url.replace("{{usbkeyidentification}}",DATA.org.usbkeyidentification)
+              "scheme": newUrl
             }
             DATA.CHANNEL.opensopApp(JSON.stringify(app))
           }

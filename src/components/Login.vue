@@ -88,6 +88,8 @@ export default {
           //保存用户信息
           localforage.setItem('appData', appData, function (err){
             if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
+            const data = JSON.stringify({type:"8",appType: "1",appID: "0", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
+            DATA.CHANNEL.queryAppStore(data)
             window.location.href="#/Main"
           });
         }
@@ -117,8 +119,8 @@ export default {
 <style lang='less' scoped>
 .logo {
   width: 180px;
-  margin: 0 auto;
-  height: 220px;
+  margin: 20px auto;
+  height: 180px;
   display: block;
   img {
     height: 120px;
@@ -126,8 +128,8 @@ export default {
     margin: 0;
   }
   p {
-    color: #099dff;
-    font-size: 20px;
+    color: #A9A9A9;
+    font-size: 19px;
     text-align: center;
   }
 }
