@@ -81,17 +81,20 @@ export default {
         _this.notice = noticeData
       },0)
     })
-    // const YJURL = `http://10.152.36.20/secmail/GetAppUnreadFileService?id_card=${DATA.org.usbkeyidentification}&username=secmail&password=welcome`
-    // get( YJURL, (receive)=> {
-    //   if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
-    //   const data = JSON.parse(receive)
-    //   log(data)
-    // })
+    const YJURL = `http://10.152.36.18:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
+    get( YJURL, (receive)=> {
+      if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+      const data = JSON.parse(receive)
+      log(data.pageSize)
+    })
   },
   methods:{
     openURL:function(item) {
-      DATA.iframeURL = item.url
-      window.location.href = `#/Iframe/${item.name}`;
+      const url = item.url.replace("http","browser")
+      const app1 = {
+        "scheme":url,
+      };
+      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
     }
   }
 }
@@ -117,7 +120,7 @@ export default {
     }
     .message{
       margin: 10px;
-      width: calc(~'100% - 135px');
+      width: calc(~'100% - 115px');
       overflow: hidden;
     }
     .text{
