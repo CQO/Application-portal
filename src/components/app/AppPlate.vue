@@ -241,7 +241,6 @@ export default {
 }
 .scroll{
   touch-action: none;
-	text-size-adjust: none;
   overflow: hidden;
   height: 290px;
 }

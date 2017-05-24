@@ -136,6 +136,7 @@ export default {
       const _this = this
       let appInformation = {
         id: item.id,
+        type: item.type,
         name: item.name,
         icon: item.icon,
         packageName: item.packageName,

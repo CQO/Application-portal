@@ -19,7 +19,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection, DATA} from "./method.js" 
+import {get, cutString, timeoutDetection, DATA, log} from "./method.js" 
 //引入图片资源
 const $XXFB    = require('../assets/XTBG.png')
 export default {
@@ -81,11 +81,11 @@ export default {
         _this.notice = noticeData
       },0)
     })
-    // const YJURL = `http://192.168.117.63/secmail/GetAppUnreadFileService?id_card=${DATA.org.usbkeyidentification}&username=secmail&password=welcome`
+    // const YJURL = `http://10.152.36.20/secmail/GetAppUnreadFileService?id_card=${DATA.org.usbkeyidentification}&username=secmail&password=welcome`
     // get( YJURL, (receive)=> {
     //   if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
     //   const data = JSON.parse(receive)
-    //   document.write(receive)
+    //   log(data)
     // })
   },
   methods:{
