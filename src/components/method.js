@@ -19,6 +19,7 @@ const get = function(url,fn){
   obj.send(null);
 };
 
+
 //剪切字符串
 const cutString = function(original,before,after,index){
   index = index || 0;
@@ -99,4 +100,4 @@ if(!DATA.debug){
   });
 }
 
-export {get, log, cutString, timeoutDetection, DATA};
+export { get, log, cutString, timeoutDetection, DATA };
