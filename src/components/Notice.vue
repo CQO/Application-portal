@@ -23,7 +23,8 @@ import localforage from 'localforage'
 import {get, cutString, timeoutDetection, DATA, log} from "./method.js" 
 //引入图片资源
 const $XXFB    = require('../assets/XTBG.png'),
-      $AQYJ      = require('../assets/YJ.png');
+      $AQYJ    = require('../assets/YJ.png'),
+      $GWGL    = require('../assets/GWGL.png');
 
 export default {
   components: {
@@ -65,52 +66,92 @@ export default {
     get( YJURL, (receive)=> {
       if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
       const data = JSON.parse(receive)
-      const date = Date.parse(data[0].send_date.replace(/-/gi,"/"))
       const AQYJ = { // 安全邮件
         img    : $AQYJ,
         name   : '安全邮件',
-        text   : data[0].subject,
-        time   : this.getDateDiff(date),
-        notice : data[0].count,
+        text   : '暂无待处理邮件',
+        time   : '',
+        notice : '0',
         url    : `http://10.152.36.20/secmail/loginapp.do?type=cid&PID=${DATA.org.usbkeyidentification}&type2=Unread`
+      }
+      if(data.length > 0){
+        const date = Date.parse(data[0].send_date.replace(/-/gi,"/"))
+        AQYJ.text = data[0].subject
+        AQYJ.time = this.getDateDiff(date)
+        AQYJ.notice = data[0].count
       }
       // 将 *应用数据* 显示在界面上
       setTimeout(()=> {
         this.notice.push(AQYJ)
       },0)
     })
-    if(DATA.org.unitId != "1") { return null } //集团用户检测
-    //--------------------------------------------代办通知获取--------------------------------------------------------
-    const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
-    //通过Get请求请求通知数据
-    get( XXFBURL, (receive)=> {
-      if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
-      let number = parseInt(cutString(receive,"wdNum>","<"))
-      if(number > 99) number = '99+'
-      const date = Date.parse(cutString(receive,"SentTime>","<").replace(/-/gi,"/"))
-      //给 *应用数据* 的备份 增加 *通知数据*
-      const XXFB = { // 协同办公项
-        img    : $XXFB,
-        name   : '协同办公',
-        text   : cutString(receive,"Title>","<"),
-        time   : this.getDateDiff(date),
-        notice : number,
-        url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
-      }
-      // 将 *应用数据* 显示在界面上
-      setTimeout(()=> {
-        this.notice.push(XXFB)
-      },0)
-    })
-
+    //集团用户检测
+    if(DATA.org.unitId == "1") { 
+      //--------------------------------------------代办通知获取--------------------------------------------------------
+      const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
+      //通过Get请求请求通知数据
+      get( XXFBURL, (receive)=> {
+        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        let number = parseInt(cutString(receive,"wdNum>","<"))
+        if(number > 99) number = '99+'
+        const date = Date.parse(cutString(receive,"SentTime>","<").replace(/-/gi,"/"))
+        //给 *应用数据* 的备份 增加 *通知数据*
+        const XXFB = { // 协同办公项
+          img    : $XXFB,
+          name   : '协同办公',
+          text   : cutString(receive,"Title>","<"),
+          time   : this.getDateDiff(date),
+          notice : number,
+          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
+        }
+        // 将 *应用数据* 显示在界面上
+        setTimeout(()=> {
+          this.notice.unshift(XXFB)
+        },0)
+      })
+    }
+    else{
+      const GWGLURL = `http://10.152.36.18:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
+      get( GWGLURL, (receive)=> {
+        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        const data = JSON.parse(receive)
+        const GWGL = { // 公文管理
+          img    : $GWGL,
+          name   : '公文管理',
+          text   : '暂无待处理公文',
+          time   : '',
+          notice : "0",
+          url    : '#'
+        }
+        if(data.pageData.length > 0){
+          const date = Date.parse(data.pageData[0].startTime.replace(/-/gi,"/"))
+          GWGL.text = data.pageData[0]["wfInstance.description"]
+          GWGL.time = this.getDateDiff(date)
+          GWGL.notice = data.pageData.length
+        }
+        setTimeout(()=> {
+          this.notice.unshift(GWGL)
+        },0)
+      })
+    }
   },
   methods:{
     openURL: function(item) {
-      const url = item.url.replace("http","browser")
-      const app1 = {
-        "scheme":url,
-      };
-      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+      if(item.url == "#"){
+        const app =  {
+          "scheme": 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
+        }
+        DATA.CHANNEL.opensopApp(JSON.stringify(app))
+
+      }
+      else{
+        const url = item.url.replace("http","browser")
+        const app1 = {
+          "scheme":url,
+        };
+        DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+      }
+
     },
     getDateDiff: function(nS) {
       let result;
