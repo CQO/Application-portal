@@ -2,7 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    li(v-for='item in notice',@click="openURL(item)")
+    li(v-for='item in noticeList',@click="openURL(item)")
       img(:src='item.img')
       .message
         p {{item.name}}
@@ -34,10 +34,10 @@ export default {
   },
   data () {
     return {
-      notice: []
+      noticeList: {}
     }
   },
-  created(){
+  activated(){
     //判断是否为debug模式
     if(DATA.debug){
       const noticeData = { // 协同办公项
@@ -48,7 +48,7 @@ export default {
         notice : '99+',
         url    : 'owo.help'
       }
-      this.notice.push(noticeData)
+      this.noticeList.push(noticeData)
       return
     }
     const _this = this
@@ -78,11 +78,13 @@ export default {
         const date = Date.parse(data[0].send_date.replace(/-/gi,"/"))
         AQYJ.text = data[0].subject
         AQYJ.time = this.getDateDiff(date)
-        AQYJ.notice = data[0].count
+        let number = parseInt(data[0].count)
+        if(number > 99) number = '99+'
+        AQYJ.notice = number
       }
       // 将 *应用数据* 显示在界面上
       setTimeout(()=> {
-        this.notice.push(AQYJ)
+        this.$set(this.noticeList,"AQYJ",AQYJ)
       },0)
     })
     //集团用户检测
@@ -96,7 +98,7 @@ export default {
         if(number > 99) number = '99+'
         const date = Date.parse(cutString(receive,"SentTime>","<").replace(/-/gi,"/"))
         //给 *应用数据* 的备份 增加 *通知数据*
-        const XXFB = { // 协同办公项
+        const XXFB = { // 信息发布
           img    : $XXFB,
           name   : '协同办公',
           text   : cutString(receive,"Title>","<"),
@@ -106,7 +108,7 @@ export default {
         }
         // 将 *应用数据* 显示在界面上
         setTimeout(()=> {
-          this.notice.unshift(XXFB)
+          this.$set(this.noticeList,"XXFB",XXFB)
         },0)
       })
     }
@@ -126,11 +128,13 @@ export default {
         if(data.pageData.length > 0){
           const date = Date.parse(data.pageData[0].startTime.replace(/-/gi,"/"))
           GWGL.text = data.pageData[0]["wfInstance.description"]
+          let number = data.pageData.length
+          if(number > 99) number = '99+'
           GWGL.time = this.getDateDiff(date)
-          GWGL.notice = data.pageData.length
+          GWGL.notice = number
         }
         setTimeout(()=> {
-          this.notice.unshift(GWGL)
+          this.$set(this.noticeList,"GWGL",GWGL)
         },0)
       })
     }
@@ -139,10 +143,9 @@ export default {
     openURL: function(item) {
       if(item.url == "#"){
         const app =  {
-          "scheme": 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
+          "scheme": `casicoa:showOA?pid=${DATA.org.usbkeyidentification}&sessionID=54545333`
         }
         DATA.CHANNEL.opensopApp(JSON.stringify(app))
-
       }
       else{
         const url = item.url.replace("http","browser")

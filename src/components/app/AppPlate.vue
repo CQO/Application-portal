@@ -47,11 +47,11 @@ export default {
     if(DATA.debug){
       this.appList = {
         "办公应用": [
-          { id:10002, type: 2 , name: "安全邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:false },
-          { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
+          { id:100004, type: 2 , name: "安全邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:false },
+          { id:100003, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
         ],
         "通讯应用":[
-          { id:10003, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{usbkeyidentification}}", main:true },
+          { id:100002, type: 2 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{usbkeyidentification}}", main:true },
         ]
       }
       return
@@ -76,24 +76,24 @@ export default {
     //生成默认应用列表
     this.appList = {
       "办公应用": [
-        { id:10002, type: 2 , name: "安全邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
-        { id:10001, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
+        { id:100004, type: 2 , name: "安全邮件", icon: $YJ, url: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
+        { id:100003, type: 2 , name: "信息发布", icon: $XXFB, url: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
       ],
       "通讯应用":[
-        { id:10003, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
+        { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, url: "linkdood:showlinkdood?id={{idCard}}", main:true },
       ]
     }
-    this.installedAppID = ["10002","10001","10003"]
+    this.installedAppID = ["100004","100003","100002"]
     //--------------------------------------------------集团用户判断--------------------------------------------------
     if(DATA.org.unitId == "1"){
       const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
-      this.appList["办公应用"].unshift({ id:10004, type: 2, name: "协同办公", icon: $XTBG, url: officeAppUrl, main: true })
-      this.installedAppID.push("10004")
+      this.appList["办公应用"].unshift({ id:100000, type: 2, name: "协同办公", icon: $XTBG, url: officeAppUrl, main: true })
+      this.installedAppID.push("100000")
     }
     else{
       const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
-      this.appList["办公应用"].unshift({ id:10005, type: 1, name: "公文管理", icon: $GWGL, url: GWGLURL, main: true })
-      this.installedAppID.push("10004")
+      this.appList["办公应用"].unshift({ id:100001, type: 1, name: "公文管理", icon: $GWGL, url: GWGLURL, main: true })
+      this.installedAppID.push("100000")
     }
     DATA.appList = this.appList //存储
     //--------------------------------------------------处理在线应用--------------------------------------------------
@@ -161,7 +161,7 @@ export default {
           newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
           newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
           if(thisApp.type === 2){
-            // if(thisApp.id === 10002 || thisApp.id === 10004){
+            // if(thisApp.id === 100004 || thisApp.id === 100000){
               const url = newUrl.replace("http","browser")
               const app1 = {
                 "scheme":url,
