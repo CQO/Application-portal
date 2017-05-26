@@ -20,7 +20,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection, DATA, log} from "./method.js" 
+import {get, cutString, timeoutDetection, DATA, STATE, log} from "./method.js" 
 //引入图片资源
 const $XXFB    = require('../assets/XTBG.png'),
       $AQYJ    = require('../assets/YJ.png'),
@@ -61,82 +61,13 @@ export default {
     }
     if(timeoutDetection()) { return null } //超时检测
     if(DATA.org.enname === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
-    //--------------------------------------------邮件通知获取--------------------------------------------------------
-    const YJURL = `http://10.152.36.26:8080/CASIC/interfaces/mailInterface.jsp?PID=${DATA.org.usbkeyidentification}`
-    get( YJURL, (receive)=> {
-      if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
-      const data = JSON.parse(receive)
-      const AQYJ = { // 安全邮件
-        img    : $AQYJ,
-        name   : '安全邮件',
-        text   : '暂无待处理邮件',
-        time   : '',
-        notice : '0',
-        url    : `http://10.152.36.20/secmail/loginapp.do?type=cid&PID=${DATA.org.usbkeyidentification}&type2=Unread`
-      }
-      if(data.length > 0){
-        const date = Date.parse(data[0].send_date.replace(/-/gi,"/"))
-        AQYJ.text = data[0].subject
-        AQYJ.time = this.getDateDiff(date)
-        let number = parseInt(data[0].count)
-        if(number > 99) number = '99+'
-        AQYJ.notice = number
-      }
-      // 将 *应用数据* 显示在界面上
-      setTimeout(()=> {
-        this.$set(this.noticeList,"AQYJ",AQYJ)
-      },0)
-    })
+    this.getMail()
     //集团用户检测
     if(DATA.org.unitId == "1") { 
-      //--------------------------------------------代办通知获取--------------------------------------------------------
-      const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
-      //通过Get请求请求通知数据
-      get( XXFBURL, (receive)=> {
-        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
-        let number = parseInt(cutString(receive,"wdNum>","<"))
-        if(number > 99) number = '99+'
-        const date = Date.parse(cutString(receive,"SentTime>","<").replace(/-/gi,"/"))
-        //给 *应用数据* 的备份 增加 *通知数据*
-        const XXFB = { // 信息发布
-          img    : $XXFB,
-          name   : '协同办公',
-          text   : cutString(receive,"Title>","<"),
-          time   : this.getDateDiff(date),
-          notice : number,
-          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
-        }
-        // 将 *应用数据* 显示在界面上
-        setTimeout(()=> {
-          this.$set(this.noticeList,"XXFB",XXFB)
-        },0)
-      })
+      this.getBacklog()
     }
     else{
-      const GWGLURL = `http://10.152.36.18:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
-      get( GWGLURL, (receive)=> {
-        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
-        const data = JSON.parse(receive)
-        const GWGL = { // 公文管理
-          img    : $GWGL,
-          name   : '公文管理',
-          text   : '暂无待处理公文',
-          time   : '',
-          notice : "0",
-          url    : '#'
-        }
-        if(data.pageData.length > 0){
-          const date = Date.parse(data.pageData[0].startTime.replace(/-/gi,"/"))
-          GWGL.text = data.pageData[0]["wfInstance.description"]
-          let number = data.pageData.length
-          if(number > 99) number = '99+'
-          GWGL.time = this.getDateDiff(date)
-          GWGL.notice = number
-        }
-        setTimeout(()=> {
-          this.$set(this.noticeList,"GWGL",GWGL)
-        },0)
-      })
+      this.getBumph()
     }
   },
   methods:{
@@ -182,6 +113,93 @@ export default {
         result = "刚刚";
       }
       return result;
+    },
+    getMail: function() {
+      //--------------------------------------------邮件通知获取--------------------------------------------------------
+      if(STATE.getMail) return;
+      STATE.getMail = true
+      const YJURL = `http://10.152.36.26:8080/CASIC/interfaces/mailInterface.jsp?PID=${DATA.org.usbkeyidentification}`
+      get( YJURL, (receive)=> {
+        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        const data = JSON.parse(receive)
+        const AQYJ = { // 安全邮件
+          img    : $AQYJ,
+          name   : '安全邮件',
+          text   : '暂无待处理邮件',
+          time   : '',
+          notice : '0',
+          url    : `http://10.152.36.20/secmail/loginapp.do?type=cid&PID=${DATA.org.usbkeyidentification}&type2=Unread`
+        }
+        if(data.length > 0){
+          const date = Date.parse(data[0].send_date.replace(/-/gi,"/"))
+          AQYJ.text = data[0].subject
+          AQYJ.time = this.getDateDiff(date)
+          let number = parseInt(data[0].count)
+          if(number > 99) number = '99+'
+          AQYJ.notice = number
+        }
+        // 将 *应用数据* 显示在界面上
+        setTimeout(()=> {
+          STATE.getMail = false
+          this.$set(this.noticeList,"AQYJ",AQYJ)
+        },0)
+      })
+    },
+    getBacklog: function() {
+      //--------------------------------------------代办通知获取--------------------------------------------------------
+      if(STATE.getBacklog) return;
+      STATE.getBacklog = true
+      const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
+      //通过Get请求请求通知数据
+      get( XXFBURL, (receive)=> {
+        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        let number = parseInt(cutString(receive,"wdNum>","<"))
+        if(number > 99) number = '99+'
+        const date = Date.parse(cutString(receive,"SentTime>","<").replace(/-/gi,"/"))
+        //给 *应用数据* 的备份 增加 *通知数据*
+        const XXFB = { // 信息发布
+          img    : $XXFB,
+          name   : '协同办公',
+          text   : cutString(receive,"Title>","<"),
+          time   : this.getDateDiff(date),
+          notice : number,
+          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
+        }
+        // 将 *应用数据* 显示在界面上
+        setTimeout(()=> {
+          STATE.getMail = false
+          this.$set(this.noticeList,"XXFB",XXFB)
+        },0)
+      })
+    },
+    getBumph: function() {
+      const GWGLURL = `http://10.152.36.18:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
+      if(STATE.getBumph) return;
+      STATE.getBumph = true
+      get( GWGLURL, (receive)=> {
+        if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        const data = JSON.parse(receive)
+        const GWGL = { // 公文管理
+          img    : $GWGL,
+          name   : '公文管理',
+          text   : '暂无待处理公文',
+          time   : '',
+          notice : "0",
+          url    : '#'
+        }
+        if(data.pageData.length > 0){
+          const date = Date.parse(data.pageData[0].startTime.replace(/-/gi,"/"))
+          GWGL.text = data.pageData[0]["wfInstance.description"]
+          let number = data.pageData.length
+          if(number > 99) number = '99+'
+          GWGL.time = this.getDateDiff(date)
+          GWGL.notice = number
+        }
+        setTimeout(()=> {
+          STATE.getBumph = false
+          this.$set(this.noticeList,"GWGL",GWGL)
+        },0)
+      })
     }
   }
 }

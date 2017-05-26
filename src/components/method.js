@@ -19,7 +19,6 @@ const get = function(url,fn){
   obj.send(null);
 };
 
-
 //剪切字符串
 const cutString = function(original,before,after,index){
   index = index || 0;
@@ -85,6 +84,13 @@ let DATA = {
   iframeURL: null
 };
 
+//标记目前是否在获取某项数据
+let STATE = {
+  getMail : false,
+  getBacklog : false,
+  getBumph: false
+}
+
 import { QWebChannel } from  "./QTWebChannel";
 import { Order } from './Order.js';
 
@@ -100,4 +106,4 @@ if(!DATA.debug){
   });
 }
 
-export { get, log, cutString, timeoutDetection, DATA };
+export { get, log, cutString, timeoutDetection, DATA, STATE };
