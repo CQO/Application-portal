@@ -88,7 +88,6 @@ export default {
         const appInfoList = message.appStore.appInfoList
         let newList = []
         appInfoList.forEach(function(element) {
-          log(element)
           newList.push({
             classify: element.classify, //标签ID
             downloadUrl: element.downloadUrl, //原生应用下载列表
