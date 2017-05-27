@@ -31,6 +31,14 @@ export default {
 </script>
 
 <style scoped>
+.loading-box{
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+}
 .loading-box .toast{
     position: fixed;
     z-index: 5000;

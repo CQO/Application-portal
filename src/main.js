@@ -23,7 +23,6 @@ const routes = [
   { path: '/Version', name: 'Version', component: require('./components/me/Version') },
   { path: '/Help', name: 'Help', component: require('./components/me/Help') },
   { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') },
-  { path: '/TimeOut', name: 'TimeOut', component: require('./components/brick/TimeOut') },
   { path: '/ChangePassword', name: 'ChangePassword', component: require('./components/me/ChangePassword') },
   { path: '/Iframe/:name', name: 'Iframe', component: require('./components/Iframe') }
 ];
