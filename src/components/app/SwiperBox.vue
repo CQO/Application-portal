@@ -43,7 +43,7 @@ export default {
         img:'http://myweb-10017157.cossh.myqcloud.com/2017/0518/1.png',
         title: '北京下雪了'
       }]
-      this.rightIcon = 'add'
+      //this.rightIcon = 'add'
       return
     }
     //--------------------------------------------------轮播图处理阶段--------------------------------------------------

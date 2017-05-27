@@ -4,7 +4,46 @@
     p.title {{title}}
     router-link.titleButton.ico(v-if="rightIcon === 'add'",to="\Store") &#xe626;
     .titleButton(v-if="rightIcon === 'save'",v-on:click="save") 保存
-    img.loading(v-if="rightIcon === 'loading'",src="data:image/gif;base64,R0lGODlhEgASAIABAKa4zP///yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAwABACwAAAAAEgASAEACJwyOoYa3D6N8rVqgLp5M2+x9XcWBTTmGTqqa6qqxFInWUMzhk76TBQAh+QQJAwABACwAAAAAEgASAEACKQyOoYa3D6NUrdHqGJ44d3B9m1ZNZGZ+YXmKnsuq44qaNqSmnZ3rllIAACH5BAkDAAEALAAAAAASABIAQAIpDI6hhrcPo2zt0cRuvG5xoHxfyE2UZJWeKrLtmZ3aWqG2OaOjvfPwUgAAIfkECQMAAQAsAAAAABIAEgBAAigMjqGGtw8jbC3SxO67bnLFhQD4bZRkap4qli37qWSF1utZh7a+41ABACH5BAkDAAEALAAAAAASABIAQAIqDI6hhrcP42pNMgoUdpfanXVgJSaaZ53Yt6kj+a6lI7tcioN5m+o7KSkAACH5BAkDAAEALAAAAAASABIAQAIoDI6hhrcPI2tOKpom3vZyvVEeBgLdKHYhGjZsW63kMp/Sqn4WnrtnAQAh+QQJAwABACwAAAAAEgASAEACKAyOocvtCCN0TB5lM6Ar92hYmChxX2l6qRhqYAui8GTOm8rhlL6/ZgEAIfkECQMAAQAsAAAAABIAEgBAAigMjqHL7QgjdEyeJY2leHOdgZF4KdYJfGTynaq7XmGctuicwZy+j2oBACH5BAkDAAEALAAAAAASABIAQAInDI6hy+0II3RMHrosUFpjbmUROJFdiXmfmoafMZoodUpyLU5sO1MFACH5BAkDAAEALAAAAAASABIAQAImDI6hy+2GDozyKZrspBf7an1aFy2fuJ1Z6I2oho2yGqc0SYN1rRUAIfkECQMAAQAsAAAAABIAEgBAAiYMjqHL7W+QVLJaAOnVd+eeccliRaXZVSH4ee0Uxg+bevUJnuIRFAAh+QQJAwABACwAAAAAEgASAEACKoyBacvtnyI4EtH6QrV6X5l9UYgt2DZ1JRqqIOm1ZUszrIuOeM6x8x4oAAAh+QQJAwABACwAAAAAEgASAEACKIwNqcftryJAMrFqG55hX/wcnlN9UQeipZiGo9vCZ0hD6TbiN7hSZwEAIfkECQMAAQAsAAAAABIAEgBAAiiMH6CL7Z+WNHK2yg5WdLsNQB12VQgJjmZJiqnriZEl1y94423aqlwBACH5BAkDAAEALAAAAAASABIAQAIrjH+gi+2+IjCSvaoo1vUFPHnfxlllBp5mk4qt98KSSKvZCHZ4HtmTrgoUAAAh+QQFAwABACwAAAAAEgASAEACKIyPAcvpr5g0csJYc8P1cgtpwDceGblQmiey69W6oOfEon2f6KirUwEAIfkECQMAAQAsAAAPAAgAAwBAAgSMj6lXACH5BAkDAAEALAAAAAASABIAQAIYjI+JwK0Po5y02glUvrz7bzXiBpbLaD4FACH5BAkDAAEALAAAAAASABIAQAImjI8By8qfojQPTldzw/VymB3aCIidN6KaGl7kSnWpC6ftt00zDRUAIfkECQMAAQAsAAAAABIAEgBAAiaMjwHLyp+iNA9WcO6aVHOneWBYZeUXouJEiu1lWit7jhCX4rMEFwAh+QQJAwABACwAAAAAEgASAEACJ4yPAcvKn6I0r1pA78zWQX51XrWBSzl+Uxia7Jm+mEujW3trubg3BQAh+QQFAwABACwAAAAAEgASAEACJwyOoYa3D6N8rVqgLp5M2+x9XcWBTTmGTqqa6qqxFInWUMzhk76TBQA7")
+    .loading(v-if="rightIcon === 'loading'")
+      <svg width='120px' height='120px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-default">
+        <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(0 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-1s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(30 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.9166666666666666s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(60 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.8333333333333334s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(90 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.75s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(120 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.6666666666666666s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(150 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.5833333333333334s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(180 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.5s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(210 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.4166666666666667s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(240 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.3333333333333333s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(270 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.25s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(300 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.16666666666666666s' repeatCount='indefinite'/>
+        </rect>
+        <rect  x='46.5' y='40' width='7' height='20' rx='5' ry='5' fill='#D3D3D3' transform='rotate(330 50 50) translate(0 -30)'>  
+          <animate attributeName='opacity' from='1' to='0' dur='1s' begin='-0.08333333333333333s' repeatCount='indefinite'/>
+        </rect>
+      </svg>
 </template>
 
 <script>
@@ -62,10 +101,13 @@ export default {
   .titleButton:active{
     background-color: aqua;
   }
+  svg{
+    height: 24px;
+    width: 24px;
+    
+  }
   .loading{
-    height: 18px;
-    width: 18px;
-    margin: 12px;
+    margin: 6px;
   }
 }
 </style>

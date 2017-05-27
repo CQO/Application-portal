@@ -2,6 +2,8 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
+    transition(name="fade")
+      Refresh(v-if="thread !== 1")
     li(v-for='item in noticeList',@click="openURL(item)")
       img(:src='item.img')
       .message
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-
+import Refresh from './brick/Refresh'
 import Toast from './brick/Toast'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
@@ -30,11 +32,13 @@ export default {
   components: {
     TitleBar,
     BottomBar,
-    Toast
+    Toast,
+    Refresh
   },
   data () {
     return {
-      noticeList: {}
+      noticeList: {},
+      thread: 0
     }
   },
   activated(){
@@ -48,7 +52,7 @@ export default {
         notice : '99+',
         url    : 'owo.help'
       }
-      this.noticeList.push(noticeData)
+      this.$set(this.noticeList,"XXFB",noticeData)
       return
     }
     const _this = this
@@ -119,6 +123,7 @@ export default {
       if(STATE.getMail) return;
       STATE.getMail = true
       const YJURL = `http://10.152.36.26:8080/CASIC/interfaces/mailInterface.jsp?PID=${DATA.org.usbkeyidentification}`
+      this.thread++
       get( YJURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
         const data = JSON.parse(receive)
@@ -142,6 +147,7 @@ export default {
         setTimeout(()=> {
           STATE.getMail = false
           this.$set(this.noticeList,"AQYJ",AQYJ)
+          this.thread--
         },0)
       })
     },
@@ -150,6 +156,7 @@ export default {
       if(STATE.getBacklog) return;
       STATE.getBacklog = true
       const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
+      this.thread++
       //通过Get请求请求通知数据
       get( XXFBURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
@@ -169,6 +176,7 @@ export default {
         setTimeout(()=> {
           STATE.getMail = false
           this.$set(this.noticeList,"XXFB",XXFB)
+          this.thread--
         },0)
       })
     },
@@ -176,6 +184,7 @@ export default {
       const GWGLURL = `http://10.152.36.18:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
       if(STATE.getBumph) return;
       STATE.getBumph = true
+      this.thread++
       get( GWGLURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
         const data = JSON.parse(receive)
@@ -198,6 +207,7 @@ export default {
         setTimeout(()=> {
           STATE.getBumph = false
           this.$set(this.noticeList,"GWGL",GWGL)
+          this.thread--
         },0)
       })
     }
@@ -266,6 +276,12 @@ export default {
   li:active{
     background-color: #4899E0;
     color: #FFF;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+  .fade-enter, .fade-leave-active {
+    opacity: 0
   }
 }
 </style>
