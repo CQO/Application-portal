@@ -4,7 +4,7 @@
   Search
   .checker
     .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
-    .checker-item(v-for="(item,key) in selectItem",:class="{ 'item-selected': click(key) }",v-on:click="select=key",:key="key") {{item}}
+    .checker-item(v-for="item in selectItem",:class="{ 'item-selected': click(item.classifyID) }",v-on:click="select=item.classifyID",:key="item.classifyID") {{item.classifyName}}
   vroll.store-list(ref="iscroll",:options="{preventDefault: false}")
     li.app-list(v-for="item in classification",:key="item.id")
       img(:src="item.icon")
@@ -72,19 +72,15 @@ export default {
     }
     else{
       //----------------------------分类条处理----------------------------
-      Order.$on('classifyBeans', (message) => {
-        const json = {}
-        message.classifyBeans.forEach(function(element) {
-          json[element.classifyID + ""] = element.classifyName
-        }, this);
-        DATA.selectItem = json
+      Order.$once('classifyBeans', (message) => {
+        DATA.selectItem = message.classifyBeans
         setTimeout(() => {
-          this.selectItem = json
+          this.selectItem = message.classifyBeans
         }, 0);
       })
       DATA.CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
-      Order.$on('appStores', (message) => {
+      Order.$once('appStores', (message) => {
         const appInfoList = message.appStore.appInfoList
         let newList = []
         appInfoList.forEach(function(element) {

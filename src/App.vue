@@ -39,7 +39,6 @@ body{
 .root-box{
   height: 100%;
   width: 100%;
-  
 }
 
 a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
