@@ -143,7 +143,7 @@ export default {
 .organization{
 	  touch-action: none;
     overflow: hidden;
-    height: 400px;
+    height: 402px;
     li{
         height: 61px;
         background-color: white;
