@@ -4,7 +4,7 @@
   ul.notice-list
     transition(name="fade")
       Refresh(v-if="thread !== 0")
-    li(v-for='item in noticeList',@click="openURL(item)")
+    li(v-for='item in noticeList',v-if="item",@click="openURL(item)")
       img(:src='item.img')
       .message
         p {{item.name}}
@@ -37,7 +37,11 @@ export default {
   },
   data () {
     return {
-      noticeList: {},
+      noticeList: {
+        "XXFB":null,
+        "GWGL":null,
+        "AQYJ":null
+      },
       thread: 0
     }
   },
@@ -181,7 +185,7 @@ export default {
       })
     },
     getBumph: function() {
-      const GWGLURL = `http://10.152.36.18:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
+      const GWGLURL = `http://10.152.36.33:8080/CasicOA/std/entity/page_data.tsp?objectName=WfActivity!portal&objectEvent=Query&$bizId=my_all_without_doc_mobile&isMobile=y&PID=${DATA.org.usbkeyidentification}`
       if(STATE.getBumph) return;
       STATE.getBumph = true
       this.thread++
