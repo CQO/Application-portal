@@ -88,19 +88,8 @@ export default {
         const appInfoList = message.appStore.appInfoList
         let newList = []
         appInfoList.forEach((element)=> {
-          newList.push({
-            classify: element.classify, //标签ID
-            downloadUrl: element.downloadUrl, //原生应用下载列表
-            url: element.homeUrl, //H5应用打开链接
-            icon: element.icon, //应用图标
-            id: element.id, //应用ID
-            status: element.status, //应用状态 1:显示
-            version: element.version,
-            name: element.name,
-            type: element.type,
-            packageName: element.packageName,
-            activityName: element.activityName
-          })
+          //*2数据
+          newList.push(element)
         }, this);
         //存储应用列表信息
         DATA.appInfoList = newList
@@ -143,14 +132,14 @@ export default {
         status: 1
       }
       if(item.type === 2){ //判断是否是H5应用
-        appInformation.url = item.url
+        appInformation.homeUrl = item.homeUrl
         DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
         DATA.installedAppID.push(item.id)
       }
       else{
         if( this.downloading ) { Order.$emit('Toast', '正在下载请稍后'); return;}
         this.downloading = true
-        appInformation.url = item.activityName
+        appInformation.homeUrl = item.activityName
         Order.$on('progress', (message)=> {
           element.target.innerHTML = `${message.progress}%`
         })

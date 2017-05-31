@@ -111,7 +111,6 @@ export default {
         }, this);
       }, this);
       //存储数据
-      
       setTimeout(() => {
         this.appList = {} //不知道为什么需要清空一次
         this.appList = newAppList
@@ -132,46 +131,29 @@ export default {
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
       //调用统计接口
-      //Order.$on('appStatistics', (message)=> { log(message) })
-      const data = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
-      DATA.CHANNEL.queryAppStore(data)
+      const statisticalData = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
+      DATA.CHANNEL.queryAppStore(statisticalData)
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
         this.selectNumber--
+        return
       }
-      else{
-        //判断是否有应用被选中
-        if(this.selectNumber > 0){
-          if(thisApp.main) {Order.$emit('Toast', '系统应用不可卸载！'); return;} //如果是系统应用不可删除
-          thisApp.isSelect = true
-          this.selectNumber++
-        }
-        else{
-          let newUrl = thisApp.homeUrl
-          newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
-          newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
-          if(thisApp.type === 2){
-            // if(thisApp.id === 100004 || thisApp.id === 100000){
-              const url = newUrl.replace("http","browser")
-              const app1 = {
-                "scheme":url,
-              };
-              DATA.CHANNEL.opensopApp(JSON.stringify(app1))
-            // }
-            // else{
-            //   DATA.iframeURL = newUrl
-            //   window.location.href = `#/Iframe/${thisApp.name}`;
-            // }
-          }
-          else{
-            const app =  {
-              "scheme": newUrl
-            }
-            DATA.CHANNEL.opensopApp(JSON.stringify(app))
-          }
-        }
+      //判断是否有应用被选中
+      if(this.selectNumber > 0){
+        if(thisApp.main) {Order.$emit('Toast', '系统应用不可卸载！'); return;} //如果是系统应用不可删除
+        thisApp.isSelect = true
+        this.selectNumber++
+        return
       }
+      let newUrl = thisApp.homeUrl
+      newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
+      newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
+      //如果是H5应用使用无地址栏浏览器打开
+      if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
+      //打开应用
+      const app =  { "scheme": newUrl }
+      DATA.CHANNEL.opensopApp(JSON.stringify(app))
     },
     pressItem:function(thisApp){ //长按app事件
       if(thisApp.main) {Order.$emit('Toast', '系统应用不可卸载！');} //如果是系统应用不可删除
