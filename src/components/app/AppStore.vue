@@ -139,7 +139,7 @@ export default {
       else{
         if( this.downloading ) { Order.$emit('Toast', '正在下载请稍后'); return;}
         this.downloading = true
-        appInformation.homeUrl = item.activityName
+        item.homeUrl = item.activityName
         Order.$on('progress', (message)=> {
           element.target.innerHTML = `${message.progress}%`
         })
@@ -155,10 +155,10 @@ export default {
         DATA.CHANNEL.downloadApp(item.packageName,item.downloadUrl)
       }
       if(DATA.appList[this.appList[item.classify]]){
-        DATA.appList[this.appList[item.classify]].push(appInformation)
+        DATA.appList[this.appList[item.classify]].push(item)
       }
       else{
-        DATA.appList[this.appList[item.classify]] = [appInformation]
+        DATA.appList[this.appList[item.classify]] = [item]
       }
       
       localforage.getItem("appData",(err,appData) => {
