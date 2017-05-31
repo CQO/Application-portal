@@ -81,6 +81,7 @@ export default {
       DATA.CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
+        log(message.appStore.appInfoList)
         const appInfoList = message.appStore.appInfoList
         let newList = []
         appInfoList.forEach(function(element) {

@@ -3,7 +3,7 @@
   TitleBar(title='通知')
   ul.notice-list
     transition(name="fade")
-      Refresh(v-if="thread !== 10")
+      Refresh(v-if="thread !== 0")
     li(v-for='item in noticeList',@click="openURL(item)")
       img(:src='item.img')
       .message

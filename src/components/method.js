@@ -70,7 +70,7 @@ let DATA = {
     usbkeyname: '刘霞',
     userAccount: '3390843' 
   },
-  debug: true,
+  debug: false,
   normal: false,
   CHANNEL: null,
   Timestamp: null,
