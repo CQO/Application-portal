@@ -98,7 +98,6 @@ export default {
     DATA.appList = this.appList //存储
     //--------------------------------------------------处理在线应用--------------------------------------------------
     Order.$once('appInfos', (message) => {
-      log(message.appInfos[0].appInfoList)
       let newAppList = this.appList
       //整理数据
       message.appInfos.forEach(function(element) {
@@ -112,10 +111,12 @@ export default {
         }, this);
       }, this);
       //存储数据
-      DATA.appList = this.appList
-      DATA.installedAppID = this.installedAppID 
+      
       setTimeout(() => {
+        this.appList = {} //不知道为什么需要清空一次
         this.appList = newAppList
+        DATA.appList = this.appList
+        DATA.installedAppID = this.installedAppID 
         const iscroll = this.$refs.iscroll
         iscroll.refresh()
         localforage.getItem("appData",(err,appData) => {

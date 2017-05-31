@@ -39,7 +39,8 @@ export default {
       text:"",
       installedAppID:null,
       leftIcon:"loading",
-      downloading: false
+      downloading: false,
+      appList: {}
     }
   },
   created(){
@@ -74,6 +75,9 @@ export default {
       //----------------------------分类条处理----------------------------
       Order.$once('classifyBeans', (message) => {
         DATA.selectItem = message.classifyBeans
+        DATA.selectItem.forEach((element)=> {
+          this.appList[element.classifyID] = element.classifyName
+        },this)
         setTimeout(() => {
           this.selectItem = message.classifyBeans
         }, 0);
@@ -84,7 +88,7 @@ export default {
         log(message.appStore.appInfoList)
         const appInfoList = message.appStore.appInfoList
         let newList = []
-        appInfoList.forEach(function(element) {
+        appInfoList.forEach((element)=> {
           newList.push({
             classify: element.classify, //标签ID
             downloadUrl: element.downloadUrl, //原生应用下载列表
@@ -162,11 +166,11 @@ export default {
         })
         DATA.CHANNEL.downloadApp(item.packageName,item.downloadUrl)
       }
-      if(DATA.appList[this.selectItem[item.classify]]){
-        DATA.appList[this.selectItem[item.classify]].push(appInformation)
+      if(DATA.appList[this.appList[item.classify]]){
+        DATA.appList[this.appList[item.classify]].push(appInformation)
       }
       else{
-        DATA.appList[this.selectItem[item.classify]] = [appInformation]
+        DATA.appList[this.appList[item.classify]] = [appInformation]
       }
       
       localforage.getItem("appData",(err,appData) => {
@@ -277,7 +281,6 @@ export default {
   }
 .store-list{
   touch-action: none;
-	text-size-adjust: none;
   overflow: hidden;
   height: 443px;
 }
