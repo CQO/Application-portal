@@ -90,7 +90,7 @@ export default {
       this.installedAppID = ["100004","100003","100002"]
       //--------------------------------------------------集团用户判断--------------------------------------------------
       if(DATA.org.unitId == "1"){
-        const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
+        const officeAppUrl = 'http://10.152.36.33:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
         this.appList["办公应用"].unshift({ id:100000, type: 2, name: "协同办公", icon: $XTBG, homeUrl: officeAppUrl, main: true })
         this.installedAppID.push("100000")
       }
