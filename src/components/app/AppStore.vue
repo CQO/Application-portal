@@ -22,7 +22,7 @@ import TitleBar from '../brick/Title'
 import localforage from 'localforage'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
-import { timeoutDetection, log, DATA } from "../method.js" 
+import { timeoutDetection, log, DATA, CHANNEL } from "../method.js" 
 const $TGYY = require('../../assets/TGYY.png')
 export default {
   components: {
@@ -82,7 +82,7 @@ export default {
           this.selectItem = message.classifyBeans
         }, 0);
       })
-      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
+      CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
         const appInfoList = message.appStore.appInfoList
@@ -100,7 +100,7 @@ export default {
           iscroll.refresh()
         }, 0);
       })
-      DATA.CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
+      CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
     }
     Order.$on('Search', function(message) {
       _this.text = message
@@ -119,7 +119,7 @@ export default {
         "name":"linkdood"
       };
       //打开应用
-      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+      CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item,element){
       const _this = this
@@ -133,7 +133,7 @@ export default {
       }
       if(item.type === 2){ //判断是否是H5应用
         appInformation.homeUrl = item.homeUrl
-        DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+        CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
         DATA.installedAppID.push(item.id)
       }
       else{
@@ -148,11 +148,11 @@ export default {
           setTimeout(()=>{
             this.downloading = false
             DATA.installedAppID.push(item.id)
-            DATA.CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
-            DATA.CHANNEL.installSopApp(item.packageName)
+            CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+            CHANNEL.installSopApp(item.packageName)
           },0)
         })
-        DATA.CHANNEL.downloadApp(item.packageName,item.downloadUrl)
+        CHANNEL.downloadApp(item.packageName,item.downloadUrl)
       }
       if(DATA.appList[this.appList[item.classify]]){
         DATA.appList[this.appList[item.classify]].push(item)

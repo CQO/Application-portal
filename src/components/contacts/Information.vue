@@ -27,7 +27,7 @@
 
 <script>
 import TitleBar from '../brick/Title'
-import { DATA } from "../method.js" 
+import { DATA, CHANNEL } from "../method.js" 
 export default {
   components: {
     TitleBar
@@ -41,15 +41,15 @@ export default {
     sendMes:function(){
       const data={scheme:"sms:"+ this.$route.params.enMobile +"?body="};
       //发短信
-      DATA.CHANNEL.opensopApp(JSON.stringify(data))
+      CHANNEL.opensopApp(JSON.stringify(data))
     },
     call:function(){
       //打电话
-      DATA.CHANNEL.callPhone(this.$route.params.enMobile)
+      CHANNEL.callPhone(this.$route.params.enMobile)
     },
     callTel:function(){
       //打电话
-      DATA.CHANNEL.callPhone(this.$route.params.telPhone)
+      CHANNEL.callPhone(this.$route.params.telPhone)
     },
     yuanyuan:function(){
       const app1 = {
@@ -60,7 +60,7 @@ export default {
         "name":"linkdood"
       };
       //打开应用
-      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+      CHANNEL.opensopApp(JSON.stringify(app1))
     }
   },
 }

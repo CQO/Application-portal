@@ -72,7 +72,6 @@ let DATA = {
   },
   debug: false,
   normal: false,
-  CHANNEL: null,
   Timestamp: null,
   orgList:{},
   orgTree : [],
@@ -83,6 +82,8 @@ let DATA = {
   telePhone: null,
   iframeURL: null
 };
+
+let CHANNEL = null
 
 //标记目前是否在获取某项数据
 let STATE = {
@@ -96,9 +97,9 @@ import { Order } from './Order.js';
 
 if(!DATA.debug){
   new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
-    if(DATA.CHANNEL === null){
-      DATA.CHANNEL = channel.objects.content;
-      DATA.CHANNEL.callback.connect(function(receive) {
+    if(CHANNEL === null){
+      CHANNEL = channel.objects.content;
+      CHANNEL.callback.connect(function(receive) {
         const Data = JSON.parse(receive);
         Order.$emit(Data.fName, Data.data);
       });
@@ -106,4 +107,4 @@ if(!DATA.debug){
   });
 }
 
-export { get, log, cutString, timeoutDetection, DATA, STATE };
+export { get, log, cutString, timeoutDetection, DATA, STATE, CHANNEL };

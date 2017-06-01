@@ -22,7 +22,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection, DATA, STATE, log} from "./method.js" 
+import {get, cutString, timeoutDetection, DATA, STATE, log, CHANNEL} from "./method.js" 
 //引入图片资源
 const $XXFB    = require('../assets/XTBG.png'),
       $AQYJ    = require('../assets/YJ.png'),
@@ -81,19 +81,19 @@ export default {
   methods:{
     openURL: function(item) {
       //const statisticalData = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
-      DATA.CHANNEL.queryAppStore(item.statistics)
+      CHANNEL.queryAppStore(item.statistics)
       if(item.url == "#"){
         const app =  {
           "scheme": `casicoa:showOA?pid=${DATA.org.usbkeyidentification}&sessionID=54545333`
         }
-        DATA.CHANNEL.opensopApp(JSON.stringify(app))
+        CHANNEL.opensopApp(JSON.stringify(app))
       }
       else{
         const url = item.url.replace("http","browser")
         const app1 = {
           "scheme":url,
         };
-        DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+        CHANNEL.opensopApp(JSON.stringify(app1))
       }
 
     },

@@ -29,7 +29,7 @@
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
 import { Order } from './Order.js'
-import { DATA, log } from "./method.js"
+import { DATA, log, CHANNEL } from "./method.js"
 import localforage from 'localforage'
 
 export default {
@@ -68,7 +68,7 @@ export default {
         },0);
       })
       Order.$emit('Loading', 'show')
-      DATA.CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
+      CHANNEL.preLogin( `{"userName":"${this.userName}","password":"${this.password}"}` )
     },
     login: function(thisOrg){ //登录函数
       DATA.org = thisOrg //存储组织信息
@@ -80,6 +80,15 @@ export default {
         //登录验证成功后执行的方法
         function loginSuccess(){
           const nowTime = new Date().getTime()
+          //获取缓存用户数据
+          CHANNEL.readData((data)=>{
+            const cache = JSON.parse(data)
+            if(cache.org.usbkeyidentification === DATA.org.usbkeyidentification){
+              //DATA.orgTree = cache.orgTree
+              //DATA.selectItem = cache.selectItem
+              DATA.appList = cache.appList
+            }
+          })
           const appData = {
             Timestamp: nowTime, //时间戳
             org: DATA.org
@@ -89,7 +98,7 @@ export default {
           localforage.setItem('appData', appData, function (err){
             if(err){ Order.$emit('Toast', '缓存用户数据失败'); return null; } //错误处理
             const data = JSON.stringify({type:"8",appType: "1",appID: "0", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
-            DATA.CHANNEL.queryAppStore(data)
+            CHANNEL.queryAppStore(data)
             window.location.href="#/Main"
           });
         }
@@ -105,7 +114,7 @@ export default {
           this.selectList = null
         },0)
       })
-      DATA.CHANNEL.login(JSON.stringify({
+      CHANNEL.login(JSON.stringify({
         usbkeyidentification : DATA.org.usbkeyidentification, //身份证
         password : this.password, //密码
         unitId : DATA.org.unitId, //所在组织id

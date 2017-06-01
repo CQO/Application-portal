@@ -17,7 +17,7 @@
 <script>
 import AppTitle from '../brick/AppTitle'
 import { Order } from '../Order.js'
-import { timeoutDetection, DATA, log, recover } from "../method.js" 
+import { timeoutDetection, DATA, log, recover, CHANNEL } from "../method.js" 
 import Toast from '../brick/Toast'
 import localforage from 'localforage'
 import { QWebChannel } from  "../QTWebChannel"
@@ -73,29 +73,35 @@ export default {
       })
       return;
     }
-    //生成默认应用列表
-    this.appList = {
-      "办公应用": [
-        { id:100004, type: 2 , name: "安全邮件", icon: $YJ, homeUrl: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
-        { id:100003, type: 2 , name: "信息发布", icon: $XXFB, homeUrl: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
-      ],
-      "通讯应用":[
-        { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true },
-      ]
-    }
-    this.installedAppID = ["100004","100003","100002"]
-    //--------------------------------------------------集团用户判断--------------------------------------------------
-    if(DATA.org.unitId == "1"){
-      const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
-      this.appList["办公应用"].unshift({ id:100000, type: 2, name: "协同办公", icon: $XTBG, homeUrl: officeAppUrl, main: true })
-      this.installedAppID.push("100000")
+    if(false){
+      this.appList = DATA.appList
     }
     else{
-      const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
-      this.appList["办公应用"].unshift({ id:100001, type: 1, name: "公文管理", icon: $GWGL, homeUrl: GWGLURL, main: true })
-      this.installedAppID.push("100000")
+      //生成默认应用列表
+      this.appList = {
+        "办公应用": [
+          { id:100004, type: 2 , name: "安全邮件", icon: $YJ, homeUrl: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
+          { id:100003, type: 2 , name: "信息发布", icon: $XXFB, homeUrl: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
+        ],
+        "通讯应用":[
+          { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true },
+        ]
+      }
+      this.installedAppID = ["100004","100003","100002"]
+      //--------------------------------------------------集团用户判断--------------------------------------------------
+      if(DATA.org.unitId == "1"){
+        const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
+        this.appList["办公应用"].unshift({ id:100000, type: 2, name: "协同办公", icon: $XTBG, homeUrl: officeAppUrl, main: true })
+        this.installedAppID.push("100000")
+      }
+      else{
+        const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
+        this.appList["办公应用"].unshift({ id:100001, type: 1, name: "公文管理", icon: $GWGL, homeUrl: GWGLURL, main: true })
+        this.installedAppID.push("100000")
+      }
+      DATA.appList = this.appList //存储
     }
-    DATA.appList = this.appList //存储
+
     //--------------------------------------------------处理在线应用--------------------------------------------------
     Order.$once('appInfos', (message) => {
       let newAppList = this.appList
@@ -112,7 +118,6 @@ export default {
       }, this);
       //存储数据
       setTimeout(() => {
-        this.appList = {} //不知道为什么需要清空一次
         this.appList = newAppList
         DATA.appList = this.appList
         DATA.installedAppID = this.installedAppID 
@@ -126,14 +131,13 @@ export default {
         })
       }, 0);
     })
-    DATA.CHANNEL.queryAppStore(JSON.stringify({type:"1"}))
+    CHANNEL.queryAppStore(JSON.stringify({type:"1"}))
   },
   methods: {
     openStart:function(thisApp){ //判断以何种方式打开应用
       //调用统计接口
       const statisticalData = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
-      log(statisticalData)
-      DATA.CHANNEL.queryAppStore(statisticalData)
+      CHANNEL.queryAppStore(statisticalData)
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
         thisApp.isSelect = false 
@@ -154,7 +158,7 @@ export default {
       if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
       //打开应用
       const app =  { "scheme": newUrl }
-      DATA.CHANNEL.opensopApp(JSON.stringify(app))
+      CHANNEL.opensopApp(JSON.stringify(app))
     },
     pressItem:function(thisApp){ //长按app事件
       if(thisApp.main) {Order.$emit('Toast', '系统应用不可卸载！');} //如果是系统应用不可删除
@@ -174,8 +178,8 @@ export default {
           //将没用被用户选择的应用筛选出来放入新的Json对象，如果有选择的标记mark
           if(element.isSelect){
             mark = true
-            DATA.CHANNEL.uninstallSopApp(element.packageName.split("-")[0])
-            DATA.CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
+            CHANNEL.uninstallSopApp(element.packageName.split("-")[0])
+            CHANNEL.queryAppStore(JSON.stringify({type:"7",id:element.id}))
           }
           else{
             if(!newList[item])  newList[item] = []

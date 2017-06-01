@@ -29,7 +29,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import { timeoutDetection, DATA, log } from "./method.js" 
+import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
 import localforage from 'localforage'
 
 export default {
@@ -67,7 +67,7 @@ export default {
     Order.$on('SEARCHOK',(message) => {
       if(message){
         const enOS = { enterId: 602, orgId: DATA.org.unitId + "" ,type: 2, name:message }
-        DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
+        CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
       else{
         this.searchResult = null
@@ -105,17 +105,17 @@ export default {
         if( Data.subUserNum === 0) {
           //请求组织信息
           const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
-          DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
+          CHANNEL.queryEnOS(JSON.stringify(enOS));
           return
         }
         //请求人员信息
         const enOS = { enterId: 602, orgId: Data.orgID + "",type: 3 }
-        DATA.CHANNEL.queryEnOS(JSON.stringify(enOS)); 
+        CHANNEL.queryEnOS(JSON.stringify(enOS)); 
       }
       else {
         //请求组织信息
         const enOS = { enterId: 602, orgId: Data.orgID + "" ,type: 4 }
-        DATA.CHANNEL.queryEnOS(JSON.stringify(enOS));
+        CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
     },
     clickTree:function(item, key){

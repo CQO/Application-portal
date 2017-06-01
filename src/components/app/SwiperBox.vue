@@ -12,7 +12,7 @@
 <script>
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
-import { DATA, log } from "../method.js" 
+import { DATA, log, CHANNEL } from "../method.js" 
 import localforage from 'localforage'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
@@ -55,7 +55,7 @@ export default {
       },0);
     })
     //请求轮播数据
-    DATA.CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
+    CHANNEL.slidesshow(JSON.stringify({type:"5"})) 
   },
   methods: {
     clickSwipe: function(thisSlide){
@@ -65,7 +65,7 @@ export default {
       const app1 = {
         "scheme":url,
       };
-      DATA.CHANNEL.opensopApp(JSON.stringify(app1))
+      CHANNEL.opensopApp(JSON.stringify(app1))
     }
   }
 }

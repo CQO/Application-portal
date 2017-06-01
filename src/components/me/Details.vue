@@ -40,7 +40,7 @@ import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
-import { timeoutDetection, DATA, log } from "../method.js" 
+import { timeoutDetection, DATA, log, CHANNEL } from "../method.js" 
 
 export default {
   components: {
@@ -71,13 +71,13 @@ export default {
       const phoneNumber = DATA.phoneNumber = this.phoneNumber
       const telePhone = DATA.telePhone = this.telePhone
       Order.$emit('Toast', '更改成功');
-      DATA.CHANNEL.updateAccount(JSON.stringify({
+      CHANNEL.updateAccount(JSON.stringify({
         type:2, 
         phone: phoneNumber ,
         telPhone: telePhone
       }))
     })
-    DATA.CHANNEL.getAccountInfo()
+    CHANNEL.getAccountInfo()
   },
   data () {
     return {
@@ -105,7 +105,7 @@ export default {
         case 2 : this.gender = "女"; break;
         case 0 : this.gender = "保密"; break;
       }
-      DATA.CHANNEL.updateAccount( JSON.stringify({type:3, gander: this.id}) )
+      CHANNEL.updateAccount( JSON.stringify({type:3, gander: this.id}) )
       this.showCheck = false
     }
   }

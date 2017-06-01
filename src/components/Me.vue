@@ -19,7 +19,7 @@ import Loading from './brick/Loading'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
-import {timeoutDetection, DATA, log} from "./method.js"
+import {timeoutDetection, DATA, log, CHANNEL} from "./method.js"
 import { Order } from './Order.js'
 import localforage from 'localforage'
 export default {
@@ -31,6 +31,7 @@ export default {
   },
   methods: {
     quitApp: function(url) { //退出登录
+      CHANNEL.writeData(JSON.stringify(DATA))
       Order.$emit('Loading', 'show')
       //退出信号监听
       Order.$on('loginout', function(message) {
@@ -44,7 +45,7 @@ export default {
         }
         location.reload() //刷新页面以清空变量数据
       })
-      DATA.CHANNEL.loginout()
+      CHANNEL.loginout()
     }
   },
   created(){

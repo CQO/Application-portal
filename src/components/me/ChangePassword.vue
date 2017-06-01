@@ -17,7 +17,7 @@
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
-import { DATA } from "../method.js" 
+import { DATA, CHANNEL } from "../method.js" 
 export default {
   components: {
     TitleBar,
@@ -40,7 +40,7 @@ export default {
         }
       })
       const data = {oldPwd : _this.oldPassword, newPwd : _this.password}
-      DATA.CHANNEL.changedPwd(JSON.stringify(data))
+      CHANNEL.changedPwd(JSON.stringify(data))
     }
   },
   data () {
