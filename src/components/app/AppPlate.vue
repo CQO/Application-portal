@@ -64,7 +64,7 @@ export default {
       },0)
     })
     //防止内存数据被清空
-    if(!DATA.org.enname){
+    if(!DATA.org.enname === "测试用户"){
       localforage.getItem("appData",(err,appData) => {
         DATA.org = appData.org
         DATA.appList = appData.appList

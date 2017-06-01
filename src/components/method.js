@@ -59,7 +59,7 @@ const timeoutDetection = function(){
 let DATA = {
   org: { 
     deptName: '综合办公室',
-    enname: '刘霞',
+    enname: '测试用户',
     isFirstLogin: '0',
     orderNum: 99999,
     orgCode: '10011001100610011001',
@@ -67,7 +67,7 @@ let DATA = {
     unitId: '936',
     unitName: '内蒙古河西航天科技发展有限公司',
     usbkeyidentification: '150102197503261521',
-    usbkeyname: '刘霞',
+    usbkeyname: '测试用户',
     userAccount: '3390843' 
   },
   debug: false,
