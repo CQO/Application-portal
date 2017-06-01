@@ -2,8 +2,7 @@
 .notice-box
   TitleBar(title='通知')
   ul.notice-list
-    transition(name="fade")
-      Refresh(v-if="thread !== 0")
+    Refresh(v-if="thread !== 0")
     li(v-for='item in noticeList',v-if="item",@click="openURL(item)")
       img(:src='item.img')
       .message
@@ -45,6 +44,14 @@ export default {
       thread: 0
     }
   },
+  created(){
+    Order.$on('refreshData', (message)=> {
+      this.getMail()
+      //集团用户检测
+      if(DATA.org.unitId == "1") { this.getBacklog() }
+      else{ this.getBumph() }
+    })
+  },
   activated(){
     //判断是否为debug模式
     if(DATA.debug){
@@ -70,12 +77,8 @@ export default {
     if(DATA.org.enname === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
     this.getMail()
     //集团用户检测
-    if(DATA.org.unitId == "1") { 
-      this.getBacklog()
-    }
-    else{
-      this.getBumph()
-    }
+    if(DATA.org.unitId == "1") { this.getBacklog() }
+    else{ this.getBumph() }
   },
   methods:{
     openURL: function(item) {
