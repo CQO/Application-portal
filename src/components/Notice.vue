@@ -59,7 +59,6 @@ export default {
       this.$set(this.noticeList,"XXFB",noticeData)
       return
     }
-    const _this = this
     if(!DATA.org.enname){
       localforage.getItem("appData",(err,appData) => {
         DATA.org = appData.org
@@ -80,7 +79,7 @@ export default {
   },
   methods:{
     openURL: function(item) {
-      //const statisticalData = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
+      //统计接口 这里的statistics为手拼应用识别码
       CHANNEL.queryAppStore(item.statistics)
       if(item.url == "#"){
         const app =  {

@@ -43,19 +43,6 @@ export default {
     }
   },
   created(){
-    //判断是否为debug模式
-    if(DATA.debug){
-      this.appList = {
-        "办公应用": [
-          { id:100004, type: 2 , name: "安全邮件", icon: $YJ, homeUrl: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID='+DATA.org.usbkeyidentification, main:false },
-          { id:100003, type: 2 , name: "信息发布", icon: $XXFB, homeUrl: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
-        ],
-        "通讯应用":[
-          { id:100002, type: 2 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{usbkeyidentification}}", main:true },
-        ]
-      }
-      return
-    }
     //监听应用安装通知
     Order.$on('appInstall', (message) => {
       this.installedAppID = DATA.installedAppID
@@ -73,9 +60,8 @@ export default {
       })
       return;
     }
-    if(false){
-      this.appList = DATA.appList
-    }
+    //如果有缓存那么使用缓存
+    if(DATA.appList){ this.appList = DATA.appList }
     else{
       //生成默认应用列表
       this.appList = {
@@ -106,14 +92,17 @@ export default {
     Order.$once('appInfos', (message) => {
       let newAppList = this.appList
       //整理数据
+      const appListData = JSON.stringify(DATA.appList)
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
         element.appInfoList.forEach(function(item) {
-          if(item.type === 1) item.homeUrl = item.activityName
-          //应用列表是否包含此分类检测
-          if(newAppList[className] === undefined){ newAppList[className] = []}
-          newAppList[className].push(item)
-          this.installedAppID.push(item.id)
+          if( appListData.indexOf(item.secret) < 0 ) {
+            if(item.type === 1) item.homeUrl = item.activityName
+            //应用列表是否包含此分类检测
+            if(newAppList[className] === undefined){ newAppList[className] = []}
+            newAppList[className].push(item)
+            this.installedAppID.push(item.id)
+          }
         }, this);
       }, this);
       DATA.appList = this.appList
