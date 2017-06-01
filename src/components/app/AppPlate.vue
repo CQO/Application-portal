@@ -116,11 +116,11 @@ export default {
           this.installedAppID.push(item.id)
         }, this);
       }, this);
+      DATA.appList = this.appList
+      DATA.installedAppID = this.installedAppID 
       //存储数据
       setTimeout(() => {
         this.appList = newAppList
-        DATA.appList = this.appList
-        DATA.installedAppID = this.installedAppID 
         const iscroll = this.$refs.iscroll
         iscroll.refresh()
         localforage.getItem("appData",(err,appData) => {
