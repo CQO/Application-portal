@@ -76,6 +76,8 @@ export default {
   },
   methods:{
     openURL: function(item) {
+      //const statisticalData = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
+      DATA.CHANNEL.queryAppStore(item.statistics)
       if(item.url == "#"){
         const app =  {
           "scheme": `casicoa:showOA?pid=${DATA.org.usbkeyidentification}&sessionID=54545333`
@@ -133,7 +135,8 @@ export default {
           text   : '暂无待处理邮件',
           time   : '',
           notice : '0',
-          url    : `http://10.152.36.20/secmail/loginapp.do?type=cid&PID=${DATA.org.usbkeyidentification}&type2=Unread`
+          url    : `http://10.152.36.20/secmail/loginapp.do?type=cid&PID=${DATA.org.usbkeyidentification}&type2=Unread`,
+          statistics: `{"type":"8","appType":"2","appID":"100004","orgID":"${DATA.org.orgID}","unitID":"${DATA.org.unitId}","orgCode":"${DATA.org.orgCode}"}`
         }
         if(data.length > 0){
           const date = Date.parse(data[0].send_date.replace(/-/gi,"/"))
@@ -152,7 +155,7 @@ export default {
       })
     },
     getBacklog: function() {
-      //--------------------------------------------代办通知获取--------------------------------------------------------
+      //--------------------------------------------协同通知获取--------------------------------------------------------
       if(STATE.getBacklog) return;
       STATE.getBacklog = true
       const XXFBURL = 'http://10.152.36.26:8080/CASIC/interfaces/304DaiBanInterface.jsp?userName='+ DATA.org.enname +'&PID='+DATA.org.usbkeyidentification+'&webService='
@@ -170,7 +173,8 @@ export default {
           text   : cutString(receive,"Title>","<"),
           time   : this.getDateDiff(date),
           notice : number,
-          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService='
+          url    : 'http://10.152.36.26:8080/page_m/dblist.jsp?userName=' + DATA.org.enname + '&PID='+ DATA.org.usbkeyidentification + '&webService=',
+          statistics: `{"type":"8","appType":"2","appID":"100000","orgID":"${DATA.org.orgID}","unitID":"${DATA.org.unitId}","orgCode":"${DATA.org.orgCode}"}`
         }
         // 将 *应用数据* 显示在界面上
         setTimeout(()=> {
@@ -194,7 +198,8 @@ export default {
           text   : '暂无待处理公文',
           time   : '',
           notice : "0",
-          url    : '#'
+          url    : '#',
+          statistics: `{"type":"8","appType":"2","appID":"100001","orgID":"${DATA.org.orgID}","unitID":"${DATA.org.unitId}","orgCode":"${DATA.org.orgCode}"}`
         }
         if(data.pageData.length > 0){
           const date = Date.parse(data.pageData[0].startTime.replace(/-/gi,"/"))

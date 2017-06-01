@@ -132,6 +132,7 @@ export default {
     openStart:function(thisApp){ //判断以何种方式打开应用
       //调用统计接口
       const statisticalData = JSON.stringify({type:"8",appType: "2",appID: thisApp.id + "", orgID: DATA.org.orgID, unitID: DATA.org.unitId, orgCode: DATA.org.orgCode})
+      log(statisticalData)
       DATA.CHANNEL.queryAppStore(statisticalData)
       //判断当前点击项目是否已经被选中
       if(thisApp.isSelect === true){
