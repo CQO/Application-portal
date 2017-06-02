@@ -60,7 +60,7 @@ export default {
         Order.$emit('Loading', 'hide')
         setTimeout( ()=>{
           switch(message.length){ //判断同名用户数量
-            case 0  : Order.$emit('Toast', '登录失败'); break; 
+            case 0  : Order.$emit('Toast', '登录超时'); break; 
             //如果用户所属的组织只有一个，那么自动帮用户选择登录
             case 1  : const data = message[0]; this.login(data); break;
             default : this.selectList = message; this.orgNumber = message.length;
