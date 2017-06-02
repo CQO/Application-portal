@@ -39,9 +39,22 @@ export default {
     Search,
     Organization
   },
+  data () {
+    return {
+      List: null,
+      tree:"",
+      searchResult: null
+    }
+  },
   created () {
     timeoutDetection() //超时检测
-
+    if(DATA.orgTree && DATA.orgList) {
+      this.List = DATA.orgList
+      this.tree = DATA.orgTree
+      return
+    }
+    DATA.orgTree = []
+    DATA.orgList = {}
     //取数据库数据
     localforage.getItem("appData",(err,appData) => {
       let orgName = DATA.org.unitName
@@ -82,10 +95,10 @@ export default {
     load:function(Data,addTree){ //拉取层级数据
       this.List = null //显示加载动画
       //预登录信号监听
-      
       Order.$once('queryEnOS', (message) => {
-        setTimeout( ()=>{          
-          this.List = message //显示层级数据
+        setTimeout( ()=>{   
+          DATA.orgList = message
+          this.List = DATA.orgList //显示层级数据
           if(addTree) {
             DATA.orgTree.push(Data) //层级树增加一层
             this.tree = DATA.orgTree //显示层级树
@@ -127,13 +140,6 @@ export default {
       DATA.kkkkkkkkid = item.id 
       this.load(item,false)
     },
-  },
-  data () {
-    return {
-      List: null,
-      tree:"",
-      searchResult: null
-    }
   },
 }
 </script>

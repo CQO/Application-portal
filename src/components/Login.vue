@@ -80,12 +80,12 @@ export default {
         //登录验证成功后执行的方法
         function loginSuccess(){
           const nowTime = new Date().getTime()
-          //获取缓存用户数据
+          //从本地文件中读取缓存
           CHANNEL.readData((data)=>{
             const cache = JSON.parse(data)
             if(cache.org.usbkeyidentification === DATA.org.usbkeyidentification){
-              //DATA.orgTree = cache.orgTree
-              //DATA.selectItem = cache.selectItem
+              DATA.orgTree = cache.orgTree
+              DATA.orgList = cache.orgList
               DATA.appList = cache.appList
             }
           })
