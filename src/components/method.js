@@ -86,7 +86,7 @@ let DATA = {
     usbkeyname: '测试用户',
     userAccount: '3390843' 
   },
-  debug: false,
+  debug: true,
   normal: false,
   Timestamp: null,
   orgList: null,

@@ -1,15 +1,15 @@
 <template lang="pug">
   .bottomBar
-    .item.notice(@click.stop="noticeTabClick",v-bind:class="{ active: index==='0' }")
+    .item.notice(@click="noticeTabClick",v-bind:class="{ active: index==='0' }")
       .ico &#xe630;
       .name 通知
-    .item.app(@click.stop="appTabClick",v-bind:class="{ active: index==='1' }")
+    .item.app(@click="appTabClick",v-bind:class="{ active: index==='1' }")
       .ico &#xe622;
       .name 我的应用
-    .item.contacts(@click.stop="contactsTabClick",v-bind:class="{ active: index==='2' }")
+    .item.contacts(@click="contactsTabClick",v-bind:class="{ active: index==='2' }")
       .ico &#xe664;
       .name 通讯录
-    .item.me(@click.stop="meTabClick",v-bind:class="{ active: index==='3' }")
+    .item.me(@click="meTabClick",v-bind:class="{ active: index==='3' }")
       .ico &#xe60c;
       .name 我
 </template>
