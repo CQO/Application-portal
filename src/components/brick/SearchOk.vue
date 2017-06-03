@@ -28,6 +28,7 @@ export default {
 .search-box{
     height: 30px;
     border-bottom: 1px solid #dfdde8;
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 5px 0;
     .text-bar{
         height: 30px;

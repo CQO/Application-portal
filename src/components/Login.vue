@@ -28,7 +28,7 @@
 <script>
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
-import { Order } from './Order.js'
+import { Order, Color } from './Order.js'
 import { DATA, log, CHANNEL } from "./method.js"
 import localforage from 'localforage'
 
@@ -75,7 +75,6 @@ export default {
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$once('login', (message)=> {
-        
         DATA.normal = true //标记状态为 正常 ，以后根据这个字段的值判断内存是否被清理
         //登录验证成功后执行的方法
         function loginSuccess(){
@@ -83,6 +82,9 @@ export default {
           //从本地文件中读取缓存
           CHANNEL.readData((data)=>{
             const cache = JSON.parse(data)
+            Color.titleBackground = cache.color.titleBackground
+            Color.titleText = cache.color.titleText
+            Order.$emit('rootColor', cache.color.rootColor)
             if(cache.org.usbkeyidentification === DATA.org.usbkeyidentification){
               DATA.orgTree = cache.orgTree
               DATA.orgList = cache.orgList

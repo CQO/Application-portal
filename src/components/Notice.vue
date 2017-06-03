@@ -69,6 +69,7 @@ export default {
     })
   },
   activated(){
+    if(DATA.debug) return
     this.getMail()
     //集团用户检测
     if(DATA.org.unitId == "1") { this.getBacklog() }
@@ -228,7 +229,7 @@ export default {
     height: 65px;
     border-bottom: 1px solid #eaeaea;
     position: relative;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
     overflow: hidden;
     width: 100%;
     img{

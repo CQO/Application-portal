@@ -6,6 +6,7 @@
       </div>
     </div>
 </template>
+
 <script>
 import { Order } from '../Order.js'
 export default {

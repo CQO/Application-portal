@@ -1,3 +1,10 @@
 "use strict";
 import Vue from 'vue';
-export var Order = new Vue();
+const Order = new Vue();
+
+let Color = {
+  titleBackground: '#f8f8f8',
+  titleText: '#000000'
+}
+
+export { Order, Color }

@@ -86,7 +86,12 @@ let DATA = {
     usbkeyname: '测试用户',
     userAccount: '3390843' 
   },
-  debug: true,
+  color: {
+    titleBackground: '#f8f8f8',
+    titleText: '#000000',
+    rootColor: '#f4f4f4'
+  },
+  debug: false,
   normal: false,
   Timestamp: null,
   orgList: null,

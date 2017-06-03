@@ -1,6 +1,6 @@
 <template lang="pug">
 .swiper-box
-  TitleBar(title='我的应用',:rightIcon="rightIcon")
+  TitleBar(title='应用',:rightIcon="rightIcon")
   swiper.swiper(:options="swipeOptions",v-if="showList")
     swiperSlide(v-for="slide in showList",:key="slide.id")
       .item(v-on:click="clickSwipe(slide)")
@@ -31,7 +31,7 @@ export default {
         autoplay: 3500,
         pagination : '.swiper-pagination',
         autoplayDisableOnInteraction : false,
-        preventClicks : false,
+        preventClicks : false
       }
     }
   },

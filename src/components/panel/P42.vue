@@ -20,7 +20,7 @@ export default {
 .panel42{
     display: flex;
     height: 42px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
     border-bottom: 1px solid #eaeaea;
     .ico{
         width: 42px;

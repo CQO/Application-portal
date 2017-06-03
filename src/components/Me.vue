@@ -32,6 +32,7 @@ export default {
   methods: {
     quitApp: function(url) { //退出登录
       CHANNEL.writeData(JSON.stringify(DATA))
+      log(DATA)
       Order.$emit('Loading', 'show')
       //退出信号监听
       Order.$on('loginout', function(message) {
@@ -55,8 +56,9 @@ export default {
     return {
       list: [
         { icon: '&#xe600;', title: '更改密码', color:'#61c2ff', id:"1000",url:"/ChangePassword"}, 
-        { icon: '&#xe629;', title: '帮助', color:'#ffd217', id:"1001",url:"/Help"},
-        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
+        { icon: '&#xe629;', title: '获取帮助', color:'#ffd217', id:"1001",url:"/Help"},
+        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"},
+        { icon: '&#xe60e;', title: '更改主题', color:'#1bee47', id:"1002",url:"/Theme"}
       ],
       userName: DATA.org.enname
     }
@@ -73,7 +75,6 @@ export default {
       color: #a8a8a8;
       padding-left: 10px;
       font-size: 0.8rem;
-      background-color: #f4f4f4;
     }
     .quit{
         height: 40px;

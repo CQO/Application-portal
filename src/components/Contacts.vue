@@ -157,9 +157,9 @@ export default {
     height: 402px;
     li{
         height: 61px;
-        background-color: white;
         display: flex;
         border-bottom: 1px solid #eaeaea;
+        background-color: white;
     }
     img{
         height: 45px;
@@ -199,6 +199,8 @@ export default {
     line-height: 30px;
     font-size: 0.8rem;
     overflow-x: scroll;
+    border-bottom: 1px solid #dfdde8;
+    background-color: rgba(255, 255, 255, 0.7);
     .organization-item {
         color: #2c84ff;
         margin: 0 5px;
