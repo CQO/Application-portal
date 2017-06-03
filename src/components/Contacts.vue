@@ -18,8 +18,9 @@
   .search-result(v-if="searchResult")
     .search-result-title
       span 共搜索到了{{searchResult.length}}条结果
-      .close.ico(@click.stop="searchResult = null") &#xe697;
-    Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+      .close.ico(@click.stop="clearSearch") &#xe697;
+    vroll.organization
+      Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   BottomBar(index="2")
 </template>
 
@@ -140,6 +141,10 @@ export default {
       DATA.kkkkkkkkid = item.id 
       this.load(item,false)
     },
+    clearSearch:function(){
+      this.searchResult = null
+
+    }
   },
 }
 </script>
@@ -205,7 +210,7 @@ export default {
 .search-result {
   background-color: rgba(248, 248, 248, 1);
   position: absolute;
-  top: 45px;
+  top: 40px;
   bottom: 0;
   left: 0;
   right: 0;
