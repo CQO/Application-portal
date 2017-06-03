@@ -20,9 +20,11 @@ export default {
     TitleBar,
   },
   data(){
-    genderID:null
+    return {
+      genderID: null
+    }
   },
-  created(){
+  mounted(){
     //this.genderID = this.$route.params.id
   },
   methods: {

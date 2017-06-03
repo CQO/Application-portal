@@ -47,7 +47,7 @@ export default {
       searchResult: null
     }
   },
-  created () {
+  mounted () {
     timeoutDetection() //超时检测
     if(DATA.orgTree && DATA.orgList) {
       this.List = DATA.orgList

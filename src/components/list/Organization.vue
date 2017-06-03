@@ -38,7 +38,7 @@ export default {
       theTelPhone: '未设置'
     }
   },
-  created () {
+  mounted () {
     if(this.enMobile) { this.theEnMobile = this.enMobile}
     if(this.duty) { this.theDuty = this.duty}
     if(this.telPhone) { this.theTelPhone = this.telPhone}

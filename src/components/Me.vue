@@ -48,7 +48,7 @@ export default {
       CHANNEL.loginout()
     }
   },
-  created(){
+  mounted(){
     if(timeoutDetection()) return null
   },
   data () {

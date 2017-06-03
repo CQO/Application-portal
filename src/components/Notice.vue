@@ -21,7 +21,7 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection, DATA, STATE, log, CHANNEL} from "./method.js" 
+import {get, cutString, timeoutDetection, DATA, STATE, log, CHANNEL, dataDetection} from "./method.js" 
 //引入图片资源
 const $XXFB    = require('../assets/XTBG.png'),
       $AQYJ    = require('../assets/YJ.png'),
@@ -44,19 +44,9 @@ export default {
       thread: 0
     }
   },
-  created(){
-    Order.$on('refreshData', (message)=> {
-      this.getMail()
-      //集团用户检测
-      if(DATA.org.unitId == "1") { this.getBacklog() }
-      else{ this.getBumph() }
-    })
-  },
-  activated(){
+  mounted(){
     //判断是否为debug模式
-    if(DATA.debug){
-      const noticeData = { // 协同办公项
-        img    : $XXFB,
+    if(DATA.debug){ const noticeData = { img    : $XXFB,
         name   : '协同办公',
         text   : '这里是邮件的题目',
         time   : '2066年6月6日',
@@ -66,15 +56,19 @@ export default {
       this.$set(this.noticeList,"XXFB",noticeData)
       return
     }
-    if(!DATA.org.enname){
-      localforage.getItem("appData",(err,appData) => {
-        DATA.org = appData.org
-        DATA.appList = appData.appList
-        DATA.installedAppID = appData.installedAppID
-      }) 
-    }
+    //---------------------检测------------------------
     if(timeoutDetection()) { return null } //超时检测
-    if(DATA.org.enname === null) { Order.$emit('Toast', '非法登录'); return null; } //空数据检测
+    dataDetection() //数据被清除检测
+    //------------------------------------------------
+    //监听客户端发来的程序被激活事件
+    Order.$on('refreshData', (message)=> {
+      this.getMail()
+      //集团用户检测
+      if(DATA.org.unitId == "1") { this.getBacklog() }
+      else{ this.getBumph() }
+    })
+  },
+  activated(){
     this.getMail()
     //集团用户检测
     if(DATA.org.unitId == "1") { this.getBacklog() }
@@ -97,7 +91,6 @@ export default {
         };
         CHANNEL.opensopApp(JSON.stringify(app1))
       }
-
     },
     getDateDiff: function(nS) {
       let result;

@@ -1,5 +1,9 @@
 "use strict";
+import localforage from 'localforage'
+import { QWebChannel } from  "./QTWebChannel";
+import { Order } from './Order.js';
 
+//日志的方法
 const log = function(record){
   const server = 'http://192.168.132.45:2333/',
         obj = new XMLHttpRequest(),
@@ -8,6 +12,8 @@ const log = function(record){
   obj.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // 发送信息至服务器时内容编码类型
   obj.send(JSON.stringify(mess));
 };
+
+//get请求数据
 const get = function(url,fn){
   const obj=new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据          
   obj.open('GET',url,true);
@@ -43,7 +49,7 @@ const cutString = function(original,before,after,index){
     }
 };
 
-
+//超时检测
 const timeoutDetection = function(){
   const nowTime = new Date().getTime();
   //检测距离上次操作是否已经过去1200000毫秒(20分钟)
@@ -55,6 +61,16 @@ const timeoutDetection = function(){
   DATA.Timestamp = nowTime;
   return false;
 };
+
+//程序内存被清恢复
+const dataDetection = function(){
+  //从本读数据库中取出数据
+  localforage.getItem("appData",(err,appData) => {
+    DATA.org = appData.org
+    DATA.appList = appData.appList
+    DATA.installedAppID = appData.installedAppID
+  }) 
+}
 
 let DATA = {
   org: { 
@@ -92,8 +108,8 @@ let STATE = {
   getBumph: false
 }
 
-import { QWebChannel } from  "./QTWebChannel";
-import { Order } from './Order.js';
+
+
 
 if(!DATA.debug){
   new QWebChannel(navigator.qtWebChannelTransport, (channel) => {
@@ -107,4 +123,4 @@ if(!DATA.debug){
   });
 }
 
-export { get, log, cutString, timeoutDetection, DATA, STATE, CHANNEL };
+export { get, log, cutString, dataDetection, timeoutDetection, DATA, STATE, CHANNEL };

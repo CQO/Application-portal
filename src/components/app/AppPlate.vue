@@ -42,7 +42,7 @@ export default {
       installedAppID: []
     }
   },
-  created(){
+  mounted(){
     //监听应用安装通知
     Order.$on('appInstall', (message) => {
       this.installedAppID = DATA.installedAppID

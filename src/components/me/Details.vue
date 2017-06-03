@@ -48,7 +48,7 @@ export default {
     TitleBar,
     Toast
   },
-  created(){
+  mounted(){
     //if( timeoutDetection() ) { return null} //时间处理
     //退出信号监听
     Order.$on('getAccountInfo', (message)=> {

@@ -45,7 +45,7 @@ export default {
     Toast,
     Loading
   },
-  created(){
+  mounted(){
     if(this.$route.params.name) this.userName = this.$route.params.name //智能保存用户名
   },
   methods: {

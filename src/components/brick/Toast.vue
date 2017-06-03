@@ -12,7 +12,7 @@ export default {
       text: null
     }
   },
-  created () {
+  mounted () {
     const _this = this
     Order.$on('Toast', function(message) {
       _this.text = message

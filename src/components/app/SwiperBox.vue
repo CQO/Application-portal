@@ -35,7 +35,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     //判断是否为debug模式
     if(DATA.debug){
       this.showList = [{

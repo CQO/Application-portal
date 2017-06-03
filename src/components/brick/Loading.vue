@@ -12,7 +12,7 @@ export default {
   props: {
     text: String
   },
-  created () {
+  mounted () {
     Order.$on('Loading', (message) => {
       if(message === 'show'){
         this.show = true
