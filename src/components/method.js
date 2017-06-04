@@ -91,7 +91,7 @@ let DATA = {
     titleText: '#000000',
     bottomBackground: '#f7f7fa'
   },
-  debug: false,
+  debug: true,
   normal: false,
   Timestamp: null,
   orgList: null,

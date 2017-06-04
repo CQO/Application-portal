@@ -14,7 +14,6 @@
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   .load(v-else)
-    img(src="../assets/loading.gif")
   .search-result(v-if="searchResult")
     .search-result-title
       span 共搜索到了{{searchResult.length}}条结果
@@ -183,16 +182,9 @@ export default {
     }
 }
 .load{
-    display: flex;
-    justify-content: center;
-    img{
-      margin: auto;
-      position: absolute;
-      top: 0; 
-      left: 0; 
-      bottom: 0; 
-      right: 0;
-    }
+    height: calc(~"100% - 166px");
+    width: 100%;
+    background: url(../assets/loading.svg) no-repeat center;
 }
 .organization-bar{
     height:30px;

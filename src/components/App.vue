@@ -20,3 +20,9 @@ export default {
   }
 }
 </script>
+
+<style lang='less' scoped>
+.content-box {
+  height: calc(~"100% - 50px");
+}
+</style>

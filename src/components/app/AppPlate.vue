@@ -70,7 +70,7 @@ export default {
           { id:100003, type: 2 , name: "信息发布", icon: $XXFB, homeUrl: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
         ],
         "通讯应用":[
-          { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true },
+          { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true }
         ]
       }
       this.installedAppID = ["100004","100003","100002"]
@@ -204,12 +204,13 @@ export default {
 
 <style lang='less' scoped>
 .app-plate{
-  height: 100%;
+  height: calc(~"100% - 225px");
+  position: relative;
 }
 .scroll{
   touch-action: none;
   overflow: hidden;
-  height: 290px;
+  height: 100%;
 }
 .grid{
   .grid-item{

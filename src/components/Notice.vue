@@ -222,7 +222,7 @@ export default {
 
 <style lang='less' scoped>
 .notice-list{
-  height: 100%;
+  height: calc(~"100% - 95px");
   overflow-y: hidden;
   li{
     display: flex;

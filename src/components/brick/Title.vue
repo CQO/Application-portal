@@ -81,7 +81,6 @@ export default {
   text-align:center;
   border-bottom: 1px solid #dfdde8;
   display: flex;
-  position: fixed;
   z-index: 99;
   top: 0;
   .title{

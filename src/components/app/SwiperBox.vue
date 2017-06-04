@@ -16,7 +16,6 @@ import { DATA, log, CHANNEL } from "../method.js"
 import localforage from 'localforage'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
-
 export default {
   components: {
     TitleBar,
@@ -73,7 +72,7 @@ export default {
 
 <style lang='less' scoped>
 .swiper-box{
-  height: 180px;
+  height: 225px;
   width: 100%;
   position: relative;
   overflow: hidden;
