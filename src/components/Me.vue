@@ -32,7 +32,6 @@ export default {
   methods: {
     quitApp: function(url) { //退出登录
       CHANNEL.writeData(JSON.stringify(DATA))
-      log(DATA)
       Order.$emit('Loading', 'show')
       //退出信号监听
       Order.$on('loginout', function(message) {

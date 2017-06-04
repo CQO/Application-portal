@@ -49,10 +49,16 @@ export default {
       DATA.color.titleText = this.titleText
       Color.bottomBackground = this.bottomBackground
       DATA.color.bottomBackground = this.bottomBackground
-      Order.$emit('Toast', '颜色更改成功');
+      Order.$emit('Toast', '更改成功，下次登录生效');
     },
     recovery: function(){
-      console.log("sd")
+      Color.titleBackground = '#f8f8f8'
+      DATA.color.titleBackground = '#f8f8f8'
+      Color.titleText = '#000000'
+      DATA.color.titleText = '#000000'
+      Color.bottomBackground = '#f4f4f4'
+      DATA.color.bottomBackground = '#f4f4f4'
+      Order.$emit('Toast', '更改成功，下次登录生效');
     }
   }
 }
