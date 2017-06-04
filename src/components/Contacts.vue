@@ -199,8 +199,6 @@ export default {
     line-height: 30px;
     font-size: 0.8rem;
     overflow-x: scroll;
-    border-bottom: 1px solid #dfdde8;
-    background-color: rgba(255, 255, 255, 0.7);
     .organization-item {
         color: #2c84ff;
         margin: 0 5px;

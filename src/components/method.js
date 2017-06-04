@@ -89,7 +89,7 @@ let DATA = {
   color: {
     titleBackground: '#f8f8f8',
     titleText: '#000000',
-    rootColor: '#f4f4f4'
+    bottomBackground: '#f7f7fa'
   },
   debug: false,
   normal: false,
@@ -112,9 +112,6 @@ let STATE = {
   getBacklog : false,
   getBumph: false
 }
-
-
-
 
 if(!DATA.debug){
   new QWebChannel(navigator.qtWebChannelTransport, (channel) => {

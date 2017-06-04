@@ -1,5 +1,5 @@
 <template lang="pug">
-  .bottomBar
+  .bottomBar(v-bind:style="{ background: bgColor }")
     .item.notice(@click="noticeTabClick",v-bind:class="{ active: index==='0' }")
       .ico &#xe630;
       .name 通知
@@ -14,11 +14,16 @@
       .name 我
 </template>
 <script>
-
+import { Color } from '../Order.js'
 export default {
   props: {
     index: String,
-  },  
+  },
+  data () {
+    return {
+      bgColor: Color.bottomBackground,
+    }
+  },
   methods: {
     //通知标签点击事件
     noticeTabClick() {

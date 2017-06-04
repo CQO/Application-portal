@@ -84,7 +84,7 @@ export default {
             const cache = JSON.parse(data)
             Color.titleBackground = cache.color.titleBackground
             Color.titleText = cache.color.titleText
-            Order.$emit('rootColor', cache.color.rootColor)
+            Color.bottomBackground = cache.color.bottomBackground
             if(cache.org.usbkeyidentification === DATA.org.usbkeyidentification){
               DATA.orgTree = cache.orgTree
               DATA.orgList = cache.orgList

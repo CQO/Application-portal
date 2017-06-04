@@ -2,20 +2,20 @@
 .theme-box
   TitleBar(title='更换主题',leftIcon="true")
   .item 
-    .title 标题背景色(默认颜色:#f8f8f8)
+    .title 顶栏背景色(默认颜色:#f8f8f8)
     .input
       input.colorInput(type="text",v-model="titleBackground")
       colorPicker.colorPicker(v-model="titleBackground")
   .item 
-    .title 标题文字颜色(默认颜色:#000000)
+    .title 顶栏文字颜色(默认颜色:#000000)
     .input
       input.colorInput(type="text",v-model="titleText")
       colorPicker.colorPicker(v-model="titleText")
   .item 
-    .title 主背景色(默认颜色:#f4f4f4)
+    .title 底栏背景色(默认颜色:#f4f4f4)
     .input
-      input.colorInput(type="text",v-model="rootColor")
-      colorPicker.colorPicker(v-model="rootColor")
+      input.colorInput(type="text",v-model="bottomBackground")
+      colorPicker.colorPicker(v-model="bottomBackground")
   .button-box
     .save.button(v-on:click = "save") 保存更改
     .recovery.button(v-on:click = "recovery") 还原颜色
@@ -38,7 +38,7 @@ export default {
     return {
       titleBackground: Color.titleBackground,
       titleText: Color.titleText,
-      rootColor: DATA.color.rootColor,
+      bottomBackground: Color.bottomBackground,
     }
   },
   methods: {
@@ -47,7 +47,8 @@ export default {
       DATA.color.titleBackground = this.titleBackground
       Color.titleText = this.titleText
       DATA.color.titleText = this.titleText
-      DATA.color.rootColor = this.rootColor
+      Color.bottomBackground = this.bottomBackground
+      DATA.color.bottomBackground = this.bottomBackground
       Order.$emit('Toast', '颜色更改成功');
     },
     recovery: function(){

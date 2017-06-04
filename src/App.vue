@@ -1,26 +1,9 @@
 <template lang="pug">
-  .root-box(v-bind:style="{ background: rootColor }")
+  .root-box
     .title-bar-seat
     keep-alive
       router-view.main-box
 </template>
-
-<script>
-import { DATA, CHANNEL } from "./components/method.js"
-import { Order } from "./components/Order.js"
-export default {
-  data () {
-    return {
-      rootColor: '#f4f4f4',
-    }
-  },
-  mounted(){
-    Order.$once('rootColor', (message)=> {
-      this.rootColor = message
-    })
-  },
-}
-</script>
 
 
 <style lang="less">
