@@ -191,6 +191,7 @@ export default {
       this.thread++
       get( GWGLURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        if(receive.length === 34) {STATE.getBumph = false;this.thread--;return;}
         const data = JSON.parse(receive)
         const GWGL = { // 公文管理
           img    : $GWGL,

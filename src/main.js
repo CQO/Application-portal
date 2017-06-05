@@ -24,8 +24,7 @@ const routes = [
   { path: '/Help', name: 'Help', component: require('./components/me/Help') },
   { path: '/GenderSetting', name: 'GenderSetting', component: require('./components/me/GenderSetting') },
   { path: '/ChangePassword', name: 'ChangePassword', component: require('./components/me/ChangePassword') },
-  { path: '/Iframe/:name', name: 'Iframe', component: require('./components/Iframe') },
-  { path: '/Theme', name: 'Theme', component: require('./components/me/Theme') }
+  { path: '/Iframe/:name', name: 'Iframe', component: require('./components/Iframe') }
 ];
 
 const router = new VueRouter({

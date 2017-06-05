@@ -45,10 +45,10 @@ export default {
   mounted(){
     //监听应用安装通知
     Order.$on('appInstall', (message) => {
-      this.installedAppID = DATA.installedAppID
-      setTimeout(()=>{
-        this.appList = message
-      },0)
+      // setTimeout(()=>{
+      //   log(message)
+      //   this.appList = message
+      // },0)
     })
     //防止内存数据被清空
     if(!DATA.org.enname === "测试用户"){
@@ -196,6 +196,8 @@ export default {
     }
   },
   activated(){
+    this.appList = {}
+    this.appList = DATA.appList
     const iscroll = this.$refs.iscroll
     iscroll.refresh()
   }

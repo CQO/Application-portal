@@ -128,6 +128,7 @@ export default {
 .logo {
   width: 180px;
   margin: 20px auto;
+  padding-top: 20px;
   height: 180px;
   display: block;
   img {
