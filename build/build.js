@@ -20,7 +20,6 @@ shell.cp('-R', 'static/*', assetsPath)
 shell.config.silent = false
 
 webpack(webpackConfig, function (err, stats) {
-  spinner.stop()
   if (err) throw err
   process.stdout.write(stats.toString({
     colors: true,
