@@ -82,9 +82,6 @@ export default {
           //从本地文件中读取缓存
           CHANNEL.readData((data)=>{
             const cache = JSON.parse(data)
-            Color.titleBackground = cache.color.titleBackground
-            Color.titleText = cache.color.titleText
-            Color.bottomBackground = cache.color.bottomBackground
             if(cache.org.usbkeyidentification === DATA.org.usbkeyidentification){
               DATA.orgTree = cache.orgTree
               DATA.orgList = cache.orgList

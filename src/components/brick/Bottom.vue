@@ -1,5 +1,5 @@
 <template lang="pug">
-  .bottomBar(v-bind:style="{ background: bgColor }")
+  .bottomBar
     .item.notice(@click="noticeTabClick",v-bind:class="{ active: index==='0' }")
       .ico &#xe630;
       .name 通知
@@ -18,11 +18,6 @@ import { Color } from '../Order.js'
 export default {
   props: {
     index: String,
-  },
-  data () {
-    return {
-      bgColor: Color.bottomBackground,
-    }
   },
   methods: {
     //通知标签点击事件
@@ -69,8 +64,8 @@ export default {
 /*底部栏目切换栏*/
 .bottomBar{
   border-top: 1px solid #dfdde8;
+  background-color: #f7f7fa;
   height:49px;
-  background:#f7f7fa;
   width:100%;
   position:fixed;
   bottom: 0;

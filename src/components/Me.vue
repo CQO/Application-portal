@@ -56,8 +56,7 @@ export default {
       list: [
         { icon: '&#xe600;', title: '更改密码', color:'#61c2ff', id:"1000",url:"/ChangePassword"}, 
         { icon: '&#xe629;', title: '获取帮助', color:'#ffd217', id:"1001",url:"/Help"},
-        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"},
-        { icon: '&#xe60e;', title: '更改主题', color:'#1bee47', id:"1002",url:"/Theme"}
+        { icon: '&#xe60e;', title: '当前版本', color:'#1bee47', id:"1002",url:"/Version"}
       ],
       userName: DATA.org.enname
     }

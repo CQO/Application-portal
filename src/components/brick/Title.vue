@@ -1,5 +1,5 @@
 <template lang="pug">
-  .title-bar(v-bind:style="{ background: bgColor, color: textColor }")
+  .title-bar
     .titleButton.ico(v-bind:class="{ hidden: !leftIcon }",v-on:click="back") &#xe601;
     p.title {{title}}
     router-link.titleButton.ico(tag="div",v-if="rightIcon === 'add'",to="\Store") &#xe626;
@@ -47,18 +47,12 @@
 </template>
 
 <script>
-import { Order, Color } from '../Order.js'
+import { Order } from '../Order.js'
 export default {
   props: {
     title: { type: String, required: false, default: '标题栏'},
     leftIcon: String,
     rightIcon: String
-  },
-  data () {
-    return {
-      bgColor: Color.titleBackground,
-      textColor: Color.titleText
-    }
   },
   methods: {
     back () {
@@ -74,7 +68,8 @@ export default {
 
 <style lang='less' scoped>
 /*标题栏样式*/
-.title-bar{
+.title-bar {
+  background-color: #f8f8f8;
   height:44px;
   line-height:44px;
   width:100%;
