@@ -46,7 +46,9 @@ export default {
   },
   mounted(){
     //判断是否为debug模式
-    if(DATA.debug){ const noticeData = { img    : $XXFB,
+    if(DATA.debug){ 
+      const noticeData = { 
+        img    : $XXFB,
         name   : '协同办公',
         text   : '这里是邮件的题目',
         time   : '2066年6月6日',

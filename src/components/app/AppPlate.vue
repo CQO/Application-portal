@@ -109,6 +109,7 @@ export default {
       DATA.installedAppID = this.installedAppID 
       //存储数据
       setTimeout(() => {
+        this.appList = {}
         this.appList = newAppList
         const iscroll = this.$refs.iscroll
         iscroll.refresh()
