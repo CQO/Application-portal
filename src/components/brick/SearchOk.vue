@@ -18,7 +18,6 @@ export default {
   methods: {
     search () {
       Order.$emit('SEARCHOK', this.searchText)
-      this.searchText = ''
     }
   },
 }

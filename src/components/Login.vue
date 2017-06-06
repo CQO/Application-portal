@@ -145,6 +145,7 @@ export default {
 .input-box{
   width: 300px;
   margin: 0 auto;
+  margin-top: 30px;
   border-radius: 5px;
   overflow: hidden;
   border: 1px solid #e3e3e3;
@@ -200,7 +201,7 @@ export default {
     height: 280px;
     margin: 0 auto;
     position: absolute;
-    top: 160px;
+    top: 210px;
     left: 0;
     right: 0;
     width: 90%;

@@ -6,7 +6,7 @@
     template(v-for="(item, key) in tree")
       span.organization-item(v-on:click="clickTree(item, key)") {{item.orgName }}
       span >
-  vroll.organization(ref="iscroll",v-if="List",v-show="!searchResult",:options="{click: true,scrollbars: true}")
+  vroll.organization(ref="iscroll",v-if="List  && !searching",v-show="!searchResult",:options="{click: true,scrollbars: true}")
     li(v-for="item in List.depts",v-on:click="load(item,true)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
@@ -18,7 +18,7 @@
     .search-result-title
       span 共搜索到了{{searchResult.length}}条结果
       .close.ico(@click.stop="clearSearch") &#xe697;
-    vroll.organization
+    vroll.organizationSearch(:options="{click: true,scrollbars: true}")
       Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   BottomBar(index="2")
 </template>
@@ -45,7 +45,8 @@ export default {
     return {
       List: null,
       tree:"",
-      searchResult: null
+      searchResult: null,
+      searching: false
     }
   },
   mounted () {
@@ -74,12 +75,14 @@ export default {
     Order.$on('searchEnOS',(message) => {
       //定时器
       setTimeout( ()=>{
+        this.searching = false
         this.searchResult = message.entUsers
       },0); 
       
     }) 
     //注册搜索
     Order.$on('SEARCHOK',(message) => {
+      this.searching = true
       if(message){
         const enOS = { enterId: 602, orgId: DATA.org.unitId + "" ,type: 2, name:message }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
@@ -144,7 +147,6 @@ export default {
     },
     clearSearch:function(){
       this.searchResult = null
-
     }
   },
 }
@@ -217,6 +219,11 @@ export default {
       font-size: 1.2rem;
       color: cadetblue;
     }
+  }
+  .organizationSearch {
+    height: calc(~"100% - 30px");
+    touch-action: none;
+    overflow: hidden;
   }
 }
 
