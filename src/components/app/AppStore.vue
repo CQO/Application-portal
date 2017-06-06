@@ -145,13 +145,14 @@ export default {
         })
         CHANNEL.downloadApp(item.packageName,item.downloadUrl)
       }
+      //清除它的选中状态
+      item.isSelect = false
       if(DATA.appList[this.appList[item.classify]]){
         DATA.appList[this.appList[item.classify]].push(item)
       }
       else{
         DATA.appList[this.appList[item.classify]] = [item]
       }
-      
       localforage.getItem("appData",(err,appData) => {
         appData.appList = DATA.appList
         appData.installedAppID = DATA.installedAppID

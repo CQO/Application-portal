@@ -2,17 +2,18 @@
 .iframe-box(v-bind:class="{ isLoad: ok }")
   TitleBar(:title='$route.params.name',leftIcon="flase")
   iframe#iframe(:src="iframeURL",frameborder="0")
-  .load
-    img(src="../assets/loading.gif")
+  myLoad.load
 </template>
 
 <script>
 import TitleBar from './brick/Title'
+import myLoad from './brick/SVG'
 import { Order } from './Order.js'
 import { DATA } from "./method.js" 
 export default {
   components: {
-    TitleBar
+    TitleBar,
+    myLoad
   },
   activated () {
     this.ok = false

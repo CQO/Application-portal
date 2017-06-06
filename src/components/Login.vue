@@ -224,7 +224,6 @@ export default {
     }
     .list{
         touch-action: none;
-        text-size-adjust: none;
         overflow: auto;
         height: 220px;
         border: 1px solid #dcecec;
