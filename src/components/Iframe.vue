@@ -2,18 +2,16 @@
 .iframe-box(v-bind:class="{ isLoad: ok }")
   TitleBar(:title='$route.params.name',leftIcon="flase")
   iframe#iframe(:src="iframeURL",frameborder="0")
-  myLoad.load
+  .load
 </template>
 
 <script>
 import TitleBar from './brick/Title'
-import myLoad from './brick/SVG'
 import { Order } from './Order.js'
 import { DATA } from "./method.js" 
 export default {
   components: {
     TitleBar,
-    myLoad
   },
   activated () {
     this.ok = false
@@ -25,7 +23,7 @@ export default {
   },
   data () {
     return {
-      iframeURL: 'http://owo.ink/application/',
+      iframeURL: '',
       ok: false
     }
   }
@@ -34,7 +32,7 @@ export default {
 <style lang='less' scoped>
 .iframe-box{
   position: absolute;
-  top: 45px;
+  top: 0;
   left: 0;
   height: 525px;
   width: 100%;
@@ -45,16 +43,15 @@ export default {
   }
 }
 .load{
-    display: flex;
-    justify-content: center;
-    img{
-      margin: auto;
-      position: absolute;
-      top: 0; 
-      left: 0; 
-      bottom: 0; 
-      right: 0;
-    }
+  display: flex;
+  background: url(../assets/loading.svg) no-repeat center;
+  justify-content: center;
+  margin: auto;
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  bottom: 0; 
+  right: 0;
 }
 .isLoad{
   iframe{

@@ -144,12 +144,18 @@ export default {
       let newUrl = thisApp.homeUrl
       newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
       newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
-      log(newUrl)
-      //如果是H5应用使用无地址栏浏览器打开
-      if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
-      //打开应用
-      const app =  { "scheme": newUrl }
-      CHANNEL.opensopApp(JSON.stringify(app))
+      // 如果有规定字段#useIframe那么使用iframe打开
+      if(newUrl.indexOf("#useIframe")>-1) {
+        DATA.iframeURL = newUrl
+        window.location.href=`#/Iframe/${thisApp.name}`
+      }
+      else{
+        //如果是H5应用使用无地址栏浏览器打开
+        if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
+        //打开网址
+        const app =  { "scheme": newUrl }
+        CHANNEL.opensopApp(JSON.stringify(app))
+      }
     },
     pressItem:function(thisApp){ //长按app事件
       if(thisApp.main) {Order.$emit('Toast', '系统应用不可卸载！');} //如果是系统应用不可删除

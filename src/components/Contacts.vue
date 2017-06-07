@@ -13,7 +13,7 @@
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-  myLoad(v-else)
+  .load(v-else)
   .search-result(v-if="searchResult")
     .search-result-title
       span 共搜索到了{{searchResult.length}}条结果
@@ -27,7 +27,6 @@
 import Search from './brick/SearchOk'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
-import myLoad from './brick/SVG'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
 import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
@@ -38,8 +37,7 @@ export default {
     TitleBar,
     BottomBar,
     Search,
-    Organization,
-    myLoad
+    Organization
   },
   data () {
     return {
@@ -197,6 +195,11 @@ export default {
     p {
         color: #787878
     }
+}
+.load{
+  height: calc(~"100% - 166px");
+  width: 100%;
+  background: url(../assets/loading.svg) no-repeat center;
 }
 .search-result {
   background-color: rgba(248, 248, 248, 1);
