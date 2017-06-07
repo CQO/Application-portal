@@ -130,6 +130,7 @@ export default {
       this.thread++
       get( YJURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
+        if(receive.length === 30) {STATE.getMail = false;this.thread--;return;}
         const data = JSON.parse(receive)
         const AQYJ = { // 安全邮件
           img    : $AQYJ,

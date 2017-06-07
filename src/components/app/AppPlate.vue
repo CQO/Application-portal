@@ -76,7 +76,7 @@ export default {
       this.installedAppID = ["100004","100003","100002"]
       //--------------------------------------------------集团用户判断--------------------------------------------------
       if(DATA.org.unitId == "1"){
-        const officeAppUrl = 'http://10.152.36.33:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
+        const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
         this.appList["办公应用"].unshift({ id:100000, type: 2, name: "协同办公", icon: $XTBG, homeUrl: officeAppUrl, main: true })
         this.installedAppID.push("100000")
       }
@@ -144,6 +144,7 @@ export default {
       let newUrl = thisApp.homeUrl
       newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
       newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
+      log(newUrl)
       //如果是H5应用使用无地址栏浏览器打开
       if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
       //打开应用
