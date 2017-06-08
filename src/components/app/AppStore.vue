@@ -13,6 +13,7 @@
         p.detail 版本号:{{item.version}}
       .button.open(v-if="item.installed") 已安装
       .button.down(v-else,v-on:click="installApp(item,$event)") 安装
+  .no-item.ico &#xe62a;
   Toast
 </template>
 
@@ -76,20 +77,25 @@ export default {
       CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
+        log(message)
         const appInfoList = message.appStore.appInfoList
-        let newList = []
-        appInfoList.forEach((element)=> {
-          //*2数据
-          newList.push(element)
-        }, this);
-        //存储应用列表信息
-        DATA.appInfoList = newList
-        setTimeout(() => {
-          this.appStoreList = newList
+        if(appInfoList.length === 0) {
           this.leftIcon = "no"
-          const iscroll = this.$refs.iscroll
-          iscroll.refresh()
-        }, 0);
+        }
+        else {
+          let newList = []
+          appInfoList.forEach((element)=> {
+            newList.push(element)
+          }, this);
+          //存储应用列表信息
+          DATA.appInfoList = newList
+          setTimeout(() => {
+            this.appStoreList = newList
+            this.leftIcon = "no"
+            const iscroll = this.$refs.iscroll
+            iscroll.refresh()
+          }, 0);
+        }
       })
       CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
     }
@@ -214,53 +220,60 @@ export default {
   }
 
 }
-  .app-list{
-    display: flex;
-    background-color: white;
-    img{
-      width: 45px;
-      height: 45px;
-      margin: 9px;
-    }
-    .info{
-      width: calc(~"100% - 150px");
-    }
-    p{
-      height: 30px;
-    }
-    .name{
-      font-size: 0.9rem;
-      line-height: 33px;
-    }
-    .detail{
-      font-size: 0.8rem;
-      line-height: 30px;
-      color: #7b7b7b;
-    }
-    .button{
-      width: 60px;
-      height: 30px;
-      border-radius: 5px;
-      margin: 16px 13px;
-      text-align: center;
-      line-height: 30px;
-      font-size: 0.9rem;
-    }
-    .button:active{
-      background: cornflowerblue;
-      color: white;
-    }
-    .open{
-      border: 1px solid black;
-    }
-    .down{
-      color: white;
-      background-color: #1865ff;
-    }
+.app-list{
+  display: flex;
+  background-color: white;
+  img{
+    width: 45px;
+    height: 45px;
+    margin: 9px;
   }
+  .info{
+    width: calc(~"100% - 150px");
+  }
+  p{
+    height: 30px;
+  }
+  .name{
+    font-size: 0.9rem;
+    line-height: 33px;
+  }
+  .detail{
+    font-size: 0.8rem;
+    line-height: 30px;
+    color: #7b7b7b;
+  }
+  .button{
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    margin: 16px 13px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 0.9rem;
+  }
+  .button:active{
+    background: cornflowerblue;
+    color: white;
+  }
+  .open{
+    border: 1px solid black;
+  }
+  .down{
+    color: white;
+    background-color: #1865ff;
+  }
+}
 .store-list{
   touch-action: none;
   overflow: hidden;
   height: 443px;
+}
+.no-item {
+  position: fixed;
+  top: 250px;
+  left: 120px;
+  font-size: 5rem;
+  color: #ccc;
 }
 </style>

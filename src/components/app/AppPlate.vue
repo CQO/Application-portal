@@ -43,13 +43,6 @@ export default {
     }
   },
   mounted(){
-    //监听应用安装通知
-    Order.$on('appInstall', (message) => {
-      // setTimeout(()=>{
-      //   log(message)
-      //   this.appList = message
-      // },0)
-    })
     //防止内存数据被清空
     if(!DATA.org.enname === "测试用户"){
       localforage.getItem("appData",(err,appData) => {
