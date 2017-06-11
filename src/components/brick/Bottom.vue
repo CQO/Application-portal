@@ -14,7 +14,6 @@
       .name 我
 </template>
 <script>
-import { Color } from '../Order.js'
 export default {
   props: {
     index: String,

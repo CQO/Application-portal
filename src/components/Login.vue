@@ -28,7 +28,7 @@
 <script>
 import Loading from './brick/Loading'
 import Toast from './brick/Toast'
-import { Order, Color } from './Order.js'
+import { Order } from './Order.js'
 import { DATA, log, CHANNEL } from "./method.js"
 import localforage from 'localforage'
 
@@ -51,7 +51,7 @@ export default {
   methods: {
     preLogin: function() { //预登录函数
       //判断是否为debug模式
-      if(DATA.debug) { window.location.href="#/Main"; DATA.normal = true; return; }
+      if(DATA.debug) { window.location.href="#/Main"; return; }
       //判断用户名和密码是否为空
       if( this.userName === '' || this.password === '' ){ Order.$emit('Toast', '请正确输入账号和密码'); return null; }
       //预登录信号监听
@@ -75,7 +75,6 @@ export default {
       Order.$emit('Loading', 'show')
       //登录信号监听
       Order.$once('login', (message)=> {
-        DATA.normal = true //标记状态为 正常 ，以后根据这个字段的值判断内存是否被清理
         //登录验证成功后执行的方法
         function loginSuccess(){
           const nowTime = new Date().getTime()

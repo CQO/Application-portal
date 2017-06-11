@@ -39,24 +39,19 @@ export default {
   },
   mounted () {
     timeoutDetection() //超时检测
-    if(DATA.orgTree && DATA.orgList) {
+    if(DATA.orgTree && DATA.orgTree.length>0) {
       this.List = DATA.orgList
       this.tree = DATA.orgTree
       return
     }
-    DATA.orgTree = []
-    DATA.orgList = {}
-    //取数据库数据
-    localforage.getItem("appData",(err,appData) => {
-      let orgName = DATA.org.unitName
-      if(DATA.org.unitId == 1)  orgName = "集团公司总部"
-      this.load({
-        orgName: orgName,
-        orgID: DATA.org.unitId,
-        subOrgNum: 666,
-        subUserNum: 666,
-      },true)
-    })
+    let orgName = DATA.org.unitName
+    if(DATA.org.unitId == 1)  orgName = "集团公司总部"
+    this.load({
+      orgName: orgName,
+      orgID: DATA.org.unitId,
+      subOrgNum: 666,
+      subUserNum: 666,
+    },true)
   },
   activated(){
     const iscroll = this.$refs.iscroll
@@ -107,8 +102,6 @@ export default {
       DATA.orgTree = DATA.orgTree.slice(0,key + 1)
       //显示层级树
       this.tree = DATA.orgTree
-      //刷新所在层级的ID
-      DATA.kkkkkkkkid = item.id 
       this.load(item,false)
     },
   },
@@ -116,7 +109,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-
 .organization{
 	  touch-action: none;
     overflow: hidden;

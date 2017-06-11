@@ -49,14 +49,15 @@ export default {
     Toast
   },
   mounted(){
-    //if( timeoutDetection() ) { return null} //时间处理
+    if( timeoutDetection() ) { return null} //时间处理
     //退出信号监听
     Order.$on('getAccountInfo', (message)=> {
+      log(message)
       setTimeout(()=>{
         this.name = message.name
         this.oldPhone = message.phone
-        DATA.phoneNumber = this.phoneNumber = message.phone
-        DATA.telePhone = this.oldTelPhone = message.telPhone
+        DATA.user.phone = this.phoneNumber = message.phone
+        DATA.user.telPhone = this.oldTelPhone = message.telPhone
         this.telePhone = message.telPhone
         this.id = message.gender
         switch(message.gender){
@@ -68,8 +69,8 @@ export default {
       },0)
     })
     Order.$on('TITLEBUTTONCLICK', (message)=> {
-      const phoneNumber = DATA.phoneNumber = this.phoneNumber
-      const telePhone = DATA.telePhone = this.telePhone
+      const phoneNumber = DATA.user.phone = this.phoneNumber
+      const telePhone = DATA.user.telPhone = this.telePhone
       Order.$emit('Toast', '更改成功');
       CHANNEL.updateAccount(JSON.stringify({
         type:2, 
@@ -93,9 +94,9 @@ export default {
     }
   },
   activated () {
-    if(DATA.phoneNumber !== null || DATA.telePhone !== null){
-      this.phoneNumber = DATA.phoneNumber
-      this.telePhone = DATA.telePhone
+    if(DATA.user.phone !== null || DATA.user.telPhone !== null){
+      this.phoneNumber = DATA.user.phone
+      this.telePhone = DATA.user.telPhone
     }
   },
   methods: {

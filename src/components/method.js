@@ -86,21 +86,19 @@ let DATA = {
     usbkeyname: '测试用户',
     userAccount: '3390843' 
   },
-  color: {
-    titleBackground: '#f8f8f8',
-    titleText: '#000000',
-    bottomBackground: '#f7f7fa'
+  user: { 
+    gender: 1,
+    name: '测试用户',
+    phone: null,
+    telPhone: null 
   },
   debug: false,
-  normal: false,
   Timestamp: null,
-  orgList: null,
-  orgTree: null,
+  orgList: {},
+  orgTree: [],
   selectItem: null,
   appList:null,
   installedAppID: null,
-  phoneNumber: null,
-  telePhone: null,
   iframeURL: null
 };
 
