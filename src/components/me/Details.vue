@@ -52,7 +52,6 @@ export default {
     if( timeoutDetection() ) { return null} //时间处理
     //退出信号监听
     Order.$on('getAccountInfo', (message)=> {
-      log(message)
       setTimeout(()=>{
         this.name = message.name
         this.oldPhone = message.phone
