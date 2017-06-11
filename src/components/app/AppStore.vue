@@ -2,18 +2,19 @@
 .app-store-box
   TitleBar(title='应用商店',leftIcon="ok",:rightIcon="leftIcon")
   Search
-  .checker
-    .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
-    .checker-item(v-for="item in selectItem",:class="{ 'item-selected': click(item.classifyID) }",v-on:click="select=item.classifyID",:key="item.classifyID") {{item.classifyName}}
-  vroll.store-list(ref="iscroll",:options="{preventDefault: false}")
-    li.app-list(v-for="item in classification",:key="item.id")
-      img(:src="item.icon")
-      .info
-        p.name {{item.name}}
-        p.detail 版本号:{{item.version}}
-      .button.open(v-if="item.installed") 已安装
-      .button.down(v-else,v-on:click="installApp(item,$event)") 安装
-  .no-item.ico &#xe62a;
+  .content(v-if="!showNoItem")
+    .checker
+      .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
+      .checker-item(v-for="item in selectItem",:class="{ 'item-selected': click(item.classifyID) }",v-on:click="select=item.classifyID",:key="item.classifyID") {{item.classifyName}}
+    vroll.store-list(ref="iscroll",:options="{preventDefault: false}")
+      li.app-list(v-for="item in classification",:key="item.id")
+        img(:src="item.icon")
+        .info
+          p.name {{item.name}}
+          p.detail 版本号:{{item.version}}
+        .button.open(v-if="item.installed") 已安装
+        .button.down(v-else,v-on:click="installApp(item,$event)") 安装
+  .no-item.ico(v-if="showNoItem") &#xe62a;
   Toast
 </template>
 
@@ -41,6 +42,7 @@ export default {
       installedAppID:null,
       leftIcon:"loading",
       downloading: false,
+      showNoItem: false,
       appList: {}
     }
   },
@@ -80,7 +82,10 @@ export default {
         log(message)
         const appInfoList = message.appStore.appInfoList
         if(appInfoList.length === 0) {
-          this.leftIcon = "no"
+          setTimeout(()=>{
+            this.leftIcon = "no"
+            this.showNoItem = true
+          })
         }
         else {
           let newList = []
@@ -89,6 +94,7 @@ export default {
           }, this);
           //存储应用列表信息
           DATA.appInfoList = newList
+          
           setTimeout(() => {
             this.appStoreList = newList
             this.leftIcon = "no"
