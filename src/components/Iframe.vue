@@ -1,6 +1,6 @@
 <template lang="pug">
 .iframe-box(v-bind:class="{ isLoad: ok }")
-  TitleBar(:title='$route.params.name',leftIcon="flase")
+  TitleBar(:title='$route.params.name')
   iframe#iframe(:src="iframeURL",frameborder="0")
   .load
 </template>

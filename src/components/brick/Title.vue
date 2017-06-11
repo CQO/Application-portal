@@ -4,6 +4,7 @@
     p.title {{title}}
     router-link.titleButton.ico(tag="div",v-if="rightIcon === 'add'",to="\Store") &#xe626;
     .titleButton(v-if="rightIcon === 'save'",v-on:click="save") 保存
+    router-link.titleButton.ico(tag="div",v-if="rightIcon === 'search'",to="\Search") &#xe60b;
     .loading(v-if="rightIcon === 'loading'")
       <svg width='120px' height='120px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-default">
         <rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
@@ -95,6 +96,7 @@ export default {
   }
   .ico{
     font-size: 1.4rem;
+    color: #ccc;
   }
   .titleButton:active{
     background-color: aqua;
@@ -102,7 +104,7 @@ export default {
   svg{
     height: 24px;
     width: 24px;
-    
+    fill: #ccc;
   }
   .loading{
     margin: 6px;

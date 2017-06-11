@@ -79,7 +79,6 @@ export default {
       CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
-        log(message)
         const appInfoList = message.appStore.appInfoList
         if(appInfoList.length === 0) {
           setTimeout(()=>{

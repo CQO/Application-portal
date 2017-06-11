@@ -1,12 +1,12 @@
 <template lang="pug">
 .contacts-box
-  TitleBar(title='通讯录')
+  TitleBar(title='通讯录',rightIcon='search')
   Search
   .organization-bar
     template(v-for="(item, key) in tree")
       span.organization-item(v-on:click="clickTree(item, key)") {{item.orgName }}
       span >
-  vroll.organization(ref="iscroll",v-if="List  && !searching",v-show="!searchResult",:options="{click: true,scrollbars: true}")
+  vroll.organization(ref="iscroll",v-if="List",:options="{click: true,scrollbars: true}")
     li(v-for="item in List.depts",v-on:click="load(item,true)",:key="item.orgID")
       img(src="../assets/Organization.png")
       p.organization-name {{item.orgName}}
@@ -14,17 +14,10 @@
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   .load(v-else)
-  .search-result(v-if="searchResult")
-    .search-result-title
-      span 共搜索到了{{searchResult.length}}条结果
-      .close.ico(@click.stop="clearSearch") &#xe697;
-    vroll.organizationSearch(:options="{click: true,scrollbars: true}")
-      Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
   BottomBar(index="2")
 </template>
 
 <script>
-import Search from './brick/SearchOk'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import Organization from './list/Organization'
@@ -36,15 +29,12 @@ export default {
   components: {
     TitleBar,
     BottomBar,
-    Search,
     Organization
   },
   data () {
     return {
       List: null,
-      tree:"",
-      searchResult: null,
-      searching: false
+      tree:""
     }
   },
   mounted () {
@@ -67,28 +57,6 @@ export default {
         subUserNum: 666,
       },true)
     })
-  },
-  beforeMount(){
-    //注册搜索
-    Order.$on('searchEnOS',(message) => {
-      //定时器
-      setTimeout( ()=>{
-        this.searching = false
-        this.searchResult = message.entUsers
-      },0); 
-      
-    }) 
-    //注册搜索
-    Order.$on('SEARCHOK',(message) => {
-      this.searching = true
-      if(message){
-        const enOS = { enterId: 602, orgId: DATA.org.unitId + "" ,type: 2, name:message }
-        CHANNEL.queryEnOS(JSON.stringify(enOS));
-      }
-      else{
-        this.searchResult = null
-      }
-    }) 
   },
   activated(){
     const iscroll = this.$refs.iscroll
@@ -143,9 +111,6 @@ export default {
       DATA.kkkkkkkkid = item.id 
       this.load(item,false)
     },
-    clearSearch:function(){
-      this.searchResult = null
-    }
   },
 }
 </script>
@@ -155,7 +120,7 @@ export default {
 .organization{
 	  touch-action: none;
     overflow: hidden;
-    height: 402px;
+    height: calc(~"100% - 125px");
     li{
         height: 61px;
         display: flex;
@@ -201,33 +166,6 @@ export default {
   width: 100%;
   background: url(../assets/loading.svg) no-repeat center;
 }
-.search-result {
-  background-color: rgba(248, 248, 248, 1);
-  position: absolute;
-  top: 40px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  .search-result-title{
-    height: 30px;
-    line-height: 30px;
-    background-color: gainsboro;
-    color: ivory;
-    padding-left: 10px;
-    position: relitive;
-    .close{
-      position: absolute;
-      right: 5px;
-      font-size: 1.2rem;
-      color: cadetblue;
-    }
-  }
-  .organizationSearch {
-    height: calc(~"100% - 30px");
-    touch-action: none;
-    overflow: hidden;
-  }
-}
+
 
 </style>
