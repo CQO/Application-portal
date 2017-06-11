@@ -43,7 +43,7 @@ export default {
       appList: {}
     }
   },
-  mounted(){
+  created(){
     const _this = this
     //判断是否为debug模式
     if(DATA.debug){
