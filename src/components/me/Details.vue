@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import Pa42 from '../panel/Pa42'
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
 import Toast from '../brick/Toast'
@@ -44,7 +43,6 @@ import { timeoutDetection, DATA, log, CHANNEL } from "../method.js"
 
 export default {
   components: {
-    Pa42,
     TitleBar,
     Toast
   },
