@@ -34,8 +34,6 @@
     </div>
 </template>
 
-
-
 <style scoped>
 .loading-box {
     position: absolute;
