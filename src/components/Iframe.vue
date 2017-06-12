@@ -1,8 +1,8 @@
 <template lang="pug">
-.iframe-box(v-bind:class="{ isLoad: ok }")
+.iframe-box
   TitleBar(:title='$route.params.name')
   iframe#iframe(:src="iframeURL",frameborder="0")
-  Load.load
+  Load(v-if="!ok")
 </template>
 
 <script>
@@ -42,14 +42,6 @@ export default {
     height: 100%;
     width: 100%;
     visibility:hidden
-  }
-}
-.isLoad{
-  iframe{
-    visibility: visible;
-  }
-  .load{
-    display: none;
   }
 }
 </style>

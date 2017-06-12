@@ -126,7 +126,7 @@ export default {
       //--------------------------------------------邮件通知获取--------------------------------------------------------
       if(STATE.getMail) return;
       STATE.getMail = true
-      const YJURL = `http://10.152.36.26:8080/CASIC/interfaces/mailInterface.jsp?PID=${DATA.org.usbkeyidentification}`
+      const YJURL = `http://10.152.36.31/secmail/GetAppUnreadFileService?id_card=${DATA.org.usbkeyidentification}&username=secmail&password=welcome`
       this.thread++
       get( YJURL, (receive)=> {
         if(receive ==="" || receive === null ) { Order.$emit('Toast', '获取通知数据失败'); return null } //空数据检测
