@@ -1,7 +1,6 @@
 <template lang="pug">
 .contacts-box
   TitleBar(title='通讯录',rightIcon='search')
-  Search
   .organization-bar
     template(v-for="(item, key) in tree")
       span.organization-item(v-on:click="clickTree(item, key)") {{item.orgName }}
@@ -13,13 +12,14 @@
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-  .load(v-else)
+  Load(v-else)
   BottomBar(index="2")
 </template>
 
 <script>
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
+import Load from './brick/load'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
 import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
@@ -29,7 +29,8 @@ export default {
   components: {
     TitleBar,
     BottomBar,
-    Organization
+    Organization,
+    Load
   },
   data () {
     return {
@@ -153,11 +154,4 @@ export default {
         color: #787878
     }
 }
-.load{
-  height: calc(~"100% - 166px");
-  width: 100%;
-  background: url(../assets/loading.svg) no-repeat center;
-}
-
-
 </style>

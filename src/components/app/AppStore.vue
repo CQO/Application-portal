@@ -2,7 +2,7 @@
 .app-store-box
   TitleBar(title='应用商店',leftIcon="ok",:rightIcon="leftIcon")
   Search
-  .content(v-if="!showNoItem")
+  .content
     .checker
       .checker-item(v-on:click="select='all'",:class="{ 'item-selected': select=='all' }") 全部
       .checker-item(v-for="item in selectItem",:class="{ 'item-selected': click(item.classifyID) }",v-on:click="select=item.classifyID",:key="item.classifyID") {{item.classifyName}}
@@ -14,7 +14,9 @@
           p.detail 版本号:{{item.version}}
         .button.open(v-if="item.installed") 已安装
         .button.down(v-else,v-on:click="installApp(item,$event)") 安装
-  .no-item.ico(v-if="showNoItem") &#xe62a;
+  .no-item(v-if="showNoItem") 
+    p.ico &#xe62a;
+    p.text 没有应用
   Toast
 </template>
 
@@ -277,8 +279,13 @@ export default {
 .no-item {
   position: fixed;
   top: 250px;
-  left: 120px;
-  font-size: 5rem;
+  left: 140px;
   color: #ccc;
+  .ico {
+    font-size: 5rem;
+  }
+  p {
+    text-align: center;
+  }
 }
 </style>

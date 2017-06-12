@@ -1,6 +1,6 @@
 <template lang="pug">
 .search-box
-  TitleBar(title='搜索通讯录',leftIcon="ok")
+  TitleBar(title='搜索',leftIcon="ok")
   .text-bar
     input.text-input(v-model="searchText",type="text",name="fname")
     .button(v-on:click="search") 搜索
@@ -59,17 +59,14 @@ export default {
 <style lang="less" scoped>
 .search-box{
     height:100%;
-    border-bottom: 1px solid #dfdde8;
-    background-color: rgba(255, 255, 255, 0.7);
     background-color: #f8f8f8;
     position: relative;
     .text-bar{
         height: 30px;
         width: 100%;
-        margin: 0 auto;
-        border-radius: 5px;
         position: relative;
         display: flex;
+        border-bottom: 1px solid #dfdde8;
     }
     .text-input{
         width: calc(~"100% - 60px");

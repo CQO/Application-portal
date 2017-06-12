@@ -2,16 +2,18 @@
 .iframe-box(v-bind:class="{ isLoad: ok }")
   TitleBar(:title='$route.params.name')
   iframe#iframe(:src="iframeURL",frameborder="0")
-  .load
+  Load.load
 </template>
 
 <script>
+import Load from './brick/load'
 import TitleBar from './brick/Title'
 import { Order } from './Order.js'
 import { DATA } from "./method.js" 
 export default {
   components: {
     TitleBar,
+    Load
   },
   activated () {
     this.ok = false
@@ -41,17 +43,6 @@ export default {
     width: 100%;
     visibility:hidden
   }
-}
-.load{
-  display: flex;
-  background: url(../assets/loading.svg) no-repeat center;
-  justify-content: center;
-  margin: auto;
-  position: absolute;
-  top: 0; 
-  left: 0; 
-  bottom: 0; 
-  right: 0;
 }
 .isLoad{
   iframe{
