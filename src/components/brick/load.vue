@@ -36,7 +36,7 @@
 
 <style scoped>
 .loading-box {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     margin: -60px 0 0 -60px;

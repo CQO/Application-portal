@@ -64,13 +64,14 @@ const timeoutDetection = function(){
 
 //程序内存被清恢复
 const dataDetection = function(){
-  if(Timestamp!== null) return
-  //从本读数据库中取出数据
-  localforage.getItem("appData",(err,appData) => {
-    DATA.org = appData.org
-    DATA.appList = appData.appList
-    DATA.installedAppID = appData.installedAppID
-  }) 
+  if(DATA.Timestamp === null) {
+    //从本读数据库中取出数据
+    localforage.getItem("appData",(err,appData) => {
+      DATA.org = appData.org
+      DATA.appList = appData.appList
+      DATA.installedAppID = appData.installedAppID
+    }) 
+  }
 }
 
 let DATA = {

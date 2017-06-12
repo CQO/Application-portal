@@ -64,6 +64,7 @@ export default {
     //------------------------------------------------
     //监听客户端发来的程序被激活事件
     Order.$on('refreshData', (message)=> {
+      console.log(message)
       this.getMail()
       //集团用户检测
       if(DATA.org.unitId == "1") { this.getBacklog() }

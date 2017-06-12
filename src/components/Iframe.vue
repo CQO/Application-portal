@@ -38,10 +38,10 @@ export default {
   left: 0;
   height: 525px;
   width: 100%;
+  overflow: hidden;
   iframe{
     height: 100%;
     width: 100%;
-    visibility:hidden
   }
 }
 </style>
