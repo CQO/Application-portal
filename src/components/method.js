@@ -52,8 +52,8 @@ const cutString = function(original,before,after,index){
 //超时检测
 const timeoutDetection = function(){
   const nowTime = new Date().getTime();
-  //检测距离上次操作是否已经过去1200000毫秒(20分钟)
-  if(nowTime - DATA.Timestamp > 7200000){
+  //检测距离上次操作是否已经过去3600000毫秒(10分钟)
+  if(nowTime - DATA.Timestamp > 14400000){
     if( DATA.Timestamp === null ) { return false;}//数据清楚检测
     window.location.href="/";
     return true;
