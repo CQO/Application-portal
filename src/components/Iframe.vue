@@ -8,7 +8,6 @@
 <script>
 import Load from './brick/load'
 import TitleBar from './brick/Title'
-import { Order } from './Order.js'
 import { DATA } from "./method.js" 
 export default {
   components: {
@@ -38,7 +37,6 @@ export default {
   left: 0;
   height: 525px;
   width: 100%;
-  overflow: hidden;
   iframe{
     height: 100%;
     width: 100%;
