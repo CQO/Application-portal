@@ -54,7 +54,7 @@ export default {
       return;
     }
     //如果有缓存那么使用缓存
-    if(DATA.appList){ this.appList = DATA.appList }
+    if(DATA.appList){ this.appList = DATA.appList; this.installedAppID = DATA.installedAppID; }
     else{
       //生成默认应用列表
       this.appList = {

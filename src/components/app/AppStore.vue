@@ -49,7 +49,6 @@ export default {
     }
   },
   created(){
-    const _this = this
     //判断是否为debug模式
     if(DATA.debug){
       this.appStoreList = [
@@ -106,8 +105,8 @@ export default {
       })
       CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
     }
-    Order.$on('Search', function(message) {
-      _this.text = message
+    Order.$on('Search', (message) => {
+      this.text = message
     })
   },
   methods: {
@@ -126,7 +125,6 @@ export default {
       CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item,element){
-      const _this = this
       let appInformation = {
         id: item.id,
         type: item.type,

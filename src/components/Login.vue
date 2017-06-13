@@ -85,6 +85,7 @@ export default {
               DATA.orgTree = cache.orgTree
               DATA.orgList = cache.orgList
               DATA.appList = cache.appList
+              DATA.installedAppID = cache.installedAppID
             }
           })
           const appData = {
