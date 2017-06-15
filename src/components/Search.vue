@@ -2,30 +2,34 @@
 .search-box
   TitleBar(title='搜索',leftIcon="ok")
   .text-bar
-    input.text-input(v-model="searchText",type="text",name="fname")
+    input.text-input(v-model="searchText",type="text",name="fname",placeholder="输入人名关键字")
     .button(v-on:click="search") 搜索
   .search-result(v-if="searchResult")
     .search-result-title
-      span 共搜索到了{{searchResult.length}}条结果
+      span 共搜索到了1条结果
       .close.ico(@click.stop="clearSearch") &#xe697;
     vroll.organizationSearch(:options="{click: true,scrollbars: true}")
       Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
+  Load(v-if="searching")
 </template>
 
 <script>
 import TitleBar from './brick/Title'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
+import Load from './brick/load'
 import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
 export default {
   components: {
     TitleBar,
-    Organization
+    Organization,
+    Load
   },
   data () {
     return {
       searchText:"",
-      searchResult: null
+      searchResult: null,
+      searching: false
     }
   },
   beforeMount(){
@@ -33,7 +37,7 @@ export default {
     Order.$on('searchEnOS',(message) => {
       //定时器
       setTimeout( ()=>{
-        //this.searching = false
+        this.searching = false
         this.searchResult = message.entUsers
         this.searchText = ""
       },0); 
@@ -42,6 +46,7 @@ export default {
   methods: {
     search: function() {
       if(this.searchText){
+        this.searching = true
         const enOS = { enterId: 602, orgId: DATA.org.unitId + "" ,type: 2, name:this.searchText }
         CHANNEL.queryEnOS(JSON.stringify(enOS));
       }
@@ -75,6 +80,7 @@ export default {
         padding-left: 5px;
         background-color: #dbdbdb;
         font-size: 0.9rem;
+        border-radius: 5px;
     }
     .button {
         line-height: 30px;
@@ -95,8 +101,7 @@ export default {
   .search-result-title{
     height: 30px;
     line-height: 30px;
-    background-color: gainsboro;
-    color: ivory;
+    color: #ccc;
     padding-left: 10px;
     position: relitive;
     .close{

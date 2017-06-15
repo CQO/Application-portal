@@ -146,6 +146,7 @@ export default {
     line-height: 30px;
     font-size: 0.8rem;
     overflow-x: scroll;
+    background-color: #f2f2f2;
     .organization-item {
         color: #2c84ff;
         margin: 0 5px;
