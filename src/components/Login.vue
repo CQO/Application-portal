@@ -127,8 +127,8 @@ export default {
 <style lang='less' scoped>
 .logo {
   width: 180px;
-  margin: 20px auto;
-  padding-top: 20px;
+  margin: 0 auto;
+  padding: 20px 0;
   height: 180px;
   display: block;
   img {
