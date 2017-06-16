@@ -55,7 +55,7 @@ const timeoutDetection = function(){
   //检测距离上次操作是否已经过去3600000毫秒(10分钟)
   if(nowTime - DATA.Timestamp > 14400000){
     if( DATA.Timestamp === null ) { return false;}//数据清楚检测
-    window.location.href="/";
+    window.location.href="#/TimeOut";
     return true;
   }
   DATA.Timestamp = nowTime;

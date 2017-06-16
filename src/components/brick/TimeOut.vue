@@ -1,34 +1,37 @@
 <template>
 <div class="time-out-box">
-    <svg t="1492354556829" class="icon" style="" viewBox="0 0 1028 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4865" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="200">
-        <path d="M943.644188 827.215696l-351.176649-608.204749c-42.945473-74.36249-113.147387-74.36249-156.092861 0l-351.176649 608.204749c-42.946498 74.431167-7.811716 135.14955 78.012605 135.14955l702.420949 0C951.455904 962.36422 986.555836 901.645838 943.644188 827.215696zM466.187532 391.579035c12.621133-13.644108 28.66175-20.466675 48.233578-20.466675 19.580028 0 35.612444 6.75389 48.241778 20.194018 12.544256 13.473954 18.820484 30.325365 18.820484 50.587035 0 17.430551-26.19759 145.621205-34.929778 238.882082l-63.105666 0c-7.666162-93.259852-36.090106-221.450507-36.090106-238.882082C447.358847 421.938226 453.643275 405.155491 466.187532 391.579035zM561.76804 835.026386c-13.268949 12.928641-29.062535 19.375023-47.345906 19.375023-18.275171 0-34.076957-6.447407-47.346931-19.375023-13.235123-12.89379-19.818859-28.517221-19.818859-46.869269 0-18.249546 6.583736-34.043131 19.818859-47.278254 13.268949-13.235123 29.07176-19.852685 47.346931-19.852685 18.283371 0 34.076957 6.617562 47.345906 19.852685 13.235123 13.235123 19.827059 29.028709 19.827059 47.278254C581.595099 806.51019 575.003163 822.132597 561.76804 835.026386z" p-id="4866" fill="#5f9ea0"></path>
-    </svg>
-    <p class="text">您的会话已超时</p>
-    <a href="#/Main" class="button">重新登录</a>
+  <div class="img-box">
+    <img src="../../assets/timeOut.png"></img>
+  </div>
+  <p class="text">您的会话已超时</p>
+  <a href="#/" class="button">重新登录</a>
 </div>
 </template>
 
 <style scoped>
-    .time-out-box{
-        margin-top: 20%;
-    }
-    .text{
-        text-align: center;
-        color: lightseagreen;
-        font-size: 1.4rem;
-    }
-    .button{
-        text-align: center;
-        height: 50px;
-        line-height: 50px;
-        border: 1px solid cadetblue;
-        width: 200px;
-        margin: 0 auto;
-        border-radius: 5px;
-        margin-top: 30px;
-        background-color: deepskyblue;
-        color: white;
-        font-size: 1.4rem;
-        display: block;
-    }
+.text{
+    text-align: center;
+    color: lightseagreen;
+    font-size: 1.4rem;
+}
+.button{
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid cadetblue;
+    width: 200px;
+    margin: 0 auto;
+    border-radius: 5px;
+    margin-top: 30px;
+    background-color: deepskyblue;
+    color: white;
+    font-size: 1.4rem;
+    display: block;
+}
+.img-box {
+    height: 128px;
+    width: 128px;
+    margin: 0 auto;
+    padding: 20% 0;
+}
 </style>
