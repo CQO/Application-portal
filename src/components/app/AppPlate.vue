@@ -8,7 +8,8 @@
           v-touch.touch(tag="div",v-on:press="pressItem(item)",v-on:tap="openStart(item)")
           img(slot="icon",:src="item.icon")
           p {{item.name}}
-          .choose.ico(tag="div",v-show="item.isSelect") &#xe608;
+          .choose.ico(v-show="item.isSelect") &#xe608;
+          .needUp.ico(v-if="item.needUpdata",v-on:click="needUpdataClick") &#xe670;
         .clear
   .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
   Toast
@@ -51,7 +52,7 @@ export default {
         DATA.installedAppID = appData.installedAppID
         this.appList = appData.appList
       })
-      return;
+      return null;
     }
     //如果有缓存那么使用缓存
     if(DATA.appList){ this.appList = DATA.appList; this.installedAppID = DATA.installedAppID; }
@@ -80,7 +81,11 @@ export default {
       }
       DATA.appList = this.appList //存储
     }
-
+    Order.$once('getSystemAppList', (systemAppList) => {
+      log(systemAppList)
+      DATA.systemAppList = systemAppList
+    })
+    CHANNEL.getSystemAppList()
     //--------------------------------------------------处理在线应用--------------------------------------------------
     Order.$once('appInfos', (message) => {
       let newAppList = this.appList
@@ -88,13 +93,25 @@ export default {
       const appListData = JSON.stringify(DATA.appList)
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
+        //应用列表是否包含此分类检测
+        if(newAppList[className] === undefined) { 
+          newAppList[className] = []
+        }
         element.appInfoList.forEach(function(item) {
           if( appListData.indexOf(item.secret) < 0 ) {
-            if(item.type === 1) item.homeUrl = item.activityName
-            //应用列表是否包含此分类检测
-            if(newAppList[className] === undefined){ newAppList[className] = []}
             newAppList[className].push(item)
             this.installedAppID.push(item.id)
+          }
+          else {
+            if (item.type === 1) {
+              item.homeUrl = item.activityName
+              // 检测对应App列表里
+              newAppList[className].forEach(function(myAppList) {
+                if("V" + myAppList.version != item.version) {
+                  log('不匹配啦' + myAppList.version + item.version)
+                }
+              }, this);
+            }
           }
         }, this);
       }, this);
@@ -194,6 +211,9 @@ export default {
       }
       this.selectNumber = 0
       Order.$emit('Toast', '应用卸载成功！');
+    },
+    needUpdataClick:function() {
+      window.location.href='#/Store'
     }
   },
   activated(){
@@ -267,5 +287,17 @@ export default {
   z-index: 999;
   font-size: 1.2rem;
   box-shadow: 1px 2px 1px #888888;
+}
+.needUp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: honeydew;
+  background-color: rgba(0, 0, 0, 0.5);
+  line-height: 45px;
+  text-align: center;
+  font-size: 2rem;
 }
 </style>

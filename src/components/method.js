@@ -101,7 +101,8 @@ let DATA = {
   selectItem: null,
   appList:null,
   installedAppID: null,
-  iframeURL: null
+  iframeURL: null,
+  systemAppList: null
 };
 
 let CHANNEL = null
