@@ -98,17 +98,23 @@ export default {
           newAppList[className] = []
         }
         element.appInfoList.forEach(function(item) {
+          log(item)
+          if (item.type === 1) { item.homeUrl = item.activityName }
           if( appListData.indexOf(item.secret) < 0 ) {
             newAppList[className].push(item)
             this.installedAppID.push(item.id)
           }
           else {
+            // 如果列表中有 此应用 并且该应用是一个原生应用
             if (item.type === 1) {
-              item.homeUrl = item.activityName
               // 检测对应App列表里
+              log(item)
               newAppList[className].forEach(function(myAppList) {
-                if("V" + myAppList.version != item.version) {
-                  log('不匹配啦' + myAppList.version + item.version)
+                if(item.packageName === myAppList.packageName) {
+                  log('一样')
+                  if(myAppList.version != item.version) {
+                    log('不匹配啦' + myAppList.version + item.version)
+                  }
                 }
               }, this);
             }
