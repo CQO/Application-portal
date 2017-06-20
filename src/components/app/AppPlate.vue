@@ -82,7 +82,6 @@ export default {
       DATA.appList = this.appList //存储
     }
     Order.$once('getSystemAppList', (systemAppList) => {
-      log(systemAppList)
       DATA.systemAppList = systemAppList
     })
     CHANNEL.getSystemAppList()
@@ -98,22 +97,33 @@ export default {
           newAppList[className] = []
         }
         element.appInfoList.forEach(function(item) {
-          log(item)
           if (item.type === 1) { item.homeUrl = item.activityName }
+          // 判断缓存应用列表里是否有 此应用
           if( appListData.indexOf(item.secret) < 0 ) {
-            newAppList[className].push(item)
-            this.installedAppID.push(item.id)
+            // 判断是否为原生应用
+            if (item.type === 1) {
+              log(DATA.systemAppList)
+              log(item.packageName)
+              // 判断本地应用列表是否有该应用
+              if (DATA.systemAppList[item.packageName]) {
+                newAppList[className].push(item)
+                this.installedAppID.push(item.id)
+              }
+            }
+            else {
+              newAppList[className].push(item)
+              this.installedAppID.push(item.id)
+            }
           }
           else {
             // 如果列表中有 此应用 并且该应用是一个原生应用
             if (item.type === 1) {
               // 检测对应App列表里
-              log(item)
-              newAppList[className].forEach(function(myAppList) {
+              newAppList[className].forEach(function(myAppList,index) {
                 if(item.packageName === myAppList.packageName) {
-                  log('一样')
-                  if(myAppList.version != item.version) {
-                    log('不匹配啦' + myAppList.version + item.version)
+                  // 如果发现版本号不一致 那么将它标记为需要更新
+                  if(myAppList.version == item.version) {
+                    this.appList[className][index].needUpdata = true
                   }
                 }
               }, this);

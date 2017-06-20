@@ -12,8 +12,9 @@
         .info
           p.name {{item.name}}
           p.detail 版本号:{{item.version}}
-        .button.open(v-if="item.installed") 已安装
-        .button.down(v-else,v-on:click="installApp(item,$event)") 安装
+        .button.open(v-if="item.installed === 1") 已安装
+        .button.down(v-if="item.installed === 0",v-on:click="installApp(item,$event)") 安装
+        .button.down(v-if="item.installed === 2",v-on:click="needDown(item,$event)") 需下载
   .no-item(v-if="showNoItem") 
     p.ico &#xe62a;
     p.text 没有应用
@@ -80,7 +81,7 @@ export default {
       CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
-        const appInfoList = message.appStore.appInfoList
+        let appInfoList = message.appStore.appInfoList
         if(appInfoList.length === 0) {
           setTimeout(()=>{
             this.leftIcon = "no"
@@ -88,15 +89,38 @@ export default {
           })
         }
         else {
-          let newList = []
-          appInfoList.forEach((element)=> {
-            newList.push(element)
-          }, this);
+          appInfoList.forEach((item, index) => {
+            // 如果是原生应用
+            if(item.type === 1) {
+              log(this.installedAppID)
+              // 判断是否安装这个应用
+              if (this.installedAppID.indexOf(item.id) > -1) {
+                // 判断本地应用列表是否有该应用
+                if(DATA.systemAppList[item.packageName]) {
+                  appInfoList[index].installed = 1
+                }
+                else {
+                  appInfoList[index].installed = 2
+                }
+              }
+              else {
+                appInfoList[index].installed = 0
+              }
+            }
+            else {
+              if (this.installedAppID.indexOf(item.id) > -1) {
+                appInfoList[index].installed = 1
+              }
+              else {
+                appInfoList[index].installed = 0
+              }
+            }
+          })
+          log(appInfoList)
           //存储应用列表信息
-          DATA.appInfoList = newList
-          
+          DATA.appInfoList = appInfoList
           setTimeout(() => {
-            this.appStoreList = newList
+            this.appStoreList = appInfoList
             this.leftIcon = "no"
             const iscroll = this.$refs.iscroll
             iscroll.refresh()
@@ -170,6 +194,44 @@ export default {
         localforage.setItem('appData', appData)
       })
     },
+    needDown:function(item,element){
+      let appInformation = {
+        id: item.id,
+        type: item.type,
+        name: item.name,
+        icon: item.icon,
+        packageName: item.packageName,
+        status: 1
+      }
+      if( this.downloading ) { Order.$emit('Toast', '正在下载请稍后'); return;}
+      this.downloading = true
+      item.homeUrl = item.activityName
+      Order.$on('progress', (message)=> {
+        element.target.innerHTML = `${message.progress}%`
+      })
+      Order.$once('downloadApp', (message)=> {
+        Order.$off("progress")
+        setTimeout(()=>{
+          this.downloading = false
+          DATA.installedAppID.push(item.id)
+          CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+        },0)
+      })
+      CHANNEL.downloadApp(item.packageName,item.downloadUrl)
+      //清除它的选中状态
+      item.isSelect = false
+      item.needUpdata = false
+      DATA.appList.forEach((thisApp, index) => {
+        if(item.packageName === thisApp.packageName) {
+          DATA.appList[index] = item
+        }
+      })
+      localforage.getItem("appData",(err,appData) => {
+        appData.appList = DATA.appList
+        appData.installedAppID = DATA.installedAppID
+        localforage.setItem('appData', appData)
+      })
+    },
     click:function(key){
       return this.select == key
     }
@@ -184,7 +246,6 @@ export default {
         if(this.select === "all" || data.classify == this.select){
           if(data.status === 1) {
             if(this.text =="" || data.name.indexOf(this.text) > -1) {
-              data.installed = this.installedAppID.indexOf(data.id) > -1
               newList[item] = data
             }
           }
