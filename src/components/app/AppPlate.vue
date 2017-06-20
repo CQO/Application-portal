@@ -9,7 +9,6 @@
           img(slot="icon",:src="item.icon")
           p {{item.name}}
           .choose.ico(v-show="item.isSelect") &#xe608;
-          .needUp.ico(v-if="item.needUpdata",v-on:click="needUpdataClick") &#xe670;
         .clear
   .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
   Toast
@@ -40,7 +39,8 @@ export default {
       selectNumber:0, //长按选中个数
       appData: null,
       appList: {},
-      installedAppID: []
+      installedAppID: [],
+      updateNumber: 0
     }
   },
   mounted(){
@@ -92,42 +92,20 @@ export default {
       const appListData = JSON.stringify(DATA.appList)
       message.appInfos.forEach(function(element) {
         const className = element.appClassify.classifyName //应用分类名称
-        //应用列表是否包含此分类检测
-        if(newAppList[className] === undefined) { 
-          newAppList[className] = []
-        }
         element.appInfoList.forEach(function(item) {
-          if (item.type === 1) { item.homeUrl = item.activityName }
-          // 判断缓存应用列表里是否有 此应用
-          if( appListData.indexOf(item.secret) < 0 ) {
-            // 判断是否为原生应用
-            if (item.type === 1) {
-              log(DATA.systemAppList)
-              log(item.packageName)
-              // 判断本地应用列表是否有该应用
-              if (DATA.systemAppList[item.packageName]) {
-                newAppList[className].push(item)
-                this.installedAppID.push(item.id)
+          if(item.type === 1) {
+            item.homeUrl = item.activityName
+            if(DATA.systemAppList[item.packageName]) {
+              if(DATA.systemAppList[item.packageName].ver != item.version) {
+                this.updateNumber++
               }
             }
-            else {
-              newAppList[className].push(item)
-              this.installedAppID.push(item.id)
-            }
           }
-          else {
-            // 如果列表中有 此应用 并且该应用是一个原生应用
-            if (item.type === 1) {
-              // 检测对应App列表里
-              newAppList[className].forEach(function(myAppList,index) {
-                if(item.packageName === myAppList.packageName) {
-                  // 如果发现版本号不一致 那么将它标记为需要更新
-                  if(myAppList.version == item.version) {
-                    this.appList[className][index].needUpdata = true
-                  }
-                }
-              }, this);
-            }
+          if( appListData.indexOf(item.secret) < 0 ) {
+            //应用列表是否包含此分类检测
+            if(newAppList[className] === undefined){ newAppList[className] = []}
+            newAppList[className].push(item)
+            this.installedAppID.push(item.id)
           }
         }, this);
       }, this);
@@ -227,9 +205,6 @@ export default {
       }
       this.selectNumber = 0
       Order.$emit('Toast', '应用卸载成功！');
-    },
-    needUpdataClick:function() {
-      window.location.href='#/Store'
     }
   },
   activated(){
@@ -303,17 +278,5 @@ export default {
   z-index: 999;
   font-size: 1.2rem;
   box-shadow: 1px 2px 1px #888888;
-}
-.needUp {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: honeydew;
-  background-color: rgba(0, 0, 0, 0.5);
-  line-height: 45px;
-  text-align: center;
-  font-size: 2rem;
 }
 </style>

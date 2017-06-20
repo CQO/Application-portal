@@ -213,8 +213,7 @@ export default {
         Order.$off("progress")
         setTimeout(()=>{
           this.downloading = false
-          DATA.installedAppID.push(item.id)
-          CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
+          CHANNEL.installSopApp(item.packageName)
         },0)
       })
       CHANNEL.downloadApp(item.packageName,item.downloadUrl)
@@ -226,6 +225,7 @@ export default {
           DATA.appList[index] = item
         }
       })
+
       localforage.getItem("appData",(err,appData) => {
         appData.appList = DATA.appList
         appData.installedAppID = DATA.installedAppID
