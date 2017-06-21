@@ -10,6 +10,9 @@
           p {{item.name}}
           .choose.ico(v-show="item.isSelect") &#xe608;
         .clear
+  .needUp(v-if="updateNumber > 0",v-on:click="needUpdataClick")
+    .upData.ico &#xe670;
+      .number {{updateNumber}}
   .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
   Toast
 </template>
@@ -102,6 +105,9 @@ export default {
             }
           }
           if( appListData.indexOf(item.secret) < 0 ) {
+            if(item.type === 1) {
+              this.updateNumber++
+            }
             //应用列表是否包含此分类检测
             if(newAppList[className] === undefined){ newAppList[className] = []}
             newAppList[className].push(item)
@@ -205,6 +211,9 @@ export default {
       }
       this.selectNumber = 0
       Order.$emit('Toast', '应用卸载成功！');
+    },
+    needUpdataClick:function() {
+      window.location.href='#/Store'
     }
   },
   activated(){
@@ -278,5 +287,27 @@ export default {
   z-index: 999;
   font-size: 1.2rem;
   box-shadow: 1px 2px 1px #888888;
+}
+.needUp {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  .upData {
+    font-size: 2.5rem;
+    color: burlywood;
+    position: relative;
+  }
+  .number {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    font-size: 15px;
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+  }
 }
 </style>
