@@ -15,6 +15,7 @@
         .button.open(v-if="item.installed === 1") 已安装
         .button.down(v-if="item.installed === 0",v-on:click="installApp(item,$event)") 安装
         .button.down(v-if="item.installed === 2",v-on:click="needDown(item,$event)") 需下载
+        .button.down(v-if="item.installed === 3",v-on:click="needDown(item,$event)") 更新
   .no-item(v-if="showNoItem") 
     p.ico &#xe62a;
     p.text 没有应用
@@ -50,7 +51,6 @@ export default {
     }
   },
   created(){
-    log(DATA)
     //判断是否为debug模式
     if(DATA.debug){
       this.appStoreList = [
@@ -82,9 +82,6 @@ export default {
       CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
-        log("sdsds")
-        log(DATA)
-        log(DATA.installedAppID)
         let appInfoList = message.appStore.appInfoList
         if(appInfoList.length === 0) {
           setTimeout(()=>{
@@ -97,21 +94,21 @@ export default {
             // 如果是原生应用
             if(item.type === 1) {
               // 判断是否安装这个应用
-              log(this.installedAppID)
+              //log(this.installedAppID)
               if (this.installedAppID.indexOf(item.id) > -1) {
                 // 判断本地应用列表是否有该应用
-                log("2")
                 if(DATA.systemAppList[item.packageName]) {
-                  log("3")
-                  appInfoList[index].installed = 1
+                  if(DATA.systemAppList[item.packageName].version != item.type) {
+                    appInfoList[index].installed = 3
+                  } else {
+                    appInfoList[index].installed = 1
+                  }
                 }
                 else {
-                  log("4")
                   appInfoList[index].installed = 2
                 }
               }
               else {
-                log("5")
                 appInfoList[index].installed = 0
               }
             }
@@ -124,8 +121,6 @@ export default {
               }
             }
           })
-          log(appInfoList)
-          log("gggggggg")
           //存储应用列表信息
           DATA.appInfoList = appInfoList
           setTimeout(() => {
