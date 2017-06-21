@@ -50,6 +50,7 @@ export default {
     }
   },
   created(){
+    log(DATA)
     //判断是否为debug模式
     if(DATA.debug){
       this.appStoreList = [
@@ -81,6 +82,9 @@ export default {
       CHANNEL.queryAppStore(JSON.stringify({type:"4"}))
       //----------------------------应用列表处理----------------------------
       Order.$once('appStores', (message) => {
+        log("sdsds")
+        log(DATA)
+        log(DATA.installedAppID)
         let appInfoList = message.appStore.appInfoList
         if(appInfoList.length === 0) {
           setTimeout(()=>{
@@ -92,18 +96,22 @@ export default {
           appInfoList.forEach((item, index) => {
             // 如果是原生应用
             if(item.type === 1) {
-              log(this.installedAppID)
               // 判断是否安装这个应用
+              log(this.installedAppID)
               if (this.installedAppID.indexOf(item.id) > -1) {
                 // 判断本地应用列表是否有该应用
+                log("2")
                 if(DATA.systemAppList[item.packageName]) {
+                  log("3")
                   appInfoList[index].installed = 1
                 }
                 else {
+                  log("4")
                   appInfoList[index].installed = 2
                 }
               }
               else {
+                log("5")
                 appInfoList[index].installed = 0
               }
             }
@@ -117,6 +125,7 @@ export default {
             }
           })
           log(appInfoList)
+          log("gggggggg")
           //存储应用列表信息
           DATA.appInfoList = appInfoList
           setTimeout(() => {

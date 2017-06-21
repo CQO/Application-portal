@@ -25,13 +25,12 @@ import Toast from '../brick/Toast'
 import localforage from 'localforage'
 import { QWebChannel } from  "../QTWebChannel"
 
-
 //引入图片资源
 const $TGYY = require('../../assets/TGYY.png'),
-      $XXFB    = require('../../assets/XXFB.png'),
-      $YJ      = require('../../assets/YJ.png'),
-      $XTBG    = require('../../assets/XTBG.png'),
-      $GWGL    = require('../../assets/GWGL.png');
+      $XXFB = require('../../assets/XXFB.png'),
+      $YJ   = require('../../assets/YJ.png'),
+      $XTBG = require('../../assets/XTBG.png'),
+      $GWGL = require('../../assets/GWGL.png');
 export default {
   components: {
     AppTitle,
