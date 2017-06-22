@@ -67,46 +67,46 @@ export default {
 
 <style lang='less' scoped>
 .personal-information{
-    .title{
-      height: 30px;
-      line-height: 30px;
-      color: #a8a8a8;
-      padding-left: 10px;
-      font-size: 0.8rem;
-    }
-    .quit{
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        background-color: white;
-        border: 1px solid #e5e5e5;
-        margin: 20px 0;
-    }
-    .quit:active{
-        background-color: aqua;
-    }
-    .information{
-      height: 61px;
-      display: flex;
+  .title{
+    height: 30px;
+    line-height: 30px;
+    color: #a8a8a8;
+    padding-left: 10px;
+    font-size: 0.8rem;
+  }
+  .quit{
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
       background-color: white;
-      img{
-        height: 45px;
-        width: 45px;
-        margin: 8px;
-        border-radius: 5px;
-      }
-      .name{
-        width: calc(~"100% - 90px");
-        line-height: 61px;
-        font-size: 0.9rem;
-      }
-      .ico{
-        line-height: 60px;
-        color: #a4a9b2;
-      }
+      border: 1px solid #e5e5e5;
+      margin: 20px 0;
+  }
+  .quit:active{
+      background-color: aqua;
+  }
+  .information{
+    height: 61px;
+    display: flex;
+    background-color: white;
+    img{
+      height: 45px;
+      width: 45px;
+      margin: 8px;
+      border-radius: 5px;
     }
-    .information:active{
-        background-color: aqua;
+    .name{
+      width: calc(~"100% - 90px");
+      line-height: 61px;
+      font-size: 0.9rem;
     }
+    .ico{
+      line-height: 60px;
+      color: #a4a9b2;
+    }
+  }
+  .information:active{
+      background-color: aqua;
+  }
 }
 </style>

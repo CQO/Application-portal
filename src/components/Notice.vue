@@ -21,8 +21,8 @@ import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
 import localforage from 'localforage'
-import {get, cutString, timeoutDetection, DATA, STATE, log, CHANNEL, dataDetection} from "./method.js" 
-//引入图片资源
+import { get, cutString, timeoutDetection, DATA, STATE, log, CHANNEL, dataDetection } from "./method.js" 
+// 引入图片资源
 const $XXFB    = require('../assets/XTBG.png'),
       $AQYJ    = require('../assets/YJ.png'),
       $GWGL    = require('../assets/GWGL.png');
@@ -37,9 +37,9 @@ export default {
   data () {
     return {
       noticeList: {
-        "XXFB":null,
-        "GWGL":null,
-        "AQYJ":null
+        "XXFB": null,
+        "GWGL": null,
+        "AQYJ": null
       },
       thread: 0
     }
@@ -55,28 +55,37 @@ export default {
         notice : '99+',
         url    : 'owo.help'
       }
-      this.$set(this.noticeList,"XXFB",noticeData)
+      this.thread++
+      this.$set(this.noticeList, "XXFB", noticeData)
       return
     }
+
+    // const data = {
+    //   userID: DATA.org.usbkeyidentification + "",
+    //   appID: 7616946172 + "",
+    //   accountType: 2 + ""
+    // }
+    // Order.$once('getLoginAuthCode', (message)=> {
+    //   log(message)
+    // })
+    // CHANNEL.getLoginAuthCode(JSON.stringify(data))
+
     //---------------------检测------------------------
     if(timeoutDetection()) { return null } //超时检测
     dataDetection() //数据被清除检测
     //------------------------------------------------
-    //监听客户端发来的程序被激活事件
+    // 监听客户端发来的程序被激活事件
     Order.$on('refreshData', (message)=> {
-      console.log(message)
-      this.getMail()
-      //集团用户检测
-      if(DATA.org.unitId == "1") { this.getBacklog() }
+      this.getMail() // 获取邮件
+      if(DATA.org.unitId == "1") { this.getBacklog() } // 集团用户检测
       else{ this.getBumph() }
     })
   },
   activated(){
     if(DATA.debug) return
     this.getMail()
-    //集团用户检测
-    if(DATA.org.unitId == "1") { this.getBacklog() }
-    else{ this.getBumph() }
+    if(DATA.org.unitId == "1") { this.getBacklog() } // 集团用户检测
+    else { this.getBumph() }
   },
   methods:{
     openURL: function(item) {
@@ -286,12 +295,6 @@ export default {
   li:active{
     background-color: #4899E0;
     color: #FFF;
-  }
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
-  }
-  .fade-enter, .fade-leave-active {
-    opacity: 0
   }
 }
 </style>

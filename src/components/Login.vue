@@ -46,7 +46,7 @@ export default {
     Loading
   },
   mounted(){
-    if(this.$route.params.name) this.userName = this.$route.params.name //智能保存用户名
+    if(this.$route.params.name) this.userName = this.$route.params.name // 判断是否有保存的用户名
   },
   methods: {
     preLogin: function() { //预登录函数

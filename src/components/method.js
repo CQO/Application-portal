@@ -94,7 +94,7 @@ let DATA = {
     phone: null,
     telPhone: null 
   },
-  debug: false,
+  debug: true,
   Timestamp: null,
   orgList: {},
   orgTree: [],
