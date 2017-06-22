@@ -100,7 +100,7 @@ let DATA = {
   orgTree: [],
   selectItem: null,
   appList:null,
-  installedAppID: null,
+  installedAppID: ["100004","100003","100002"],
   iframeURL: null,
   systemAppList: null
 };

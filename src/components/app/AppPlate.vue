@@ -20,7 +20,7 @@
 <script>
 import AppTitle from '../brick/AppTitle'
 import { Order } from '../Order.js'
-import { timeoutDetection, DATA, log, recover, CHANNEL } from "../method.js" 
+import { timeoutDetection, DATA, log, recover, dataDetection, CHANNEL } from "../method.js" 
 import Toast from '../brick/Toast'
 import localforage from 'localforage'
 import { QWebChannel } from  "../QTWebChannel"
@@ -40,26 +40,7 @@ export default {
     return {
       selectNumber: 0, //长按选中个数
       appData: null,
-      appList: {},
-      updateNumber: 0
-    }
-  },
-  mounted(){
-    //防止内存数据被清空
-    if(!DATA.org.enname === "测试用户"){
-      localforage.getItem("appData",(err,appData) => {
-        DATA.org = appData.org
-        DATA.appList = appData.appList
-        DATA.installedAppID = appData.installedAppID
-        this.appList = appData.appList
-      })
-      return null;
-    }
-    //如果有缓存那么使用缓存
-    if(DATA.appList){ this.appList = DATA.appList; }
-    else{
-      //生成默认应用列表
-      this.appList = {
+      appList: {
         "办公应用": [
           { id:100004, type: 2 , name: "安全邮件", icon: $YJ, homeUrl: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
           { id:100003, type: 2 , name: "信息发布", icon: $XXFB, homeUrl: 'http://info.casic.cs/jeecms2/index/mobile/', main:true}
@@ -67,8 +48,16 @@ export default {
         "通讯应用":[
           { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true }
         ]
-      }
-      DATA.installedAppID = ["100004","100003","100002"]
+      },
+      updateNumber: 0
+    }
+  },
+  mounted(){
+    //防止内存数据被清空
+    dataDetection()
+    //如果有缓存那么使用缓存
+    if(DATA.appList){ this.appList = DATA.appList; }
+    else{
       //--------------------------------------------------集团用户判断--------------------------------------------------
       if(DATA.org.unitId == "1"){
         const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
