@@ -10,9 +10,6 @@
           p {{item.name}}
           .choose.ico(v-show="item.isSelect") &#xe608;
         .clear
-  .needUp(v-if="updateNumber > 0",v-on:click="needUpdataClick")
-    .upData.ico &#xe670;
-      .number {{updateNumber}}
   .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
   Toast
 </template>
@@ -48,8 +45,7 @@ export default {
         "通讯应用":[
           { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true }
         ]
-      },
-      updateNumber: 0
+      }
     }
   },
   mounted(){
@@ -85,16 +81,8 @@ export default {
         element.appInfoList.forEach(function(item) {
           if(item.type === 1) {
             item.homeUrl = item.activityName
-            if(DATA.systemAppList[item.packageName]) {
-              if(DATA.systemAppList[item.packageName].ver != item.version) {
-                this.updateNumber++
-              }
-            }
           }
           if( appListData.indexOf(item.secret) < 0 ) {
-            if(item.type === 1) {
-              this.updateNumber++
-            }
             //应用列表是否包含此分类检测
             if(newAppList[className] === undefined){ newAppList[className] = []}
             newAppList[className].push(item)
