@@ -38,10 +38,9 @@ export default {
   },
   data () {
     return {
-      selectNumber:0, //长按选中个数
+      selectNumber: 0, //长按选中个数
       appData: null,
       appList: {},
-      installedAppID: [],
       updateNumber: 0
     }
   },
@@ -57,7 +56,7 @@ export default {
       return null;
     }
     //如果有缓存那么使用缓存
-    if(DATA.appList){ this.appList = DATA.appList; this.installedAppID = DATA.installedAppID; }
+    if(DATA.appList){ this.appList = DATA.appList; }
     else{
       //生成默认应用列表
       this.appList = {
@@ -69,17 +68,17 @@ export default {
           { id:100002, type: 1 , name: "天工圆圆", icon:$TGYY, homeUrl: "linkdood:showlinkdood?id={{idCard}}", main:true }
         ]
       }
-      this.installedAppID = ["100004","100003","100002"]
+      DATA.installedAppID = ["100004","100003","100002"]
       //--------------------------------------------------集团用户判断--------------------------------------------------
       if(DATA.org.unitId == "1"){
         const officeAppUrl = 'http://10.152.36.26:8080/portal/menu.jsp?userName={{userName}}&PID={{idCard}}&webService=&SessionID='
         this.appList["办公应用"].unshift({ id:100000, type: 2, name: "协同办公", icon: $XTBG, homeUrl: officeAppUrl, main: true })
-        this.installedAppID.push("100000")
+        DATA.installedAppID.push("100000")
       }
       else{
         const GWGLURL = 'casicoa:showOA?pid={{idCard}}&sessionID=54545333'
         this.appList["办公应用"].unshift({ id:100001, type: 1, name: "公文管理", icon: $GWGL, homeUrl: GWGLURL, main: true })
-        this.installedAppID.push("100000")
+        DATA.installedAppID.push("100000")
       }
       DATA.appList = this.appList //存储
     }
@@ -110,12 +109,11 @@ export default {
             //应用列表是否包含此分类检测
             if(newAppList[className] === undefined){ newAppList[className] = []}
             newAppList[className].push(item)
-            this.installedAppID.push(item.id)
+            DATA.installedAppID.push(item.id)
           }
         }, this);
       }, this);
       DATA.appList = this.appList
-      DATA.installedAppID = this.installedAppID 
       //存储数据
       setTimeout(() => {
         this.appList = {}
@@ -125,7 +123,7 @@ export default {
         localforage.getItem("appData",(err,appData) => {
           appData.org = DATA.org
           appData.appList = newAppList
-          appData.installedAppID = this.installedAppID
+          appData.installedAppID = DATA.installedAppID
           localforage.setItem('appData', appData)
         })
       }, 0);
@@ -177,7 +175,7 @@ export default {
     },
     delateApp:function(){
       let   mark    = false ;  //用于标记用户是否有删除app
-      this.installedAppID = [] //清空已安装应用列表
+      DATA.installedAppID = [] //清空已安装应用列表
       let newList = {}
       for(let item in DATA.appList){
         DATA.appList[item].forEach(function(element,index) {
@@ -190,13 +188,12 @@ export default {
           else{
             if(!newList[item])  newList[item] = []
             newList[item].push(element)
-            this.installedAppID.push(element.id)
+            DATA.installedAppID.push(element.id)
           }
         }, this);
       }
       if(mark) {  //如果标记mark为真，那就证明有应用被删除了，这时候把新的应用列表写到数据库
-        DATA.installedAppID = this.installedAppID
-        Order.$emit("delateApp", this.installedAppID);
+        Order.$emit("delateApp", DATA.installedAppID);
         DATA.appList = newList
         localforage.getItem("appData",(err,appData) => {
           appData.appList = newList
