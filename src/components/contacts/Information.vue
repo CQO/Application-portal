@@ -14,15 +14,15 @@
       .item 固定电话
       .text {{$route.params.telPhone}}
       .call-box
-        .tel.ico(v-on:click.stop="callTel") &#xe603;
+        .tel.ico(v-on:click="callTel") &#xe603;
       
     .Pan42
       .item 手机号码
       .text {{$route.params.enMobile}}
       .call-box
-        .phone.ico(v-on:click.stop="call") &#xe604;
-        .chat.ico(v-on:click.stop="yuanyuan") &#xe60a;
-        .mess.ico(v-on:click.stop="sendMes") &#xe619;
+        .phone.ico(v-on:click="call") &#xe604;
+        .chat.ico(v-on:click="yuanyuan") &#xe60a;
+        .mess.ico(v-on:click="sendMes") &#xe619;
 </template>
 
 <script>

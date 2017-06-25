@@ -11,14 +11,14 @@
       .password
         .ico &#xe623;
         input(type="password",v-model="password",placeholder="密码")
-  .button(@click.stop="preLogin()",:class="{ hide: selectList }") 登录
+  .button(@click="preLogin()",:class="{ hide: selectList }") 登录
   .step
     .ico.one &#xe602;
     .ico.two &#xe602;
   .select-list(v-show="selectList")
     .title
       span.ok 共查找到 {{orgNumber}} 个组织
-      .close.ico(@click.stop="selectList = null") &#xe697;
+      .close.ico(@click="selectList = null") &#xe697;
     ul.list(ref="iscroll",:options="{preventDefault: false}")
       li(v-for="item in selectList",v-on:click="login(item)") {{item.unitName}}
   Loading(text="正在登录")

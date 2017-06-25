@@ -90,37 +90,6 @@ export default {
           })
         }
         else {
-          appInfoList.forEach((item, index) => {
-            // 如果是原生应用
-            if(item.type === 1) {
-              // 判断是否安装这个应用
-              //log(this.installedAppID)
-              if (this.installedAppID.indexOf(item.id) > -1) {
-                // 判断本地应用列表是否有该应用
-                if(DATA.systemAppList[item.packageName]) {
-                  if(DATA.systemAppList[item.packageName].version != item.type) {
-                    appInfoList[index].installed = 3
-                  } else {
-                    appInfoList[index].installed = 1
-                  }
-                }
-                else {
-                  appInfoList[index].installed = 2
-                }
-              }
-              else {
-                appInfoList[index].installed = 0
-              }
-            }
-            else {
-              if (this.installedAppID.indexOf(item.id) > -1) {
-                appInfoList[index].installed = 1
-              }
-              else {
-                appInfoList[index].installed = 0
-              }
-            }
-          })
           //存储应用列表信息
           DATA.appInfoList = appInfoList
           setTimeout(() => {
@@ -153,16 +122,7 @@ export default {
       CHANNEL.opensopApp(JSON.stringify(app1))
     },
     installApp: function(item,element){
-      let appInformation = {
-        id: item.id,
-        type: item.type,
-        name: item.name,
-        icon: item.icon,
-        packageName: item.packageName,
-        status: 1
-      }
       if(item.type === 2){ //判断是否是H5应用
-        appInformation.homeUrl = item.homeUrl
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
         DATA.installedAppID.push(item.id)
       }
@@ -240,6 +200,9 @@ export default {
       return this.select == key
     }
   },
+  mounted() {
+    this.installedAppID = DATA.installedAppID
+  },
   computed: {
     //筛选应用
     classification: function () {
@@ -248,9 +211,33 @@ export default {
         const data = this.appStoreList[item]
         //判断应用列表的类型是否和选择的类型一致
         if(this.select === "all" || data.classify == this.select){
+          // 判断应用是否标记为可用
           if(data.status === 1) {
+            // 判断是否有搜索内容
             if(this.text =="" || data.name.indexOf(this.text) > -1) {
-              newList[item] = data
+              // 判断应用是否为原生应用
+              if(item.type === 1) {
+                if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
+                else {
+                  // 判断本地应用列表是否有该应用
+                  if(DATA.systemAppList[data.packageName]) {
+                    // 判断本地已安装版本号 是否和 网络最新版本一致
+                    if(DATA.systemAppList[item.packageName].version != item.type) {
+                      appInfoList[index].installed = 3
+                    } else {
+                      appInfoList[index].installed = 1
+                    }
+                  }
+                  else {
+                    appInfoList[index].installed = 2
+                  }
+                }
+              }
+              else {
+                if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
+                else data.installed = 1
+                newList[item] = data
+              }
             }
           }
         }

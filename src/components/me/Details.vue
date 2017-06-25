@@ -9,7 +9,7 @@
       .item 姓名
       .text {{name}}
       .ico.enter &#xe607;
-    .P42(v-on:click.stop="showCheck = true")
+    .P42(v-on:click="showCheck = true")
       .item 性别
       .text {{gender}}
       .ico.enter &#xe607;
@@ -23,13 +23,13 @@
     .title
       .button(v-on:click="changeGender") 确定
     .gender-box
-      .item(v-on:click.stop = "id = 0")
+      .item(v-on:click = "id = 0")
         span 保密
         .ico(v-show="id == 0") &#xe609;
-      .item(v-on:click.stop = "id = 1")
+      .item(v-on:click = "id = 1")
         span 男
         .ico(v-show="id == 1") &#xe609;
-      .item(v-on:click.stop = "id = 2")
+      .item(v-on:click = "id = 2")
         span 女
         .ico(v-show="id == 2") &#xe609;
   Toast

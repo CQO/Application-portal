@@ -12,7 +12,7 @@ p,ul{
 }
 /*全局样式*/
 @font-face {
-  font-family: 'iconfont';  /* project id 252571 */
+  font-family: 'iconfont'; 
   src: url('./assets/font/iconfont.woff') format('woff');
 }
 .hidden{ visibility: hidden; }

@@ -14,7 +14,6 @@
 import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
 import { DATA, log, CHANNEL } from "../method.js" 
-import localforage from 'localforage'
 
 export default {
   components: {
@@ -46,11 +45,6 @@ export default {
         url:'http://owo.ink/application/',
         img:'http://myweb-10017157.cossh.myqcloud.com/2017/0518/1.png',
         title: '北京下雪了1'
-      },
-      {
-        url:'http://owo.ink/application/',
-        img:'http://myweb-10017157.cossh.myqcloud.com/2017/0518/1.png',
-        title: '北京下雪了2'
       }]
       //this.rightIcon = 'add'
       return
