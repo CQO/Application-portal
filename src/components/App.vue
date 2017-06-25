@@ -3,7 +3,6 @@
   .content-box
     SwiperBox
     AppPlate
-    .placeholder
   BottomBar(index="1")
 </template>
 

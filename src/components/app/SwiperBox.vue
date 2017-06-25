@@ -6,7 +6,8 @@
       .item(v-on:click="clickSwipe(slide)")
         img(:src="slide.img")
         .info {{slide.title}}
-  .swiper-pagination
+  .swiper-pagination(v-if="showList")
+    .item(v-for="n in showList.length", :class="{ active: swipeindex === n }")
 </template>
 
 <script>
@@ -23,13 +24,18 @@ export default {
     return {
       showList: null,
       rightIcon: 'loading',
+      swipeindex: 1,
       swipeOptions: {
         startSlide: 0,
         speed: 300,
         auto: 4000,
         continuous: true,
         disableScroll: false,
-        stopPropagation: false
+        stopPropagation: false,
+        callback: () => {
+          if (this.swipeindex === this.showList.length) this.swipeindex = 1
+          else this.swipeindex ++
+        },
       }
     }
   },
@@ -39,7 +45,12 @@ export default {
       this.showList = [{
         url:'http://owo.ink/application/',
         img:'http://myweb-10017157.cossh.myqcloud.com/2017/0518/1.png',
-        title: '北京下雪了'
+        title: '北京下雪了1'
+      },
+      {
+        url:'http://owo.ink/application/',
+        img:'http://myweb-10017157.cossh.myqcloud.com/2017/0518/1.png',
+        title: '北京下雪了2'
       }]
       //this.rightIcon = 'add'
       return
@@ -75,15 +86,29 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  .swiper, .item, img{
+  .swiper .item,.swiper img{
     height: 180px;
     width: 100%;
   }
 }
 .swiper-pagination{
   position: absolute;
-  bottom: 5px;
+  display: flex;
+  height: 10px;
   right: 5px;
+  bottom: 5px;
+  .item {
+    height: 8px;
+    width: 8px;
+    background-color: #b6b6bc;
+    border-radius: 50%;
+    margin: 1px 3px;
+  }
+  .active {
+    background-color: #4572bd;
+    padding: 1px;
+    margin: 0;
+  }
 }
 .info{
   position: absolute;
