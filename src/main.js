@@ -10,6 +10,8 @@ Vue.use(VueTouch, {name: 'v-touch'});
 //-------------------------------------------
 import vRoll from 'vroll'
 Vue.use(vRoll);
+import VSwipe from 'vswipe'
+Vue.use(VSwipe)
 const routes = [
   { path: '/Main', name: 'Main', component: require('./components/Notice') },
   { path: '/', name: 'Login', component: require('./components/Login') },

@@ -1,8 +1,8 @@
 <template lang="pug">
 .swiper-box
   TitleBar(title='应用',:rightIcon="rightIcon")
-  swiper.swiper(:options="swipeOptions",v-if="showList")
-    swiperSlide(v-for="slide in showList",:key="slide.id")
+  swipe.swiper(:options="swipeOptions",v-if="showList")
+    swipe-item(v-for="slide in showList",:key="slide.id")
       .item(v-on:click="clickSwipe(slide)")
         img(:src="slide.img")
         .info {{slide.title}}
@@ -14,23 +14,22 @@ import TitleBar from '../brick/Title'
 import { Order } from '../Order.js'
 import { DATA, log, CHANNEL } from "../method.js" 
 import localforage from 'localforage'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
   components: {
-    TitleBar,
-    swiper,
-    swiperSlide
+    TitleBar
   },
   data () {
     return {
       showList: null,
       rightIcon: 'loading',
       swipeOptions: {
-        autoplay: 3500,
-        pagination : '.swiper-pagination',
-        autoplayDisableOnInteraction : false,
-        preventClicks : false
+        startSlide: 0,
+        speed: 300,
+        auto: 4000,
+        continuous: true,
+        disableScroll: false,
+        stopPropagation: false
       }
     }
   },
