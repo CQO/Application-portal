@@ -20,7 +20,6 @@ import { Order } from '../Order.js'
 import { timeoutDetection, DATA, log, recover, dataDetection, CHANNEL } from "../method.js" 
 import Toast from '../brick/Toast'
 import localforage from 'localforage'
-import { QWebChannel } from  "../QTWebChannel"
 
 //引入图片资源
 const $TGYY = require('../../assets/TGYY.png'),
@@ -67,6 +66,7 @@ export default {
       }
       DATA.appList = this.appList //存储
     }
+    // 获取本机已安装应用列表
     Order.$once('getSystemAppList', (systemAppList) => {
       DATA.systemAppList = systemAppList
     })
@@ -76,20 +76,20 @@ export default {
       let newAppList = this.appList
       //整理数据
       const appListData = JSON.stringify(DATA.appList)
-      message.appInfos.forEach(function(element) {
+      message.appInfos.forEach((element) => {
         const className = element.appClassify.classifyName //应用分类名称
-        element.appInfoList.forEach(function(item) {
-          if(item.type === 1) {
-            item.homeUrl = item.activityName
-          }
+        element.appInfoList.forEach((item) => {
+          // 原生应用处理
+          if(item.type === 1) { item.homeUrl = item.activityName }
+          // 判断当前应用列表里是否有此应用
           if( appListData.indexOf(item.secret) < 0 ) {
-            //应用列表是否包含此分类检测
+            // 目标分类不存在 处理
             if(newAppList[className] === undefined){ newAppList[className] = []}
             newAppList[className].push(item)
             DATA.installedAppID.push(item.id)
           }
-        }, this);
-      }, this);
+        });
+      });
       DATA.appList = this.appList
       //存储数据
       setTimeout(() => {
@@ -125,6 +125,7 @@ export default {
         this.selectNumber++
         return
       }
+      // 处理链接中的 idCard 和 userName
       let newUrl = thisApp.homeUrl
       newUrl = newUrl.replace("{{idCard}}",DATA.org.usbkeyidentification)
       newUrl = newUrl.replace("{{userName}}",DATA.org.enname)
@@ -134,9 +135,8 @@ export default {
         window.location.href=`#/Iframe/${thisApp.name}`
       }
       else{
-        //如果是H5应用使用无地址栏浏览器打开
+        // 使用无地址栏浏览器打开
         if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
-        //打开网址
         const app =  { "scheme": newUrl }
         CHANNEL.opensopApp(JSON.stringify(app))
       }
@@ -184,9 +184,6 @@ export default {
       }
       this.selectNumber = 0
       Order.$emit('Toast', '应用卸载成功！');
-    },
-    needUpdataClick:function() {
-      window.location.href='#/Store'
     }
   },
   activated(){

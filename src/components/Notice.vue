@@ -20,7 +20,6 @@ import Toast from './brick/Toast'
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
 import { Order } from './Order.js'
-import localforage from 'localforage'
 import { get, cutString, timeoutDetection, DATA, STATE, log, CHANNEL, dataDetection } from "./method.js" 
 // 引入图片资源
 const $XXFB    = require('../assets/XTBG.png'),

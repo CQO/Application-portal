@@ -121,10 +121,9 @@ export default {
       //打开应用
       CHANNEL.opensopApp(JSON.stringify(app1))
     },
-    installApp: function(item,element){
+    installApp: function(item,element){ // 安装应用
       if(item.type === 2){ //判断是否是H5应用
         CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
-        DATA.installedAppID.push(item.id)
       }
       else{
         if( this.downloading ) { Order.$emit('Toast', '正在下载请稍后'); return;}
@@ -137,13 +136,14 @@ export default {
           Order.$off("progress")
           setTimeout(()=>{
             this.downloading = false
-            DATA.installedAppID.push(item.id)
+            
             CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
             CHANNEL.installSopApp(item.packageName)
           },0)
         })
         CHANNEL.downloadApp(item.packageName,item.downloadUrl)
       }
+      DATA.installedAppID.push(item.id)
       //清除它的选中状态
       item.isSelect = false
       if(DATA.appList[this.appList[item.classify]]){
@@ -189,7 +189,6 @@ export default {
           DATA.appList[index] = item
         }
       })
-
       localforage.getItem("appData",(err,appData) => {
         appData.appList = DATA.appList
         appData.installedAppID = DATA.installedAppID
@@ -216,9 +215,9 @@ export default {
             // 判断是否有搜索内容
             if(this.text =="" || data.name.indexOf(this.text) > -1) {
               // 判断应用是否为原生应用
-              if(item.type === 1) {
-                if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
-                else {
+              if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
+              else {
+                if(item.type === 1) {
                   // 判断本地应用列表是否有该应用
                   if(DATA.systemAppList[data.packageName]) {
                     // 判断本地已安装版本号 是否和 网络最新版本一致
@@ -232,15 +231,14 @@ export default {
                     appInfoList[index].installed = 2
                   }
                 }
-              }
-              else {
-                if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
-                else data.installed = 1
-                newList[item] = data
+                else {
+                  data.installed = 1
+                }
               }
             }
           }
         }
+        newList[item] = data
       }
       return newList
     }

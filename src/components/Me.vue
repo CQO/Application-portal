@@ -21,7 +21,6 @@ import BottomBar from './brick/Bottom'
 import P42 from './panel/P42'
 import {timeoutDetection, DATA, log, CHANNEL} from "./method.js"
 import { Order } from './Order.js'
-import localforage from 'localforage'
 export default {
   components: {
     TitleBar,

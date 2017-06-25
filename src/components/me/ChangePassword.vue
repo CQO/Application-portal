@@ -31,7 +31,6 @@ export default {
       if(this.password !== this.repeatPassword) {Order.$emit('Toast', '密码不一致'); return null;} //密码验证
       //更改密码信号监听
       Order.$once('changedPwd', function(message) {
-        log(message)
         switch(message.code){
           case 543 :  Order.$emit('Toast', '当前密码不正确') ; break;
           case 542 :  Order.$emit('Toast', '新密码不合法') ; break;
@@ -42,7 +41,6 @@ export default {
         }
       })
       const data = {oldPwd : _this.oldPassword, newPwd : _this.password}
-      log("111")
       CHANNEL.changedPwd(JSON.stringify(data))
     }
   },

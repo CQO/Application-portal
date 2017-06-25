@@ -23,7 +23,6 @@ import Load from './brick/load'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
 import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
-import localforage from 'localforage'
 
 export default {
   components: {
