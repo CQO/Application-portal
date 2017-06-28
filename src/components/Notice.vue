@@ -59,15 +59,15 @@ export default {
       return
     }
 
-    // const data = {
-    //   userID: DATA.org.usbkeyidentification + "",
-    //   appID: 7616946172 + "",
-    //   accountType: 2 + ""
-    // }
-    // Order.$once('getLoginAuthCode', (message)=> {
-    //   log(message)
-    // })
-    // CHANNEL.getLoginAuthCode(JSON.stringify(data))
+    const data = {
+      userID: DATA.org.usbkeyidentification + "",
+      appID: 7616946181 + "",
+      accountType: 2 + ""
+    }
+    Order.$once('getLoginAuthCode', (message)=> {
+      log(message)
+    })
+    CHANNEL.getLoginAuthCode(JSON.stringify(data))
 
     //---------------------检测------------------------
     if(timeoutDetection()) { return null } //超时检测
