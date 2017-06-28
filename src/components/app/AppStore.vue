@@ -136,7 +136,7 @@ export default {
           Order.$off("progress")
           setTimeout(()=>{
             this.downloading = false
-            
+            element.target.innerHTML = '已安装'
             CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
             CHANNEL.installSopApp(item.packageName)
           },0)

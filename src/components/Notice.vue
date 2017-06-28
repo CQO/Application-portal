@@ -59,14 +59,14 @@ export default {
       return
     }
 
-    const data = {
-      userID: DATA.org.usbkeyidentification + "",
-      appID: 7616946181 + "",
-      accountType: 2 + ""
-    }
-    Order.$once('getLoginAuthCode', (message)=> {
-      log(message)
-    })
+    // const data = {
+    //   userID: DATA.org.usbkeyidentification + "",
+    //   appID: 7616946181 + "",
+    //   accountType: 2 + ""
+    // }
+    // Order.$once('getLoginAuthCode', (message)=> {
+    //   log(message)
+    // })
     CHANNEL.getLoginAuthCode(JSON.stringify(data))
 
     //---------------------检测------------------------
