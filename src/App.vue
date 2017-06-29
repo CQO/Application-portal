@@ -5,7 +5,7 @@
 </template>
 
 
-<style lang="less">
+<style>
 p,ul{
   margin: 0;
   padding: 0;
@@ -56,6 +56,13 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
   width: 100%;
   position: relative;
 }
-  
+.load {
+  position: fixed;
+  top: calc(50% - 60px);
+  left: calc(50% - 60px);
+  width: 120px;
+  height: 120px;
+  background-image: url("./assets/balls.svg")
+}
 </style>
 

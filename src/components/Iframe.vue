@@ -2,17 +2,15 @@
 .iframe-box
   TitleBar(:title='$route.params.name')
   iframe#iframe(:src="iframeURL",frameborder="0")
-  Load(v-if="!ok")
+  .load(v-if="!ok")
 </template>
 
 <script>
-import Load from './brick/load'
 import TitleBar from './brick/Title'
 import { DATA } from "./method.js" 
 export default {
   components: {
-    TitleBar,
-    Load
+    TitleBar
   },
   activated () {
     this.ok = false
