@@ -12,14 +12,13 @@
       p.organization-number.ico &#xe61b; {{item.subOrgNum}}
       p.organization-people.ico &#xe60c; {{item.subUserNum}}
     Organization(v-for="item in List.entUsers",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-  Load(v-else)
+  .load(v-else)
   BottomBar(index="2")
 </template>
 
 <script>
 import TitleBar from './brick/Title'
 import BottomBar from './brick/Bottom'
-import Load from './brick/load'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
 import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
@@ -28,8 +27,7 @@ export default {
   components: {
     TitleBar,
     BottomBar,
-    Organization,
-    Load
+    Organization
   },
   data () {
     return {

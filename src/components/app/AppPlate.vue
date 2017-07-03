@@ -136,7 +136,10 @@ export default {
       }
       else{
         // 使用无地址栏浏览器打开
-        if( thisApp.type === 2 ){ newUrl = newUrl.replace("http","browser") }
+        if( thisApp.type === 2 ){ 
+          newUrl = newUrl.replace("https","browser") 
+          newUrl = newUrl.replace("http","browser") 
+        }
         const app =  { "scheme": newUrl }
         CHANNEL.opensopApp(JSON.stringify(app))
       }
