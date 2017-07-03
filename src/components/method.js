@@ -102,7 +102,8 @@ let DATA = {
   appList:null,
   installedAppID: ["100004","100003","100002"],
   iframeURL: null,
-  systemAppList: null
+  systemAppList: null,
+  updateNumber: 0 // 升级更新小红点
 };
 
 let CHANNEL = null

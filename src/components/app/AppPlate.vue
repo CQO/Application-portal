@@ -11,6 +11,7 @@
           .choose.ico(v-show="item.isSelect") &#xe608;
         .clear
   .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
+  .spot(v-if="updateNumber > 0")
   Toast
 </template>
 
@@ -36,6 +37,7 @@ export default {
     return {
       selectNumber: 0, //长按选中个数
       appData: null,
+      updateNumber: 0,
       appList: {
         "办公应用": [
           { id:100004, type: 2 , name: "安全邮件", icon: $YJ, homeUrl: 'http://10.152.36.31/secmail/loginapp.do?type=cid&PID={{idCard}}', main:true },
@@ -80,7 +82,15 @@ export default {
         const className = element.appClassify.classifyName //应用分类名称
         element.appInfoList.forEach((item) => {
           // 原生应用处理
-          if(item.type === 1) { item.homeUrl = item.activityName }
+          if(item.type === 1) {
+            item.homeUrl = item.activityName
+            // 升级更新小红点提示
+            if(DATA.systemAppList[item.packageName]) {
+              if(DATA.systemAppList[item.packageName].ver !== item.version) {
+                this.updateNumber++
+              }
+             }
+          }
           // 判断当前应用列表里是否有此应用
           if( appListData.indexOf(item.secret) < 0 ) {
             // 目标分类不存在 处理
@@ -88,6 +98,7 @@ export default {
             newAppList[className].push(item)
             DATA.installedAppID.push(item.id)
           }
+          DATA.updateNumber = this.updateNumber
         });
       });
       DATA.appList = this.appList
@@ -192,6 +203,7 @@ export default {
   activated(){
     this.appList = {}
     this.appList = DATA.appList
+    this.updateNumber = DATA.updateNumber
     const iscroll = this.$refs.iscroll
     iscroll.refresh()
   }
@@ -261,26 +273,13 @@ export default {
   font-size: 1.2rem;
   box-shadow: 1px 2px 1px #888888;
 }
-.needUp {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  .upData {
-    font-size: 2.5rem;
-    color: burlywood;
-    position: relative;
-  }
-  .number {
-    position: absolute;
-    right: -5px;
-    top: -5px;
-    font-size: 15px;
-    background-color: red;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 20px;
-  }
+.spot {
+  position: fixed;
+  background-color: red;
+  height: 10px;
+  width: 10px;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
 }
 </style>

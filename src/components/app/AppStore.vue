@@ -58,6 +58,8 @@ export default {
       ]
       return
     }
+    // 清除更新提示的小红点
+    DATA.updateNumber = 0
     this.installedAppID = DATA.installedAppID
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {
@@ -214,24 +216,26 @@ export default {
           if(data.status === 1) {
             // 判断是否有搜索内容
             if(this.text =="" || data.name.indexOf(this.text) > -1) {
-              // 判断应用是否为原生应用
+              
               if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
               else {
-                if(item.type === 1) {
+                // 判断应用是否为原生应用
+                if(data.type === 1) {
                   // 判断本地应用列表是否有该应用
                   if(DATA.systemAppList[data.packageName]) {
                     // 判断本地已安装版本号 是否和 网络最新版本一致
-                    if(DATA.systemAppList[item.packageName].version != item.type) {
-                      appInfoList[index].installed = 3
+                    if(DATA.systemAppList[data.packageName].version != data.type) {
+                      data.installed = 3
                     } else {
-                      appInfoList[index].installed = 1
+                      data.installed = 1
                     }
                   }
                   else {
-                    appInfoList[index].installed = 2
+                    data.installed = 2
                   }
                 }
                 else {
+                  log(data)
                   data.installed = 1
                 }
               }
