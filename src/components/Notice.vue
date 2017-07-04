@@ -67,7 +67,7 @@ export default {
     // Order.$once('getLoginAuthCode', (message)=> {
     //   log(message)
     // })
-    CHANNEL.getLoginAuthCode(JSON.stringify(data))
+    // CHANNEL.getLoginAuthCode(JSON.stringify(data))
 
     //---------------------检测------------------------
     if(timeoutDetection()) { return null } //超时检测

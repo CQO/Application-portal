@@ -92,6 +92,13 @@
         };
         obj.send(JSON.stringify(mess));
       };
+      function one() {
+        log("http://baqi.linkdood.cn/platform/api2/oauth/token?appid=7616946181&appsecret=jaScJrP9bf3zczzk5D9bQw&code="+authCode, "");
+      }
+      function two() {
+        if (!token) alert("没有获取Token!")
+        else log2("http://baqi.linkdood.cn/platform/api2/oauth/getUserInfo?appid=7616946181&appsecret=jaScJrP9bf3zczzk5D9bQw&token=" + token, "");
+      }
       const log3 = function(server){
         const obj = new XMLHttpRequest();
         obj.open("GET", server, true);
