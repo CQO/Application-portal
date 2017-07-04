@@ -58,8 +58,6 @@ export default {
       ]
       return
     }
-    // 清除更新提示的小红点
-    DATA.updateNumber = 0
     this.installedAppID = DATA.installedAppID
     //监听应用被删除事件
     Order.$on('delateApp', (message) => {
@@ -161,6 +159,8 @@ export default {
       })
     },
     needDown:function(item,element){
+      // 减少
+      DATA.updateNumber--
       let appInformation = {
         id: item.id,
         type: item.type,

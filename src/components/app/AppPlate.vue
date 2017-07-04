@@ -11,7 +11,7 @@
           .choose.ico(v-show="item.isSelect") &#xe608;
         .clear
   .delate.ico(v-on:click="delateApp",v-if="selectNumber > 0") &#xe6ff;
-  .spot(v-if="updateNumber > 0")
+  .spot(v-if="updateNumber > 0") {{updateNumber}}
   Toast
 </template>
 
@@ -281,5 +281,9 @@ export default {
   top: 10px;
   right: 10px;
   border-radius: 50%;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  line-height: 10px;
 }
 </style>
