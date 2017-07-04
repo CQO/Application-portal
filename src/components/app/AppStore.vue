@@ -137,6 +137,7 @@ export default {
           setTimeout(()=>{
             this.downloading = false
             element.target.innerHTML = '已安装'
+             element.target.setAttribute("class", "button open"); 
             CHANNEL.queryAppStore(JSON.stringify({type:"6",id:item.id,classify:item.classify}))
             CHANNEL.installSopApp(item.packageName)
           },0)
@@ -179,6 +180,10 @@ export default {
         Order.$off("progress")
         setTimeout(()=>{
           this.downloading = false
+          // 将应用ID添加到已安装应用列表
+          element.target.innerHTML = '已安装'
+          element.target.setAttribute("class", "button open"); 
+          DATA.installedAppID.push(item.id)
           CHANNEL.installSopApp(item.packageName)
         },0)
       })
@@ -216,7 +221,6 @@ export default {
           if(data.status === 1) {
             // 判断是否有搜索内容
             if(this.text =="" || data.name.indexOf(this.text) > -1) {
-              
               if (this.installedAppID.indexOf(data.id) < 0) data.installed = 0
               else {
                 // 判断应用是否为原生应用
@@ -235,7 +239,6 @@ export default {
                   }
                 }
                 else {
-                  log(data)
                   data.installed = 1
                 }
               }
@@ -285,7 +288,7 @@ export default {
   img{
     width: 45px;
     height: 45px;
-    margin: 9px;
+    margin: 7px;
   }
   .info{
     width: calc(~"100% - 150px");

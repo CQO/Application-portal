@@ -2,7 +2,7 @@
   .title-bar
     .titleButton.ico(v-bind:class="{ hidden: !leftIcon }",v-on:click="back") &#xe601;
     p.title {{title}}
-    router-link.titleButton.ico(tag="div",v-if="rightIcon === 'add'",to="\Store") &#xe68d;
+    router-link.titleButton.ico(tag="div",v-if="rightIcon === 'add'",to="\Store") &#xe655;
     .titleButton(v-if="rightIcon === 'save'",v-on:click="save") 保存
     router-link.titleButton.ico(tag="div",v-if="rightIcon === 'search'",to="\Search") &#xe60b;
     .loading(v-if="rightIcon === 'loading'")

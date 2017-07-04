@@ -5,7 +5,7 @@ import { Order } from './Order.js';
 
 //日志的方法
 const log = function(record){
-  const server = 'http://172.16.16.57:2333/',
+  const server = 'http://192.168.132.45:2333/',
         obj = new XMLHttpRequest(),
         mess   = {data:record};
   obj.open("POST", server, true);
@@ -94,7 +94,7 @@ let DATA = {
     phone: null,
     telPhone: null 
   },
-  debug: false,
+  debug: true,
   Timestamp: null,
   orgList: {},
   orgTree: [],

@@ -58,11 +58,12 @@ a:visited,a:link,a:hover,a:active {color: black;text-decoration: none;}
 }
 .load {
   position: fixed;
-  top: calc(50% - 60px);
-  left: calc(50% - 60px);
-  width: 120px;
-  height: 120px;
-  background-image: url("./assets/balls.svg")
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+  width: 100px;
+  height: 100px;
+  background-image: url("./assets/ring.gif");
+  background-size: 100px;
 }
 </style>
 

@@ -10,20 +10,18 @@
       .close.ico(@click.stop="clearSearch") &#xe697;
     vroll.organizationSearch(:options="{click: true,scrollbars: true}")
       Organization(v-for="item in searchResult",:key="item.id",:name="item.enName",:text="item.orgName",:enMobile="item.enMobile",:duty="item.duty",:telPhone="item.telPhone")
-  Load(v-if="searching")
+  .load(v-if="searching")
 </template>
 
 <script>
 import TitleBar from './brick/Title'
 import Organization from './list/Organization'
 import { Order } from './Order.js'
-import Load from './brick/load'
 import { timeoutDetection, DATA, log, CHANNEL } from "./method.js" 
 export default {
   components: {
     TitleBar,
-    Organization,
-    Load
+    Organization
   },
   data () {
     return {
