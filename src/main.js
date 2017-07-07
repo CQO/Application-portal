@@ -6,12 +6,14 @@ import App from './App';
 Vue.use(VueRouter);
 //------------------触摸控件------------------
 import VueTouch from 'vue-touch';
-Vue.use(VueTouch, {name: 'v-touch'});
+Vue.use(VueTouch, { name: 'v-touch' });
 //-------------------------------------------
 import vRoll from 'vroll'
 Vue.use(vRoll);
-import VSwipe from 'vswipe'
-Vue.use(VSwipe)
+// import VSwipe from 'vswipe'
+// Vue.use(VSwipe)
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
 const routes = [
   { path: '/Main', name: 'Main', component: require('./components/Notice') },
   { path: '/', name: 'Login', component: require('./components/Login') },
