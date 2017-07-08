@@ -103,6 +103,7 @@ export default {
       CHANNEL.queryAppStore(JSON.stringify({type:"2"}))
     }
     Order.$on('Search', (message) => {
+      // 在这里打log看是否能监听到
       this.text = message
     })
   },
